@@ -381,11 +381,9 @@ OPTION(WRAP_PYTHON "Wrap Python" FALSE)
 IF(WRAP_PYTHON)
   # Provisory hack... shall rework on this
   if (${CMAKE_VERSION} VERSION_GREATER "4.12")
-    find_package (Python3 COMPONENTS Interpreter Development NumPy)
+    find_package (Python3 COMPONENTS Interpreter Development)
 
-    include_directories(${Python3_INCLUDE_DIRS})
-    include_directories(${Python3_NumPy_INCLUDE_DIRS})
-    include_directories(${Python3_NumPy_INCLUDE_DIR})
+    link_libraries(Python3::Python)
 
     STRING(REGEX MATCH "[0-9]\\.[0-9]" PYTHON_VERSION "${Python3_VERSION}")
     STRING(REGEX MATCH "[0-9]" PYTHON_MAJOR "${PYTHON3_VERSION}")
@@ -418,29 +416,11 @@ IF(WRAP_PYTHON)
   OPTION(USE_NUMPY "Use Numpy for python pixels manipulation." OFF)
 
   IF(USE_NUMPY)
-    IF (NOT Python_Numpy_INCLUDE_DIR)
-      IF (CONDA_PREFIX)
-        SET(PYTHON_PREFIX ${CONDA_PREFIX})
-      ELSE ()
-        SET(PYTHON_PREFIX /usr)
-      ENDIF ()
-      FIND_PATH(PYTHON_NUMPY_INCLUDE_DIR numpy/arrayobject.h
-          DOC "Directory where the numpy/arrayobject.h header file can be found."
-          PATHS
-            ${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/site-packages/numpy/core/include/
-            ${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/dist-packages/numpy/core/include/
-            ${PYTHON_PREFIX}/lib/python${PYTHON_MAJOR}/site-packages/numpy/core/include/
-            ${PYTHON_PREFIX}/lib/python${PYTHON_MAJOR}/dist-packages/numpy/core/include/
-            ${PYTHON_PREFIX}/include/)
-
-      IF(PYTHON_NUMPY_INCLUDE_DIR)
-        ADD_DEFINITIONS("-DUSE_NUMPY")
-        INCLUDE_DIRECTORIES(${PYTHON_NUMPY_INCLUDE_DIR})
-      ENDIF(PYTHON_NUMPY_INCLUDE_DIR)
-      MESSAGE(STATUS "Numpy includes: " ${PYTHON_NUMPY_INCLUDE_DIR})
-    ENDIF (NOT Python_Numpy_INCLUDE_DIR)
+    find_package(Python3 REQUIRED COMPONENTS NumPy)
+    ADD_DEFINITIONS("-DUSE_NUMPY")
+    LINK_LIBRARIES(Python3::NumPy)
+    MESSAGE(STATUS "Numpy includes: " ${Python3_NumPy_INCLUDE_DIRS})
   ENDIF(USE_NUMPY)
-  ADD_DEFINITIONS("-DUSE_NUMPY")
 ENDIF(WRAP_PYTHON)
 
 #
