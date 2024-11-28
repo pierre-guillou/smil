@@ -5,13 +5,10 @@
 # -------------------------------------
 from smilAdvancedPython       import *
 from smilBasePython           import *
-from smilColorPython          import *
 from smilCorePython           import *
-from smilFiltersPython        import *
 from smilGuiPython            import *
 from smilIOPython             import *
 from smilMorphoPython         import *
-from smilStochasticWSPython   import *
 from smil_Python              import *
   
 # -------------------------------------
