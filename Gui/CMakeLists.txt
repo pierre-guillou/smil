@@ -49,9 +49,6 @@ if(USE_QT)
   if(USE_QT_VERSION EQUAL 5)
     qt5_wrap_ui(QT_UIS_H ${QT_UIS})
     qt5_wrap_cpp(QT_MOC ${QT_HEADERS})
-  else() # QT4
-    qt4_wrap_ui(QT_UIS_H ${QT_UIS})
-    qt4_wrap_cpp(QT_MOC ${QT_HEADERS})
   endif()
 
   list(APPEND ADD_SRCS ${SRCS} ${QT_SRCS} ${QT_UIS_H} ${QT_MOC})

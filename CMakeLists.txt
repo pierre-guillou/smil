@@ -463,37 +463,21 @@ endif(
 # GUI ######
 
 find_package(Qt5Widgets QUIET)
+
 if(Qt5Core_FOUND)
-  set(IGNORE_QT4
-      TRUE
-      CACHE BOOL "")
-  mark_as_advanced(IGNORE_QT4)
+  option(USE_QT "Build Qt Gui" ON)
+else(Qt5Core_FOUND)
+  option(USE_QT "Build Qt Gui" OFF)
 endif(Qt5Core_FOUND)
 
-if(NOT IGNORE_QT4)
-  find_package(Qt4 QUIET)
-endif(NOT IGNORE_QT4)
-
-if(QT4_FOUND OR Qt5Core_FOUND)
-  option(USE_QT "Build Qt Gui" ON)
-else(QT4_FOUND OR Qt5Core_FOUND)
-  option(USE_QT "Build Qt Gui" OFF)
-endif(QT4_FOUND OR Qt5Core_FOUND)
-
 if(USE_QT)
-  if(Qt5Core_FOUND)
-    set(USE_QT_VERSION
-        "5"
-        CACHE STRING "Qt version to use")
-  elseif(QT4_FOUND)
-    set(USE_QT_VERSION
-        "4"
-        CACHE STRING "Qt version to use")
-  endif(Qt5Core_FOUND)
+  set(USE_QT_VERSION
+      "5"
+      CACHE STRING "Qt version to use")
 
-  if(NOT QT4_FOUND OR NOT Qt5Core_FOUND)
+  if(NOT Qt5Core_FOUND)
     mark_as_advanced(USE_QT_VERSION)
-  endif(NOT QT4_FOUND OR NOT Qt5Core_FOUND)
+  endif(NOT Qt5Core_FOUND)
 
   if(CMAKE_CROSSCOMPILING)
     set(QT_HEADERS_DIR "/usr/i686-w64-mingw32/include")
@@ -509,15 +493,6 @@ if(USE_QT)
     include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
     list(APPEND SMIL_EXT_DEPS Qt5::Core Qt5::Gui Qt5::Widgets)
     add_definitions(${Qt5Widgets_DEFINITIONS})
-  else()
-    # QT4
-    find_package(Qt4 REQUIRED)
-    include(${QT_USE_FILE})
-    include_directories(${QT_QTCORE_INCLUDE_DIR}/..)
-    list(APPEND SMIL_EXT_DEPS ${QT_LIBRARIES} ${QT_QTCORE_LIB_DEPENDENCIES}
-         ${QT_QTGUI_LIB_DEPENDENCIES})
-    link_directories(${QT_LIBRARY_DIRS})
-    add_definitions(${QT_DEFINITIONS})
   endif()
 
   add_definitions(-DUSE_QT)
