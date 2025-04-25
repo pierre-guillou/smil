@@ -379,13 +379,8 @@ ENDIF(WRAP_CPP)
 
 OPTION(WRAP_PYTHON "Wrap Python" FALSE)
 IF(WRAP_PYTHON)
-  # Provisory hack... shall rework on this
   find_package (Python3 COMPONENTS Interpreter Development)
   link_libraries(Python3::Python)
-
-  STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${Python3_VERSION}")
-  STRING(REGEX MATCH "[0-9]" PYTHON_MAJOR "${PYTHON3_VERSION}")
-  SET(PYTHON_VERSION ${Python3_VERSION})
 
   ADD_CUSTOM_TARGET(python)
 ENDIF(WRAP_PYTHON)
@@ -808,7 +803,7 @@ IF(USE_WRAPPER)
     # Trick to avoid to rebuild every time even without the dependencies having changed
     SET_SOURCE_FILES_PROPERTIES(${SWIG_MAIN_INTERFACE} PROPERTIES
         SWIG_MODULE_NAME smil_Python)
-    MESSAGE(STATUS "Wrap for python version ${PYTHON_VERSION}")
+    MESSAGE(STATUS "Wrap for python version ${Python3_VERSION}")
     IF(MSVC)
       # Anaconda does not provide Python libraries with
       # debug symbols
@@ -840,21 +835,15 @@ IF(USE_WRAPPER)
             COMPONENT python)
 
     IF(UNIX)
-      IF(${PYTHON_VERSION} VERSION_LESS 2.7)
+      IF (CONDA_PREFIX)
         INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/smilPython.pth
-              DESTINATION /usr/lib/python${PYTHON_VERSION}/site-packages
-              COMPONENT python)
-      ELSE(${PYTHON_VERSION} VERSION_LESS 2.7)
-       IF (CONDA_PREFIX)
-         INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/smilPython.pth
-                 DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION}/site-packages
-                 COMPONENT python)
-       ELSE(CONDA_PREFIX)
-         INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/smilPython.pth
-                 DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIBSUFFIX}/python${PYTHON_VERSION}/dist-packages
-                 COMPONENT python)
-       ENDIF(CONDA_PREFIX)
-      ENDIF(${PYTHON_VERSION} VERSION_LESS 2.7)
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python${Python3_VERSION}/site-packages
+          COMPONENT python)
+      ELSE(CONDA_PREFIX)
+        INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/smilPython.pth
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIBSUFFIX}/python${Python3_VERSION}/dist-packages
+          COMPONENT python)
+      ENDIF(CONDA_PREFIX)
     ENDIF(UNIX)
 
     ADD_DEPENDENCIES(python smil_Python)
