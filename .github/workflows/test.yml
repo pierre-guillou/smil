@@ -1,0 +1,55 @@
+name: test_build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq \
+            libaa1-dev \
+            libcurl4-openssl-dev \
+            libfreetype-dev \
+            libpng-dev \
+            libtiff-dev \
+            qtbase5-dev \
+            libqwt-qt5-dev \
+            swig \
+            ninja-build
+
+      - name: Setup Python Version
+        uses: actions/setup-python@v5
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install numpy
+
+      - name: Create & configure Smil build directory
+        run: |
+          mkdir build && cd build
+          cmake \
+            -DWRAP_PYTHON=ON \
+            -DUSE_NUMPY=ON \
+            $GITHUB_WORKSPACE
+        env:
+          CMAKE_GENERATOR: Ninja
+          CMAKE_BUILD_TYPE: Release
+
+      - name: Build Smil
+        run: |
+          cd build
+          cmake --build . --parallel 3
+
+      - name: Install Smil
+        run: |
+          cd build
+          sudo cmake --build . --target install
