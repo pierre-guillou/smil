@@ -37,8 +37,7 @@ jobs:
         run: |
           mkdir build && cd build
           cmake \
-            -DWRAP_PYTHON=ON \
-            -DUSE_NUMPY=ON \
+            -DBUILD_TEST=ON \
             $GITHUB_WORKSPACE
         env:
           CMAKE_GENERATOR: Ninja
