@@ -8,6 +8,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        py: [
+          "3.9",
+          "3.10",
+          "3.11",
+          "3.12",
+          "3.13",
+        ]
 
     steps:
       - uses: actions/checkout@v4
@@ -23,21 +32,24 @@ jobs:
             libtiff-dev \
             qtbase5-dev \
             libqwt-qt5-dev \
-            swig \
             ninja-build
 
       - name: Setup Python Version
         uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
 
       - name: Install Python dependencies
         run: |
-          python3 -m pip install numpy
+          python3 -m pip install numpy swig
 
       - name: Create & configure Smil build directory
         run: |
           mkdir build && cd build
           cmake \
             -DBUILD_TEST=ON \
+            -DWRAP_PYTHON=ON \
+            -DUSE_NUMPY=ON \
             $GITHUB_WORKSPACE
         env:
           CMAKE_GENERATOR: Ninja
