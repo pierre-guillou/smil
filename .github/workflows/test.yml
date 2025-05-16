@@ -48,6 +48,12 @@ jobs:
           cd build
           cmake --build . --parallel 3
 
+      - name: Execute non-regression tests and benchmarks
+        run: |
+          cd build
+          ctest
+        continue-on-error: true
+
       - name: Install Smil
         run: |
           cd build
