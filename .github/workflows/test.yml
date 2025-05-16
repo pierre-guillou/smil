@@ -8,6 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        py: [
+          "3.9",
+          "3.10",
+        ]
 
     steps:
       - uses: actions/checkout@v4
@@ -28,6 +34,8 @@ jobs:
 
       - name: Setup Python Version
         uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
 
       - name: Install Python dependencies
         run: |
@@ -38,6 +46,7 @@ jobs:
           mkdir build && cd build
           cmake \
             -DBUILD_TEST=ON \
+            -DWRAP_PYTHON=ON \
             $GITHUB_WORKSPACE
         env:
           CMAKE_GENERATOR: Ninja
