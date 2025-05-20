@@ -109,8 +109,8 @@ namespace smil
       res_compl[i][1] = (src1_compl[i][1] * src2_compl[i][0] -
                          src1_compl[i][0] * src2_compl[i][1]);
 
-      double norm =
-          std::sqrt(pow(res_compl[i][0], 2) + pow(res_compl[i][1], 2));
+      double norm = std::sqrt(std::pow(res_compl[i][0], 2) +
+                              std::pow(res_compl[i][1], 2));
       res_compl[i][0] /= norm;
       res_compl[i][1] /= norm;
     }
