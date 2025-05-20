@@ -110,7 +110,7 @@ namespace smil
                          src1_compl[i][0] * src2_compl[i][1]);
 
       double norm =
-          std::sqrt(pow(res_compl[i][0], 2) + pow(res_compl[i][1], 2));
+          std::sqrt(std::pow(res_compl[i][0], 2) + std::pow(res_compl[i][1], 2));
       res_compl[i][0] /= norm;
       res_compl[i][1] /= norm;
     }
