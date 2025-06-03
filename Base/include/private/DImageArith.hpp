@@ -414,9 +414,9 @@ namespace smil
     ASSERT(CHECK_ALLOCATED(&imIn1, &imIn2), false);
     ASSERT(CHECK_SAME_SIZE(&imIn1, &imIn2), false);
 
-    typedef typename Image<T>::lineType lineType;
-    lineType                            pix1 = imIn1.getPixels();
-    lineType                            pix2 = imIn2.getPixels();
+    using lineType = typename Image<T>::lineType;
+    lineType pix1  = imIn1.getPixels();
+    lineType pix2  = imIn2.getPixels();
 
     for (size_t i = 0; i < imIn1.getPixelCount(); i++)
       if (pix1[i] != pix2[i])
@@ -1831,9 +1831,9 @@ namespace smil
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    typedef typename MCT1::DataType T1;
-    typename Image<T1>::lineType    lineIn  = imIn.getPixels().arrays[chanNum];
-    typename Image<T2>::lineType    lineOut = imOut.getPixels();
+    using T1                             = typename MCT1::DataType;
+    typename Image<T1>::lineType lineIn  = imIn.getPixels().arrays[chanNum];
+    typename Image<T2>::lineType lineOut = imOut.getPixels();
 
     copyLine<T1, T2>(lineIn, imIn.getPixelCount(), lineOut);
     imOut.modified();
@@ -1864,9 +1864,9 @@ namespace smil
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    typedef typename MCT2::DataType T2;
-    typename Image<T1>::lineType    lineIn  = imIn.getPixels();
-    typename Image<T2>::lineType    lineOut = imOut.getPixels().arrays[chanNum];
+    using T2                             = typename MCT2::DataType;
+    typename Image<T1>::lineType lineIn  = imIn.getPixels();
+    typename Image<T2>::lineType lineOut = imOut.getPixels().arrays[chanNum];
 
     copyLine<T1, T2>(lineIn, imIn.getPixelCount(), lineOut);
     imOut.modified();
@@ -1898,9 +1898,9 @@ namespace smil
     UINT pixCount = width * height;
     ASSERT(im3DOut.setSize(width, height, chanNum) == RES_OK);
 
-    typedef typename MCT1::DataType T1;
-    typename Image<MCT1>::lineType  lineIn  = imIn.getPixels();
-    typename Image<T2>::lineType    lineOut = im3DOut.getPixels();
+    using T1                               = typename MCT1::DataType;
+    typename Image<MCT1>::lineType lineIn  = imIn.getPixels();
+    typename Image<T2>::lineType   lineOut = im3DOut.getPixels();
 
     for (UINT i = 0; i < chanNum; i++) {
       copyLine<T1, T2>(lineIn.arrays[i], pixCount, lineOut);
@@ -1932,9 +1932,9 @@ namespace smil
     UINT pixCount = width * height;
     imOut.setSize(width, height);
 
-    typedef typename MCT2::DataType T2;
-    typename Image<T1>::lineType    lineIn  = imIn.getPixels();
-    typename Image<MCT2>::lineType  lineOut = imOut.getPixels();
+    using T2                               = typename MCT2::DataType;
+    typename Image<T1>::lineType   lineIn  = imIn.getPixels();
+    typename Image<MCT2>::lineType lineOut = imOut.getPixels();
 
     for (UINT i = 0; i < chanNum; i++) {
       copyLine<T1, T2>(lineIn, pixCount, lineOut.arrays[i]);

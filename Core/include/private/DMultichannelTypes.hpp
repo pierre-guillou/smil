@@ -52,7 +52,7 @@ namespace smil
     T c[N];
 
   public:
-    typedef T   DataType;
+    using DataType = T;
     static UINT channelNumber()
     {
       return N;
@@ -385,9 +385,9 @@ namespace smil
   class MultichannelArrayItem : public MultichannelType<T, N>
   {
   public:
-    typedef MultichannelType<T, N> MCType;
-    typedef T                     *Tptr;
-    Tptr                           _c[N];
+    using MCType = MultichannelType<T, N>;
+    using Tptr   = T *;
+    Tptr _c[N];
 
     MultichannelArrayItem(const MultichannelArray<T, N> &mcArray,
                           const UINT                    &index)
@@ -417,10 +417,10 @@ namespace smil
   public:
     //         friend MultichannelArrayItem<T,N>;
 
-    typedef MultichannelType<T, N> MCType;
+    using MCType = MultichannelType<T, N>;
 
-    typedef T *lineType;
-    lineType   arrays[N];
+    using lineType = T *;
+    lineType arrays[N];
     //         string subtypeName;
 
     MultichannelArray() : size(0), index(0), allocatedData(false)

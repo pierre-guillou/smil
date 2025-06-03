@@ -56,7 +56,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measAreaFunc : public MeasureFunctionBase<T, double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     virtual void processSequence(lineType /*lineIn*/, size_t size)
     {
@@ -97,7 +97,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measVolFunc : public MeasureFunctionBase<T, double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     virtual void processSequence(lineType lineIn, size_t size)
     {
@@ -168,9 +168,9 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMeanValFunc : public MeasureFunctionBase<T, Vector_double> {
-    typedef typename Image<T>::lineType lineType;
-    double                              sum1, sum2;
-    double                              pixNbr;
+    using lineType = typename Image<T>::lineType;
+    double sum1, sum2;
+    double pixNbr;
 
     virtual void initialize(const Image<T> & /*imIn*/)
     {
@@ -225,8 +225,8 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMinValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    using lineType = typename Image<T>::lineType;
+    virtual void initialize(const Image<T> & /*imIn*/)
     {
       this->retVal = numeric_limits<T>::max();
     }
@@ -240,9 +240,9 @@ namespace smil
 
   template <class T>
   struct measMinValPosFunc : public MeasureFunctionWithPos<T, T> {
-    typedef typename Image<T>::lineType lineType;
-    Point<UINT>                         pt;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    using lineType = typename Image<T>::lineType;
+    Point<UINT>  pt;
+    virtual void initialize(const Image<T> & /*imIn*/)
     {
       this->retVal = numeric_limits<T>::max();
     }
@@ -302,8 +302,8 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMaxValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    using lineType = typename Image<T>::lineType;
+    virtual void initialize(const Image<T> & /*imIn*/)
     {
       this->retVal = numeric_limits<T>::min();
     }
@@ -317,9 +317,9 @@ namespace smil
 
   template <class T>
   struct measMaxValPosFunc : public MeasureFunctionWithPos<T, T> {
-    typedef typename Image<T>::lineType lineType;
-    Point<UINT>                         pt;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    using lineType = typename Image<T>::lineType;
+    Point<UINT>  pt;
+    virtual void initialize(const Image<T> & /*imIn*/)
     {
       this->retVal = numeric_limits<T>::min();
     }
@@ -379,8 +379,8 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMinMaxValFunc : public MeasureFunctionBase<T, vector<T>> {
-    typedef typename Image<T>::lineType lineType;
-    T                                   minVal, maxVal;
+    using lineType = typename Image<T>::lineType;
+    T    minVal, maxVal;
     void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal.clear();
@@ -430,8 +430,8 @@ namespace smil
   /** @cond */
   template <class T>
   struct valueListFunc : public MeasureFunctionBase<T, vector<T>> {
-    typedef typename Image<T>::lineType lineType;
-    set<T>                              valList;
+    using lineType = typename Image<T>::lineType;
+    set<T> valList;
 
     virtual void initialize(const Image<T> & /*imIn*/)
     {
@@ -482,7 +482,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measModeValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     map<int, int> nbList;
     int           maxNb;
@@ -548,7 +548,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMedianValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     map<int, int> nbList;
     size_t        acc_elem, total_elems;
@@ -580,7 +580,7 @@ namespace smil
 
     virtual void finalize(const Image<T> & /*imIn*/)
     {
-      typedef std::map<int, int>::iterator it_type;
+      using it_type = std::map<int, int>::iterator;
 
       for (it_type my_iterator = nbList.begin(); my_iterator != nbList.end();
            my_iterator++) {
@@ -668,9 +668,9 @@ namespace smil
   /** @cond */
   template <class T>
   struct measBarycenterFunc : public MeasureFunctionWithPos<T, Vector_double> {
-    typedef typename Image<T>::lineType lineType;
-    double                              xSum, ySum, zSum, tSum;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    using lineType = typename Image<T>::lineType;
+    double       xSum, ySum, zSum, tSum;
+    virtual void initialize(const Image<T> & /*imIn*/)
     {
       this->retVal.clear();
       xSum = ySum = zSum = tSum = 0.;
@@ -719,10 +719,10 @@ namespace smil
   /** @cond */
   template <class T>
   struct measBoundBoxFunc : public MeasureFunctionWithPos<T, vector<size_t>> {
-    typedef typename Image<T>::lineType lineType;
-    double                              xMin, xMax, yMin, yMax, zMin, zMax;
-    bool                                im3d;
-    virtual void                        initialize(const Image<T> &imIn)
+    using lineType = typename Image<T>::lineType;
+    double       xMin, xMax, yMin, yMax, zMin, zMax;
+    bool         im3d;
+    virtual void initialize(const Image<T> &imIn)
     {
       this->retVal.clear();
       size_t imSize[3];
@@ -793,7 +793,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMomentsFunc : public MeasureFunctionWithPos<T, Vector_double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     double       m000, m100, m010, m110, m200, m020, m001, m101, m011, m002;
     bool         im3d;
     virtual void initialize(const Image<T> &imIn)
@@ -1242,7 +1242,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measEntropyFunc : public MeasureFunctionBase<T, double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     map<T, UINT> histo;
 

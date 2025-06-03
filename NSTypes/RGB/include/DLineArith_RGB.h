@@ -72,8 +72,8 @@ namespace smil
 
   template <>
   struct fillLine<RGB> : public unaryLineFunctionBase<RGB> {
-    typedef Image<RGB>::lineType lineType;
-    fillLine() = default;
+    using lineType = Image<RGB>::lineType;
+    fillLine()     = default;
     fillLine(const lineType lIn, const size_t size, const RGB value)
     {
       this->_exec(lIn, size, value);
@@ -102,9 +102,9 @@ namespace smil
 
   template <>
   struct supLine<RGB> : public binaryLineFunctionBase<RGB> {
-    typedef Image<RGB>::lineType lineType;
-    inline void                  _exec(const lineType lIn1, const lineType lIn2,
-                                       const size_t size, lineType lOut) override
+    using lineType = Image<RGB>::lineType;
+    inline void _exec(const lineType lIn1, const lineType lIn2,
+                      const size_t size, lineType lOut) override
     {
       for (UINT n = 0; n < 3; n++) {
         UINT8 *cArrIn1 = lIn1.arrays[n];
@@ -119,7 +119,7 @@ namespace smil
 
   template <>
   struct infLine<RGB> : public binaryLineFunctionBase<RGB> {
-    typedef Image<RGB>::lineType lineType;
+    using lineType = Image<RGB>::lineType;
     void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
                lineType lOut) override
     {
@@ -142,7 +142,7 @@ namespace smil
 
     UINT8 trueVal, falseVal;
 
-    typedef Image<RGB>::lineType lineType;
+    using lineType = Image<RGB>::lineType;
     void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
                lineType lOut) override
     {

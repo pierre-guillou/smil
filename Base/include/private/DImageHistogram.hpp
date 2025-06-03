@@ -514,8 +514,8 @@ namespace smil
     unsigned long numberOfHistogramBins = hist.size();
     unsigned long numberOfClasses       = classMean.size();
 
-    typedef double MeanType;
-    typedef double FrequencyType;
+    using MeanType      = double;
+    using FrequencyType = double;
 
     MeanType      meanOld;
     FrequencyType freqOld;
@@ -605,8 +605,8 @@ namespace smil
   template <class T>
   vector<T> otsuThresholdValues(map<T, UINT> &hist, UINT threshLevels = 1)
   {
-    typedef double           MeanType;
-    typedef vector<MeanType> MeanVectorType;
+    using MeanType       = double;
+    using MeanVectorType = vector<MeanType>;
 
     double   totalFrequency = 0;
     MeanType globalMean     = 0;

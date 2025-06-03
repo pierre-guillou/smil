@@ -42,10 +42,10 @@ namespace smil
   class imageFunctionBase
   {
   public:
-    typedef Image<T>                      imageType;
-    typedef typename imageType::sliceType sliceType;
-    typedef typename imageType::lineType  lineType;
-    typedef typename imageType::pixelType pixelType;
+    using imageType = Image<T>;
+    using sliceType = typename imageType::sliceType;
+    using lineType  = typename imageType::lineType;
+    using pixelType = typename imageType::pixelType;
 
     sliceType alignedBuffers;
     size_t    bufferNumber;
@@ -77,16 +77,16 @@ namespace smil
   class unaryImageFunction : public imageFunctionBase<T>
   {
   public:
-    typedef imageFunctionBase<T>            parentClass;
-    typedef Image<T>                        imageInType;
-    typedef typename imageInType::pixelType pixelInType;
-    typedef typename imageInType::lineType  lineInType;
-    typedef typename imageInType::sliceType sliceInType;
+    using parentClass = imageFunctionBase<T>;
+    using imageInType = Image<T>;
+    using pixelInType = typename imageInType::pixelType;
+    using lineInType  = typename imageInType::lineType;
+    using sliceInType = typename imageInType::sliceType;
 
-    typedef Image<T_out>                     imageOutType;
-    typedef typename imageOutType::pixelType pixelOutType;
-    typedef typename imageOutType::lineType  lineOutType;
-    typedef typename imageOutType::sliceType sliceOutType;
+    using imageOutType = Image<T_out>;
+    using pixelOutType = typename imageOutType::pixelType;
+    using lineOutType  = typename imageOutType::lineType;
+    using sliceOutType = typename imageOutType::sliceType;
 
     unaryImageFunction() = default;
     unaryImageFunction(const imageInType &imIn, imageOutType &ImOut)
@@ -118,11 +118,11 @@ namespace smil
   class binaryImageFunction : public imageFunctionBase<T>
   {
   public:
-    typedef imageFunctionBase<T>          parentClass;
-    typedef Image<T>                      imageType;
-    typedef typename imageType::pixelType pixelType;
-    typedef typename imageType::lineType  lineType;
-    typedef typename imageType::sliceType sliceType;
+    using parentClass = imageFunctionBase<T>;
+    using imageType   = Image<T>;
+    using pixelType   = typename imageType::pixelType;
+    using lineType    = typename imageType::lineType;
+    using sliceType   = typename imageType::sliceType;
 
     binaryImageFunction() = default;
     binaryImageFunction(const imageType &imIn1, const imageType &imIn2,
@@ -170,11 +170,11 @@ namespace smil
   class tertiaryImageFunction : public imageFunctionBase<T>
   {
   public:
-    typedef imageFunctionBase<T>          parentClass;
-    typedef Image<T>                      imageType;
-    typedef typename imageType::pixelType pixelType;
-    typedef typename imageType::lineType  lineType;
-    typedef typename imageType::sliceType sliceType;
+    using parentClass = imageFunctionBase<T>;
+    using imageType   = Image<T>;
+    using pixelType   = typename imageType::pixelType;
+    using lineType    = typename imageType::lineType;
+    using sliceType   = typename imageType::sliceType;
 
     tertiaryImageFunction() = default;
 
