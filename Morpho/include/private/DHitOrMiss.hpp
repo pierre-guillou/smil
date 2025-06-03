@@ -33,8 +33,7 @@
 #include "Morpho/include/DCompositeSE.h"
 #include "Morpho/include/private/DMorphoBase.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Morpho
    * @defgroup HitOrMiss Hit-or-Miss Transform
@@ -50,7 +49,7 @@ namespace smil
    * first structuring element fits in the foreground of the input image, and
    * the second structuring element misses it completely.
    *
-   * @see 
+   * @see
    * - @SoilleBook{p. 139}
    * - <a href="https://en.wikipedia.org/wiki/Hit-or-miss_transform">
    * Hit-or-mis Transform</a>
@@ -67,10 +66,11 @@ namespace smil
    * @param[in] borderVal : value to be assigned to border pixels
    */
   template <class T>
-  RES_T hitOrMiss(const Image<T> &imIn, const StrElt &foreSE,
-                  const StrElt &backSE, Image<T> &imOut,
-                  T borderVal = ImDtTypes<T>::min())
-  {
+  RES_T hitOrMiss(const Image<T> &imIn,
+                  const StrElt &foreSE,
+                  const StrElt &backSE,
+                  Image<T> &imOut,
+                  T borderVal = ImDtTypes<T>::min()) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -97,9 +97,10 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T hitOrMiss(const Image<T> &imIn, const CompStrElt &compSE,
-                  Image<T> &imOut, T borderVal = ImDtTypes<T>::min())
-  {
+  RES_T hitOrMiss(const Image<T> &imIn,
+                  const CompStrElt &compSE,
+                  Image<T> &imOut,
+                  T borderVal = ImDtTypes<T>::min()) {
     return hitOrMiss(imIn, compSE.fgSE, compSE.bgSE, imOut, borderVal);
   }
 
@@ -115,9 +116,10 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T hitOrMiss(const Image<T> &imIn, const CompStrEltList &mhtSE,
-                  Image<T> &imOut, T borderVal = ImDtTypes<T>::min())
-  {
+  RES_T hitOrMiss(const Image<T> &imIn,
+                  const CompStrEltList &mhtSE,
+                  Image<T> &imOut,
+                  T borderVal = ImDtTypes<T>::min()) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -126,10 +128,10 @@ namespace smil
 
     ImageFreezer freezer(imOut);
     ASSERT((fill(imOut, ImDtTypes<T>::min()) == RES_OK));
-    for (std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
-         it != mhtSE.compSeList.end(); it++) {
-      ASSERT((hitOrMiss<T>(imIn, (*it).fgSE, (*it).bgSE, tmpIm, borderVal) ==
-              RES_OK));
+    for(std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
+        it != mhtSE.compSeList.end(); it++) {
+      ASSERT((hitOrMiss<T>(imIn, (*it).fgSE, (*it).bgSE, tmpIm, borderVal)
+              == RES_OK));
       ASSERT((sup(imOut, tmpIm, imOut) == RES_OK));
     }
 
@@ -148,9 +150,10 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T thin(const Image<T> &imIn, const StrElt &foreSE, const StrElt &backSE,
-             Image<T> &imOut)
-  {
+  RES_T thin(const Image<T> &imIn,
+             const StrElt &foreSE,
+             const StrElt &backSE,
+             Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -176,8 +179,7 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T thin(const Image<T> &imIn, const CompStrElt &compSE, Image<T> &imOut)
-  {
+  RES_T thin(const Image<T> &imIn, const CompStrElt &compSE, Image<T> &imOut) {
     return thin(imIn, compSE.fgSE, compSE.bgSE, imOut);
   }
 
@@ -192,8 +194,8 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T thin(const Image<T> &imIn, const CompStrEltList &mhtSE, Image<T> &imOut)
-  {
+  RES_T
+    thin(const Image<T> &imIn, const CompStrEltList &mhtSE, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -202,8 +204,8 @@ namespace smil
 
     ImageFreezer freezer(imOut);
     ASSERT((fill(imOut, ImDtTypes<T>::min()) == RES_OK));
-    for (std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
-         it != mhtSE.compSeList.end(); it++) {
+    for(std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
+        it != mhtSE.compSeList.end(); it++) {
       ASSERT((thin<T>(tmpIm, (*it).fgSE, (*it).bgSE, tmpIm) == RES_OK));
     }
     copy(tmpIm, imOut);
@@ -215,7 +217,7 @@ namespace smil
    * thick() - Thicking transform
    *
    * A @b thickening consists in adding background pixels having a specific
-   * configuration to the set of foreground pixels. This is achieved by adding 
+   * configuration to the set of foreground pixels. This is achieved by adding
    * to the input image the hit or miss transform by the corresponding composite
    * SE.
    *
@@ -224,9 +226,10 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T thick(const Image<T> &imIn, const StrElt &foreSE, const StrElt &backSE,
-              Image<T> &imOut)
-  {
+  RES_T thick(const Image<T> &imIn,
+              const StrElt &foreSE,
+              const StrElt &backSE,
+              Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -251,8 +254,7 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T thick(const Image<T> &imIn, const CompStrElt &compSE, Image<T> &imOut)
-  {
+  RES_T thick(const Image<T> &imIn, const CompStrElt &compSE, Image<T> &imOut) {
     return thick(imIn, compSE.fgSE, compSE.bgSE, imOut);
   }
 
@@ -267,9 +269,8 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T thick(const Image<T> &imIn, const CompStrEltList &mhtSE,
-              Image<T> &imOut)
-  {
+  RES_T
+    thick(const Image<T> &imIn, const CompStrEltList &mhtSE, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -278,8 +279,8 @@ namespace smil
 
     ImageFreezer freezer(imOut);
     ASSERT((fill(imOut, ImDtTypes<T>::min()) == RES_OK));
-    for (std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
-         it != mhtSE.compSeList.end(); it++) {
+    for(std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
+        it != mhtSE.compSeList.end(); it++) {
       ASSERT((thick<T>(tmpIm, (*it).fgSE, (*it).bgSE, tmpIm) == RES_OK));
     }
     copy(tmpIm, imOut);
@@ -300,9 +301,9 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T fullThin(const Image<T> &imIn, const CompStrEltList &mhtSE,
-                 Image<T> &imOut)
-  {
+  RES_T fullThin(const Image<T> &imIn,
+                 const CompStrEltList &mhtSE,
+                 Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -311,10 +312,10 @@ namespace smil
     double v1, v2;
     ASSERT((thin<T>(imIn, mhtSE, imOut) == RES_OK));
     v1 = vol(imOut);
-    while (true) {
+    while(true) {
       ASSERT((thin<T>(imOut, mhtSE, imOut) == RES_OK));
       v2 = vol(imOut);
-      if (v2 == v1)
+      if(v2 == v1)
         break;
       v1 = v2;
     }
@@ -333,9 +334,8 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T fullThin(const Image<T> &imIn, const CompStrElt &compSE,
-                 Image<T> &imOut)
-  {
+  RES_T
+    fullThin(const Image<T> &imIn, const CompStrElt &compSE, Image<T> &imOut) {
     return fullThin(imIn, CompStrEltList(compSE), imOut);
   }
 
@@ -349,9 +349,10 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T fullThin(const Image<T> &imIn, const StrElt &foreSE,
-                 const StrElt &backSE, Image<T> &imOut)
-  {
+  RES_T fullThin(const Image<T> &imIn,
+                 const StrElt &foreSE,
+                 const StrElt &backSE,
+                 Image<T> &imOut) {
     return fullThin(imIn, CompStrEltList(CompStrElt(foreSE, backSE)), imOut);
   }
 
@@ -368,9 +369,9 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T fullThick(const Image<T> &imIn, const CompStrEltList &mhtSE,
-                  Image<T> &imOut)
-  {
+  RES_T fullThick(const Image<T> &imIn,
+                  const CompStrEltList &mhtSE,
+                  Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -378,10 +379,10 @@ namespace smil
     double v1, v2;
     ASSERT((thick<T>(imIn, mhtSE, imOut) == RES_OK));
     v1 = vol(imOut);
-    while (true) {
+    while(true) {
       ASSERT((thick<T>(imOut, mhtSE, imOut) == RES_OK));
       v2 = vol(imOut);
-      if (v2 == v1)
+      if(v2 == v1)
         break;
       v1 = v2;
     }
@@ -400,9 +401,8 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T fullThick(const Image<T> &imIn, const CompStrElt &compSE,
-                  Image<T> &imOut)
-  {
+  RES_T
+    fullThick(const Image<T> &imIn, const CompStrElt &compSE, Image<T> &imOut) {
     return fullThick(imIn, CompStrEltList(compSE), imOut);
   }
 
@@ -417,9 +417,10 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T fullThick(const Image<T> &imIn, const StrElt &foreSE,
-                  const StrElt &backSE, Image<T> &imOut)
-  {
+  RES_T fullThick(const Image<T> &imIn,
+                  const StrElt &foreSE,
+                  const StrElt &backSE,
+                  Image<T> &imOut) {
     return fullThick(imIn, CompStrEltList(CompStrElt(foreSE, backSE)), imOut);
   }
 

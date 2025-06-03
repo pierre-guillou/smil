@@ -33,8 +33,7 @@
 #include "DMorphoBase.hpp"
 #include "DHitOrMiss.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Morpho
    * @defgroup Skeleton Skeleton
@@ -67,13 +66,12 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T skiz(const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T skiz(const Image<T> &imIn, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     ImageFreezer freezer(imOut);
-    Image<T>     tmpIm(imIn);
+    Image<T> tmpIm(imIn);
     inv(imIn, imOut);
     fullThin(imOut, HMT_hL(6), tmpIm);
     fullThin(tmpIm, HMT_hM(6), imOut);
@@ -89,9 +87,9 @@ namespace smil
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T skeleton(const Image<T> &imIn, Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE)
-  {
+  RES_T skeleton(const Image<T> &imIn,
+                 Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -112,7 +110,7 @@ namespace smil
       sup(imOut, imTemp, imTemp);
       idempt = equ(imTemp, imOut);
       copy(imTemp, imOut);
-    } while (!idempt);
+    } while(!idempt);
 
     return RES_OK;
   }
@@ -125,9 +123,9 @@ namespace smil
    * @param[in] se : structuring element
    */
   template <class T1, class T2>
-  RES_T extinctionValues(const Image<T1> &imIn, Image<T2> &imOut,
-                         const StrElt &se = DEFAULT_SE)
-  {
+  RES_T extinctionValues(const Image<T1> &imIn,
+                         Image<T2> &imOut,
+                         const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -140,7 +138,7 @@ namespace smil
     copy(imIn, imEro);
     fill(imOut, ImDtTypes<T2>::min());
 
-    T2   r      = 1;
+    T2 r = 1;
     bool idempt = false;
     do {
       erode(imEro, imEro, se);
@@ -149,11 +147,10 @@ namespace smil
       test(imTemp1, r++, imOut, imTemp2);
       idempt = equ(imTemp2, imOut);
       copy(imTemp2, imOut);
-    } while (!idempt);
+    } while(!idempt);
 
     return RES_OK;
   }
-
 
   /*
    *
@@ -175,13 +172,13 @@ namespace smil
    *
    */
   template <class T>
-  RES_T pruneSkiz(const Image<T> &imIn, Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE)
-  {
+  RES_T pruneSkiz(const Image<T> &imIn,
+                  Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    T *in  = imIn.getPixels();
+    T *in = imIn.getPixels();
     T *out = imOut.getPixels();
 
     fill<T>(imOut, T(0));
@@ -189,7 +186,7 @@ namespace smil
     size_t Size[3];
     imIn.getSize(Size);
 
-    size_t nbrPixels   = Size[0] * Size[1] * Size[2];
+    size_t nbrPixels = Size[0] * Size[1] * Size[2];
     size_t sePtsNumber = se.points.size();
 
 #ifdef USE_OPEN_MP
@@ -200,31 +197,31 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif
-      for (size_t i = 0; i < nbrPixels; ++i) {
+      for(size_t i = 0; i < nbrPixels; ++i) {
         ImageBox pt(Size);
         pt.setReference(i);
 
-        bool up   = false;
+        bool up = false;
         bool down = false;
-        if (in[pt.reference] > 0 && in[pt.reference] != ImDtTypes<T>::max()) {
-          for (UINT pts = 0; pts < sePtsNumber; ++pts) {
+        if(in[pt.reference] > 0 && in[pt.reference] != ImDtTypes<T>::max()) {
+          for(UINT pts = 0; pts < sePtsNumber; ++pts) {
             ImageBox qt(Size);
             qt = pt;
             qt.shift(se.points[pts]);
 
-            if (qt.inImage()) {
-              if (in[qt.reference] != ImDtTypes<T>::max()) {
-                if (in[qt.reference] >= in[pt.reference] + 1) {
+            if(qt.inImage()) {
+              if(in[qt.reference] != ImDtTypes<T>::max()) {
+                if(in[qt.reference] >= in[pt.reference] + 1) {
                   up = true;
                 }
-                if (in[qt.reference] <= in[pt.reference] - 1) {
+                if(in[qt.reference] <= in[pt.reference] - 1) {
                   down = true;
                 }
               }
             }
           }
 
-          if (!up || !down) {
+          if(!up || !down) {
             out[pt.reference] = in[pt.reference];
           }
         }

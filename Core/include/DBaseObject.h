@@ -41,88 +41,75 @@
 
 using namespace std;
 
-namespace smil
-{
+namespace smil {
   class Core;
 
   /**
    * Base @Smil Object
    */
-  class BaseObject
-  {
+  class BaseObject {
   public:
     //         BaseObject(bool _register=true);
     BaseObject(const char *_className, bool _register = true)
-        : triggerEvents(true), registered(false), className(_className),
-          name("")
-    {
-      if (_register) {
+      : triggerEvents(true), registered(false), className(_className),
+        name("") {
+      if(_register) {
         Core *core = Core::getInstance();
-        if (core)
+        if(core)
           core->registerObject(this);
       }
     }
     BaseObject(const BaseObject &rhs, bool _register = true)
-        : registered(false), className(rhs.className), name("")
-    {
+      : registered(false), className(rhs.className), name("") {
       this->_clone(rhs);
-      if (_register) {
+      if(_register) {
         Core *core = Core::getInstance();
-        if (core)
+        if(core)
           core->registerObject(this);
       }
     }
 
-    virtual ~BaseObject()
-    {
-      if (registered) {
+    virtual ~BaseObject() {
+      if(registered) {
         Core *core = Core::getInstance();
-        if (core)
+        if(core)
           core->unregisterObject(this);
       }
     }
 
     // Assignment operator
-    BaseObject &operator=(const BaseObject &rhs)
-    {
+    BaseObject &operator=(const BaseObject &rhs) {
       this->_clone(rhs);
       return *this;
     }
 
   private:
-    void _clone(const BaseObject &rhs)
-    {
-      this->className     = rhs.getClassName();
+    void _clone(const BaseObject &rhs) {
+      this->className = rhs.getClassName();
       this->triggerEvents = rhs.triggerEvents;
     }
 
   public:
     Core *getCoreInstance();
     typedef void parentClass;
-    virtual std::string getInfoString(const char * = "") const
-    {
+    virtual std::string getInfoString(const char * = "") const {
       return {};
     }
-    virtual void printSelf(ostream & = std::cout, string = "") const
-    {
+    virtual void printSelf(ostream & = std::cout, string = "") const {
     }
-    virtual const char *getClassName() const
-    {
+    virtual const char *getClassName() const {
       return this->className.c_str();
     }
 
-    virtual void setName(const char *_name)
-    {
+    virtual void setName(const char *_name) {
       name = _name;
     }
-    virtual const char *getName() const
-    {
+    virtual const char *getName() const {
       return name.c_str();
     }
     typedef void (BaseObject::*voidMemberFunc)();
 
-    virtual size_t getAllocatedSize() const
-    {
+    virtual size_t getAllocatedSize() const {
       return sizeof(*this);
     }
     bool triggerEvents;

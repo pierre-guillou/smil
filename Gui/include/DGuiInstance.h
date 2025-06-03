@@ -43,8 +43,7 @@
 #include "Gui/AALib/DAAImageViewer.hpp"
 #endif // USE_AALIB
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Gui
    */
@@ -55,16 +54,15 @@ namespace smil
 
   /** @cond */
   // Need this when Qt is enabled and import smilPython under Jupyter
-  inline bool isGuiDisabled()
-  {
+  inline bool isGuiDisabled() {
     // JOE XXX - solve this for windows
 #ifndef _MSC_VER
     char *env = getenv("SMIL_DISABLE_GUI");
-    if (env != nullptr) {
+    if(env != nullptr) {
       return (strcasecmp(env, "yes") == 0 || strcasecmp(env, "true") == 0);
     }
     env = getenv("DisableQt");
-    if (env != nullptr) {
+    if(env != nullptr) {
       return (strcasecmp(env, "yes") == 0 || strcasecmp(env, "true") == 0);
     }
 #endif
@@ -77,19 +75,16 @@ namespace smil
   /**
    * Gui module instance
    */
-  class Gui : public UniqueInstance<Gui>
-  {
+  class Gui : public UniqueInstance<Gui> {
     friend class UniqueInstance<Gui>;
 
   protected:
     // disable Qt when running from notebooks or without GUI
 
-    Gui()
-    {
+    Gui() {
     }
 
-    virtual ~Gui()
-    {
+    virtual ~Gui() {
     }
 
   public:
@@ -111,24 +106,20 @@ namespace smil
     ImageViewer<T> *createDefaultViewer(Image<T> &im = NULL);
 
   protected:
-    virtual void _execLoop()
-    {
+    virtual void _execLoop() {
     }
-    virtual void _processEvents()
-    {
+    virtual void _processEvents() {
     }
-    virtual void _showHelp()
-    {
+    virtual void _showHelp() {
     }
 
   private:
   };
 
   template <class T>
-  ImageViewer<T> *Gui::createDefaultViewer(Image<T> &im)
-  {
+  ImageViewer<T> *Gui::createDefaultViewer(Image<T> &im) {
 #ifdef USE_QT
-    if (!isGuiDisabled()) {
+    if(!isGuiDisabled()) {
       return new QtImageViewer<T>(im);
     } else {
       return new ImageViewer<T>(im);

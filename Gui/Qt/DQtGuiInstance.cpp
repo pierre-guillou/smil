@@ -45,58 +45,48 @@
 
 using namespace smil;
 
-namespace smil
-{
-  QtGui::~QtGui()
-  {
-    if (helpForm)
+namespace smil {
+  QtGui::~QtGui() {
+    if(helpForm)
       delete helpForm;
   }
 
-  void QtGui::_execLoop()
-  {
+  void QtGui::_execLoop() {
     qtLoop();
   }
 
-  void QtGui::_processEvents()
-  {
-    if (qApp)
+  void QtGui::_processEvents() {
+    if(qApp)
       qApp->processEvents();
   }
 
-  void QtGui::_showHelp()
-  {
-    if (!helpForm)
+  void QtGui::_showHelp() {
+    if(!helpForm)
       helpForm = new HelpForm();
     helpForm->show();
   }
 
-  QtAppGui::QtAppGui() : QApplication(_argc, NULL)
-  {
+  QtAppGui::QtAppGui() : QApplication(_argc, NULL) {
   }
 
-  QtAppGui::~QtAppGui()
-  {
+  QtAppGui::~QtAppGui() {
   }
 
-  void QtAppGui::_execLoop()
-  {
+  void QtAppGui::_execLoop() {
     qtLoop();
   }
 
-  void QtAppGui::_processEvents()
-  {
+  void QtAppGui::_processEvents() {
     QApplication::processEvents();
   }
 
-  int qtLoop()
-  {
+  int qtLoop() {
     QCoreApplication *app = QCoreApplication::instance();
 
-    if (app && app->thread() == QThread::currentThread()) {
+    if(app && app->thread() == QThread::currentThread()) {
 #if defined(Q_OS_WIN)
       QTimer timer;
-      bool   lastWindowClosed;
+      bool lastWindowClosed;
 
       do {
         timer.start(100);
@@ -104,11 +94,11 @@ namespace smil
         timer.stop();
 
         lastWindowClosed = true;
-        foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-          if (widget->isVisible())
+        foreach(QWidget *widget, QApplication::topLevelWidgets()) {
+          if(widget->isVisible())
             lastWindowClosed = false;
         }
-      } while (!_kbhit() && !lastWindowClosed);
+      } while(!_kbhit() && !lastWindowClosed);
 
       QObject::disconnect(&timer, SIGNAL(timeout()), app, SLOT(quit()));
 #else

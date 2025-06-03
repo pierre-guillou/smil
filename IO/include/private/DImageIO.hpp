@@ -33,45 +33,38 @@
 #include "IO/include/DCommonIO.h"
 #include "Base/include/private/DImageArith.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup IO
    */
 
   /**@{*/
 
-  template <class T = void> class ImageFileHandler
-  {
+  template <class T = void>
+  class ImageFileHandler {
   public:
-    ImageFileHandler(const char *ext) : fileExtention(ext)
-    {
+    ImageFileHandler(const char *ext) : fileExtention(ext) {
     }
-    virtual ~ImageFileHandler()
-    {
+    virtual ~ImageFileHandler() {
     }
 
     const char *fileExtention;
 
-    virtual RES_T getFileInfo(const char *, ImageFileInfo &)
-    {
+    virtual RES_T getFileInfo(const char *, ImageFileInfo &) {
       return RES_ERR;
     }
 
-    virtual RES_T read(const char *)
-    {
+    virtual RES_T read(const char *) {
       return RES_ERR;
     }
 
-    virtual RES_T read(const char *, Image<T> &)
-    {
+    virtual RES_T read(const char *, Image<T> &) {
       T *dum = NULL;
       cout << getDataTypeAsString<T>(dum) << " data type not implemented for "
            << fileExtention << " files (read)." << endl;
       return RES_ERR;
     }
-    virtual RES_T write(const Image<T> &, const char *)
-    {
+    virtual RES_T write(const Image<T> &, const char *) {
       T *dum = NULL;
       cout << getDataTypeAsString<T>(dum) << " data type not implemented for "
            << fileExtention << " files (write)." << endl;
@@ -95,7 +88,8 @@ namespace smil
    *
    * @smilexample{example-read.py}
    */
-  template <class T> RES_T read(const char *filename, Image<T> &image);
+  template <class T>
+  RES_T read(const char *filename, Image<T> &image);
 
   /**
    * Read a stack of 2D images and convert then into a 3D image
@@ -111,7 +105,8 @@ namespace smil
    * TIFF @b VTK
    *
    */
-  template <class T> RES_T read(const vector<string> fileList, Image<T> &image);
+  template <class T>
+  RES_T read(const vector<string> fileList, Image<T> &image);
 
   /**
    * Write image into file
@@ -119,7 +114,8 @@ namespace smil
    * @param[in] image : image to write to file
    * @param[in] filename : file name
    */
-  template <class T> RES_T write(const Image<T> &image, const char *filename);
+  template <class T>
+  RES_T write(const Image<T> &image, const char *filename);
 
   /**
    * Write a 3D image as a stack of 2D image files

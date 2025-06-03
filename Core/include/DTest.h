@@ -42,23 +42,17 @@
 
 using namespace std;
 
-namespace smil
-{
-  class TestCase
-  {
+namespace smil {
+  class TestCase {
   public:
-    TestCase() : stopIfError(false), outStream(NULL)
-    {
+    TestCase() : stopIfError(false), outStream(NULL) {
     }
-    virtual ~TestCase()
-    {
+    virtual ~TestCase() {
     }
-    virtual void init()
-    {
+    virtual void init() {
     }
     virtual void run() = 0;
-    virtual void end()
-    {
+    virtual void end() {
     }
     const char *name;
     bool stopIfError;
@@ -70,56 +64,55 @@ namespace smil
     int tElapsed;
   };
 
-#define TEST_ASSERT(expr)                                                      \
-  {                                                                            \
-    if (!(expr)) {                                                             \
-      if (outStream)                                                           \
-        *outStream << __FILE__ << ":" << __LINE__ << ": error: "               \
-                   << " assert " << #expr << endl;                             \
-      retVal = RES_ERR;                                                        \
-      if (stopIfError)                                                         \
-        return;                                                                \
-    }                                                                          \
+#define TEST_ASSERT(expr)                                        \
+  {                                                              \
+    if(!(expr)) {                                                \
+      if(outStream)                                              \
+        *outStream << __FILE__ << ":" << __LINE__ << ": error: " \
+                   << " assert " << #expr << endl;               \
+      retVal = RES_ERR;                                          \
+      if(stopIfError)                                            \
+        return;                                                  \
+    }                                                            \
   }
 
-#define TEST_NO_THROW(expr)                                                    \
-  {                                                                            \
-    bool _throw = false;                                                       \
-    try {                                                                      \
-      expr;                                                                    \
-    } catch (...) {                                                            \
-      _throw = true;                                                           \
-    }                                                                          \
-    if (_throw) {                                                              \
-      if (outStream)                                                           \
-        *outStream << __FILE__ << ":" << __LINE__ << ": error: "               \
-                   << " no throw " << #expr << endl;                           \
-      retVal = RES_ERR;                                                        \
-      if (stopIfError)                                                         \
-        return;                                                                \
-    }                                                                          \
+#define TEST_NO_THROW(expr)                                      \
+  {                                                              \
+    bool _throw = false;                                         \
+    try {                                                        \
+      expr;                                                      \
+    } catch(...) {                                               \
+      _throw = true;                                             \
+    }                                                            \
+    if(_throw) {                                                 \
+      if(outStream)                                              \
+        *outStream << __FILE__ << ":" << __LINE__ << ": error: " \
+                   << " no throw " << #expr << endl;             \
+      retVal = RES_ERR;                                          \
+      if(stopIfError)                                            \
+        return;                                                  \
+    }                                                            \
   }
 
-#define TEST_THROW(expr)                                                       \
-  {                                                                            \
-    bool _throw = false;                                                       \
-    try {                                                                      \
-      expr;                                                                    \
-    } catch (...) {                                                            \
-      _throw = true;                                                           \
-    }                                                                          \
-    if (!_throw) {                                                             \
-      if (outStream)                                                           \
-        *outStream << __FILE__ << ":" << __LINE__ << ": error: "               \
-                   << " throw " << #expr << endl;                              \
-      retVal = RES_ERR;                                                        \
-      if (stopIfError)                                                         \
-        return;                                                                \
-    }                                                                          \
+#define TEST_THROW(expr)                                         \
+  {                                                              \
+    bool _throw = false;                                         \
+    try {                                                        \
+      expr;                                                      \
+    } catch(...) {                                               \
+      _throw = true;                                             \
+    }                                                            \
+    if(!_throw) {                                                \
+      if(outStream)                                              \
+        *outStream << __FILE__ << ":" << __LINE__ << ": error: " \
+                   << " throw " << #expr << endl;                \
+      retVal = RES_ERR;                                          \
+      if(stopIfError)                                            \
+        return;                                                  \
+    }                                                            \
   }
 
-  class TestSuite
-  {
+  class TestSuite {
   public:
     void add(TestCase *f);
     int run();
@@ -132,9 +125,9 @@ namespace smil
     int tElapsed;
   };
 
-#define ADD_TEST(TS, TC)                                                       \
-  TC TC##_inst;                                                                \
-  TC##_inst.name = #TC;                                                        \
+#define ADD_TEST(TS, TC) \
+  TC TC##_inst;          \
+  TC##_inst.name = #TC;  \
   TS.add(&TC##_inst);
 
 } // namespace smil

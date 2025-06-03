@@ -49,8 +49,7 @@ using namespace std;
  */
 #define NEWTDEFS 0
 
-namespace smil
-{
+namespace smil {
   typedef int INT;
   typedef long LONG;
   typedef unsigned int UINT;
@@ -73,9 +72,9 @@ namespace smil
   // typedef unsigned char __attribute__ ((vector_size (16))) alUINT8;
 
   // Why this directive for msvc (windows) ?
-  //#ifndef _MSC_VER
+  // #ifndef _MSC_VER
   typedef signed char INT8;
-  //#endif // _MSC_VER
+  // #endif // _MSC_VER
   typedef short INT16;
   typedef int INT32;
 
@@ -85,7 +84,8 @@ namespace smil
 
   enum DType { DtUINT8, DtUINT16, DtUINT32, DtUINT64, DtINT, DtUINT };
 
-  template <class T> struct ImDtTypes {
+  template <class T>
+  struct ImDtTypes {
     typedef T pixelType;
     typedef pixelType *lineType;
 #ifndef SWIG
@@ -101,32 +101,25 @@ namespace smil
 
     typedef double floatType;
 
-    static inline pixelType min()
-    {
+    static inline pixelType min() {
       return numeric_limits<T>::min();
     }
-    static inline pixelType max()
-    {
+    static inline pixelType max() {
       return numeric_limits<T>::max();
     }
-    static inline size_t cardinal()
-    {
+    static inline size_t cardinal() {
       return size_t(max() - min()) + 1;
     }
-    static inline lineType createLine(size_t lineLen)
-    {
+    static inline lineType createLine(size_t lineLen) {
       return createAlignedBuffer<T>(lineLen);
     }
-    static inline void deleteLine(lineType line)
-    {
+    static inline void deleteLine(lineType line) {
       deleteAlignedBuffer<T>(line);
     }
-    static inline size_t ptrOffset(lineType p, size_t n = SIMD_VEC_SIZE)
-    {
-      return ((size_t) p) & (n - 1);
+    static inline size_t ptrOffset(lineType p, size_t n = SIMD_VEC_SIZE) {
+      return ((size_t)p) & (n - 1);
     }
-    static inline std::string toString(const T &val)
-    {
+    static inline std::string toString(const T &val) {
       stringstream str;
       str << double(val);
       return str.str();
@@ -134,15 +127,14 @@ namespace smil
   };
 
   template <class T>
-  inline const char *getDataTypeAsString(T * /*val*/ = (T *) NULL)
-  {
+  inline const char *getDataTypeAsString(T * /*val*/ = (T *)NULL) {
     return "Unknown";
   }
 
-#define DECL_DATA_TYPE_STR(_type)                                              \
-  template <> inline const char *getDataTypeAsString(_type *)                  \
-  {                                                                            \
-    return #_type;                                                             \
+#define DECL_DATA_TYPE_STR(_type)                   \
+  template <>                                       \
+  inline const char *getDataTypeAsString(_type *) { \
+    return #_type;                                  \
   }
 
   DECL_DATA_TYPE_STR(UINT8)

@@ -32,8 +32,7 @@
 
 #include "DBaseLineOperations.hpp"
 
-namespace smil
-{
+namespace smil {
   /** @ingroup Histogram
    * @{
    */
@@ -46,10 +45,9 @@ namespace smil
     typedef typename unaryLineFunctionBase<T, T_out>::lineInType lineInType;
     typedef typename unaryLineFunctionBase<T, T_out>::lineOutType lineOutType;
 
-    virtual void _exec(const lineInType lIn, const size_t size,
-                       lineOutType lOut)
-    {
-      for (size_t i = 0; i < size; i++)
+    virtual void
+      _exec(const lineInType lIn, const size_t size, lineOutType lOut) {
+      for(size_t i = 0; i < size; i++)
         lOut[i] = lIn[i] >= minVal && lIn[i] <= maxVal ? trueVal : falseVal;
     }
   };
@@ -62,16 +60,15 @@ namespace smil
     typedef typename unaryLineFunctionBase<Tin>::lineType lineInType;
     typedef typename unaryLineFunctionBase<Tout>::lineType lineOutType;
 
-    virtual void _exec(const lineInType lIn, const size_t size,
-                       lineOutType lOut)
-    {
+    virtual void
+      _exec(const lineInType lIn, const size_t size, lineOutType lOut) {
       double newVal;
 
-      for (size_t i = 0; i < size; i++) {
+      for(size_t i = 0; i < size; i++) {
         newVal = double(outOrig) + (double(lIn[i]) - double(inOrig)) * coeff;
-        if (newVal > double(numeric_limits<Tout>::max()))
+        if(newVal > double(numeric_limits<Tout>::max()))
           newVal = numeric_limits<Tout>::max();
-        else if (newVal < double(numeric_limits<Tout>::min()))
+        else if(newVal < double(numeric_limits<Tout>::min()))
           newVal = numeric_limits<Tout>::min();
         lOut[i] = Tout(round(newVal));
       }

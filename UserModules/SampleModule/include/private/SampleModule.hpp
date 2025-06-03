@@ -35,21 +35,19 @@
 
 #include <unistd.h> // For usleep
 
-namespace smil
-{
+namespace smil {
   // Sample inv function
   template <class T>
-  RES_T samplePixelFunction(const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T samplePixelFunction(const Image<T> &imIn, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn)
     ASSERT_SAME_SIZE(&imIn, &imOut)
 
     ImageFreezer freeze(imOut);
 
-    typename Image<T>::lineType pixelsIn  = imIn.getPixels();
+    typename Image<T>::lineType pixelsIn = imIn.getPixels();
     typename Image<T>::lineType pixelsOut = imOut.getPixels();
 
-    for (size_t i = 0; i < imIn.getPixelCount(); i++)
+    for(size_t i = 0; i < imIn.getPixelCount(); i++)
       pixelsOut[i] = ImDtTypes<T>::max() - pixelsIn[i];
 
     return RES_OK;
@@ -58,12 +56,12 @@ namespace smil
   // Sample Morpho functor
   template <class T>
   struct SampleMorphoFunctor : public MorphImageFunctionBase<T> {
-    virtual inline void processPixel(size_t pointOffset, vector<int> &dOffsets)
-    {
+    virtual inline void processPixel(size_t pointOffset,
+                                     vector<int> &dOffsets) {
       double pixSum = 0;
 
-      for (vector<int>::iterator it = dOffsets.begin(); it != dOffsets.end();
-           it++)
+      for(vector<int>::iterator it = dOffsets.begin(); it != dOffsets.end();
+          it++)
         pixSum += this->pixelsIn[pointOffset + *it];
 
       this->pixelsOut[pointOffset] = T(pixSum / dOffsets.size());
@@ -71,9 +69,9 @@ namespace smil
   };
 
   template <class T>
-  RES_T sampleMorphoFunction(const Image<T> &imIn, Image<T> &imOut,
-                             const StrElt &se = DEFAULT_SE)
-  {
+  RES_T sampleMorphoFunction(const Image<T> &imIn,
+                             Image<T> &imOut,
+                             const StrElt &se = DEFAULT_SE) {
     SampleMorphoFunctor<T> func;
     return func(imIn, imOut, se);
   }
@@ -81,30 +79,28 @@ namespace smil
   // Sample (silly) Flooding functor
   template <class T, class labelT>
   struct SampleFloodingFunctor : public BaseFlooding<T, labelT> {
-    virtual RES_T initialize(const Image<T> &imIn, Image<labelT> &imLbl,
-                             const StrElt &se)
-    {
+    virtual RES_T
+      initialize(const Image<T> &imIn, Image<labelT> &imLbl, const StrElt &se) {
       BaseFlooding<T, labelT>::initialize(imIn, imLbl, se);
       this->imgLbl->updatesEnabled = true; // Enable image repaint
     }
 
-    virtual inline void processPixel(const size_t &curOffset)
-    {
+    virtual inline void processPixel(const size_t &curOffset) {
       this->lblPixels[curOffset] = UINT16(255);
 
       BaseFlooding<T, labelT>::processPixel(curOffset);
 
       this->imgLbl->modified(); // Trigger image repaint
-      Gui::processEvents();     // Refresh display
+      Gui::processEvents(); // Refresh display
 
       usleep(1000);
     }
   };
 
   template <class T>
-  RES_T sampleFloodingFunction(const Image<T> &imIn, Image<T> &imOut,
-                               const StrElt &se = DEFAULT_SE)
-  {
+  RES_T sampleFloodingFunction(const Image<T> &imIn,
+                               Image<T> &imOut,
+                               const StrElt &se = DEFAULT_SE) {
     SampleFloodingFunctor<T, T> func;
     fill(imOut, T(0));
     size_t pixNbr = imOut.getPixelCount();

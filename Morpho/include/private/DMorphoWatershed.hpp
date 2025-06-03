@@ -36,8 +36,7 @@
 #include "DMorphoResidues.hpp"
 #include "Core/include/DTypes.h"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Morpho
    * @defgroup Watershed Watershed Segmentation
@@ -59,49 +58,45 @@ namespace smil
    * class BaseFlooding
    */
   template <class T, class labelT, class HQ_Type = HierarchicalQueue<T>>
-  class BaseFlooding
-  {
+  class BaseFlooding {
   public:
-    BaseFlooding() : STAT_QUEUED(ImDtTypes<labelT>::max())
-    {
+    BaseFlooding() : STAT_QUEUED(ImDtTypes<labelT>::max()) {
       pixelCount = 0;
     }
-    virtual ~BaseFlooding()
-    {
+    virtual ~BaseFlooding() {
     }
 
   protected:
     const labelT STAT_QUEUED;
 
-    typename ImDtTypes<T>::lineType      inPixels;
+    typename ImDtTypes<T>::lineType inPixels;
     typename ImDtTypes<labelT>::lineType lblPixels;
 
     size_t imSize[3], pixPerSlice;
     size_t pixelCount;
 
-    inline void getCoordsFromOffset(size_t off, size_t &x, size_t &y,
-                                    size_t &z) const
-    {
+    inline void
+      getCoordsFromOffset(size_t off, size_t &x, size_t &y, size_t &z) const {
       z = off / pixPerSlice;
       y = (off % pixPerSlice) / imSize[0];
       x = off % imSize[0];
     }
 
     vector<IntPoint> sePts;
-    size_t           sePtsNbr;
-    bool             oddSE;
-    vector<int>      dOffsets;
+    size_t sePtsNbr;
+    bool oddSE;
+    vector<int> dOffsets;
 
     T currentLevel;
 
   public:
     const Image<T> *imgIn;
-    Image<labelT>  *imgLbl;
+    Image<labelT> *imgLbl;
 
-    virtual RES_T flood(const Image<T> &imIn, const Image<labelT> &imMarkers,
+    virtual RES_T flood(const Image<T> &imIn,
+                        const Image<labelT> &imMarkers,
                         Image<labelT> &imBasinsOut,
-                        const StrElt  &se = DEFAULT_SE)
-    {
+                        const StrElt &se = DEFAULT_SE) {
       ASSERT_ALLOCATED(&imIn, &imMarkers, &imBasinsOut);
       ASSERT_SAME_SIZE(&imIn, &imMarkers, &imBasinsOut);
 
@@ -117,16 +112,15 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T initialize(const Image<T> &imIn, Image<labelT> &imLbl,
-                             const StrElt &se)
-    {
-      imgIn  = &imIn;
+    virtual RES_T
+      initialize(const Image<T> &imIn, Image<labelT> &imLbl, const StrElt &se) {
+      imgIn = &imIn;
       imgLbl = &imLbl;
 
       // Empty the priority queue
       hq.initialize(imIn);
 
-      inPixels  = imIn.getPixels();
+      inPixels = imIn.getPixels();
       lblPixels = imLbl.getPixels();
 
       pixelCount = imIn.getPixelCount();
@@ -138,12 +132,12 @@ namespace smil
       oddSE = se.odd;
 
       // set an offset distance for each se point (!=0,0,0)
-      for (vector<IntPoint>::const_iterator it = se.points.begin();
-           it != se.points.end(); it++)
-        if (it->x != 0 || it->y != 0 || it->z != 0) {
+      for(vector<IntPoint>::const_iterator it = se.points.begin();
+          it != se.points.end(); it++)
+        if(it->x != 0 || it->y != 0 || it->z != 0) {
           sePts.push_back(*it);
-          dOffsets.push_back(it->x + it->y * imSize[0] +
-                             it->z * imSize[0] * imSize[1]);
+          dOffsets.push_back(it->x + it->y * imSize[0]
+                             + it->z * imSize[0] * imSize[1]);
         }
 
       sePtsNbr = sePts.size();
@@ -152,8 +146,8 @@ namespace smil
     }
 
     virtual RES_T processImage(const Image<T> & /*imIn*/,
-                               Image<labelT> & /*imLbl*/, const StrElt & /*se*/)
-    {
+                               Image<labelT> & /*imLbl*/,
+                               const StrElt & /*se*/) {
       // Put the marker pixels in the HQ
       /*
       size_t offset = 0;
@@ -167,45 +161,44 @@ namespace smil
           }
       */
 
-      for (size_t offset = 0; offset < pixelCount; offset++) {
-        if (lblPixels[offset] != 0)
+      for(size_t offset = 0; offset < pixelCount; offset++) {
+        if(lblPixels[offset] != 0)
           hq.push(inPixels[offset], offset);
       }
 
       currentLevel = ImDtTypes<T>::min();
 
-      while (!hq.isEmpty()) {
+      while(!hq.isEmpty()) {
         this->processPixel(hq.pop());
       }
 
       return RES_OK;
     }
 
-    inline virtual void processPixel(const size_t &curOffset)
-    {
+    inline virtual void processPixel(const size_t &curOffset) {
       size_t x0, y0, z0;
 
       getCoordsFromOffset(curOffset, x0, y0, z0);
 
       bool oddLine = oddSE && ((y0 % 2) != 0);
 
-      int    x, y, z;
+      int x, y, z;
       size_t nbOffset;
 
-      for (size_t i = 0; i < sePtsNbr; i++) {
+      for(size_t i = 0; i < sePtsNbr; i++) {
         IntPoint &pt = sePts[i];
-        x            = x0 + pt.x;
-        y            = y0 + pt.y;
-        z            = z0 + pt.z;
+        x = x0 + pt.x;
+        y = y0 + pt.y;
+        z = z0 + pt.z;
 
-        if (oddLine)
+        if(oddLine)
           x += (((y + 1) % 2) != 0);
 
-        if (x >= 0 && x < (int) imSize[0] && y >= 0 && y < (int) imSize[1] &&
-            z >= 0 && z < (int) imSize[2]) {
+        if(x >= 0 && x < (int)imSize[0] && y >= 0 && y < (int)imSize[1]
+           && z >= 0 && z < (int)imSize[2]) {
           nbOffset = curOffset + dOffsets[i];
 
-          if (oddLine)
+          if(oddLine)
             nbOffset += (((y + 1) % 2) != 0);
 
           processNeighbor(curOffset, nbOffset);
@@ -214,13 +207,12 @@ namespace smil
     }
 
     inline virtual void processNeighbor(const size_t &curOffset,
-                                        const size_t &nbOffset)
-    {
-      labelT nbLbl  = this->lblPixels[nbOffset];
+                                        const size_t &nbOffset) {
+      labelT nbLbl = this->lblPixels[nbOffset];
       labelT curLbl = lblPixels[curOffset];
       //==STAT_QUEUED ? 0 : lblPixels[curOffset];
 
-      if (nbLbl == 0) // Add it to the tmp offsets queue
+      if(nbLbl == 0) // Add it to the tmp offsets queue
       {
         hq.push(inPixels[nbOffset], nbOffset);
         this->lblPixels[nbOffset] = curLbl;
@@ -237,23 +229,21 @@ namespace smil
   template <class T, class labelT, class HQ_Type = HierarchicalQueue<T>>
   class WatershedFlooding
 #ifndef SWIG
-      : public BaseFlooding<T, labelT, HQ_Type>
+    : public BaseFlooding<T, labelT, HQ_Type>
 #endif // SWIG
   {
   protected:
-    vector<size_t>                  tmpOffsets;
+    vector<size_t> tmpOffsets;
     typename ImDtTypes<T>::lineType wsPixels;
     const T STAT_LABELED, STAT_QUEUED, STAT_CANDIDATE, STAT_WS_LINE;
 
   public:
     WatershedFlooding()
-        : STAT_LABELED(1), STAT_QUEUED(2),
-          STAT_CANDIDATE(ImDtTypes<T>::max() - 1),
-          STAT_WS_LINE(ImDtTypes<T>::max())
-    {
+      : STAT_LABELED(1), STAT_QUEUED(2),
+        STAT_CANDIDATE(ImDtTypes<T>::max() - 1),
+        STAT_WS_LINE(ImDtTypes<T>::max()) {
     }
-    virtual ~WatershedFlooding()
-    {
+    virtual ~WatershedFlooding() {
     }
 
     Image<T> *imgWS;
@@ -262,10 +252,11 @@ namespace smil
     Image<labelT> *imgLbl;
 #endif // SWIG
 
-    virtual RES_T flood(const Image<T> &imIn, const Image<labelT> &imMarkers,
-                        Image<T> &imOut, Image<labelT> &imBasinsOut,
-                        const StrElt &se)
-    {
+    virtual RES_T flood(const Image<T> &imIn,
+                        const Image<labelT> &imMarkers,
+                        Image<T> &imOut,
+                        Image<labelT> &imBasinsOut,
+                        const StrElt &se) {
       ASSERT_ALLOCATED(&imIn, &imMarkers, &imBasinsOut);
       ASSERT_SAME_SIZE(&imIn, &imMarkers, &imBasinsOut);
 
@@ -280,8 +271,8 @@ namespace smil
       // Finalize the image containing the ws lines
       // Potential remaining candidate points (points surrounded by WS_LINE
       // points) with status STAT_CANDIDATE are added to the WS_LINE
-      for (size_t i = 0; i < imIn.getPixelCount(); i++) {
-        if (wsPixels[i] >= STAT_CANDIDATE)
+      for(size_t i = 0; i < imIn.getPixelCount(); i++) {
+        if(wsPixels[i] >= STAT_CANDIDATE)
           wsPixels[i] = STAT_WS_LINE;
         else
           wsPixels[i] = 0;
@@ -289,9 +280,10 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T initialize(const Image<T> &imIn, Image<labelT> &imLbl,
-                             Image<T> &imOut, const StrElt &se)
-    {
+    virtual RES_T initialize(const Image<T> &imIn,
+                             Image<labelT> &imLbl,
+                             Image<T> &imOut,
+                             const StrElt &se) {
       BaseFlooding<T, labelT, HQ_Type>::initialize(imIn, imLbl, se);
 
       imgWS = &imOut;
@@ -304,16 +296,15 @@ namespace smil
       return RES_OK;
     }
 
-    inline virtual void processPixel(const size_t &curOffset)
-    {
+    inline virtual void processPixel(const size_t &curOffset) {
       wsPixels[curOffset] = STAT_LABELED;
 
       BaseFlooding<T, labelT, HQ_Type>::processPixel(curOffset);
 
-      if (!tmpOffsets.empty()) {
-        if (this->wsPixels[curOffset] != STAT_WS_LINE) {
+      if(!tmpOffsets.empty()) {
+        if(this->wsPixels[curOffset] != STAT_WS_LINE) {
           size_t *offsets = tmpOffsets.data();
-          for (size_t i = 0; i < tmpOffsets.size(); i++) {
+          for(size_t i = 0; i < tmpOffsets.size(); i++) {
             this->hq.push(this->inPixels[*offsets], *offsets);
             this->wsPixels[*offsets] = STAT_QUEUED;
 
@@ -325,17 +316,16 @@ namespace smil
     }
 
     inline virtual void processNeighbor(const size_t &curOffset,
-                                        const size_t &nbOffset)
-    {
+                                        const size_t &nbOffset) {
       T nbStat = this->wsPixels[nbOffset];
 
       // Add it to the tmp offsets queue
-      if (nbStat == STAT_CANDIDATE) {
+      if(nbStat == STAT_CANDIDATE) {
         tmpOffsets.push_back(nbOffset);
-      } else if (nbStat == STAT_LABELED) {
-        if (this->lblPixels[curOffset] == 0) {
+      } else if(nbStat == STAT_LABELED) {
+        if(this->lblPixels[curOffset] == 0) {
           this->lblPixels[curOffset] = this->lblPixels[nbOffset];
-        } else if (this->lblPixels[curOffset] != this->lblPixels[nbOffset])
+        } else if(this->lblPixels[curOffset] != this->lblPixels[nbOffset])
           this->wsPixels[curOffset] = STAT_WS_LINE;
       }
     }
@@ -360,17 +350,18 @@ namespace smil
    * @smilexample{constrained_watershed.py}
    */
   template <class T, class labelT>
-  RES_T basins(const Image<T> &imIn, const Image<labelT> &imMarkers,
-               Image<labelT> &imBasinsOut, const StrElt &se = DEFAULT_SE)
-  {
+  RES_T basins(const Image<T> &imIn,
+               const Image<labelT> &imMarkers,
+               Image<labelT> &imBasinsOut,
+               const StrElt &se = DEFAULT_SE) {
     BaseFlooding<T, labelT> flooding;
     return flooding.flood(imIn, imMarkers, imBasinsOut, se);
   }
 
   template <class T, class labelT>
-  RES_T basins(const Image<T> &imIn, Image<labelT> &imBasinsInOut,
-               const StrElt &se = DEFAULT_SE)
-  {
+  RES_T basins(const Image<T> &imIn,
+               Image<labelT> &imBasinsInOut,
+               const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imBasinsInOut);
 
@@ -398,10 +389,11 @@ namespace smil
    */
 
   template <class T, class labelT>
-  RES_T watershed(const Image<T> &imIn, const Image<labelT> &imMarkers,
-                  Image<T> &imOut, Image<labelT> &imBasinsOut,
-                  const StrElt &se = DEFAULT_SE)
-  {
+  RES_T watershed(const Image<T> &imIn,
+                  const Image<labelT> &imMarkers,
+                  Image<T> &imOut,
+                  Image<labelT> &imBasinsOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &imMarkers);
     ASSERT_SAME_SIZE(&imIn, &imMarkers, &imOut, &imBasinsOut);
 
@@ -410,9 +402,10 @@ namespace smil
   }
 
   template <class T, class labelT>
-  RES_T watershed(const Image<T> &imIn, Image<labelT> &imMarkers,
-                  Image<T> &imOut, const StrElt &se = DEFAULT_SE)
-  {
+  RES_T watershed(const Image<T> &imIn,
+                  Image<labelT> &imMarkers,
+                  Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &imMarkers);
     ASSERT_SAME_SIZE(&imIn, &imMarkers, &imOut);
 
@@ -421,9 +414,9 @@ namespace smil
   }
 
   template <class T>
-  RES_T watershed(const Image<T> &imIn, Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE)
-  {
+  RES_T watershed(const Image<T> &imIn,
+                  Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -441,9 +434,10 @@ namespace smil
    *
    */
   template <class T>
-  RES_T lblSkiz(Image<T> &labelIm1, Image<T> &labelIm2, const Image<T> &maskIm,
-                const StrElt &se = DEFAULT_SE)
-  {
+  RES_T lblSkiz(Image<T> &labelIm1,
+                Image<T> &labelIm2,
+                const Image<T> &maskIm,
+                const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&labelIm1, &labelIm2, &maskIm);
     ASSERT_SAME_SIZE(&labelIm1, &labelIm2, &maskIm);
 
@@ -458,7 +452,7 @@ namespace smil
 
     T threshMin = ImDtTypes<T>::min(), threshMax = ImDtTypes<T>::max() - T(1);
 
-    while (vol1 < vol2) {
+    while(vol1 < vol2) {
       dilate(labelIm1, tmpIm1, se);
       dilate(labelIm2, tmpIm2, se);
       addNoSat(labelIm1, labelIm2, sumIm);
@@ -484,9 +478,9 @@ namespace smil
    *
    */
   template <class T1, class T2>
-  RES_T inflBasins(const Image<T1> &imIn, Image<T2> &basinsOut,
-                   const StrElt &se = DEFAULT_SE)
-  {
+  RES_T inflBasins(const Image<T1> &imIn,
+                   Image<T2> &basinsOut,
+                   const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &basinsOut);
     ASSERT_SAME_SIZE(&imIn, &basinsOut);
 
@@ -515,9 +509,9 @@ namespace smil
    *
    */
   template <class T>
-  RES_T inflZones(const Image<T> &imIn, Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE)
-  {
+  RES_T inflZones(const Image<T> &imIn,
+                  Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -537,10 +531,11 @@ namespace smil
    *
    */
   template <class T>
-  RES_T waterfall(const Image<T> &gradIn, const Image<T> &wsIn,
-                  Image<T> &imGradOut, Image<T> &imWsOut,
-                  const StrElt &se = DEFAULT_SE)
-  {
+  RES_T waterfall(const Image<T> &gradIn,
+                  const Image<T> &wsIn,
+                  Image<T> &imGradOut,
+                  Image<T> &imWsOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&gradIn, &wsIn, &imGradOut, &imWsOut);
     ASSERT_SAME_SIZE(&gradIn, &wsIn, &imGradOut, &imWsOut);
 
@@ -558,20 +553,21 @@ namespace smil
    *
    */
   template <class T>
-  RES_T waterfall(const Image<T> &gradIn, UINT nLevel, Image<T> &imWsOut,
-                  const StrElt &se = DEFAULT_SE)
-  {
+  RES_T waterfall(const Image<T> &gradIn,
+                  UINT nLevel,
+                  Image<T> &imWsOut,
+                  const StrElt &se = DEFAULT_SE) {
     ASSERT_ALLOCATED(&gradIn, &imWsOut);
     ASSERT_SAME_SIZE(&gradIn, &imWsOut);
 
     ImageFreezer freeze(imWsOut);
 
     Image<T> tmpGradIm(gradIn, 1); // clone
-    Image<T> tmpGradIm2(gradIn);   // clone
+    Image<T> tmpGradIm2(gradIn); // clone
 
     watershed(gradIn, imWsOut, se);
 
-    for (UINT i = 0; i < nLevel; i++) {
+    for(UINT i = 0; i < nLevel; i++) {
       waterfall(tmpGradIm, imWsOut, tmpGradIm2, imWsOut, se);
       copy(tmpGradIm2, tmpGradIm);
     }

@@ -2,12 +2,12 @@
 #ifndef __MEAN_SHIFT_FILTER_T_HPP__
 #define __MEAN_SHIFT_FILTER_T_HPP__
 
-namespace smil
-{
+namespace smil {
   template <class T>
-  RES_T meanShiftFilter(const Image<T> &imIn, const UINT8 radius,
-                    const int tonalDistance, Image<T> &imOut)
-  {
+  RES_T meanShiftFilter(const Image<T> &imIn,
+                        const UINT8 radius,
+                        const int tonalDistance,
+                        Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -16,12 +16,12 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    if (S[2] > 1) {
+    if(S[2] > 1) {
       // This is a 3D Image...
       return RES_ERR;
     }
 
-    typename ImDtTypes<T>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T>::lineType bufferOut = imOut.getPixels();
 
     int W, H;
@@ -32,8 +32,8 @@ namespace smil
     double shift;
 
     // pour tous les pixels
-    for (j = 0; j < H; j++)
-      for (i = 0; i < W; i++) {
+    for(j = 0; j < H; j++)
+      for(i = 0; i < W; i++) {
         int xc = i;
         int yc = j;
         int xcOld, ycOld;
@@ -49,19 +49,19 @@ namespace smil
           double mx = 0;
           double my = 0;
           double mY = 0;
-          int num   = 0;
+          int num = 0;
 
-          for (int ry = -radius; ry <= radius; ry++) {
+          for(int ry = -radius; ry <= radius; ry++) {
             int y2 = yc + ry;
-            if (y2 >= 0 && y2 < H) {
-              for (int rx = -radius; rx <= radius; rx++) {
+            if(y2 >= 0 && y2 < H) {
+              for(int rx = -radius; rx <= radius; rx++) {
                 int x2 = xc + rx;
-                if (x2 >= 0 && x2 < W) {
-                  if (ry * ry + rx * rx <= radius * radius) {
+                if(x2 >= 0 && x2 < W) {
+                  if(ry * ry + rx * rx <= radius * radius) {
                     double Y2 = bufferIn[x2 + y2 * W];
                     double dY = Yc - Y2;
 
-                    if (dY * dY <= tonalDistance * tonalDistance) {
+                    if(dY * dY <= tonalDistance * tonalDistance) {
                       mx += x2;
                       my += y2;
                       mY += Y2;
@@ -73,18 +73,18 @@ namespace smil
             }
           }
 
-          double num_ = 1.0 / (double) num;
-          Yc          = mY * num_;
-          xc          = (int) (mx * num_ + 0.5);
-          yc          = (int) (my * num_ + 0.5);
-          int dx      = xc - xcOld;
-          int dy      = yc - ycOld;
-          double dY   = Yc - YcOld;
+          double num_ = 1.0 / (double)num;
+          Yc = mY * num_;
+          xc = (int)(mx * num_ + 0.5);
+          yc = (int)(my * num_ + 0.5);
+          int dx = xc - xcOld;
+          int dy = yc - ycOld;
+          double dY = Yc - YcOld;
 
           shift = dx * dx + dy * dy + dY * dY;
           iters++;
-        } while (shift > 3 && iters < 100);
-        bufferOut[i + j * W] = (T) Yc;
+        } while(shift > 3 && iters < 100);
+        bufferOut[i + j * W] = (T)Yc;
       }
 
     return RES_OK;
@@ -92,9 +92,10 @@ namespace smil
 
 #if 1
   template <class T>
-  RES_T meanShiftFilterRGB(const Image<T> &imIn, const UINT8 radius,
-                    const int tonalDistance, Image<T> &imOut)
-  {
+  RES_T meanShiftFilterRGB(const Image<T> &imIn,
+                           const UINT8 radius,
+                           const int tonalDistance,
+                           Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -103,12 +104,12 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    if (S[2] > 1) {
+    if(S[2] > 1) {
       // This is a 3D Image...
       return RES_ERR;
     }
 
-    typename ImDtTypes<T>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T>::lineType bufferOut = imOut.getPixels();
 
     int W, H;
@@ -220,4 +221,3 @@ namespace smil
 
 } // namespace smil
 #endif
-

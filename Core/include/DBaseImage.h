@@ -38,35 +38,32 @@
 
 #include "Gui/include/private/DImageViewer.hpp"
 
-namespace smil
-{
+namespace smil {
   class BaseImageViewer;
-  template <class T> class ImageViewer;
+  template <class T>
+  class ImageViewer;
 
   /**
    * Base Image class
    */
-  class BaseImage : public BaseObject
-  {
+  class BaseImage : public BaseObject {
     typedef BaseObject parentClass;
 
   public:
     BaseImage(const char *_className = "BaseImage")
-        : BaseObject(_className), updatesEnabled(true), width(0), height(0),
-          depth(0), pixelCount(0), lineCount(0), sliceCount(0),
-          allocated(false), allocatedSize(0)
-    {
+      : BaseObject(_className), updatesEnabled(true), width(0), height(0),
+        depth(0), pixelCount(0), lineCount(0), sliceCount(0), allocated(false),
+        allocatedSize(0) {
       onModified = Signal(this);
-      onShow     = Signal(this);
+      onShow = Signal(this);
     }
 
     BaseImage(const BaseImage &rhs)
-        : BaseObject(rhs), updatesEnabled(true), width(0), height(0), depth(0),
-          pixelCount(0), lineCount(0), sliceCount(0), allocated(false),
-          allocatedSize(0)
-    {
+      : BaseObject(rhs), updatesEnabled(true), width(0), height(0), depth(0),
+        pixelCount(0), lineCount(0), sliceCount(0), allocated(false),
+        allocatedSize(0) {
       onModified = Signal(this);
-      onShow     = Signal(this);
+      onShow = Signal(this);
     }
 
     virtual ~BaseImage();
@@ -77,33 +74,28 @@ namespace smil
   public:
     virtual void init();
     //! Get image width
-    inline size_t getWidth() const
-    {
+    inline size_t getWidth() const {
       return width;
     }
     //! Get image height
-    inline size_t getHeight() const
-    {
+    inline size_t getHeight() const {
       return height;
     }
     //! Get image depth (Z)
-    inline size_t getDepth() const
-    {
+    inline size_t getDepth() const {
       return depth;
     }
 
     //! Get memory size (bytes)
-    virtual size_t getAllocatedSize() const
-    {
+    virtual size_t getAllocatedSize() const {
       return allocatedSize;
     }
 
     //! Get dimension (2D or 3D)
-    inline UINT getDimension() const
-    {
-      if (depth > 1)
+    inline UINT getDimension() const {
+      if(depth > 1)
         return 3;
-      else if (height > 1)
+      else if(height > 1)
         return 2;
       else
         return 1;
@@ -111,12 +103,12 @@ namespace smil
 
     //! Set image size
     //! Set image size and allocate it if @b doAllocate is true
-    virtual RES_T setSize(size_t w, size_t h, size_t d = 1,
-                          bool doAllocate = true) = 0;
+    virtual RES_T
+      setSize(size_t w, size_t h, size_t d = 1, bool doAllocate = true)
+      = 0;
 
     //! Get image size
-    inline void getSize(size_t *w, size_t *h, size_t *d) const
-    {
+    inline void getSize(size_t *w, size_t *h, size_t *d) const {
       *w = this->width;
       *h = this->height;
       *d = this->depth;
@@ -124,8 +116,7 @@ namespace smil
 
 #ifndef SWIGPYTHON
     //! Get image size
-    inline void getSize(int *w, int *h, int *d) const
-    {
+    inline void getSize(int *w, int *h, int *d) const {
       *w = this->width;
       *h = this->height;
       *d = this->depth;
@@ -133,48 +124,41 @@ namespace smil
 #endif // SWIGPYTHON
 
     //! Get image size
-    inline void getSize(size_t s[3]) const
-    {
+    inline void getSize(size_t s[3]) const {
       s[0] = this->width;
       s[1] = this->height;
       s[2] = this->depth;
     }
 
     //! Get image size
-    inline void getSize(off_t s[3]) const
-    {
+    inline void getSize(off_t s[3]) const {
       s[0] = this->width;
       s[1] = this->height;
       s[2] = this->depth;
     }
 
     //! Get image size
-    inline void getSize(int s[3]) const
-    {
+    inline void getSize(int s[3]) const {
       s[0] = this->width;
       s[1] = this->height;
       s[2] = this->depth;
     }
 
     //! Get the number of pixels
-    inline size_t getPixelCount() const
-    {
+    inline size_t getPixelCount() const {
       return this->pixelCount;
     }
     //! Get the number of lines
-    inline size_t getLineCount() const
-    {
+    inline size_t getLineCount() const {
       return this->lineCount;
     }
     //! Get the number of slices(for 3D images)
-    inline size_t getSliceCount() const
-    {
+    inline size_t getSliceCount() const {
       return this->sliceCount;
     }
 
     //! Check if the image is allocated
-    inline bool isAllocated() const
-    {
+    inline bool isAllocated() const {
       return this->allocated;
     }
 
@@ -189,11 +173,12 @@ namespace smil
      *
      * @param[in] x,y,z : coords of a point
      */
-    inline bool areCoordsInImage(const off_t x, const off_t y, const off_t z = 0) const
-    {
-      if (x < 0 || y < 0 || z < 0)
+    inline bool
+      areCoordsInImage(const off_t x, const off_t y, const off_t z = 0) const {
+      if(x < 0 || y < 0 || z < 0)
         return false;
-      if (x >= off_t(this->width) || y >= off_t(this->height) || z >= off_t(this->depth))
+      if(x >= off_t(this->width) || y >= off_t(this->height)
+         || z >= off_t(this->depth))
         return false;
       return true;
     }
@@ -206,9 +191,11 @@ namespace smil
      *
      * @overload
      */
-    inline bool areCoordsInImage(const size_t x, const size_t y, const size_t z = 0) const
-    {
-      if (x >= size_t(this->width) || y >= size_t(this->height) || z >= size_t(this->depth))
+    inline bool areCoordsInImage(const size_t x,
+                                 const size_t y,
+                                 const size_t z = 0) const {
+      if(x >= size_t(this->width) || y >= size_t(this->height)
+         || z >= size_t(this->depth))
         return false;
       return true;
     }
@@ -221,27 +208,10 @@ namespace smil
      *
      *
      */
-    inline bool isPointInImage(const IntPoint &p) const
-    {
-      if (p.x < 0 || p.y < 0 || p.z < 0)
+    inline bool isPointInImage(const IntPoint &p) const {
+      if(p.x < 0 || p.y < 0 || p.z < 0)
         return false;
-      if (p.x >= int(width) || p.y >= int(height) || p.z >= int(depth))
-        return false;
-      return true;
-    }
-
-
-    /**
-     * isOffsetInImage() - checks if a buffer offset in inside the image
-     * bounds.
-     *
-     * @param[in] offset : offset of a point in the image buffer
-     */
-    inline bool isOffsetInImage(const off_t offset) const
-    {
-      if (offset < 0)
-        return false;
-      if (offset > off_t(getPixelCount()))
+      if(p.x >= int(width) || p.y >= int(height) || p.z >= int(depth))
         return false;
       return true;
     }
@@ -252,62 +222,70 @@ namespace smil
      *
      * @param[in] offset : offset of a point in the image buffer
      */
-    inline bool isOffsetInImage(const size_t offset) const
-    {
-      if (offset > getPixelCount())
+    inline bool isOffsetInImage(const off_t offset) const {
+      if(offset < 0)
+        return false;
+      if(offset > off_t(getPixelCount()))
+        return false;
+      return true;
+    }
+
+    /**
+     * isOffsetInImage() - checks if a buffer offset in inside the image
+     * bounds.
+     *
+     * @param[in] offset : offset of a point in the image buffer
+     */
+    inline bool isOffsetInImage(const size_t offset) const {
+      if(offset > getPixelCount())
         return false;
       return true;
     }
 
     //! Get an offset for given x,y(,z) coordinates
-    inline size_t getOffsetFromCoords(size_t x, size_t y, size_t z = 0) const
-    {
+    inline size_t getOffsetFromCoords(size_t x, size_t y, size_t z = 0) const {
       size_t vmax = numeric_limits<size_t>::max();
-      if (x >= this->width)
+      if(x >= this->width)
         return vmax;
-      if (y >= this->height)
+      if(y >= this->height)
         return vmax;
-      if (z >= this->depth)
+      if(z >= this->depth)
         return vmax;
       return z * this->width * this->height + y * this->width + x;
     }
 
     //! Get an offset for given x,y(,z) coordinates
-    inline size_t getOffsetFromPoint(IntPoint &p) const
-    {
+    inline size_t getOffsetFromPoint(IntPoint &p) const {
       size_t vmax = numeric_limits<size_t>::max();
-      if (p.x < 0 || p.y < 0 || p.z < 0)
+      if(p.x < 0 || p.y < 0 || p.z < 0)
         return vmax;
-      if (p.x >= int(width))
+      if(p.x >= int(width))
         return vmax;
-      if (p.y >= int(height))
+      if(p.y >= int(height))
         return vmax;
-      if (p.z >= int(depth))
+      if(p.z >= int(depth))
         return vmax;
       return p.z * width * height + p.y * width + p.x;
     }
 
     //! Get x,y(,z) coordinates for a given offset
-    inline void getCoordsFromOffset(size_t off, size_t &x, size_t &y,
-                                    size_t &z) const
-    {
+    inline void
+      getCoordsFromOffset(size_t off, size_t &x, size_t &y, size_t &z) const {
       z = off / (this->width * this->height);
       y = (off % (this->width * this->height)) / this->width;
       x = off % this->width;
     }
 
     //! Get x,y(,z) coordinates for a given offset
-    inline void getCoordsFromOffset(off_t off, off_t &x, off_t &y,
-                                    off_t &z) const
-    {
+    inline void
+      getCoordsFromOffset(off_t off, off_t &x, off_t &y, off_t &z) const {
       z = off / (this->width * this->height);
       y = (off % (this->width * this->height)) / this->width;
       x = off % this->width;
     }
 
     //! Get x,y(,z) coordinates for a given offset
-    inline vector<size_t> getCoordsFromOffset(size_t off) const
-    {
+    inline vector<size_t> getCoordsFromOffset(size_t off) const {
       vector<size_t> coords(3);
 
       coords[2] = off / (this->width * this->height);
@@ -316,8 +294,7 @@ namespace smil
       return coords;
     }
 
-    inline IntPoint getPointFromOffset(size_t off) const
-    {
+    inline IntPoint getPointFromOffset(size_t off) const {
       IntPoint pt;
 
       pt.z = off / (this->width * this->height);
@@ -327,16 +304,14 @@ namespace smil
     }
 
     //! Get the description of the image
-    virtual std::string getInfoString(const char * = "") const
-    {
+    virtual std::string getInfoString(const char * = "") const {
       return {};
     }
     //! Get the type of the image as a string ("UINT8",...)
     virtual const char *getTypeAsString() = 0;
 
     //! Check if the image (viewer) is visible
-    virtual bool isVisible()
-    {
+    virtual bool isVisible() {
       return false;
     }
     //! Show the image (viewer)
@@ -347,13 +322,11 @@ namespace smil
     virtual void hide() = 0;
 
     //! Load from file
-    virtual RES_T load(const char * /*fileName*/)
-    {
+    virtual RES_T load(const char * /*fileName*/) {
       return RES_ERR_NOT_IMPLEMENTED;
     }
     //! Save to file
-    virtual RES_T save(const char * /*fileName*/)
-    {
+    virtual RES_T save(const char * /*fileName*/) {
       return RES_ERR_NOT_IMPLEMENTED;
     }
 
@@ -382,19 +355,16 @@ namespace smil
     size_t allocatedSize;
   };
 
-  class ImageFreezer
-  {
+  class ImageFreezer {
   public:
     ImageFreezer(BaseImage &im, bool updateOnDelete = true)
-        : image(&im), update(updateOnDelete)
-    {
-      imState           = im.updatesEnabled;
+      : image(&im), update(updateOnDelete) {
+      imState = im.updatesEnabled;
       im.updatesEnabled = false;
     }
-    ~ImageFreezer()
-    {
+    ~ImageFreezer() {
       image->updatesEnabled = imState;
-      if (update)
+      if(update)
         image->modified();
     }
 
@@ -410,26 +380,25 @@ namespace smil
    * Check if all images in a list have the same size.
    * The list of images must be finished by NULL.
    */
-  inline bool haveSameSize(const BaseImage *im, ...)
-  {
+  inline bool haveSameSize(const BaseImage *im, ...) {
     va_list vargs;
 
     va_start(vargs, im);
-    if (!im->isAllocated())
+    if(!im->isAllocated())
       return false;
     size_t w = im->getWidth();
     size_t h = im->getHeight();
     size_t d = im->getDepth();
 
     BaseImage *obj;
-    while ((obj = va_arg(vargs, BaseImage *))) {
-      if (!obj->isAllocated())
+    while((obj = va_arg(vargs, BaseImage *))) {
+      if(!obj->isAllocated())
         return false;
-      if (obj->getWidth() != w)
+      if(obj->getWidth() != w)
         return false;
-      if (obj->getHeight() != h)
+      if(obj->getHeight() != h)
         return false;
-      if (obj->getDepth() != d)
+      if(obj->getDepth() != d)
         return false;
     }
     va_end(vargs);
@@ -440,9 +409,8 @@ namespace smil
    * Set the same size to a list of images.
    * The size applied corresponds to the size of the first input image
    */
-  inline bool setSameSize(const BaseImage *im, ...)
-  {
-    if (!im->isAllocated())
+  inline bool setSameSize(const BaseImage *im, ...) {
+    if(!im->isAllocated())
       return false;
 
     va_list vargs;
@@ -454,9 +422,9 @@ namespace smil
 
     BaseImage *obj;
 
-    while ((obj = va_arg(vargs, BaseImage *))) {
-      if (obj->getWidth() != w || obj->getHeight() != h || obj->getDepth() != d)
-        if (obj->setSize(w, h, d) != RES_OK)
+    while((obj = va_arg(vargs, BaseImage *))) {
+      if(obj->getWidth() != w || obj->getHeight() != h || obj->getDepth() != d)
+        if(obj->setSize(w, h, d) != RES_OK)
           return false;
     }
     return true;
@@ -466,30 +434,29 @@ namespace smil
    * Check if all images in a list are allocated.
    * The list of images must be finished by NULL.
    */
-  inline bool areAllocated(const BaseImage *im, ...)
-  {
+  inline bool areAllocated(const BaseImage *im, ...) {
     va_list vargs;
 
     va_start(vargs, im);
-    if (!im->isAllocated())
+    if(!im->isAllocated())
       return false;
 
     const BaseImage *obj;
-    while ((obj = va_arg(vargs, const BaseImage *)))
-      if (!obj->isAllocated())
+    while((obj = va_arg(vargs, const BaseImage *)))
+      if(!obj->isAllocated())
         return false;
     va_end(vargs);
     return true;
   }
 
 #define CHECK_ALLOCATED(...) (areAllocated(__VA_ARGS__, NULL))
-#define ASSERT_ALLOCATED(...)                                                  \
+#define ASSERT_ALLOCATED(...) \
   ASSERT(CHECK_ALLOCATED(__VA_ARGS__), RES_ERR_BAD_ALLOCATION)
 
-#define CHECK_SAME_SIZE(...)                                                   \
-  (Core::getInstance()->autoResizeImages ? setSameSize(__VA_ARGS__, NULL)      \
+#define CHECK_SAME_SIZE(...)                                              \
+  (Core::getInstance()->autoResizeImages ? setSameSize(__VA_ARGS__, NULL) \
                                          : haveSameSize(__VA_ARGS__, NULL))
-#define ASSERT_SAME_SIZE(...)                                                  \
+#define ASSERT_SAME_SIZE(...) \
   ASSERT(CHECK_SAME_SIZE(__VA_ARGS__), RES_ERR_BAD_SIZE)
 
 #endif // SWIG

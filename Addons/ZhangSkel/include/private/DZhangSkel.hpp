@@ -30,14 +30,13 @@
 #ifndef _D_ZHANG_SKEL_HPP
 #define _D_ZHANG_SKEL_HPP
 
-//#include "DCore.h"
+// #include "DCore.h"
 #include "Core/include/DCore.h"
 
-//#include "DMorphoBase.hpp"
-//#include "DHitOrMiss.hpp"
+// #include "DMorphoBase.hpp"
+// #include "DHitOrMiss.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Addons
    * @addtogroup AddonZhangSkel
@@ -333,13 +332,12 @@ namespace smil
    * - @b 2D only
    */
   template <class T>
-  RES_T zhangSkeleton(const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T zhangSkeleton(const Image<T> &imIn, Image<T> &imOut) {
     size_t w = imIn.getWidth();
     size_t h = imIn.getHeight();
 
     // Create a copy image with a border to avoid border checks
-    size_t   width = w + 2, height = h + 2;
+    size_t width = w + 2, height = h + 2;
     Image<T> tmpIm(width, height);
     Image<T> modifiedIm(width, height);
 
@@ -350,22 +348,22 @@ namespace smil
     copy(imIn, modifiedIm, 1, 1);
 
     typedef typename Image<T>::sliceType sliceType;
-    typedef typename Image<T>::lineType  lineType;
+    typedef typename Image<T>::lineType lineType;
 
-    const sliceType lines         = tmpIm.getLines();
+    const sliceType lines = tmpIm.getLines();
     const sliceType modifiedLines = modifiedIm.getLines();
-    lineType        curLine, modifiedLine;
-    lineType        curPix, modifiedPix;
+    lineType curLine, modifiedLine;
+    lineType curPix, modifiedPix;
 
     bool ptsDeleted1, ptsDeleted2;
 
     UINT nbrTrans, nbrNonZero;
-    int  iteration;
+    int iteration;
 
-    int iWidth        = width;
-    int ngbOffsets[8] = {-iWidth - 1, -iWidth, -iWidth + 1, 1,
-                         iWidth + 1,  iWidth,  iWidth - 1,  -1};
-    T   ngbs[8];
+    int iWidth = width;
+    int ngbOffsets[8] = {
+      -iWidth - 1, -iWidth, -iWidth + 1, 1, iWidth + 1, iWidth, iWidth - 1, -1};
+    T ngbs[8];
 
     // 0  1  2 OUR DEF  ->  9  2  3 PAPER
     // 7     3          ->  8  1  4
@@ -388,17 +386,17 @@ namespace smil
       ptsDeleted2 = false;
 
       // PHASE 1 south-east boundary and  north-west corner
-      for (size_t y = 1; y < height - 1; y++) {
-        curLine      = lines[y];
-        curPix       = curLine + 1;
+      for(size_t y = 1; y < height - 1; y++) {
+        curLine = lines[y];
+        curPix = curLine + 1;
         modifiedLine = modifiedLines[y];
-        modifiedPix  = modifiedLine + 1;
+        modifiedPix = modifiedLine + 1;
 
-        for (size_t x = 1; x < width; x++, curPix++, modifiedPix++) {
-          if (*curPix == 0)
+        for(size_t x = 1; x < width; x++, curPix++, modifiedPix++) {
+          if(*curPix == 0)
             continue;
 
-          for (n = 0; n < 8; n++) {
+          for(n = 0; n < 8; n++) {
             ngbs[n] = curPix[ngbOffsets[n]];
           }
 
@@ -406,12 +404,12 @@ namespace smil
           // Calculate the number of non-zero neighbors
           // ----------------------------------------
           nbrNonZero = 0;
-          for (n = 0; n < 8; n++) {
-            if (ngbs[n] != 0) {
+          for(n = 0; n < 8; n++) {
+            if(ngbs[n] != 0) {
               nbrNonZero++;
             }
           }
-          if (nbrNonZero < 2 || nbrNonZero > 6)
+          if(nbrNonZero < 2 || nbrNonZero > 6)
             continue;
 
           // --------------------------------------------------
@@ -419,53 +417,53 @@ namespace smil
           // direction from point (-1,-1) back to itself
           // --------------------------------------------------
           nbrTrans = 0;
-          for (n = 0; n < 7; n++)
-            if (ngbs[n] == 0 && ngbs[n + 1] != 0)
+          for(n = 0; n < 7; n++)
+            if(ngbs[n] == 0 && ngbs[n + 1] != 0)
               nbrTrans++;
-          if (ngbs[7] == 0 && ngbs[0] != 0)
+          if(ngbs[7] == 0 && ngbs[0] != 0)
             nbrTrans++;
 
-          if (nbrTrans != 1)
+          if(nbrTrans != 1)
             continue;
 
           // --------------------------------------------------
           // P 1, 3, 5
           // --------------------------------------------------
-          if (ngbs[1] * ngbs[3] * ngbs[5] != 0) // phase 1
+          if(ngbs[1] * ngbs[3] * ngbs[5] != 0) // phase 1
             continue;
 
           // --------------------------------------------------
           // P 3, 5, 7
           // --------------------------------------------------
-          if (ngbs[3] * ngbs[5] * ngbs[7] != 0) // phase 1
+          if(ngbs[3] * ngbs[5] * ngbs[7] != 0) // phase 1
             continue;
 
           // --------------------------------------------------
           // All conditions verified, remove the point
           // --------------------------------------------------
           *modifiedPix = 0;
-          ptsDeleted1  = true;
+          ptsDeleted1 = true;
 
         } // for x
-      }   // for y
+      } // for y
 
       // Delete pixels satisfying all previous conditions (phase 1)
-      if (ptsDeleted1) {
+      if(ptsDeleted1) {
         copy(modifiedIm, tmpIm);
       }
 
       // PHASE 2 north-west boundary  south-east corner
-      for (size_t y = 1; y < height - 1; y++) {
-        curLine      = lines[y];
-        curPix       = curLine + 1;
+      for(size_t y = 1; y < height - 1; y++) {
+        curLine = lines[y];
+        curPix = curLine + 1;
         modifiedLine = modifiedLines[y];
-        modifiedPix  = modifiedLine + 1;
+        modifiedPix = modifiedLine + 1;
 
-        for (size_t x = 1; x < width; x++, curPix++, modifiedPix++) {
-          if (*curPix == 0)
+        for(size_t x = 1; x < width; x++, curPix++, modifiedPix++) {
+          if(*curPix == 0)
             continue;
 
-          for (n = 0; n < 8; n++) {
+          for(n = 0; n < 8; n++) {
             ngbs[n] = curPix[ngbOffsets[n]];
           }
 
@@ -473,11 +471,11 @@ namespace smil
           // Calculate the number of non-zero neighbors
           // --------------------------------------------------
           nbrNonZero = 0;
-          for (n = 0; n < 8; n++) {
-            if (ngbs[n] != 0)
+          for(n = 0; n < 8; n++) {
+            if(ngbs[n] != 0)
               nbrNonZero++;
           }
-          if (nbrNonZero < 2 || nbrNonZero > 6)
+          if(nbrNonZero < 2 || nbrNonZero > 6)
             continue;
 
           // --------------------------------------------------
@@ -485,39 +483,39 @@ namespace smil
           // direction from point (-1,-1) back to itself
           // --------------------------------------------------
           nbrTrans = 0;
-          for (n = 0; n < 7; n++)
-            if (ngbs[n] == 0 && ngbs[n + 1] != 0)
+          for(n = 0; n < 7; n++)
+            if(ngbs[n] == 0 && ngbs[n + 1] != 0)
               nbrTrans++;
-          if (ngbs[7] == 0 && ngbs[0] != 0)
+          if(ngbs[7] == 0 && ngbs[0] != 0)
             nbrTrans++;
-          if (nbrTrans != 1)
+          if(nbrTrans != 1)
             continue;
 
           // --------------------------------------------------
           // P 1, 3, 7
           // --------------------------------------------------
-          if (ngbs[1] * ngbs[3] * ngbs[7] != 0) // phase 2
+          if(ngbs[1] * ngbs[3] * ngbs[7] != 0) // phase 2
             continue;
 
           // --------------------------------------------------
           // P 1, 5, 7
           // --------------------------------------------------
-          if (ngbs[1] * ngbs[5] * ngbs[7] != 0) // phase 2
+          if(ngbs[1] * ngbs[5] * ngbs[7] != 0) // phase 2
             continue;
 
           // --------------------------------------------------
           // All conditions verified, remove the point
           // --------------------------------------------------
           *modifiedPix = 0;
-          ptsDeleted2  = true;
+          ptsDeleted2 = true;
         } // for x
-      }   // for y
+      } // for y
 
       // Delete pixels satisfying all previous conditions (phase 2)
-      if (ptsDeleted2) {
+      if(ptsDeleted2) {
         copy(modifiedIm, tmpIm);
       }
-    } while (ptsDeleted1 || ptsDeleted2); // do
+    } while(ptsDeleted1 || ptsDeleted2); // do
 
     copy(tmpIm, 1, 1, imOut);
 
@@ -540,19 +538,16 @@ namespace smil
    * @overload
    */
   template <class T>
-  RES_T zhangThinning(const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T zhangThinning(const Image<T> &imIn, Image<T> &imOut) {
     return zhangSkeleton(imIn, imOut);
   }
 
   /** @cond */
 
   template <typename T>
-  class ZhangThinning
-  {
+  class ZhangThinning {
   public:
-    ZhangThinning()
-    {
+    ZhangThinning() {
       _init();
     }
 
@@ -566,8 +561,7 @@ namespace smil
     off_t height;
     off_t depth;
 
-    void _init()
-    {
+    void _init() {
       nbOff.resize(8);
       /*
        * Neighbor numbering
@@ -588,49 +582,46 @@ namespace smil
       nbOff[7] = {-1, 0, 0};
     }
 
-    void _init(const Image<T> &im)
-    {
+    void _init(const Image<T> &im) {
       _init();
 
-      width  = im.getWidth();
+      width = im.getWidth();
       height = im.getHeight();
-      depth  = im.getDepth();
+      depth = im.getDepth();
 
       minV = minVal(im);
       maxV = maxVal(im);
     }
 
-    T getNeighborValue(T *buf, off_t offset, off_t x, off_t y, IntPoint &nbg)
-    {
-      if (nbg.x < 0 && x == 0)
+    T getNeighborValue(T *buf, off_t offset, off_t x, off_t y, IntPoint &nbg) {
+      if(nbg.x < 0 && x == 0)
         return 0;
-      if (nbg.x > 0 && x == width - 1)
+      if(nbg.x > 0 && x == width - 1)
         return 0;
-      if (nbg.y < 0 && y == 0)
+      if(nbg.y < 0 && y == 0)
         return 0;
-      if (nbg.y > 0 && y == height - 1)
+      if(nbg.y > 0 && y == height - 1)
         return 0;
       return buf[offset + nbg.x + nbg.y * width];
     }
 
-    void getNeighborhood(Image<T> &im, off_t x, off_t y,
-                                T nghbs[], int &Xr, int &Bp)
-    {
+    void getNeighborhood(
+      Image<T> &im, off_t x, off_t y, T nghbs[], int &Xr, int &Bp) {
       Xr = 0;
       Bp = 0;
       T prev = 0;
 
-      T *   buf       = im.getPixels();
+      T *buf = im.getPixels();
       off_t pixOffset = x + y * width;
 
-      for (auto i = 0; i < 8; i++) {
+      for(auto i = 0; i < 8; i++) {
         nghbs[i] = getNeighborValue(buf, pixOffset, x, y, nbOff[i]);
-        if (nghbs[i] != minV)
+        if(nghbs[i] != minV)
           Bp++;
 
-        if (i == 0)
+        if(i == 0)
           prev = nghbs[i];
-        if (prev != nghbs[i])
+        if(prev != nghbs[i])
           Xr++;
         prev = nghbs[i];
       }
@@ -643,15 +634,14 @@ namespace smil
      * AN IMPROVED PARALLEL THINNING ALGORITHM
      * JIANWEI DONG, WUHONG LIN, CHAO HUANG
      */
-    RES_T skDongLinHuang(const Image<T> &imIn, Image<T> &imOut)
-    {
+    RES_T skDongLinHuang(const Image<T> &imIn, Image<T> &imOut) {
       _init(imIn);
 
-      if (depth > 1) {
+      if(depth > 1) {
         ERR_MSG("Only 2D images");
         return RES_ERR;
       }
-      if (!isBinary(imIn)) {
+      if(!isBinary(imIn)) {
         ERR_MSG("Only binary images");
         return RES_ERR;
       }
@@ -673,21 +663,21 @@ namespace smil
 
       /* P R E - T H I N N I N G */
       copy(imTmp, imMod);
-      for (off_t y = 0; y < height; y++) {
-        for (off_t x = 0; x < width; x++) {
+      for(off_t y = 0; y < height; y++) {
+        for(off_t x = 0; x < width; x++) {
           int Bodd = 0;
-          for (size_t i = 0; i < nbOff.size(); i += 2) {
-            if (!imTmp.areCoordsInImage(x + nbOff[i].x, y + nbOff[i].y, 0))
+          for(size_t i = 0; i < nbOff.size(); i += 2) {
+            if(!imTmp.areCoordsInImage(x + nbOff[i].x, y + nbOff[i].y, 0))
               continue;
-            if (bufTmp[(y + nbOff[i].y) * width + x + nbOff[x].x] != 0)
+            if(bufTmp[(y + nbOff[i].y) * width + x + nbOff[x].x] != 0)
               Bodd++;
           }
           continue;
-          if (Bodd < 2) {
+          if(Bodd < 2) {
             bufMod[y * width + x] = minV;
             continue;
           }
-          if (Bodd > 2) {
+          if(Bodd > 2) {
             bufMod[y * width + x] = maxV;
             continue;
           }
@@ -696,93 +686,93 @@ namespace smil
       copy(imMod, imTmp);
 
       /* M A I N     L O O P */
-      int  iteration = 0;
-      bool done      = true;
+      int iteration = 0;
+      bool done = true;
       bool modified;
       do {
         iteration++;
 
-        if (iteration > 2000) {
+        if(iteration > 2000) {
           cout << ">>> Iteraction limit reached : " << iteration << endl;
           break;
         }
         int Xr = 0;
         int Bp = 0;
-        done   = true;
+        done = true;
 
         // first sub-iteration
         modified = false;
-        for (off_t y = 0; y < height; y++) {
+        for(off_t y = 0; y < height; y++) {
           off_t lineOffset = y * width;
 
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-          for (off_t x = 0; x < width; x++) {
-            off_t     pixOffset = lineOffset + x;
+          for(off_t x = 0; x < width; x++) {
+            off_t pixOffset = lineOffset + x;
 
-            if (bufTmp[pixOffset] == minV)
+            if(bufTmp[pixOffset] == minV)
               continue;
 
             T nghbs[8];
             getNeighborhood(imTmp, x, y, nghbs, Xr, Bp);
-            if (Bp < 2 || Bp > 6)
+            if(Bp < 2 || Bp > 6)
               continue;
-            if (Xr != 2)
+            if(Xr != 2)
               continue;
 
             // 1  3  5
-            if (nghbs[1] != minV && nghbs[3] != minV && nghbs[5] != minV)
+            if(nghbs[1] != minV && nghbs[3] != minV && nghbs[5] != minV)
               continue;
             // 3  5  7
-            if (nghbs[3] != minV && nghbs[5] != minV && nghbs[7] != minV)
+            if(nghbs[3] != minV && nghbs[5] != minV && nghbs[7] != minV)
               continue;
 
             bufMod[pixOffset] = minV;
-            modified          = true;
-            done              = false;
+            modified = true;
+            done = false;
           }
         }
-        if (modified)
+        if(modified)
           copy(imMod, imTmp);
 
         // second sub-iteration
         modified = false;
-        for (off_t y = 0; y < height; y++) {
+        for(off_t y = 0; y < height; y++) {
           off_t lineOffset = y * width;
 
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-          for (off_t x = 0; x < width; x++) {
-            off_t     pixOffset = lineOffset + x;
+          for(off_t x = 0; x < width; x++) {
+            off_t pixOffset = lineOffset + x;
 
-            if (bufTmp[pixOffset] == minV)
+            if(bufTmp[pixOffset] == minV)
               continue;
 
             T nghbs[8];
             getNeighborhood(imTmp, x, y, nghbs, Xr, Bp);
-            if (Bp < 2 || Bp > 6)
+            if(Bp < 2 || Bp > 6)
               continue;
-            if (Xr != 2)
+            if(Xr != 2)
               continue;
 
             //  1  3  7
-            if (nghbs[1] != minV && nghbs[3] != minV && nghbs[7] != minV)
+            if(nghbs[1] != minV && nghbs[3] != minV && nghbs[7] != minV)
               continue;
             //  1  5  7
-            if (nghbs[1] != minV && nghbs[5] != minV && nghbs[7] != minV)
+            if(nghbs[1] != minV && nghbs[5] != minV && nghbs[7] != minV)
               continue;
 
             bufMod[pixOffset] = minV;
-            modified          = true;
-            done              = false;
+            modified = true;
+            done = false;
           }
         }
-        if (modified)
+        if(modified)
           copy(imMod, imTmp);
 
-      } while (!done);
+      } while(!done);
 
       copy(imTmp, imOut);
 
@@ -801,14 +791,15 @@ namespace smil
    * - DongLinHuang - @cite dong_lin_huang_2016
    */
   template <typename T>
-  RES_T imageThinning(const Image<T> &imIn, Image<T> &imOut, string method = "Zhang")
-  {
-    if (method == "Zhang") {
-        return zhangSkeleton(imIn, imOut);
+  RES_T imageThinning(const Image<T> &imIn,
+                      Image<T> &imOut,
+                      string method = "Zhang") {
+    if(method == "Zhang") {
+      return zhangSkeleton(imIn, imOut);
     }
-    if (method == "DongLinHuang") {
-        ZhangThinning<T> zt;
-        return zt.skDongLinHuang(imIn, imOut);
+    if(method == "DongLinHuang") {
+      ZhangThinning<T> zt;
+      return zt.skDongLinHuang(imIn, imOut);
     }
     ERR_MSG("Method not implemented : " + method);
     return RES_ERR;

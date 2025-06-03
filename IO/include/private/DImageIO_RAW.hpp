@@ -38,8 +38,7 @@
 
 using namespace std;
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup IO
    */
@@ -68,9 +67,11 @@ namespace smil
    * @smilexample{example-readRAW.py}
    */
   template <class T>
-  RES_T readRAW(const char *filename, size_t width, size_t height, size_t depth,
-                Image<T> &image)
-  {
+  RES_T readRAW(const char *filename,
+                size_t width,
+                size_t height,
+                size_t depth,
+                Image<T> &image) {
     FILE *fp = NULL;
 
     /* open image file */
@@ -81,9 +82,9 @@ namespace smil
     image.setSize(width, height, depth);
     //   image->allocate();
 
-    size_t ret =
-        fread(image.getVoidPointer(), sizeof(T), image.getPixelCount(), fp);
-    if (ret == 0) {
+    size_t ret
+      = fread(image.getVoidPointer(), sizeof(T), image.getPixelCount(), fp);
+    if(ret == 0) {
       fprintf(stderr, "error reading \"%s\"!\n", filename);
       return RES_ERR;
     }
@@ -106,8 +107,8 @@ namespace smil
    * data and not the @b RAW format from camera makers (@b NEF, @b RAF, @b CR2,
    * ...)
    */
-  template <class T> RES_T writeRAW(Image<T> &image, const char *filename)
-  {
+  template <class T>
+  RES_T writeRAW(Image<T> &image, const char *filename) {
     FILE *fp = NULL;
 
     /* open image file */

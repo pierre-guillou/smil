@@ -36,8 +36,7 @@
 #include "Core/include/DCommon.h"
 #include "Core/include/DBaseObject.h"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Base
    * @defgroup Draw Draw Operations
@@ -59,14 +58,13 @@ namespace smil
    *  - @UrlWikipedia{Bresenham%27s_line_algorithm, Bresenham's Line algorithm}
    *
    */
-  inline vector<IntPoint> bresenhamPoints(int p1x, int p1y, int p2x, int p2y,
-                                          int xMax = 0, int yMax = 0)
-  {
+  inline vector<IntPoint> bresenhamPoints(
+    int p1x, int p1y, int p2x, int p2y, int xMax = 0, int yMax = 0) {
     vector<IntPoint> points;
-    int              F, x, y;
+    int F, x, y;
 
     bool swapped = false;
-    if (p1x > p2x) // Swap points if p1 is on the right of p2
+    if(p1x > p2x) // Swap points if p1 is on the right of p2
     {
       swap(p1x, p2x);
       swap(p1y, p2y);
@@ -75,53 +73,53 @@ namespace smil
 
     // Handle trivial cases separately for algorithm speed up.
     // Trivial case 1: m = +/-INF (Vertical line)
-    if (p1x == p2x) {
-      if (p1y > p2y) // Swap y-coordinates if p1 is above p2
+    if(p1x == p2x) {
+      if(p1y > p2y) // Swap y-coordinates if p1 is above p2
       {
         swap(p1y, p2y);
       }
 
       x = p1x;
       y = p1y;
-      if ((xMax == 0) || (x >= 0 && x < xMax))
-        while (y <= p2y) {
+      if((xMax == 0) || (x >= 0 && x < xMax))
+        while(y <= p2y) {
           points.push_back(IntPoint(x, y, 0));
           y++;
         }
       return points;
     }
     // Trivial case 2: m = 0 (Horizontal line)
-    else if (p1y == p2y) {
+    else if(p1y == p2y) {
       x = p1x;
       y = p1y;
 
-      if ((yMax == 0) || (y >= 0 && y < yMax))
-        while (x <= p2x) {
+      if((yMax == 0) || (y >= 0 && y < yMax))
+        while(x <= p2x) {
           points.push_back(IntPoint(x, y, 0));
           x++;
         }
       return points;
     }
 
-    int dy            = p2y - p1y; // y-increment from p1 to p2
-    int dx            = p2x - p1x; // x-increment from p1 to p2
-    int dx2           = (dx << 1); // dx << 1 == 2*dx
-    int dy2           = 2 * dy;    // dy can be negative, prefer * over <<
+    int dy = p2y - p1y; // y-increment from p1 to p2
+    int dx = p2x - p1x; // x-increment from p1 to p2
+    int dx2 = (dx << 1); // dx << 1 == 2*dx
+    int dy2 = 2 * dy; // dy can be negative, prefer * over <<
     int dy2_minus_dx2 = dy2 - dx2; // precompute constant for speed up
-    int dy2_plus_dx2  = dy2 + dx2;
+    int dy2_plus_dx2 = dy2 + dx2;
 
-    if (dy >= 0) // m >= 0
+    if(dy >= 0) // m >= 0
     {
       // Case 1: 0 <= m <= 1 (Original case)
-      if (dy <= dx) {
+      if(dy <= dx) {
         F = dy2 - dx; // initial F
 
         x = p1x;
         y = p1y;
-        while (x <= p2x) {
-          if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
+        while(x <= p2x) {
+          if((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
             points.push_back(IntPoint(x, y, 0));
-          if (F <= 0) {
+          if(F <= 0) {
             F += dy2;
           } else {
             y++;
@@ -137,10 +135,10 @@ namespace smil
 
         y = p1y;
         x = p1x;
-        while (y <= p2y) {
-          if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
+        while(y <= p2y) {
+          if((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
             points.push_back(IntPoint(x, y, 0));
-          if (F <= 0) {
+          if(F <= 0) {
             F += dx2;
           } else {
             x++;
@@ -152,15 +150,15 @@ namespace smil
     } else // m < 0
     {
       // Case 3: -1 <= m < 0 (Mirror about x-axis, replace all dy by -dy)
-      if (dx >= -dy) {
+      if(dx >= -dy) {
         F = -dy2 - dx; // initial F
 
         x = p1x;
         y = p1y;
-        while (x <= p2x) {
-          if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
+        while(x <= p2x) {
+          if((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
             points.push_back(IntPoint(x, y, 0));
-          if (F <= 0) {
+          if(F <= 0) {
             F -= dy2;
           } else {
             y--;
@@ -176,10 +174,10 @@ namespace smil
 
         y = p1y;
         x = p1x;
-        while (y >= p2y) {
-          if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
+        while(y >= p2y) {
+          if((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
             points.push_back(IntPoint(x, y, 0));
-          if (F <= 0) {
+          if(F <= 0) {
             F += dx2;
           } else {
             x++;
@@ -190,7 +188,7 @@ namespace smil
       }
     }
     // If input points have been swapped, reverse the vector
-    if (swapped)
+    if(swapped)
       std::reverse(points.begin(), points.end());
     return points;
   }
@@ -221,8 +219,7 @@ namespace smil
    * @see
    *  - @UrlWikipedia{Bresenham%27s_line_algorithm, Bresenham's Line algorithm}
    */
-  class Bresenham : public BaseObject
-  {
+  class Bresenham : public BaseObject {
   public:
     /**
      * Constructor : build a line (@I2D or @I3D) with extremities
@@ -232,8 +229,7 @@ namespace smil
      * @param[in] pf : final point
      */
     Bresenham(const IntPoint &pi, const IntPoint &pf)
-        : BaseObject("Bresenham"), pi(pi), pf(pf)
-    {
+      : BaseObject("Bresenham"), pi(pi), pf(pf) {
       doBresenham3D(pi.x, pi.y, pi.z, pf.x, pf.y, pf.z);
     }
 
@@ -244,8 +240,7 @@ namespace smil
      * @param[in] pf : final point
      */
     Bresenham(const IntPoint &pf)
-        : BaseObject("Bresenham"), pi(IntPoint(0, 0, 0)), pf(pf)
-    {
+      : BaseObject("Bresenham"), pi(IntPoint(0, 0, 0)), pf(pf) {
       doBresenham3D(pi.x, pi.y, pi.z, pf.x, pf.y, pf.z);
     }
 
@@ -257,8 +252,7 @@ namespace smil
      * @param[in] xf, yf, zf : coordinates of final point
      */
     Bresenham(int xi, int yi, int zi, int xf, int yf, int zf)
-        : BaseObject("Bresenham")
-    {
+      : BaseObject("Bresenham") {
       pi.x = xi;
       pi.y = yi;
       pi.z = zi;
@@ -276,8 +270,7 @@ namespace smil
      * @param[in] xi, yi : coordinates of initial point
      * @param[in] xf, yf : coordinates of final point
      */
-    Bresenham(int xi, int yi, int xf, int yf) : BaseObject("Bresenham Line")
-    {
+    Bresenham(int xi, int yi, int xf, int yf) : BaseObject("Bresenham Line") {
       pi.x = xi;
       pi.y = yi;
       pi.z = 0;
@@ -293,8 +286,7 @@ namespace smil
      *
      * @returns a vector with the points of the line
      */
-    vector<IntPoint> getPoints() const
-    {
+    vector<IntPoint> getPoints() const {
       return pts;
     }
 
@@ -303,9 +295,8 @@ namespace smil
      *
      * @param[in] i : the index of the point to be accessed
      */
-    IntPoint getPoint(UINT i)
-    {
-      if (i < pts.size())
+    IntPoint getPoint(UINT i) {
+      if(i < pts.size())
         return pts[i];
       return IntPoint(0, 0, 0);
     }
@@ -314,8 +305,7 @@ namespace smil
      *
      * @returns - the number of pixels
      */
-    size_t nbPoints()
-    {
+    size_t nbPoints() {
       return pts.size();
     }
 
@@ -324,19 +314,17 @@ namespace smil
      *
      * @returns line length
      */
-    double length()
-    {
-      return std::sqrt(std::pow(pf.x - pi.x, 2) + std::pow(pf.y - pi.y, 2) +
-                       std::pow(pf.z - pi.z, 2));
+    double length() {
+      return std::sqrt(std::pow(pf.x - pi.x, 2) + std::pow(pf.y - pi.y, 2)
+                       + std::pow(pf.z - pi.z, 2));
     }
 
-    void printSelf(ostream &os = std::cout, string indent = "") const
-    {
+    void printSelf(ostream &os = std::cout, string indent = "") const {
       os << indent << "Bresenham Line" << endl;
       os << indent << "Class     : " << className << endl;
       // os << indent << "Name      : " << name << endl;
 
-      for (UINT i = 0; i < pts.size(); i++)
+      for(UINT i = 0; i < pts.size(); i++)
         os << indent << "#" << i + 1 << "\t: (" << pts[i].x << "," << pts[i].y
            << "," << pts[i].z << ")" << endl;
     }
@@ -347,13 +335,11 @@ namespace smil
 
     vector<IntPoint> pts;
 
-    void addPoint(IntPoint &p)
-    {
+    void addPoint(IntPoint &p) {
       pts.push_back(p);
     }
 
-    void doBresenham3D(int x1, int y1, int z1, int x2, int y2, int z2)
-    {
+    void doBresenham3D(int x1, int y1, int z1, int x2, int y2, int z2) {
       int dx, dy, dz;
       int dx2, dy2, dz2;
 
@@ -379,16 +365,16 @@ namespace smil
       dy2 = 2 * yLen;
       dz2 = 2 * zLen;
 
-      if ((xLen >= yLen) && (xLen >= zLen)) {
+      if((xLen >= yLen) && (xLen >= zLen)) {
         int err_1 = dy2 - xLen;
         int err_2 = dz2 - xLen;
-        for (int i = 0; i < xLen; i++) {
+        for(int i = 0; i < xLen; i++) {
           addPoint(pt);
-          if (err_1 > 0) {
+          if(err_1 > 0) {
             pt.y += yInc;
             err_1 -= dx2;
           }
-          if (err_2 > 0) {
+          if(err_2 > 0) {
             pt.z += zInc;
             err_2 -= dx2;
           }
@@ -400,16 +386,16 @@ namespace smil
         return;
       }
 
-      if ((yLen >= xLen) && (yLen >= zLen)) {
+      if((yLen >= xLen) && (yLen >= zLen)) {
         int err_1 = dx2 - yLen;
         int err_2 = dz2 - yLen;
-        for (int i = 0; i < yLen; i++) {
+        for(int i = 0; i < yLen; i++) {
           addPoint(pt);
-          if (err_1 > 0) {
+          if(err_1 > 0) {
             pt.x += xInc;
             err_1 -= dy2;
           }
-          if (err_2 > 0) {
+          if(err_2 > 0) {
             pt.z += zInc;
             err_2 -= dy2;
           }
@@ -421,16 +407,16 @@ namespace smil
         return;
       }
 
-      if ((zLen >= xLen) && (zLen >= yLen)) {
+      if((zLen >= xLen) && (zLen >= yLen)) {
         int err_1 = dy2 - zLen;
         int err_2 = dx2 - zLen;
-        for (int i = 0; i < zLen; i++) {
+        for(int i = 0; i < zLen; i++) {
           addPoint(pt);
-          if (err_1 > 0) {
+          if(err_1 > 0) {
             pt.y += yInc;
             err_1 -= dz2;
           }
-          if (err_2 > 0) {
+          if(err_2 > 0) {
             pt.x += xInc;
             err_2 -= dz2;
           }
