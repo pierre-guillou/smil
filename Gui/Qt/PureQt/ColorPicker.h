@@ -41,7 +41,7 @@
 class ColorButton : public QPushButton {
   Q_OBJECT
 public:
-  ColorButton(QWidget *parent = 0);
+  ColorButton(QWidget *parent = nullptr);
   ~ColorButton() override;
 
   QColor getColor() {
@@ -69,7 +69,7 @@ class ColorPannel : public QFrame {
   Q_OBJECT
 
 public:
-  ColorPannel(QWidget *parent = NULL);
+  ColorPannel(QWidget *parent = nullptr);
   ~ColorPannel() override;
 
   void setColors(const QVector<QRgb> &cols);
@@ -95,7 +95,7 @@ class ColorPicker : public ColorButton {
   Q_OBJECT
 
 public:
-  ColorPicker(QWidget *parent = 0);
+  ColorPicker(QWidget *parent = nullptr);
 
   ~ColorPicker() override;
 

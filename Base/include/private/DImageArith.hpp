@@ -1457,7 +1457,7 @@ namespace smil {
 
     // Initialize random number generator
     struct timeval tv;
-    gettimeofday(&tv, 0);
+    gettimeofday(&tv, nullptr);
     srand(tv.tv_usec);
 
     double rangeT = ImDtTypes<T>::cardinal();

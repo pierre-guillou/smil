@@ -44,7 +44,7 @@
 class MagnifyView : public QGraphicsView {
   Q_OBJECT
 public:
-  explicit MagnifyView(QWidget *parent = 0);
+  explicit MagnifyView(QWidget *parent = nullptr);
 
   ~MagnifyView() override;
 

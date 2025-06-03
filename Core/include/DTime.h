@@ -59,7 +59,7 @@ namespace smil {
 
   static inline double getCpuTime() {
     struct timeval tv;
-    if(gettimeofday(&tv, 0)) {
+    if(gettimeofday(&tv, nullptr)) {
       cout << "gettimeofday returned error" << endl;
     }
     return tv.tv_sec + double(tv.tv_usec) / 1E6;

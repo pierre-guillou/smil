@@ -33,10 +33,10 @@
 #include <iostream>
 
 MagnifyView::MagnifyView(QWidget *parent) : QGraphicsView(parent) {
-  fullImage = NULL;
+  fullImage = nullptr;
   scaleFactor = 250;
 
-  scene = NULL;
+  scene = nullptr;
 
   textItemList = new QList<QGraphicsTextItem *>();
 

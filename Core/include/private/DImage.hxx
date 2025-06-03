@@ -93,7 +93,7 @@ namespace smil {
   Image<T>::Image(BaseImage *_im, bool stealIdentity) : BaseImage("Image") {
     init();
 
-    if(_im == NULL)
+    if(_im == nullptr)
       return;
 
     Image *im = castBaseImage(_im, T());
@@ -166,20 +166,20 @@ namespace smil {
   Image<T>::~Image() {
     if(viewer)
       delete viewer;
-    viewer = NULL;
+    viewer = nullptr;
 
     this->deallocate();
   }
 
   template <class T>
   void Image<T>::init() {
-    this->slices = NULL;
-    this->lines = NULL;
-    this->pixels = NULL;
+    this->slices = nullptr;
+    this->lines = nullptr;
+    this->pixels = nullptr;
 
     this->dataTypeSize = sizeof(pixelType);
 
-    this->viewer = NULL;
+    this->viewer = nullptr;
 
     parentClass::init();
   }
@@ -312,8 +312,8 @@ namespace smil {
     this->pixels = createAlignedBuffer<T>(pixelCount);
     //     pixels = new pixelType[pixelCount];
 
-    ASSERT(
-      (this->pixels != NULL), "Can't allocate image", RES_ERR_BAD_ALLOCATION);
+    ASSERT((this->pixels != nullptr), "Can't allocate image",
+           RES_ERR_BAD_ALLOCATION);
 
     this->allocated = true;
     this->allocatedSize = this->pixelCount * sizeof(T);
@@ -360,9 +360,9 @@ namespace smil {
     if(this->pixels)
       deleteAlignedBuffer<T>(pixels);
 
-    this->slices = NULL;
-    this->lines = NULL;
-    this->pixels = NULL;
+    this->slices = nullptr;
+    this->lines = nullptr;
+    this->pixels = nullptr;
 
     this->allocated = false;
     this->allocatedSize = 0;
@@ -461,7 +461,7 @@ namespace smil {
     else
       os << indent << "2D image" << endl;
 
-    T *dum = NULL;
+    T *dum = nullptr;
     os << indent << "Data type: " << getDataTypeAsString<T>(dum) << endl;
 
     if(depth > 1)

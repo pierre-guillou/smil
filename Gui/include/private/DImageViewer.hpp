@@ -59,7 +59,7 @@ namespace smil {
     }
 
     ImageViewer(Image<T> &im)
-      : BaseImageViewer("ImageViewer"), image(NULL), labelImage(false) {
+      : BaseImageViewer("ImageViewer"), image(nullptr), labelImage(false) {
       onOverlayModified = Signal(this);
       imSize[0] = imSize[1] = imSize[2] = 0;
       setImage(im);
@@ -82,7 +82,7 @@ namespace smil {
     virtual void disconnect() {
       if(image)
         image->onModified.disconnect(&this->updateSlot);
-      image = NULL;
+      image = nullptr;
     }
 
     void show() override {

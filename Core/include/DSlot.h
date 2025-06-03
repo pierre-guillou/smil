@@ -50,12 +50,12 @@ namespace smil {
     virtual ~BaseSlot() {
       unregisterAll();
     }
-    virtual void run(Event * /*e*/ = NULL) {
+    virtual void run(Event * /*e*/ = nullptr) {
     }
 
   protected:
 #ifndef SWIG
-    virtual void _run(Event *e = NULL) {
+    virtual void _run(Event *e = nullptr) {
       run(e);
     }
     virtual void registerSignal(Signal *signal);
@@ -92,8 +92,8 @@ namespace smil {
     typedef void (T::*memberFunc)(eventT *);
     typedef void (T::*voidMemberFunc)();
     MemberFunctionSlot() {
-      _instance = NULL;
-      _function = NULL;
+      _instance = nullptr;
+      _function = nullptr;
     }
     MemberFunctionSlot(T *inst, memberFunc func) {
       init(inst, func);

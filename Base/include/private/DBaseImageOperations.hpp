@@ -52,7 +52,7 @@ namespace smil {
 
     RES_T retVal;
 
-    imageFunctionBase() : alignedBuffers(NULL) {
+    imageFunctionBase() : alignedBuffers(nullptr) {
     }
     ~imageFunctionBase() {
       deleteAlignedBuffers();

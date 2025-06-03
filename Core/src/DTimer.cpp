@@ -27,7 +27,7 @@ void *fun(void *_timer) {
     }
     t->app->processEvents();
   }
-  return NULL;
+  return nullptr;
 }
 
 void timer::start() {
