@@ -86,7 +86,7 @@ namespace smil
       y = p1y;
       if ((xMax == 0) || (x >= 0 && x < xMax))
         while (y <= p2y) {
-          points.push_back(IntPoint(x, y, 0));
+          points.emplace_back(x, y, 0);
           y++;
         }
       return points;
@@ -98,7 +98,7 @@ namespace smil
 
       if ((yMax == 0) || (y >= 0 && y < yMax))
         while (x <= p2x) {
-          points.push_back(IntPoint(x, y, 0));
+          points.emplace_back(x, y, 0);
           x++;
         }
       return points;
@@ -121,7 +121,7 @@ namespace smil
         y = p1y;
         while (x <= p2x) {
           if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
-            points.push_back(IntPoint(x, y, 0));
+            points.emplace_back(x, y, 0);
           if (F <= 0) {
             F += dy2;
           } else {
@@ -140,7 +140,7 @@ namespace smil
         x = p1x;
         while (y <= p2y) {
           if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
-            points.push_back(IntPoint(x, y, 0));
+            points.emplace_back(x, y, 0);
           if (F <= 0) {
             F += dx2;
           } else {
@@ -160,7 +160,7 @@ namespace smil
         y = p1y;
         while (x <= p2x) {
           if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
-            points.push_back(IntPoint(x, y, 0));
+            points.emplace_back(x, y, 0);
           if (F <= 0) {
             F -= dy2;
           } else {
@@ -179,7 +179,7 @@ namespace smil
         x = p1x;
         while (y >= p2y) {
           if ((xMax == 0) || (x >= 0 && x < xMax && y >= 0 && y < yMax))
-            points.push_back(IntPoint(x, y, 0));
+            points.emplace_back(x, y, 0);
           if (F <= 0) {
             F += dx2;
           } else {
