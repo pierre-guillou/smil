@@ -156,7 +156,7 @@ void CompStrEltList::add(const CompStrElt &cse)
 
 void CompStrEltList::add(const StrElt &fgse, const StrElt &bgse)
 {
-  compSeList.push_back(CompStrElt(fgse, bgse));
+  compSeList.emplace_back(fgse, bgse);
 }
 
 void CompStrEltList::add(const StrElt &fgse, const StrElt &bgse, UINT nrot)
