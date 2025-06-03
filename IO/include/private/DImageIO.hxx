@@ -156,7 +156,7 @@ namespace smil
     if (nFiles == 0)
       return RES_ERR;
 
-    vector<string>::const_iterator it = fileList.begin();
+    auto it = fileList.begin();
 
     Image<T> tmpIm;
     ASSERT((read((*it++).c_str(), tmpIm) == RES_OK));

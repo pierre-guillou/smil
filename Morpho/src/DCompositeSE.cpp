@@ -186,8 +186,7 @@ void CompStrEltList::printSelf(ostream &os, string indent) const
   os << indent << "HitOrMiss SE (composite structuring element list)" << endl;
   os << indent << "Name : " << name << endl;
   int i = 0;
-  for (std::vector<CompStrElt>::const_iterator it = compSeList.begin();
-       it != compSeList.end(); it++, i++) {
+  for (auto it = compSeList.begin(); it != compSeList.end(); it++, i++) {
     os << indent << "CompSE #" << i << ":" << endl;
     (*it).printSelf(os, indent + "\t");
   }

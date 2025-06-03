@@ -174,7 +174,7 @@ namespace smil
     Image<RGB>::sliceType                  lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
 
-    UINT8 *raster = (UINT8 *) _TIFFmalloc(width * 3 * sizeof(UINT8));
+    auto *raster = (UINT8 *) _TIFFmalloc(width * 3 * sizeof(UINT8));
 
     for (size_t j = 0; j < height; j++) {
       arrays = lines[j].arrays;
@@ -262,7 +262,7 @@ namespace smil
     Image<RGB>::sliceType                  lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
 
-    UINT8 *raster = (UINT8 *) _TIFFmalloc(width * 3 * sizeof(UINT8));
+    auto *raster = (UINT8 *) _TIFFmalloc(width * 3 * sizeof(UINT8));
 
     for (size_t j = 0; j < height; j++) {
       arrays = lines[j].arrays;
