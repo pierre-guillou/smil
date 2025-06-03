@@ -69,7 +69,7 @@ namespace smil
     //! Contruction from a file
     Image(const char *fileName);
 
-    virtual ~Image();
+    ~Image() override;
 
     // Provide explicit copy constructor and assignment operator
     //! Copy constructor
@@ -95,7 +95,7 @@ namespace smil
 
     //! Get the image type.
     //! @return The type of the image data as a string ("UINT8", "UINT16", ...)
-    virtual const char *getTypeAsString()
+    const char *getTypeAsString() override
     {
       T *dum = NULL;
       return getDataTypeAsString<T>(dum);
@@ -212,13 +212,13 @@ namespace smil
     void fromString(string pixVals);
 
     //! Get the image viewer (create one if needed)
-    virtual ImageViewer<T> *getViewer();
+    ImageViewer<T> *getViewer() override;
 
     //! Check if the image is visible
     //! @return @b true if the viewer is visible, @b false otherwise
-    virtual bool isVisible();
+    bool isVisible() override;
 
-    virtual void init();
+    void init() override;
 
     //! Clone from a given image (set same size and copy content)
     virtual void clone(const Image<T> &rhs);
@@ -232,8 +232,8 @@ namespace smil
     }
 
     //! Set the size of image
-    virtual RES_T setSize(size_t w, size_t h, size_t d = 1,
-                          bool doAllocate = true);
+    RES_T
+    setSize(size_t w, size_t h, size_t d = 1, bool doAllocate = true) override;
     //! Set the size of image
     virtual RES_T setSize(size_t s[3], bool doAllocate = true)
     {
@@ -270,7 +270,7 @@ namespace smil
     void printSelf(ostream &os, bool displayPixVals, bool hexaGrid = false,
                    string indent = "") const;
 
-    virtual void printSelf(ostream &os = std::cout, string indent = "") const
+    void printSelf(ostream &os = std::cout, string indent = "") const override
     {
       printSelf(os, false, false, indent);
     }
@@ -287,7 +287,7 @@ namespace smil
     }
 
     //! Get the description of the image as a string
-    virtual std::string getInfoString(const char *indent = "") const
+    std::string getInfoString(const char *indent = "") const override
     {
       stringstream s;
       this->printSelf(s, indent);
@@ -295,13 +295,13 @@ namespace smil
     }
 
     //! Get pixels as a void pointer
-    virtual void *getVoidPointer(void)
+    void *getVoidPointer(void) override
     {
       return pixels;
     }
 
-    virtual RES_T load(const char *fileName);
-    virtual RES_T save(const char *fileName);
+    RES_T load(const char *fileName) override;
+    RES_T save(const char *fileName) override;
 
 #if defined SWIGPYTHON && defined USE_NUMPY
     /**
@@ -333,7 +333,7 @@ namespace smil
 #endif // defined SWIGPYTHON && defined USE_NUMPY
 
     //! Trigger modified event (allows to force display update)
-    virtual void modified();
+    void modified() override;
 
     //! Get Maximum value of image data type
     static T getDataTypeMin()
@@ -472,19 +472,19 @@ namespace smil
 
   public:
     //! Set the name of the image
-    virtual void setName(const char *_name);
+    void setName(const char *_name) override;
 
     //! Show the default viewer associated with the image
-    virtual void show(const char *_name = NULL, bool labelImage = false);
+    void show(const char *_name = NULL, bool labelImage = false) override;
 
     //! Show the default viewer associated with the image using a color lookup
     //! table
-    virtual void showLabel(const char *_name = NULL);
+    void showLabel(const char *_name = NULL) override;
 
     virtual void showNormal(const char *_name = NULL);
 
     //! Hide image
-    virtual void hide();
+    void hide() override;
   };
 
   template <class T>
@@ -502,7 +502,7 @@ namespace smil
       Image<T>::drain(const_cast<ResImage<T> *>(&rhs));
     }
 
-    ~ResImage()
+    ~ResImage() override
     {
     }
   };

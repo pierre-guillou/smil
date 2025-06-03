@@ -381,13 +381,13 @@ namespace smil
   struct measMinMaxValFunc : public MeasureFunctionBase<T, vector<T>> {
     typedef typename Image<T>::lineType lineType;
     T                                   minVal, maxVal;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal.clear();
       maxVal = numeric_limits<T>::min();
       minVal = numeric_limits<T>::max();
     }
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
@@ -397,7 +397,7 @@ namespace smil
           minVal = val;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       this->retVal.push_back(minVal);
       this->retVal.push_back(maxVal);

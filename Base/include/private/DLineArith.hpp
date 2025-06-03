@@ -75,11 +75,11 @@ namespace smil
       this->_exec(lIn, size, value);
     }
 
-    virtual void _exec(const lineType lIn, const size_t size, lineType lOut)
+    void _exec(const lineType lIn, const size_t size, lineType lOut) override
     {
       return this->fill(lIn, size, lOut);
     }
-    virtual void _exec(lineType lInOut, const size_t size, const T value)
+    void _exec(lineType lInOut, const size_t size, const T value) override
     {
       return this->fill(lInOut, size, value);
     }

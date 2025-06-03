@@ -62,7 +62,7 @@ namespace smil
     StrElt bgSE;
 
     CompStrElt() : BaseObject("CompStrElt") {};
-    ~CompStrElt() {};
+    ~CompStrElt() override {};
 
     /** CompStrElt - Constructor
      *
@@ -108,7 +108,7 @@ namespace smil
      * @param[in] os : output stream (default : @b std::cout)
      * @param[in] indent : prefix to each printed line (string)
      */
-    virtual void printSelf(ostream &os = std::cout, string indent = "") const;
+    void printSelf(ostream &os = std::cout, string indent = "") const override;
   };
 
   /**
@@ -181,12 +181,12 @@ namespace smil
      *
      *
      */
-    void setName(const char *name)
+    void setName(const char *name) override
     {
       this->name = name;
     }
 
-    virtual void printSelf(ostream &os = std::cout, string indent = "") const;
+    void printSelf(ostream &os = std::cout, string indent = "") const override;
   };
 
   //! Square L1 ([8,1,2], [4,5,6])

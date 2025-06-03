@@ -81,11 +81,11 @@ namespace smil
       this->_exec(lIn, size, value);
     }
 
-    virtual void _exec(const lineType lIn, const size_t size, lineType lOut)
+    void _exec(const lineType lIn, const size_t size, lineType lOut) override
     {
       copyLine<RGB>(lIn, size, lOut);
     }
-    virtual void _exec(lineType lInOut, const size_t size, const RGB value)
+    void _exec(lineType lInOut, const size_t size, const RGB value) override
     {
       for (UINT n = 0; n < 3; n++) {
         UINT8 *cArr = lInOut.arrays[n];
@@ -106,7 +106,7 @@ namespace smil
   struct supLine<RGB> : public binaryLineFunctionBase<RGB> {
     typedef Image<RGB>::lineType lineType;
     inline void                  _exec(const lineType lIn1, const lineType lIn2,
-                                       const size_t size, lineType lOut)
+                                       const size_t size, lineType lOut) override
     {
       for (UINT n = 0; n < 3; n++) {
         UINT8 *cArrIn1 = lIn1.arrays[n];
@@ -122,8 +122,8 @@ namespace smil
   template <>
   struct infLine<RGB> : public binaryLineFunctionBase<RGB> {
     typedef Image<RGB>::lineType lineType;
-    virtual void                 _exec(const lineType lIn1, const lineType lIn2,
-                                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (UINT n = 0; n < 3; n++) {
         UINT8 *cArrIn1 = lIn1.arrays[n];
@@ -145,8 +145,8 @@ namespace smil
     UINT8 trueVal, falseVal;
 
     typedef Image<RGB>::lineType lineType;
-    virtual void                 _exec(const lineType lIn1, const lineType lIn2,
-                                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (UINT n = 0; n < 3; n++) {
         UINT8 *cArrIn1 = lIn1.arrays[n];

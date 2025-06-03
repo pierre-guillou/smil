@@ -60,7 +60,7 @@ namespace smil
 
   protected:
     Core();
-    ~Core();
+    ~Core() override;
 
   public:
     // Public interface

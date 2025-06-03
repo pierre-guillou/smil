@@ -86,7 +86,7 @@ namespace smil
 
     bool littleEndian;
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
+    RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) override
     {
       std::ifstream fp;
 
@@ -119,7 +119,7 @@ namespace smil
 
     bool writeBinary;
 
-    virtual RES_T read(const char *filename, Image<T> &image)
+    RES_T read(const char *filename, Image<T> &image) override
     {
       std::ifstream fp;
 
@@ -219,7 +219,7 @@ namespace smil
 
       return RES_OK;
     }
-    virtual RES_T write(const Image<T> &image, const char *filename)
+    RES_T write(const Image<T> &image, const char *filename) override
     {
       std::ofstream fp;
 
