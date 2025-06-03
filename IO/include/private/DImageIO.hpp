@@ -66,14 +66,14 @@ namespace smil
 
     virtual RES_T read(const char *, Image<T> &)
     {
-      T *dum = NULL;
+      T *dum = nullptr;
       cout << getDataTypeAsString<T>(dum) << " data type not implemented for "
            << fileExtention << " files (read)." << endl;
       return RES_ERR;
     }
     virtual RES_T write(const Image<T> &, const char *)
     {
-      T *dum = NULL;
+      T *dum = nullptr;
       cout << getDataTypeAsString<T>(dum) << " data type not implemented for "
            << fileExtention << " files (write)." << endl;
       return RES_ERR;

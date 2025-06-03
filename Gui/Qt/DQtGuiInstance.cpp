@@ -71,7 +71,7 @@ namespace smil
     helpForm->show();
   }
 
-  QtAppGui::QtAppGui() : QApplication(_argc, NULL)
+  QtAppGui::QtAppGui() : QApplication(_argc, nullptr)
   {
   }
 
@@ -112,7 +112,7 @@ namespace smil
 
       QObject::disconnect(&timer, SIGNAL(timeout()), app, SLOT(quit()));
 #else
-      QSocketNotifier notifier(0, QSocketNotifier::Read, 0);
+      QSocketNotifier notifier(0, QSocketNotifier::Read, nullptr);
       QObject::connect(&notifier, SIGNAL(activated(int)), app, SLOT(quit()));
       QCoreApplication::exec();
       QObject::disconnect(&notifier, SIGNAL(activated(int)), app, SLOT(quit()));

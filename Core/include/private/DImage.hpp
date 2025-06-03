@@ -97,7 +97,7 @@ namespace smil
     //! @return The type of the image data as a string ("UINT8", "UINT16", ...)
     const char *getTypeAsString() override
     {
-      T *dum = NULL;
+      T *dum = nullptr;
       return getDataTypeAsString<T>(dum);
     }
     typedef typename ImDtTypes<T>::pixelType        pixelType;
@@ -475,13 +475,13 @@ namespace smil
     void setName(const char *_name) override;
 
     //! Show the default viewer associated with the image
-    void show(const char *_name = NULL, bool labelImage = false) override;
+    void show(const char *_name = nullptr, bool labelImage = false) override;
 
     //! Show the default viewer associated with the image using a color lookup
     //! table
-    void showLabel(const char *_name = NULL) override;
+    void showLabel(const char *_name = nullptr) override;
 
-    virtual void showNormal(const char *_name = NULL);
+    virtual void showNormal(const char *_name = nullptr);
 
     //! Hide image
     void hide() override;

@@ -232,8 +232,9 @@ namespace smil
     }
 
     //    memory allocation
-    inline pointer allocate(size_type cnt,
-                            typename std::allocator<void>::const_pointer = 0)
+    inline pointer
+    allocate(size_type cnt,
+             typename std::allocator<void>::const_pointer = nullptr)
     {
       void *ptr;
       ptr = aligned_malloc((SIMD_VEC_SIZE * (cnt / SIMD_VEC_SIZE + 1)) *
