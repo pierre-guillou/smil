@@ -221,11 +221,11 @@ namespace smil
     void init() override;
 
     //! Clone from a given image (set same size and copy content)
-    virtual void clone(const Image<T> &rhs);
+    void clone(const Image<T> &rhs);
     template <class T2>
     void clone(const Image<T2> &rhs);
     //! Create a clone of the image (with same size and content )
-    virtual Image<T> clone(bool cloneData = true)
+    Image<T> clone(bool cloneData = true)
     {
       Image<T> im(*this, cloneData);
       return im;
