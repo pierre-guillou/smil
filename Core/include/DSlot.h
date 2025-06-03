@@ -75,7 +75,7 @@ namespace smil
   public:
     Slot()           = default;
     ~Slot() override = default;
-    void run(eventT * /*e*/) override
+    virtual void run(eventT * /*e*/)
     {
     }
     void operator()(eventT * /*e*/)
