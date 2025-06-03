@@ -52,8 +52,7 @@
 
 using namespace std;
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup    Advanced
    * @addtogroup AdvGeoTools
@@ -82,27 +81,24 @@ namespace smil
   };
 
   template <class T>
-  class AdvancedGeodesy
-  {
+  class AdvancedGeodesy {
     // TODO :
     // * remplacer des "X + Y * W + Z * W * H" par "currentPixel"
 
   public:
-    AdvancedGeodesy()
-    {
+    AdvancedGeodesy() {
       cout << "Shall be initialized with an input image" << endl;
       _init(nullptr);
     }
 
-    AdvancedGeodesy(const Image<T> &imIn)
-    {
+    AdvancedGeodesy(const Image<T> &imIn) {
       img = &imIn;
 
-      width  = img->getWidth();
+      width = img->getWidth();
       height = img->getHeight();
-      depth  = img->getDepth();
+      depth = img->getDepth();
 
-      pixPerLine  = width;
+      pixPerLine = width;
       pixPerSlice = width * height;
 
       _init(&imIn);
@@ -110,33 +106,33 @@ namespace smil
 
   public:
     template <class T1, class T2>
-    RES_T labelFlatZonesWithProperty(const Image<T1> &imIn, Image<T2> &imOut,
-                                     string property)
-    {
+    RES_T labelFlatZonesWithProperty(const Image<T1> &imIn,
+                                     Image<T2> &imOut,
+                                     string property) {
       // Check inputs
       ASSERT_ALLOCATED(&imIn)
       ASSERT_SAME_SIZE(&imIn, &imOut)
 
       int method = getPropertyID(property);
-      if (method < 0 || method > 3) {
+      if(method < 0 || method > 3) {
         ERR_MSG("Wrong method value : shall be in the interval [0,3]");
         return RES_ERR;
       }
 
-      if (img == nullptr)
+      if(img == nullptr)
         _init(&imIn);
 
       ImageFreezer freeze(imOut);
       fill(imOut, T2(0));
 
-      off_t W        = imIn.getWidth();
-      off_t H        = imIn.getHeight();
-      off_t Z        = imIn.getDepth();
+      off_t W = imIn.getWidth();
+      off_t H = imIn.getHeight();
+      off_t Z = imIn.getDepth();
       off_t nbPixels = imIn.getPixelCount();
 
       // On passe par des buffers pour des questions de performance, En 3D, on
       // passe de 80 a 50 secondes
-      typename Image<T1>::lineType pixelsIn  = imIn.getPixels();
+      typename Image<T1>::lineType pixelsIn = imIn.getPixels();
       typename Image<T2>::lineType pixelsOut = imOut.getPixels();
 
       vector<double> DistanceMap(nbPixels);
@@ -144,19 +140,19 @@ namespace smil
 
       off_t slice, Ind;
       off_t j, i;
-      for (slice = 0; slice < Z; slice++) {
+      for(slice = 0; slice < Z; slice++) {
         Ind = slice * W * H;
-        for (j = 0, i = Ind; j < W * H; ++j, ++i) {
+        for(j = 0, i = Ind; j < W * H; ++j, ++i) {
           // Process all pixels
-          DistanceMap[j] = (double) (pixelsIn[i] >= 0 ? -1. : 0.);
+          DistanceMap[j] = (double)(pixelsIn[i] >= 0 ? -1. : 0.);
           // Pixel labels
-          LabelMap[j] = (double) pixelsIn[i];
+          LabelMap[j] = (double)pixelsIn[i];
         }
         // Depth = 1 (image2D), Alongement=1 (geodesic elongation)
         _GeodesicPathOnLabels(DistanceMap, LabelMap, W, H, 1, method);
 
-        for (j = 0, i = Ind; i < Ind + W * H; ++i, ++j) {
-          pixelsOut[i] = (T2) DistanceMap[j];
+        for(j = 0, i = Ind; i < Ind + W * H; ++i, ++j) {
+          pixelsOut[i] = (T2)DistanceMap[j];
         }
       }
 
@@ -167,59 +163,61 @@ namespace smil
     //
     //
     template <class T1, class T2>
-    RES_T GeodesicProperty(const Image<T1> &imIn, Image<T2> &imOut,
-                           string property, bool sliceBySlice, double dzOverDx)
-    {
+    RES_T GeodesicProperty(const Image<T1> &imIn,
+                           Image<T2> &imOut,
+                           string property,
+                           bool sliceBySlice,
+                           double dzOverDx) {
       // Check inputs
       ASSERT_ALLOCATED(&imIn)
       ASSERT_SAME_SIZE(&imIn, &imOut)
 
       int method = getPropertyID(property);
-      if (method < 0 || method > 3) {
+      if(method < 0 || method > 3) {
         ERR_MSG("Wrong method value : shall be in the interval [0,3]");
         return RES_ERR;
       }
 
-      if (img == nullptr)
+      if(img == nullptr)
         _init(&imIn);
 
       ImageFreezer freeze(imOut);
       fill(imOut, T2(0));
 
-      off_t W        = imIn.getWidth();
-      off_t H        = imIn.getHeight();
-      off_t Z        = imIn.getDepth();
+      off_t W = imIn.getWidth();
+      off_t H = imIn.getHeight();
+      off_t Z = imIn.getDepth();
       off_t nbPixels = imIn.getPixelCount();
 
       // On passe par des buffers pour des questions de performance, En 3D, on
       // passe de 80 a 50 secondes
-      typename Image<T1>::lineType pixelsIn  = imIn.getPixels();
+      typename Image<T1>::lineType pixelsIn = imIn.getPixels();
       typename Image<T2>::lineType pixelsOut = imOut.getPixels();
 
       vector<double> DistanceMap(nbPixels);
 
       T1 vMed = maxVal(imIn) / 2;
-      if (sliceBySlice) {
-        for (off_t slice = 0; slice < Z; slice++) {
+      if(sliceBySlice) {
+        for(off_t slice = 0; slice < Z; slice++) {
           off_t i, j;
 
           off_t Ind = slice * W * H;
-          for (j = 0, i = Ind; j < W * H; ++j, ++i)
+          for(j = 0, i = Ind; j < W * H; ++j, ++i)
             DistanceMap[j] = (pixelsIn[i] >= vMed ? -1. : 0.);
 
           _GeodesicPathBinary(DistanceMap, W, H, 1, method, 1, 1, 1);
 
-          for (i = Ind, j = 0; i < Ind + W * H; ++i, ++j)
-            pixelsOut[i] = (T2) DistanceMap[j];
+          for(i = Ind, j = 0; i < Ind + W * H; ++i, ++j)
+            pixelsOut[i] = (T2)DistanceMap[j];
         }
       } else {
-        for (size_t i = 0; i < imIn.getPixelCount(); i++)
+        for(size_t i = 0; i < imIn.getPixelCount(); i++)
           DistanceMap[i] = (pixelsIn[i] >= vMed ? -1. : 0.);
 
         _GeodesicPathBinary(DistanceMap, W, H, Z, method, 1, 1, dzOverDx);
 
-        for (size_t i = 0; i < imOut.getPixelCount(); i++)
-          pixelsOut[i] = (T2) DistanceMap[i];
+        for(size_t i = 0; i < imOut.getPixelCount(); i++)
+          pixelsOut[i] = (T2)DistanceMap[i];
       }
 
       return RES_OK;
@@ -229,62 +227,65 @@ namespace smil
     //
     //
     template <typename T1, typename T2>
-    RES_T GeodesicPathOpening(const Image<T1> &imIn, Image<T2> &imOut,
-                              double Lenght, string &property, double scaleX,
-                              double scaleY, double scaleZ)
-    {
+    RES_T GeodesicPathOpening(const Image<T1> &imIn,
+                              Image<T2> &imOut,
+                              double Lenght,
+                              string &property,
+                              double scaleX,
+                              double scaleY,
+                              double scaleZ) {
       // Check inputs
       ASSERT_ALLOCATED(&imIn)
       ASSERT_SAME_SIZE(&imIn, &imOut)
 
       int method = getPropertyID(property);
-      if (method < 0 || method > 3) {
+      if(method < 0 || method > 3) {
         ERR_MSG("Wrong method value : shall be in the interval [0,3]");
         return RES_ERR;
       }
 
-      if (img == nullptr)
+      if(img == nullptr)
         _init(&imIn);
 
       ImageFreezer freeze(imOut);
       fill(imOut, T2(0));
 
-      off_t W        = imIn.getWidth();
-      off_t H        = imIn.getHeight();
-      off_t Z        = imIn.getDepth();
+      off_t W = imIn.getWidth();
+      off_t H = imIn.getHeight();
+      off_t Z = imIn.getDepth();
       off_t nbPixels = imIn.getPixelCount();
 
       // On passe par des buffers pour des questions de performance, En 3D, on
       // passe de 80 a 50 secondes
-      typename Image<T1>::lineType pixelsIn  = imIn.getPixels();
+      typename Image<T1>::lineType pixelsIn = imIn.getPixels();
       typename Image<T2>::lineType pixelsOut = imOut.getPixels();
 
       // Calcul des niveaux de gris a reellement faire: si un niveau de gris
       // n'est pas present dans l'image initial, aucun changement dans les CC.
       // Donc il n'y a pas besoin de perdre du temps pour ne rien changer...
-      std::vector<T1>    levelToDo;
+      std::vector<T1> levelToDo;
       std::map<T1, bool> hGood;
-      for (off_t i = 0; i < nbPixels; ++i)
+      for(off_t i = 0; i < nbPixels; ++i)
         hGood[pixelsIn[i]] = true;
-      for (auto it = hGood.begin(); it != hGood.end(); it++)
+      for(auto it = hGood.begin(); it != hGood.end(); it++)
         levelToDo.push_back(it->first);
 
       vector<double> DistanceMap(nbPixels);
 
       // UseLess to compute the first level
-      if (levelToDo.size() > 0)
-        fill(imOut, (T2) levelToDo[0]);
-      for (T1 k = 1; k < (T1) levelToDo.size(); k++) {
+      if(levelToDo.size() > 0)
+        fill(imOut, (T2)levelToDo[0]);
+      for(T1 k = 1; k < (T1)levelToDo.size(); k++) {
         // Threshold
-        for (off_t i = 0; i < nbPixels; i++)
+        for(off_t i = 0; i < nbPixels; i++)
           DistanceMap[i] = (pixelsIn[i] >= levelToDo[k] ? -1. : 0.);
 
-        _GeodesicPathBinary(DistanceMap, W, H, Z, method, scaleX, scaleY,
-                            scaleZ);
+        _GeodesicPathBinary(
+          DistanceMap, W, H, Z, method, scaleX, scaleY, scaleZ);
 
-        for (off_t i = 0; i < nbPixels; i++)
-          if (DistanceMap[i] >= Lenght)
-            pixelsOut[i] = (T2) levelToDo[k];
+        for(off_t i = 0; i < nbPixels; i++)
+          if(DistanceMap[i] >= Lenght)
+            pixelsOut[i] = (T2)levelToDo[k];
       }
 
       return RES_OK;
@@ -294,16 +295,20 @@ namespace smil
     //
     //
     template <typename T1, typename T2>
-    RES_T GeodesicUltimatePathOpening(const Image<T1> &imIn, Image<T1> &imTrans,
-                                      Image<T2> &imInd, double scaleX,
-                                      double scaleY, double scaleZ, off_t stop,
-                                      int lambdaAttribute, int takeMin)
-    {
+    RES_T GeodesicUltimatePathOpening(const Image<T1> &imIn,
+                                      Image<T1> &imTrans,
+                                      Image<T2> &imInd,
+                                      double scaleX,
+                                      double scaleY,
+                                      double scaleZ,
+                                      off_t stop,
+                                      int lambdaAttribute,
+                                      int takeMin) {
       ASSERT_ALLOCATED(&imIn)
       ASSERT_SAME_SIZE(&imIn, &imTrans)
       ASSERT_SAME_SIZE(&imIn, &imInd)
 
-      if (img == nullptr)
+      if(img == nullptr)
         _init(&imIn);
 
       ImageFreezer freezeTrans(imTrans);
@@ -312,43 +317,43 @@ namespace smil
       fill(imTrans, T1(0));
       fill(imInd, T2(0));
 
-      off_t W        = imIn.getWidth();
-      off_t H        = imIn.getHeight();
-      off_t Z        = imIn.getDepth();
+      off_t W = imIn.getWidth();
+      off_t H = imIn.getHeight();
+      off_t Z = imIn.getDepth();
       off_t nbPixels = imIn.getPixelCount();
 
-      typename Image<T1>::lineType pixelsIn    = imIn.getPixels();
+      typename Image<T1>::lineType pixelsIn = imIn.getPixels();
       typename Image<T1>::lineType pixelsTrans = imTrans.getPixels();
-      typename Image<T2>::lineType pixelsInd   = imInd.getPixels();
+      typename Image<T2>::lineType pixelsInd = imInd.getPixels();
 
       map<T1, bool> hGood;
-      vector<T1>    levelToDo;
+      vector<T1> levelToDo;
       levelToDo.push_back(0);
-      for (off_t i = 0; i < nbPixels; i++)
+      for(off_t i = 0; i < nbPixels; i++)
         hGood[pixelsIn[i]] = true;
-      for (auto it = hGood.begin(); it != hGood.end(); it++)
+      for(auto it = hGood.begin(); it != hGood.end(); it++)
         levelToDo.push_back(it->first + 1);
 
-      vector<double>               DistanceMap(nbPixels);
+      vector<double> DistanceMap(nbPixels);
       vector<vector<AdvGeoPoints>> PathOp(nbPixels);
-      AdvGeoPoints                 Pt;
+      AdvGeoPoints Pt;
 
       // For all the level which are needed
       // Threshold
-      for (T1 k = 0; k < levelToDo.size(); k++) {
-        for (off_t i = 0; i < nbPixels; ++i)
+      for(T1 k = 0; k < levelToDo.size(); k++) {
+        for(off_t i = 0; i < nbPixels; ++i)
           DistanceMap[i] = (pixelsIn[i] >= levelToDo[k] ? -1. : 0.);
 
         // sinon aucune propogation car l'image est noir-->pour ajouter le
         // dernier maillon Dist=0
-        if (k != (T1) levelToDo.size() - 1)
+        if(k != (T1)levelToDo.size() - 1)
           _GeodesicPathBinary(DistanceMap, W, H, Z, 0, scaleX, scaleY, scaleZ);
 
-        for (off_t i = 0; i < nbPixels; i++) {
-          if (levelToDo[k] != 0)
+        for(off_t i = 0; i < nbPixels; i++) {
+          if(levelToDo[k] != 0)
             Pt = PathOp[i].back();
-          if (levelToDo[k] == 0 || !doublesEqual(Pt.Dist, DistanceMap[i])) {
-            Pt.Dist  = (int) DistanceMap[i];
+          if(levelToDo[k] == 0 || !doublesEqual(Pt.Dist, DistanceMap[i])) {
+            Pt.Dist = (int)DistanceMap[i];
             Pt.Seuil = levelToDo[k];
             PathOp[i].push_back(Pt);
           }
@@ -363,50 +368,50 @@ namespace smil
       copy(imIn, imPOold);
       typename Image<T1>::lineType pixelsPOold = imPOold.getPixels();
 
-      int          ValPO, Sub;
+      int ValPO, Sub;
       vector<INT8> Accumulation(nbPixels, 0);
 
       // if the Stop criteria is not defined we set it to max(W,H) -1
       off_t gtDim = max(W, max(H, Z)) - 1;
-      if (stop < 0 || stop > gtDim)
+      if(stop < 0 || stop > gtDim)
         stop = gtDim;
 
-      for (off_t Lenght = 1; Lenght < stop; Lenght++) {
-        for (off_t i = 0; i < nbPixels; ++i) {
+      for(off_t Lenght = 1; Lenght < stop; Lenght++) {
+        for(off_t i = 0; i < nbPixels; ++i) {
           // Calcul de la valeur du PathOp pour la distance Lenght pour le pixel
           // i A la premiere valeur qui ne respecte pas le critere, on s'arrete
-          if (takeMin == 1) {
-            for (int k = 0;; k++) {
-              if (PathOp[i][k].Dist < Lenght) {
+          if(takeMin == 1) {
+            for(int k = 0;; k++) {
+              if(PathOp[i][k].Dist < Lenght) {
                 ValPO = PathOp[i][k].Seuil - 1;
                 break;
               }
             }
           } else {
-            for (int k = PathOp[i].size() - 2; k >= 0; k--)
-              if (PathOp[i][k].Dist >= Lenght) {
+            for(int k = PathOp[i].size() - 2; k >= 0; k--)
+              if(PathOp[i][k].Dist >= Lenght) {
                 ValPO = PathOp[i][k + 1].Seuil - 1;
                 break;
               }
           }
-          if (ValPO < 0)
+          if(ValPO < 0)
             ValPO = 0;
 
           // Initialisation des images a 0
-          if (Lenght == 1) {
-            pixelsInd[i]   = 0;
+          if(Lenght == 1) {
+            pixelsInd[i] = 0;
             pixelsTrans[i] = 0;
           }
 
           // On fait la soustraction entre le PO lambda-1 et le PO Lambda
           Sub = pixelsPOold[i] - ValPO;
           // On ecrit si on a un residu plus grand que l'ancien  (max)
-          if (Sub > 0 && pixelsTrans[i] <= (T1) Sub && Accumulation[i] <= 0) {
-            pixelsTrans[i]  = Sub;
-            pixelsInd[i]    = Lenght + 1;
+          if(Sub > 0 && pixelsTrans[i] <= (T1)Sub && Accumulation[i] <= 0) {
+            pixelsTrans[i] = Sub;
+            pixelsInd[i] = Lenght + 1;
             Accumulation[i] = lambdaAttribute;
           } else {
-            if (Accumulation[i] >= 1) {
+            if(Accumulation[i] >= 1) {
               // Ou si l'accumulation est active
               // On accumule le contraste
               pixelsTrans[i] = pixelsTrans[i] + Sub;
@@ -414,7 +419,7 @@ namespace smil
               pixelsInd[i] = Lenght + 1;
             }
           }
-          if (Sub == 0 && Accumulation[i] > -1)
+          if(Sub == 0 && Accumulation[i] > -1)
             Accumulation[i]--;
 
           // On copy la nouvelle valeur de l'ouverture ultime
@@ -435,84 +440,77 @@ namespace smil
                                     {"elongation", 1},
                                     {"tortuosity", 2},
                                     {"extremities", 3}};
-    const Image<T> * img         = nullptr;
+    const Image<T> *img = nullptr;
 
     StrElt se = DEFAULT_SE;
 
-    size_t width  = 1;
+    size_t width = 1;
     size_t height = 1;
-    size_t depth  = 1;
+    size_t depth = 1;
 
-    size_t pixPerLine  = 1;
+    size_t pixPerLine = 1;
     size_t pixPerSlice = 1;
-    size_t nbPixels    = 1;
+    size_t nbPixels = 1;
 
     //
     // Auxiliary class functions
     //
-    void _init(const Image<T> *imIn)
-    {
+    void _init(const Image<T> *imIn) {
       img = imIn;
 
-      if (img != nullptr) {
-        width  = img->getWidth();
+      if(img != nullptr) {
+        width = img->getWidth();
         height = img->getHeight();
-        depth  = img->getDepth();
+        depth = img->getDepth();
       } else {
         width = height = depth = 1;
       }
-      pixPerLine  = width;
+      pixPerLine = width;
       pixPerSlice = width * height;
-      nbPixels    = width * height * depth;
+      nbPixels = width * height * depth;
 
-      if (depth > 1)
+      if(depth > 1)
         se = CubeSE();
       else
         se = SquSE();
       se = se.noCenter();
     }
 
-    int getPropertyID(string &p)
-    {
+    int getPropertyID(string &p) {
       map<string, int>::iterator it;
 
       it = property2id.find(p);
-      if (it != property2id.end())
+      if(it != property2id.end())
         return it->second;
       return -1;
     }
 
-    bool doublesEqual(double x, double y)
-    {
+    bool doublesEqual(double x, double y) {
       return abs(x - y) < 0.000001;
     }
 
-    double _pow2(double x)
-    {
+    double _pow2(double x) {
       return x * x;
     }
 
-    double _pow3(double x)
-    {
+    double _pow3(double x) {
       return x * x * x;
     }
 
 #define CVTFUNCS 1
-    void getCoordsFromOffset(off_t offset, off_t W, off_t H, off_t D, off_t &x,
-                             off_t &y, off_t &z)
-    {
-      x      = offset % W;
+    void getCoordsFromOffset(
+      off_t offset, off_t W, off_t H, off_t D, off_t &x, off_t &y, off_t &z) {
+      x = offset % W;
       offset = (offset - x) / W;
-      y      = offset % H;
-      z      = (offset - y) / H;
+      y = offset % H;
+      z = (offset - y) / H;
       // X = currentPixel % W;
       // Y = (currentPixel % (W * H) - X) / W;
       // Z = (currentPixel - X - Y * W) / (W * H);
     }
 
-    off_t getOffsetFromCoords(off_t x, off_t y, off_t z, off_t W, off_t H,
-                              SMIL_UNUSED off_t D)
-    {
+    off_t getOffsetFromCoords(
+      off_t x, off_t y, off_t z, off_t W, off_t H, SMIL_UNUSED off_t D) {
       return (z * H + y) * W + x;
     }
 
@@ -521,17 +519,23 @@ namespace smil
     //
     void _GeodesicPathFlatZones(vector<double> &DistanceMap,
                                 vector<double> &LabelMap,
-                                queue<off_t> &fifoSave, off_t W, off_t H,
-                                off_t D, off_t BaryX, off_t BaryY, off_t BaryZ,
-                                int Allongement = 0, double scaleX = 1,
-                                double scaleY = 1, double scaleZ = 1)
-    {
-      if (fifoSave.empty())
+                                queue<off_t> &fifoSave,
+                                off_t W,
+                                off_t H,
+                                off_t D,
+                                off_t BaryX,
+                                off_t BaryY,
+                                off_t BaryZ,
+                                int Allongement = 0,
+                                double scaleX = 1,
+                                double scaleY = 1,
+                                double scaleZ = 1) {
+      if(fifoSave.empty())
         return;
 
-      off_t  IndStart, currentPixel;
-      off_t  X, Y, Z;
-      off_t  Xtort, Ytort, Ztort;
+      off_t IndStart, currentPixel;
+      off_t X, Y, Z;
+      off_t Xtort, Ytort, Ztort;
       double DistMax = -1, Dist;
 
       // Find the BaryCentre
@@ -551,14 +555,14 @@ namespace smil
         Z = (currentPixel - X - Y * W) / (W * H);
 #endif
 
-        Dist = std::sqrt(_pow2(X * scaleX - BaryX) + _pow2(Y * scaleY - BaryY) +
-                         _pow2(Z * scaleZ - BaryZ));
+        Dist = std::sqrt(_pow2(X * scaleX - BaryX) + _pow2(Y * scaleY - BaryY)
+                         + _pow2(Z * scaleZ - BaryZ));
 
-        if (Dist > DistMax) {
-          DistMax  = Dist;
+        if(Dist > DistMax) {
+          DistMax = Dist;
           IndStart = currentPixel;
         }
-      } while (!fifoCurrent.empty());
+      } while(!fifoCurrent.empty());
 
       // Get the max distance DistMax (geodesic diameter)
       bool NewDist;
@@ -582,51 +586,51 @@ namespace smil
         // JOE IndCurr = X + (Y * W) + (Z * W * H);
         IndCurr = currentPixel;
 
-        Dist    = ImDtTypes<double>::max();
+        Dist = ImDtTypes<double>::max();
         NewDist = false;
 
         // For all the neighbour
-        for (off_t j = -1; j <= 1; j++) {
-          if (Z + j < 0 || Z + j >= D)
+        for(off_t j = -1; j <= 1; j++) {
+          if(Z + j < 0 || Z + j >= D)
             continue;
-          for (off_t k = -1; k <= 1; k++) {
-            if (X + k < 0 || X + k >= W)
+          for(off_t k = -1; k <= 1; k++) {
+            if(X + k < 0 || X + k >= W)
               continue;
-            for (off_t l = -1; l <= 1; l++) {
-              if (Y + l < 0 || Y + l >= H)
+            for(off_t l = -1; l <= 1; l++) {
+              if(Y + l < 0 || Y + l >= H)
                 continue;
-              if (k == 0 && l == 0 && j == 0)
+              if(k == 0 && l == 0 && j == 0)
                 continue;
               Ind = (X + k) + (Y + l) * W + (Z + j) * W * H;
 
-              if (LabelMap[Ind] == LabelMap[IndCurr]) {
-                if (DistanceMap[Ind] == -2) {
+              if(LabelMap[Ind] == LabelMap[IndCurr]) {
+                if(DistanceMap[Ind] == -2) {
                   fifoCurrent.push(Ind);
                   DistanceMap[Ind] = -3;
-                } else if (DistanceMap[Ind] != 0 && DistanceMap[Ind] != -3) {
-                  double Dx = std::sqrt(_pow2(j * scaleX) + _pow2(k * scaleY) +
-                                        _pow2(l * scaleZ));
-                  if (!NewDist || Dist > (DistanceMap[Ind] + Dx)) {
-                    Dist    = DistanceMap[Ind] + Dx;
+                } else if(DistanceMap[Ind] != 0 && DistanceMap[Ind] != -3) {
+                  double Dx = std::sqrt(_pow2(j * scaleX) + _pow2(k * scaleY)
+                                        + _pow2(l * scaleZ));
+                  if(!NewDist || Dist > (DistanceMap[Ind] + Dx)) {
+                    Dist = DistanceMap[Ind] + Dx;
                     NewDist = true;
                   }
                 }
 
-                if (NewDist) {
+                if(NewDist) {
                   // JOE DistanceMap[X + Y * W + Z * W * H] = Dist;
                   DistanceMap[currentPixel] = Dist;
-                  if (Dist > DistMax) {
+                  if(Dist > DistMax) {
                     DistMax = Dist;
-                    Xtort   = X;
-                    Ytort   = Y;
-                    Ztort   = Z;
+                    Xtort = X;
+                    Ytort = Y;
+                    Ztort = Z;
                   }
                 }
               }
             }
           }
         }
-      } while (!fifoCurrent.empty());
+      } while(!fifoCurrent.empty());
 
       // Write on DistanceMap the Max Distance for all the pixel of the CC, we
       // pop fifoSave
@@ -637,26 +641,26 @@ namespace smil
         fifoSave.pop();
 
         // geodesic diameter
-        if (Allongement == 0) {
+        if(Allongement == 0) {
           DistanceMap[currentPixel] = DistMax;
           continue;
         }
 
-        if (Allongement == 1) {
+        if(Allongement == 1) {
           // Geodesic elongation //BMITOTO
-          if (D == 1) {
+          if(D == 1) {
             // 2D
-            DistanceMap[currentPixel] =
-                _pow2(DistMax) / (size * scaleX * scaleY) * 0.785398;
+            DistanceMap[currentPixel]
+              = _pow2(DistMax) / (size * scaleX * scaleY) * 0.785398;
           } else {
             // 3D
-            DistanceMap[currentPixel] =
-                _pow3(DistMax) / (size * scaleX * scaleY * scaleZ) * 0.523599;
+            DistanceMap[currentPixel]
+              = _pow3(DistMax) / (size * scaleX * scaleY * scaleZ) * 0.523599;
           }
           continue;
         }
 
-        if (Allongement == 2) {
+        if(Allongement == 2) {
           // Tortuosity
           off_t X2, Y2, Z2;
 #if CVTFUNCS
@@ -668,30 +672,30 @@ namespace smil
 #endif
 
           double Eucl;
-          Eucl = std::sqrt(_pow2((Xtort - X2) * scaleX) +
-                           _pow2((Ytort - Y2) * scaleY) +
-                           _pow2((Ztort - Z2) * scaleZ));
-          if (Eucl != 0)
-            DistanceMap[currentPixel] = (double) (DistMax / Eucl);
+          Eucl = std::sqrt(_pow2((Xtort - X2) * scaleX)
+                           + _pow2((Ytort - Y2) * scaleY)
+                           + _pow2((Ztort - Z2) * scaleZ));
+          if(Eucl != 0)
+            DistanceMap[currentPixel] = (double)(DistMax / Eucl);
           else
-            DistanceMap[currentPixel] = (double) (DistMax / 0.01);
+            DistanceMap[currentPixel] = (double)(DistMax / 0.01);
           continue;
         }
 
-        if (Allongement == 3) {
+        if(Allongement == 3) {
           // Extremities (first extremity is set to 1,
           // the other one is set to 2. The rest of the CC is set to 0)
           DistanceMap[currentPixel] = 0;
           continue;
         }
-      } while (!fifoSave.empty());
+      } while(!fifoSave.empty());
 
       // Extremities (first extremity is set to 1, the other one is set to 2.
       // The rest of the CC is set to 0)
-      if (Allongement == 3) {
-        int IndExt            = Xtort + Ytort * W + Ztort * W * H;
+      if(Allongement == 3) {
+        int IndExt = Xtort + Ytort * W + Ztort * W * H;
         DistanceMap[IndStart] = 1;
-        DistanceMap[IndExt]   = 2;
+        DistanceMap[IndExt] = 2;
       }
 
       return;
@@ -701,27 +705,31 @@ namespace smil
     //
     //
     void _GeodesicPathOnLabels(vector<double> &DistanceMap,
-                               vector<double> &LabelMap, off_t W, off_t H,
-                               off_t D, int Allongement = 0, double scaleX = 1,
-                               double scaleY = 1, double scaleZ = 1)
-    {
+                               vector<double> &LabelMap,
+                               off_t W,
+                               off_t H,
+                               off_t D,
+                               int Allongement = 0,
+                               double scaleX = 1,
+                               double scaleY = 1,
+                               double scaleZ = 1) {
       queue<off_t> fifoCurrent, fifoSave;
-      off_t        X, Y, Z;
-      off_t        currentPixel;
-      off_t        Ind, IndCurr;
-      off_t        BaryX, BaryY, BaryZ;
+      off_t X, Y, Z;
+      off_t currentPixel;
+      off_t Ind, IndCurr;
+      off_t BaryX, BaryY, BaryZ;
 
-      for (off_t i = W * H * D - 1; i >= 0; i--) {
+      for(off_t i = W * H * D - 1; i >= 0; i--) {
         // For all pixels
-        if (DistanceMap[i] == -1) {
+        if(DistanceMap[i] == -1) {
           // We are on a CC
           fifoCurrent.push(i);
           fifoSave.push(i);
 
           DistanceMap[i] = -2;
-          BaryX          = 0;
-          BaryY          = 0;
-          BaryZ          = 0;
+          BaryX = 0;
+          BaryY = 0;
+          BaryZ = 0;
 
           // We push all the CC
           do {
@@ -744,21 +752,21 @@ namespace smil
 
             // For all the neigbour (8-connectivity in 2D or 26-connectivity
             // in 3D)
-            for (off_t j = -1; j <= 1; j++) {
-              if (Z + j < 0 || Z + j >= D)
+            for(off_t j = -1; j <= 1; j++) {
+              if(Z + j < 0 || Z + j >= D)
                 continue;
-              for (off_t k = -1; k <= 1; k++) {
-                if (X + k < 0 || X + k >= W)
+              for(off_t k = -1; k <= 1; k++) {
+                if(X + k < 0 || X + k >= W)
                   continue;
-                for (off_t l = -1; l <= 1; l++) {
-                  if (Y + l < 0 || Y + l >= H)
+                for(off_t l = -1; l <= 1; l++) {
+                  if(Y + l < 0 || Y + l >= H)
                     continue;
-                  if (k == 0 && l == 0 && j == 0)
+                  if(k == 0 && l == 0 && j == 0)
                     continue;
                   Ind = (X + k) + (Y + l) * W + (Z + j) * W * H;
                   // Are pixels in the same flat zone?
-                  if (DistanceMap[Ind] == -1 &&
-                      LabelMap[Ind] == LabelMap[IndCurr]) {
+                  if(DistanceMap[Ind] == -1
+                     && LabelMap[Ind] == LabelMap[IndCurr]) {
                     DistanceMap[Ind] = -2;
                     fifoCurrent.push(Ind);
                     fifoSave.push(Ind);
@@ -766,7 +774,7 @@ namespace smil
                 }
               }
             }
-          } while (!fifoCurrent.empty());
+          } while(!fifoCurrent.empty());
 
           // One CC have been push, we compute it
           BaryX = (off_t)(BaryX * scaleX / fifoSave.size());
@@ -786,27 +794,31 @@ namespace smil
     //
     //
     //
-    void _GeodesicPathBinary(vector<double> &DistanceMap, off_t W, off_t H,
-                             off_t D, int Allongement = 0, double scaleX = 1,
-                             double scaleY = 1, double scaleZ = 1)
-    {
+    void _GeodesicPathBinary(vector<double> &DistanceMap,
+                             off_t W,
+                             off_t H,
+                             off_t D,
+                             int Allongement = 0,
+                             double scaleX = 1,
+                             double scaleY = 1,
+                             double scaleZ = 1) {
       queue<off_t> fifoCurrent, fifoSave;
-      off_t        X, Y, Z;
-      off_t        currentPixel;
-      off_t        Ind;
-      off_t        BaryX, BaryY, BaryZ;
+      off_t X, Y, Z;
+      off_t currentPixel;
+      off_t Ind;
+      off_t BaryX, BaryY, BaryZ;
 
       // For all pixels
-      for (off_t i = W * H * D - 1; i >= 0; i--)
-        if (DistanceMap[i] == -1) {
+      for(off_t i = W * H * D - 1; i >= 0; i--)
+        if(DistanceMap[i] == -1) {
           // We are on a CC
           fifoCurrent.push(i);
           fifoSave.push(i);
 
           DistanceMap[i] = -2;
-          BaryX          = 0;
-          BaryY          = 0;
-          BaryZ          = 0;
+          BaryX = 0;
+          BaryY = 0;
+          BaryZ = 0;
 
           // We push all the CC
           do {
@@ -825,19 +837,19 @@ namespace smil
             BaryZ += Z;
 
             // For all neighbours
-            for (off_t j = -1; j <= 1; j++) {
-              if (Z + j < 0 || Z + j >= D)
+            for(off_t j = -1; j <= 1; j++) {
+              if(Z + j < 0 || Z + j >= D)
                 continue;
-              for (off_t k = -1; k <= 1; k++) {
-                if (X + k < 0 || X + k >= W)
+              for(off_t k = -1; k <= 1; k++) {
+                if(X + k < 0 || X + k >= W)
                   continue;
-                for (off_t l = -1; l <= 1; l++) {
-                  if (Y + l < 0 || Y + l >= H)
+                for(off_t l = -1; l <= 1; l++) {
+                  if(Y + l < 0 || Y + l >= H)
                     continue;
-                  if (k == 0 && l == 0 && j == 0)
+                  if(k == 0 && l == 0 && j == 0)
                     continue;
                   Ind = (X + k) + (Y + l) * W + (Z + j) * W * H;
-                  if (DistanceMap[Ind] == -1) {
+                  if(DistanceMap[Ind] == -1) {
                     DistanceMap[Ind] = -2;
                     fifoCurrent.push(Ind);
                     fifoSave.push(Ind);
@@ -846,7 +858,7 @@ namespace smil
               }
             }
 
-          } while (!fifoCurrent.empty());
+          } while(!fifoCurrent.empty());
 
           // One CC have been push, we compute it
           BaryX = (off_t)(BaryX * scaleX / fifoSave.size());
@@ -860,17 +872,24 @@ namespace smil
     //
     //
     //
-    void _GeodesicPathCC(vector<double> &DistanceMap, queue<off_t> &fifoSave,
-                         off_t W, off_t H, off_t D, off_t BaryX, off_t BaryY,
-                         off_t BaryZ, int Allongement = 0, double scaleX = 1,
-                         double scaleY = 1, double scaleZ = 1)
-    {
-      if (fifoSave.empty())
+    void _GeodesicPathCC(vector<double> &DistanceMap,
+                         queue<off_t> &fifoSave,
+                         off_t W,
+                         off_t H,
+                         off_t D,
+                         off_t BaryX,
+                         off_t BaryY,
+                         off_t BaryZ,
+                         int Allongement = 0,
+                         double scaleX = 1,
+                         double scaleY = 1,
+                         double scaleZ = 1) {
+      if(fifoSave.empty())
         return;
 
-      off_t  IndStart, currentPixel;
-      off_t  X, Y, Z;
-      off_t  Xtort, Ytort, Ztort;
+      off_t IndStart, currentPixel;
+      off_t X, Y, Z;
+      off_t Xtort, Ytort, Ztort;
       double DistMax = -1, Dist;
 
       Xtort = Ytort = Ztort = 0;
@@ -892,18 +911,18 @@ namespace smil
         Z = (currentPixel - X - Y * W) / (W * H);
 #endif
 
-        Dist = (double) std::sqrt(_pow2(X * scaleX - BaryX) +
-                                  _pow2(Y * scaleY - BaryY) +
-                                  _pow2(Z * scaleZ - BaryZ));
+        Dist = (double)std::sqrt(_pow2(X * scaleX - BaryX)
+                                 + _pow2(Y * scaleY - BaryY)
+                                 + _pow2(Z * scaleZ - BaryZ));
 
-        if (Dist > DistMax) {
-          DistMax  = Dist;
+        if(Dist > DistMax) {
+          DistMax = Dist;
           IndStart = currentPixel;
         }
-      } while (!fifoCurrent.empty());
+      } while(!fifoCurrent.empty());
 
       // Get the max distance
-      bool  NewDist;
+      bool NewDist;
       off_t Ind;
 
       DistanceMap[IndStart] = 1;
@@ -921,50 +940,50 @@ namespace smil
         Z = (currentPixel - X - Y * W) / (W * H);
 #endif
 
-        Dist    = ImDtTypes<double>::max();
+        Dist = ImDtTypes<double>::max();
         NewDist = false;
 
         // For all the neighbour
-        for (off_t j = -1; j <= 1; j++) {
-          if (Z + j < 0 || Z + j >= D)
+        for(off_t j = -1; j <= 1; j++) {
+          if(Z + j < 0 || Z + j >= D)
             continue;
-          for (off_t k = -1; k <= 1; k++) {
-            if (X + k < 0 || X + k >= W)
+          for(off_t k = -1; k <= 1; k++) {
+            if(X + k < 0 || X + k >= W)
               continue;
-            for (off_t l = -1; l <= 1; l++) {
-              if (Y + l < 0 || Y + l >= H)
+            for(off_t l = -1; l <= 1; l++) {
+              if(Y + l < 0 || Y + l >= H)
                 continue;
-              if (k == 0 && l == 0 && j == 0)
+              if(k == 0 && l == 0 && j == 0)
                 continue;
 
               Ind = X + k + (Y + l) * W + (Z + j) * W * H;
-              if (DistanceMap[Ind] == -2) {
+              if(DistanceMap[Ind] == -2) {
                 fifoCurrent.push(Ind);
                 DistanceMap[Ind] = -3;
               } else {
-                if (DistanceMap[Ind] != 0 && DistanceMap[Ind] != -3) {
-                  double Dx = std::sqrt(_pow2(j * scaleX) + _pow2(k * scaleY) +
-                                        _pow2(l * scaleZ));
-                  if (!NewDist || Dist > (DistanceMap[Ind] + Dx)) {
-                    Dist    = DistanceMap[Ind] + Dx;
+                if(DistanceMap[Ind] != 0 && DistanceMap[Ind] != -3) {
+                  double Dx = std::sqrt(_pow2(j * scaleX) + _pow2(k * scaleY)
+                                        + _pow2(l * scaleZ));
+                  if(!NewDist || Dist > (DistanceMap[Ind] + Dx)) {
+                    Dist = DistanceMap[Ind] + Dx;
                     NewDist = true;
                   }
                 }
               }
 
-              if (NewDist) {
+              if(NewDist) {
                 DistanceMap[X + Y * W + Z * W * H] = Dist;
-                if (Dist > DistMax) {
+                if(Dist > DistMax) {
                   DistMax = Dist;
-                  Xtort   = X;
-                  Ytort   = Y;
-                  Ztort   = Z;
+                  Xtort = X;
+                  Ytort = Y;
+                  Ztort = Z;
                 }
               }
             }
           }
         }
-      } while (!fifoCurrent.empty());
+      } while(!fifoCurrent.empty());
 
       // Write on DistanceMap the Max Distance for all the pixel of the CC, we
       // pop fifoSave
@@ -972,25 +991,25 @@ namespace smil
       do {
         currentPixel = fifoSave.front();
         fifoSave.pop();
-        if (Allongement == 0) {
+        if(Allongement == 0) {
           // geodesic diameter
           DistanceMap[currentPixel] = DistMax;
           continue;
         }
-        if (Allongement == 1) {
-          if (D == 1) {
+        if(Allongement == 1) {
+          if(D == 1) {
             // En 2D
-            DistanceMap[currentPixel] =
-                _pow2(DistMax) / (double) (size * scaleX * scaleY) * 0.785398;
+            DistanceMap[currentPixel]
+              = _pow2(DistMax) / (double)(size * scaleX * scaleY) * 0.785398;
           } else {
             // En 3D
-            DistanceMap[currentPixel] =
-                _pow3(DistMax) / (double) (size * scaleX * scaleY * scaleZ) *
-                0.523599;
+            DistanceMap[currentPixel]
+              = _pow3(DistMax) / (double)(size * scaleX * scaleY * scaleZ)
+                * 0.523599;
           }
           continue;
         }
-        if (Allongement == 2) {
+        if(Allongement == 2) {
           // tortuosity
           off_t X2, Y2, Z2;
 
@@ -1002,35 +1021,35 @@ namespace smil
           Z2 = (IndStart - X2 - Y2 * W) / (W * H);
 #endif
 
-          double Eucl = std::sqrt(_pow2((Xtort - X2) * scaleX) +
-                                  _pow2((Ytort - Y2) * scaleY) +
-                                  _pow2((Ztort - Z2) * scaleZ));
+          double Eucl = std::sqrt(_pow2((Xtort - X2) * scaleX)
+                                  + _pow2((Ytort - Y2) * scaleY)
+                                  + _pow2((Ztort - Z2) * scaleZ));
           // JOE - why 0.01 ??? Compare to 0... OK !!! But ...
-          if (Eucl != 0)
+          if(Eucl != 0)
             DistanceMap[currentPixel] = DistMax / Eucl;
           else
             DistanceMap[currentPixel] = DistMax / 0.01;
           continue;
         }
-        if (Allongement == 3) {
+        if(Allongement == 3) {
           // extremities
           DistanceMap[currentPixel] = 0;
           continue;
         }
 
-      } while (!fifoSave.empty());
+      } while(!fifoSave.empty());
 
       // Extremities (first extremity is set to 1, the other one is set to 2.
       // The rest of the CC is set to 0)
-      if (Allongement == 3) {
-        off_t IndExt          = Xtort + Ytort * W + Ztort * W * H;
+      if(Allongement == 3) {
+        off_t IndExt = Xtort + Ytort * W + Ztort * W * H;
         DistanceMap[IndStart] = 1;
-        DistanceMap[IndExt]   = 2;
+        DistanceMap[IndExt] = 2;
       }
 
       return;
     } // END GeodesicPathCC
-  };  // AdvancedGeodesy
+  }; // AdvancedGeodesy
   /** @endcond */
 
   //
@@ -1053,9 +1072,9 @@ namespace smil
    * - "extremities"
    */
   template <typename T1, typename T2>
-  RES_T labelFlatZonesWithProperty(const Image<T1> &imIn, Image<T2> &imOut,
-                                   string property = "geodesicDiameter")
-  {
+  RES_T labelFlatZonesWithProperty(const Image<T1> &imIn,
+                                   Image<T2> &imOut,
+                                   string property = "geodesicDiameter") {
     AdvancedGeodesy<T1> mge(imIn);
     return mge.labelFlatZonesWithProperty(imIn, imOut, property);
   }
@@ -1081,12 +1100,13 @@ namespace smil
    * @param[in] dzOverDx :
    */
   template <typename T1, typename T2>
-  RES_T geodesicDiameter(const Image<T1> &imIn, Image<T2> &imOut,
-                         bool sliceBySlice = false, double dzOverDx = 1.)
-  {
+  RES_T geodesicDiameter(const Image<T1> &imIn,
+                         Image<T2> &imOut,
+                         bool sliceBySlice = false,
+                         double dzOverDx = 1.) {
     AdvancedGeodesy<T1> mge(imIn);
-    return mge.GeodesicProperty(imIn, imOut, "geodesicDiameter", sliceBySlice,
-                                dzOverDx);
+    return mge.GeodesicProperty(
+      imIn, imOut, "geodesicDiameter", sliceBySlice, dzOverDx);
   }
 
   /**
@@ -1115,12 +1135,13 @@ namespace smil
    * @param[in] dzOverDx :
    */
   template <typename T1, typename T2>
-  RES_T geodesicElongation(const Image<T1> &imIn, Image<T2> &imOut,
-                           bool sliceBySlice = false, double dzOverDx = 1.)
-  {
+  RES_T geodesicElongation(const Image<T1> &imIn,
+                           Image<T2> &imOut,
+                           bool sliceBySlice = false,
+                           double dzOverDx = 1.) {
     AdvancedGeodesy<T1> mge(imIn);
-    return mge.GeodesicProperty(imIn, imOut, "elongation", sliceBySlice,
-                                dzOverDx);
+    return mge.GeodesicProperty(
+      imIn, imOut, "elongation", sliceBySlice, dzOverDx);
   }
 
   /**
@@ -1149,9 +1170,9 @@ namespace smil
    * by slice
    */
   template <typename T1, typename T2>
-  RES_T geodesicTortuosity(const Image<T1> &imIn, Image<T2> &imOut,
-                           bool sliceBySlice = false)
-  {
+  RES_T geodesicTortuosity(const Image<T1> &imIn,
+                           Image<T2> &imOut,
+                           bool sliceBySlice = false) {
     AdvancedGeodesy<T1> mge(imIn);
     return mge.GeodesicProperty(imIn, imOut, "tortuosity", sliceBySlice, 1.);
   }
@@ -1169,12 +1190,13 @@ namespace smil
    * @param[in] dzOverDx :
    */
   template <typename T1, typename T2>
-  RES_T geodesicExtremities(const Image<T1> &imIn, Image<T2> &imOut,
-                            bool sliceBySlice = false, double dzOverDx = 1.)
-  {
+  RES_T geodesicExtremities(const Image<T1> &imIn,
+                            Image<T2> &imOut,
+                            bool sliceBySlice = false,
+                            double dzOverDx = 1.) {
     AdvancedGeodesy<T1> mge(imIn);
-    return mge.GeodesicProperty(imIn, imOut, "extremities", sliceBySlice,
-                                dzOverDx);
+    return mge.GeodesicProperty(
+      imIn, imOut, "extremities", sliceBySlice, dzOverDx);
   }
 
   /**
@@ -1194,10 +1216,11 @@ namespace smil
    * @overload
    */
   template <typename T1, typename T2>
-  RES_T geodesicProperty(const Image<T1> &imIn, Image<T2> &imOut,
-                         string property   = "geodesicDiameter",
-                         bool sliceBySlice = false, double dzOverDx = 1.)
-  {
+  RES_T geodesicProperty(const Image<T1> &imIn,
+                         Image<T2> &imOut,
+                         string property = "geodesicDiameter",
+                         bool sliceBySlice = false,
+                         double dzOverDx = 1.) {
     AdvancedGeodesy<T1> mge(imIn);
     return mge.GeodesicProperty(imIn, imOut, property, sliceBySlice, dzOverDx);
   }
@@ -1216,14 +1239,16 @@ namespace smil
    * @param[in] scaleX, scaleY, scaleZ :
    */
   template <typename T1, typename T2>
-  RES_T geodesicPathOpening(const Image<T1> &imIn, Image<T2> &imOut,
-                            double lenght, string property = "geodesicDiameter",
-                            double scaleX = 1., double scaleY = 1.,
-                            double scaleZ = 1.)
-  {
+  RES_T geodesicPathOpening(const Image<T1> &imIn,
+                            Image<T2> &imOut,
+                            double lenght,
+                            string property = "geodesicDiameter",
+                            double scaleX = 1.,
+                            double scaleY = 1.,
+                            double scaleZ = 1.) {
     AdvancedGeodesy<T1> mge(imIn);
-    return mge.GeodesicPathOpening(imIn, imOut, lenght, property, scaleX,
-                                   scaleY, scaleZ);
+    return mge.GeodesicPathOpening(
+      imIn, imOut, lenght, property, scaleX, scaleY, scaleZ);
   }
 
   /**
@@ -1240,22 +1265,24 @@ namespace smil
    * @param[in] scaleX, scaleY, scaleZ :
    */
   template <typename T1, typename T2>
-  RES_T geodesicPathClosing(const Image<T1> &imIn, Image<T2> &imOut,
-                            double lenght, string property = "geodesicDiameter",
-                            double scaleX = 1., double scaleY = 1.,
-                            double scaleZ = 1.)
-  {
+  RES_T geodesicPathClosing(const Image<T1> &imIn,
+                            Image<T2> &imOut,
+                            double lenght,
+                            string property = "geodesicDiameter",
+                            double scaleX = 1.,
+                            double scaleY = 1.,
+                            double scaleZ = 1.) {
     ASSERT_ALLOCATED(&imIn)
     ASSERT_SAME_SIZE(&imIn, &imOut)
     Image<T1> imTmp(imIn);
-    RES_T     res = inv(imIn, imTmp);
-    if (res != RES_OK)
+    RES_T res = inv(imIn, imTmp);
+    if(res != RES_OK)
       return res;
 
     AdvancedGeodesy<T1> mge(imIn);
-    res = mge.GeodesicPathOpening(imTmp, imOut, lenght, property, scaleX,
-                                  scaleY, scaleZ);
-    if (res != RES_OK)
+    res = mge.GeodesicPathOpening(
+      imTmp, imOut, lenght, property, scaleX, scaleY, scaleZ);
+    if(res != RES_OK)
       return res;
 
     return inv(imOut, imOut);
@@ -1273,11 +1300,15 @@ namespace smil
    * @param[in] takeMin :
    */
   template <typename T1, typename T2>
-  RES_T geodesicUltimatePathOpening(const Image<T1> &imIn, Image<T1> &imTrans,
-                                    Image<T2> &imInd, double scaleX,
-                                    double scaleY, double scaleZ, size_t stop,
-                                    int lambdaAttribute, int takeMin)
-  {
+  RES_T geodesicUltimatePathOpening(const Image<T1> &imIn,
+                                    Image<T1> &imTrans,
+                                    Image<T2> &imInd,
+                                    double scaleX,
+                                    double scaleY,
+                                    double scaleZ,
+                                    size_t stop,
+                                    int lambdaAttribute,
+                                    int takeMin) {
     AdvancedGeodesy<T1> mge(imIn);
     return mge.GeodesicUltimatePathOpening(imIn, imTrans, imInd, scaleX, scaleY,
                                            scaleZ, stop, lambdaAttribute,
@@ -1295,25 +1326,29 @@ namespace smil
    * @param[in] takeMin :
    */
   template <typename T1, typename T2>
-  RES_T geodesicUltimatePathClosing(const Image<T1> &imIn, Image<T1> &imTrans,
-                                    Image<T2> &imInd, double scaleX,
-                                    double scaleY, double scaleZ, size_t stop,
-                                    int lambdaAttribute, int takeMin)
-  {
+  RES_T geodesicUltimatePathClosing(const Image<T1> &imIn,
+                                    Image<T1> &imTrans,
+                                    Image<T2> &imInd,
+                                    double scaleX,
+                                    double scaleY,
+                                    double scaleZ,
+                                    size_t stop,
+                                    int lambdaAttribute,
+                                    int takeMin) {
     ASSERT_ALLOCATED(&imIn)
     ASSERT_SAME_SIZE(&imIn, &imTrans)
     ASSERT_SAME_SIZE(&imIn, &imInd)
 
     Image<T1> imTmp(imIn);
-    RES_T     res = inv(imIn, imTmp);
-    if (res != RES_OK)
+    RES_T res = inv(imIn, imTmp);
+    if(res != RES_OK)
       return res;
 
     AdvancedGeodesy<T1> mge(imIn);
-    res =
-        mge.GeodesicUltimatePathOpening(imTmp, imTrans, imInd, scaleX, scaleY,
+    res
+      = mge.GeodesicUltimatePathOpening(imTmp, imTrans, imInd, scaleX, scaleY,
                                         scaleZ, stop, lambdaAttribute, takeMin);
-    if (res != RES_OK)
+    if(res != RES_OK)
       return res;
 
     return inv(imTrans, imTrans);

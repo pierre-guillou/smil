@@ -34,8 +34,7 @@
 #include "Core/include/private/DImage.hxx"
 #include "Core/include/private/DSharedImage.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup NumpyInterface
    *
@@ -47,35 +46,34 @@ namespace smil
   /**
    * Numpy Array Interface
    */
-  template <class T> class NumpyInt : public SharedImage<T>
-  {
+  template <class T>
+  class NumpyInt : public SharedImage<T> {
   public:
     typedef SharedImage<T> parentClass;
 
     //! Constructor
-    NumpyInt(PyObject *obj)
-    {
+    NumpyInt(PyObject *obj) {
       BaseObject::className = "NumpyInt";
       parentClass::init();
 
-      PyArrayObject *arr = (PyArrayObject *) (obj);
+      PyArrayObject *arr = (PyArrayObject *)(obj);
 
-      int dim        = PyArray_NDIM(arr);
+      int dim = PyArray_NDIM(arr);
       npy_intp *dims = PyArray_DIMS(arr);
 
-      T *data = (T *) PyArray_DATA(arr);
+      T *data = (T *)PyArray_DATA(arr);
 
       PyArray_Descr *descr = PyArray_DESCR(arr);
-      if (descr->type_num != getNumpyType(*this)) {
+      if(descr->type_num != getNumpyType(*this)) {
         ERR_MSG("Wrong data type");
         return;
       }
 
-      if (dim == 3)
+      if(dim == 3)
         this->attach(data, dims[0], dims[1], dims[2]);
-      else if (dim == 2)
+      else if(dim == 2)
         this->attach(data, dims[0], dims[1]);
-      else if (dim == 1)
+      else if(dim == 1)
         this->attach(data, dims[0], 1);
     }
   };

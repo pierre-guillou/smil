@@ -34,40 +34,35 @@
 #include "Gui/Qt/DQtImageViewer.hxx"
 #endif // USE_QT
 
-namespace smil
-{
-  RES_T Gui::initialize()
-  {
-    if (Gui::_instance == NULL) {
+namespace smil {
+  RES_T Gui::initialize() {
+    if(Gui::_instance == NULL) {
 #ifdef USE_QT
       // Check if there is already a qapplication running
-      if (!isGuiDisabled()) {
-        if (!qApp)
+      if(!isGuiDisabled()) {
+        if(!qApp)
           Gui::_instance = new QtAppGui;
         else
           Gui::_instance = new QtGui;
       } else {
         Gui::_instance = new Gui;
       }
-#else  // USE_QT
+#else // USE_QT
       Gui::_instance = new Gui;
 #endif // USE_QT
     }
     return RES_OK;
   }
 
-  void Gui::execLoop()
-  {
+  void Gui::execLoop() {
     Gui::getInstance()->_execLoop();
   }
 
-  void Gui::processEvents()
-  {
+  void Gui::processEvents() {
     Gui::getInstance()->_processEvents();
   }
 
-  void Gui::showHelp()
-  {
+  void Gui::showHelp() {
     Gui::getInstance()->_showHelp();
   }
 

@@ -37,65 +37,58 @@
 #include "Core/include/private/DImage.hpp"
 #include "IO/include/private/DImageIO.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup IO
    */
   /* *@{*/
 
-  RES_T readNetPBMFileInfo(ifstream &fp, ImageFileInfo &fInfo,
+  RES_T readNetPBMFileInfo(ifstream &fp,
+                           ImageFileInfo &fInfo,
                            unsigned int &maxval);
-  RES_T readNetPBMFileInfo(const char *filename, ImageFileInfo &fInfo,
+  RES_T readNetPBMFileInfo(const char *filename,
+                           ImageFileInfo &fInfo,
                            unsigned int &maxval);
 
-  template <class T> class Image;
+  template <class T>
+  class Image;
 
   template <class T = void>
-  class PGMImageFileHandler : public ImageFileHandler<T>
-  {
+  class PGMImageFileHandler : public ImageFileHandler<T> {
   public:
-    PGMImageFileHandler() : ImageFileHandler<T>("PGM")
-    {
+    PGMImageFileHandler() : ImageFileHandler<T>("PGM") {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
-    {
+    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
       unsigned int dum;
       fInfo.filename = filename;
       return readNetPBMFileInfo(filename, fInfo, dum);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image)
-    {
+    virtual RES_T read(const char *filename, Image<T> &image) {
       return ImageFileHandler<T>::read(filename, image);
     }
-    virtual RES_T write(const Image<T> &image, const char *filename)
-    {
+    virtual RES_T write(const Image<T> &image, const char *filename) {
       return ImageFileHandler<T>::write(image, filename);
     }
   };
 
   template <class T = void>
-  class PBMImageFileHandler : public ImageFileHandler<T>
-  {
+  class PBMImageFileHandler : public ImageFileHandler<T> {
   public:
-    PBMImageFileHandler() : ImageFileHandler<T>("PBM")
-    {
+    PBMImageFileHandler() : ImageFileHandler<T>("PBM") {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
-    {
+    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
       unsigned int dum;
       return readNetPBMFileInfo(filename, fInfo, dum);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image)
-    {
+    virtual RES_T read(const char *filename, Image<T> &image) {
       /* open image file */
       ifstream fp(filename, ios_base::binary);
 
-      if (!fp.is_open()) {
+      if(!fp.is_open()) {
         cout << "Cannot open file " << filename << endl;
         return RES_ERR_IO;
       }
@@ -106,26 +99,26 @@ namespace smil
       ASSERT(fInfo.colorType == ImageFileInfo::COLOR_TYPE_BINARY,
              "Not an binary image", RES_ERR_IO);
 
-      size_t width  = fInfo.width;
+      size_t width = fInfo.width;
       size_t height = fInfo.height;
 
       ASSERT((image.setSize(width, height) == RES_OK), RES_ERR_BAD_ALLOCATION);
 
-      if (fInfo.fileType == ImageFileInfo::FILE_TYPE_BINARY) {
+      if(fInfo.fileType == ImageFileInfo::FILE_TYPE_BINARY) {
         typename ImDtTypes<T>::sliceType lines = image.getLines();
 
         //  int nBytePerLine = width%8==0 ? width/8 : width/8+1;
         char val;
         int k;
 
-        for (size_t j = 0; j < height; j++) {
+        for(size_t j = 0; j < height; j++) {
           typename ImDtTypes<T>::lineType pixels = lines[j];
 
-          for (size_t i = 0; i < width; i++) {
-            if (i % 8 == 0)
+          for(size_t i = 0; i < width; i++) {
+            if(i % 8 == 0)
               fp.read(&val, 1);
 
-            k         = 7 - i % 8;
+            k = 7 - i % 8;
             pixels[i] = ((val >> k) % 2) == 0 ? T(0) : ImDtTypes<T>::max();
           }
         }
@@ -133,7 +126,7 @@ namespace smil
         typename ImDtTypes<T>::lineType pixels = image.getPixels();
 
         int val;
-        for (size_t i = 0; i < image.getPixelCount(); i++) {
+        for(size_t i = 0; i < image.getPixelCount(); i++) {
           fp >> val;
           pixels[i] = val == 0 ? T(0) : ImDtTypes<T>::max();
         }
@@ -143,22 +136,19 @@ namespace smil
 
       return RES_OK;
     }
-    virtual RES_T write(const Image<T> &image, const char *filename)
-    {
+    virtual RES_T write(const Image<T> &image, const char *filename) {
       return ImageFileHandler<T>::write(image, filename);
     }
   };
 
   template <>
-  inline RES_T PBMImageFileHandler<void>::read(const char *, Image<void> &)
-  {
+  inline RES_T PBMImageFileHandler<void>::read(const char *, Image<void> &) {
     return RES_ERR;
   }
 
   template <>
   inline RES_T PBMImageFileHandler<void>::write(const Image<void> &,
-                                                const char *)
-  {
+                                                const char *) {
     return RES_ERR;
   }
 

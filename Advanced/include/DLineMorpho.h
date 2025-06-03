@@ -70,15 +70,17 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T lineDilate(const Image<T> &imIn, Image<T> &imOut, int hLen,
-                   double theta = 0, double zeta = 0)
-  {
+  RES_T lineDilate(const Image<T> &imIn,
+                   Image<T> &imOut,
+                   int hLen,
+                   double theta = 0,
+                   double zeta = 0) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     StrElt se1 = Line3DSE(hLen, theta, zeta);
     StrElt se2 = Line3DSE(hLen, theta + PI, zeta + PI);
-    StrElt se  = merge(se1, se2);
+    StrElt se = merge(se1, se2);
 
     return dilate(imIn, imOut, se);
   }
@@ -96,15 +98,17 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T lineErode(const Image<T> &imIn, Image<T> &imOut, int hLen,
-                  double theta = 0, double zeta = 0)
-  {
+  RES_T lineErode(const Image<T> &imIn,
+                  Image<T> &imOut,
+                  int hLen,
+                  double theta = 0,
+                  double zeta = 0) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     StrElt se1 = Line3DSE(hLen, theta, zeta);
     StrElt se2 = Line3DSE(hLen, theta + PI, zeta + PI);
-    StrElt se  = merge(se1, se2);
+    StrElt se = merge(se1, se2);
 
     return dilate(imIn, imOut, se);
   }
@@ -122,18 +126,20 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T lineOpen(const Image<T> &imIn, Image<T> &imOut, int hLen,
-                 double theta = 0, double zeta = 0)
-  {
+  RES_T lineOpen(const Image<T> &imIn,
+                 Image<T> &imOut,
+                 int hLen,
+                 double theta = 0,
+                 double zeta = 0) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     StrElt se1 = Line3DSE(hLen, theta, zeta);
     StrElt se2 = Line3DSE(hLen, theta + PI, zeta + PI);
-    StrElt se  = merge(se1, se2);
+    StrElt se = merge(se1, se2);
 
     RES_T r = erode(imIn, imOut, se);
-    if (r == RES_OK)
+    if(r == RES_OK)
       return dilate(imOut, imOut, se);
     return r;
   }
@@ -151,18 +157,20 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T lineClose(const Image<T> &imIn, Image<T> &imOut, int hLen,
-                  double theta = 0, double zeta = 0)
-  {
+  RES_T lineClose(const Image<T> &imIn,
+                  Image<T> &imOut,
+                  int hLen,
+                  double theta = 0,
+                  double zeta = 0) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     StrElt se1 = Line3DSE(hLen, theta, zeta);
     StrElt se2 = Line3DSE(hLen, theta + PI, zeta + PI);
-    StrElt se  = merge(se1, se2);
+    StrElt se = merge(se1, se2);
 
     RES_T r = dilate(imIn, imOut, se);
-    if (r == RES_OK)
+    if(r == RES_OK)
       return erode(imOut, imOut, se);
     return r;
   }
@@ -186,18 +194,17 @@ namespace smil
    * - in @TB{3D} images, the same square S.E. is applied to each slice.
    */
   template <class T>
-  RES_T squareDilate(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T squareDilate(const Image<T> &imIn, Image<T> &imOut, int side) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    int    hLen = (side + side % 2) / 2;
+    int hLen = (side + side % 2) / 2;
     StrElt se;
     se = LineSE(hLen, 0);
     se = merge(se, se.transpose());
 
     RES_T r = dilate(imIn, imOut, se);
-    if (r == RES_OK) {
+    if(r == RES_OK) {
       se = LineSE(hLen, PI / 2);
       se = merge(se, se.transpose());
 
@@ -217,18 +224,17 @@ namespace smil
    * - in @TB{3D} images, the same square S.E. is applied to each slice.
    */
   template <class T>
-  RES_T squareErode(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T squareErode(const Image<T> &imIn, Image<T> &imOut, int side) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    int    hLen = (side + side % 2) / 2;
+    int hLen = (side + side % 2) / 2;
     StrElt se;
     se = LineSE(hLen, 0);
     se = merge(se, se.transpose());
 
     RES_T r = erode(imIn, imOut, se);
-    if (r == RES_OK) {
+    if(r == RES_OK) {
       se = LineSE(hLen, PI / 2);
       se = merge(se, se.transpose());
 
@@ -248,13 +254,12 @@ namespace smil
    * - in @TB{3D} images, the same square S.E. is applied to each slice.
    */
   template <class T>
-  RES_T squareOpen(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T squareOpen(const Image<T> &imIn, Image<T> &imOut, int side) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     RES_T r = squareErode(imIn, imOut, side);
-    if (r == RES_OK)
+    if(r == RES_OK)
       return squareDilate(imOut, imOut, side);
     return r;
   }
@@ -270,13 +275,12 @@ namespace smil
    * - in @TB{3D} images, the same square S.E. is applied to each slice.
    */
   template <class T>
-  RES_T squareClose(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T squareClose(const Image<T> &imIn, Image<T> &imOut, int side) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     RES_T r = squareDilate(imIn, imOut, side);
-    if (r == RES_OK)
+    if(r == RES_OK)
       return squareErode(imOut, imOut, side);
     return r;
   }
@@ -290,17 +294,16 @@ namespace smil
    *    ####      #    #    #   ####   ######  ######
    */
   /** @cond */
-  int getAngleSteps(int radius)
-  {
-    if (radius < 10)
+  int getAngleSteps(int radius) {
+    if(radius < 10)
       return 4;
-    if (radius < 24)
+    if(radius < 24)
       return 8;
-    if (radius < 50)
+    if(radius < 50)
       return 12;
-    if (radius < 100)
+    if(radius < 100)
       return 16;
-    if (radius < 224)
+    if(radius < 224)
       return 32;
     return 48;
   }
@@ -317,24 +320,23 @@ namespace smil
    * - in @TB{3D} images, the same disk S.E. is applied to each slice.
    */
   template <class T>
-  RES_T circleDilate(const Image<T> &imIn, Image<T> &imOut, int radius)
-  {
+  RES_T circleDilate(const Image<T> &imIn, Image<T> &imOut, int radius) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     copy(imIn, imOut);
 
-    int    _NB_STEPS = getAngleSteps(radius);
-    double _D_ANGLE  = (PI / _NB_STEPS);
+    int _NB_STEPS = getAngleSteps(radius);
+    double _D_ANGLE = (PI / _NB_STEPS);
 
-    RES_T  r  = RES_OK;
+    RES_T r = RES_OK;
     double k0 = (radius * PI / _NB_STEPS * 0.5);
-    for (double angle = 0; angle < PI && r == RES_OK; angle += _D_ANGLE) {
-      double rd      = angle;
-      int    kradius = k0 * max(fabs(cos(rd)), fabs(sin(rd))) + 1;
+    for(double angle = 0; angle < PI && r == RES_OK; angle += _D_ANGLE) {
+      double rd = angle;
+      int kradius = k0 * max(fabs(cos(rd)), fabs(sin(rd))) + 1;
 
       StrElt se = LineSE(kradius, angle);
-      se        = merge(se, se.transpose());
+      se = merge(se, se.transpose());
 
       r = dilate(imOut, imOut, se);
     }
@@ -352,24 +354,23 @@ namespace smil
    * - in @TB{3D} images, the same disk S.E. is applied to each slice.
    */
   template <class T>
-  RES_T circleErode(const Image<T> &imIn, Image<T> &imOut, int radius)
-  {
+  RES_T circleErode(const Image<T> &imIn, Image<T> &imOut, int radius) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     copy(imIn, imOut);
 
-    int    _NB_STEPS = getAngleSteps(radius);
-    double _D_ANGLE  = (PI / _NB_STEPS);
+    int _NB_STEPS = getAngleSteps(radius);
+    double _D_ANGLE = (PI / _NB_STEPS);
 
-    RES_T  r  = RES_OK;
+    RES_T r = RES_OK;
     double k0 = (radius * PI / _NB_STEPS * 0.5);
-    for (double angle = 0; angle < PI && r == RES_OK; angle += _D_ANGLE) {
-      double rd      = angle;
-      int    kradius = k0 * max(fabs(cos(rd)), fabs(sin(rd))) + 1;
+    for(double angle = 0; angle < PI && r == RES_OK; angle += _D_ANGLE) {
+      double rd = angle;
+      int kradius = k0 * max(fabs(cos(rd)), fabs(sin(rd))) + 1;
 
       StrElt se = LineSE(kradius, angle);
-      se        = merge(se, se.transpose());
+      se = merge(se, se.transpose());
 
       r = erode(imOut, imOut, se);
     }
@@ -387,13 +388,12 @@ namespace smil
    * - in @TB{3D} images, the same disk S.E. is applied to each slice.
    */
   template <class T>
-  RES_T circleOpen(const Image<T> &imIn, Image<T> &imOut, int radius)
-  {
+  RES_T circleOpen(const Image<T> &imIn, Image<T> &imOut, int radius) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     RES_T r = circleErode(imIn, imOut, radius);
-    if (r == RES_OK)
+    if(r == RES_OK)
       return circleDilate(imOut, imOut, radius);
     return r;
   }
@@ -409,13 +409,12 @@ namespace smil
    * - in @TB{3D} images, the same disk S.E. is applied to each slice.
    */
   template <class T>
-  RES_T circleClose(const Image<T> &imIn, Image<T> &imOut, int radius)
-  {
+  RES_T circleClose(const Image<T> &imIn, Image<T> &imOut, int radius) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     RES_T r = circleDilate(imIn, imOut, radius);
-    if (r == RES_OK)
+    if(r == RES_OK)
       return circleErode(imOut, imOut, radius);
     return r;
   }
@@ -449,16 +448,18 @@ namespace smil
    * @param[in]  theta : angle between side1 and horizontal axis
    */
   template <class T>
-  RES_T rectangleDilate(const Image<T> &imIn, Image<T> &imOut, int side1,
-                        int side2, double theta = 0)
-  {
+  RES_T rectangleDilate(const Image<T> &imIn,
+                        Image<T> &imOut,
+                        int side1,
+                        int side2,
+                        double theta = 0) {
     StrElt se1 = CenteredLineSE(side1, theta);
     StrElt se2 = CenteredLineSE(side2, theta + PI / 2);
 
     RES_T r = dilate(imIn, imOut, se1);
-    if (r == RES_OK)
+    if(r == RES_OK)
       r = dilate(imOut, imOut, se2);
-    if (r == RES_OK)
+    if(r == RES_OK)
       r = close(imOut, imOut, CrossSE(1));
     return r;
   }
@@ -473,14 +474,16 @@ namespace smil
    * @param[in]  theta : angle between side1 and horizontal axis
    */
   template <class T>
-  RES_T rectangleErode(const Image<T> &imIn, Image<T> &imOut, int side1,
-                       int side2, double theta = 0)
-  {
+  RES_T rectangleErode(const Image<T> &imIn,
+                       Image<T> &imOut,
+                       int side1,
+                       int side2,
+                       double theta = 0) {
     StrElt se1 = CenteredLineSE(side1, theta);
     StrElt se2 = CenteredLineSE(side2, theta + PI / 2);
 
     RES_T r = erode(imIn, imOut, se1);
-    if (r == RES_OK)
+    if(r == RES_OK)
       r = erode(imOut, imOut, se2);
 
     return r;
@@ -496,11 +499,13 @@ namespace smil
    * @param[in]  theta : angle between side1 and horizontal axis
    */
   template <class T>
-  RES_T rectangleOpen(const Image<T> &imIn, Image<T> &imOut, int side1,
-                      int side2, double theta = 0)
-  {
+  RES_T rectangleOpen(const Image<T> &imIn,
+                      Image<T> &imOut,
+                      int side1,
+                      int side2,
+                      double theta = 0) {
     RES_T r = rectangleErode(imIn, imOut, side1, side2, theta);
-    if (r == RES_OK)
+    if(r == RES_OK)
       r = rectangleDilate(imOut, imOut, side1, side2, theta);
 
     return r;
@@ -516,11 +521,13 @@ namespace smil
    * @param[in]  theta : angle between side1 and horizontal axis
    */
   template <class T>
-  RES_T rectangleClose(const Image<T> &imIn, Image<T> &imOut, int side1,
-                       int side2, double theta = 0)
-  {
+  RES_T rectangleClose(const Image<T> &imIn,
+                       Image<T> &imOut,
+                       int side1,
+                       int side2,
+                       double theta = 0) {
     RES_T r = rectangleDilate(imIn, imOut, side1, side2, theta);
-    if (r == RES_OK)
+    if(r == RES_OK)
       r = rectangleErode(imOut, imOut, side1, side2, theta);
 
     return r;
@@ -528,27 +535,22 @@ namespace smil
 
   /** @cond */
   template <class T>
-  RES_T XsquareDilate(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T XsquareDilate(const Image<T> &imIn, Image<T> &imOut, int side) {
     return rectangleDilate(imIn, imOut, side, side, 0);
   }
   template <class T>
-  RES_T XsquareErode(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T XsquareErode(const Image<T> &imIn, Image<T> &imOut, int side) {
     return rectangleErode(imIn, imOut, side, side, 0);
   }
   template <class T>
-  RES_T XsquareOpen(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T XsquareOpen(const Image<T> &imIn, Image<T> &imOut, int side) {
     return rectangleOpen(imIn, imOut, side, side, 0);
   }
   template <class T>
-  RES_T XsquareClose(const Image<T> &imIn, Image<T> &imOut, int side)
-  {
+  RES_T XsquareClose(const Image<T> &imIn, Image<T> &imOut, int side) {
     return rectangleClose(imIn, imOut, side, side, 0);
   }
   /** @endcond */
-
 
   /** @} */
 } // namespace smil

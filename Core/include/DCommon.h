@@ -43,8 +43,7 @@
 
 using namespace std;
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup  CoreExtraTypes
    *
@@ -71,17 +70,15 @@ namespace smil
 
   // Generate template specializations (or instanciations?) for
   // ImageHandler subclasses (in IO/DImageIO_{BMP,JPG,PBM,PNG,TIFF})
-#define IMAGEFILEHANDLER_TEMP_SPEC(FORMAT, PIXELTYPE)                          \
-  template <>                                                                  \
-  class FORMAT##ImageFileHandler<PIXELTYPE>                                    \
-      : public ImageFileHandler<PIXELTYPE>                                     \
-  {                                                                            \
-  public:                                                                      \
-    FORMAT##ImageFileHandler() : ImageFileHandler<PIXELTYPE>(#FORMAT)          \
-    {                                                                          \
-    }                                                                          \
-    RES_T read(const char *filename, Image<PIXELTYPE> &image);                 \
-    RES_T write(const Image<PIXELTYPE> &image, const char *filename);          \
+#define IMAGEFILEHANDLER_TEMP_SPEC(FORMAT, PIXELTYPE)                   \
+  template <>                                                           \
+  class FORMAT##ImageFileHandler<PIXELTYPE>                             \
+    : public ImageFileHandler<PIXELTYPE> {                              \
+  public:                                                               \
+    FORMAT##ImageFileHandler() : ImageFileHandler<PIXELTYPE>(#FORMAT) { \
+    }                                                                   \
+    RES_T read(const char *filename, Image<PIXELTYPE> &image);          \
+    RES_T write(const Image<PIXELTYPE> &image, const char *filename);   \
   };
 
 #define SMART_POINTER(T) boost::shared_ptr<T>
@@ -110,8 +107,7 @@ namespace smil
 #ifndef SWIG
   struct map_comp_value_less {
     template <typename Lhs, typename Rhs>
-    bool operator()(const Lhs &lhs, const Rhs &rhs) const
-    {
+    bool operator()(const Lhs &lhs, const Rhs &rhs) const {
       return lhs.second < rhs.second;
     }
   };
@@ -120,20 +116,19 @@ namespace smil
   /**
    * Struct Point
    */
-  template <class T=int>
-  class Point
-  {
+  template <class T = int>
+  class Point {
   public:
     T x;
     T y;
     T z;
+
   public:
     /** Contructor - an empty point
      *
      * All coordinates are set to @b 0
      */
-    Point() : x(0), y(0), z(0)
-    {
+    Point() : x(0), y(0), z(0) {
     }
 
     /** Constructor from another point
@@ -141,32 +136,28 @@ namespace smil
      * @note
      * Both points shall be of the same data type
      */
-    Point(const Point &pt) : x(pt.x), y(pt.y), z(pt.z)
-    {
+    Point(const Point &pt) : x(pt.x), y(pt.y), z(pt.z) {
     }
 
     /** @b 3D Point Constructor
      *
      * @param[in] _x, _y, _z : initial coordinates
      */
-    Point(T _x, T _y, T _z) : x(_x), y(_y), z(_z)
-    {
+    Point(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {
     }
 
     /** @b 2D Point Constructor
      *
      * @param[in] _x, _y : initial coordinates
      */
-    Point(T _x, T _y) : x(_x), y(_y), z(0)
-    {
+    Point(T _x, T _y) : x(_x), y(_y), z(0) {
     }
 
     /** operator== - comparison
      *
      * @param[in] p2 : point
      */
-    bool operator==(const Point &p2)
-    {
+    bool operator==(const Point &p2) {
       return (x == p2.x && y == p2.y && z == p2.z);
     }
 
@@ -175,8 +166,7 @@ namespace smil
      * @smilexample{example-point-minus.py}
      *
      */
-    Point operator-(const Point &p2)
-    {
+    Point operator-(const Point &p2) {
       return Point(x - p2.x, y - p2.y, z - p2.z);
     }
 
@@ -185,16 +175,14 @@ namespace smil
      * @smilexample{example-point-minus.py}
      *
      */
-    Point operator+(const Point &p2)
-    {
+    Point operator+(const Point &p2) {
       return Point(x + p2.x, y + p2.y, z + p2.z);
     }
 
     /** printSelf() - Print point coordinates
      * @param[in] indent : prefix to add to each line
      */
-    void printSelf(string indent = "")
-    {
+    void printSelf(string indent = "") {
       cout << indent << " " << x << "\t" << y << "\t" << z << endl;
     }
   };
@@ -267,8 +255,8 @@ namespace smil
   class ImageBox {
   public:
     IntPoint pt;
-    off_t    reference;
-    size_t   width, height, depth;
+    off_t reference;
+    size_t width, height, depth;
 
   public:
     /** ImageBox - constructor
@@ -280,11 +268,10 @@ namespace smil
      *                  @TB{height} and @TB{depth}, as returned by the
      *                  Image method getSize()
      */
-    ImageBox(size_t Size[3])
-    {
-      width  = Size[0];
+    ImageBox(size_t Size[3]) {
+      width = Size[0];
       height = Size[1];
-      depth  = Size[2];
+      depth = Size[2];
       pt.x = pt.y = pt.z = 0;
       reference = 0;
     }
@@ -295,20 +282,18 @@ namespace smil
      * data
      * @param[in] box :
      */
-    ImageBox(const ImageBox &box)
-    {
-      *this     = box;
+    ImageBox(const ImageBox &box) {
+      *this = box;
     }
 
     /** ImageBox - constructor
      *
      * @param[in] width, height[, depth] : image bounds
      */
-    ImageBox(size_t width, size_t height, size_t depth = 1)
-    {
-      this->width  = width;
+    ImageBox(size_t width, size_t height, size_t depth = 1) {
+      this->width = width;
       this->height = height;
-      this->depth  = depth;
+      this->depth = depth;
       pt.x = pt.y = pt.z = 0;
       reference = 0;
     }
@@ -317,8 +302,7 @@ namespace smil
      *
      * @param[in] x, y[, z] :
      */
-    void setReference(off_t x, off_t y, off_t z = 0)
-    {
+    void setReference(off_t x, off_t y, off_t z = 0) {
       this->pt.x = x;
       this->pt.y = y;
       this->pt.z = z;
@@ -330,21 +314,19 @@ namespace smil
      *
      * @param[in] pt :
      */
-    void setReference(IntPoint pt)
-    {
-      this->pt        = pt;
+    void setReference(IntPoint pt) {
+      this->pt = pt;
       this->reference = pt.x + (pt.y + pt.z * width) * height;
     }
 
     /** setReference() - set reference point
      * @param[in] offset :
      */
-    void setReference(off_t offset)
-    {
+    void setReference(off_t offset) {
       this->reference = offset;
 
       this->pt.x = offset % width;
-      offset     = (offset - this->pt.x) / width;
+      offset = (offset - this->pt.x) / width;
       this->pt.y = offset % height;
       this->pt.z = (offset - this->pt.y) / height;
     }
@@ -352,24 +334,21 @@ namespace smil
     /** getPoint() - get coordinates as a point
      * @returns The coordinates of the structure as a point
      */
-    IntPoint getPoint()
-    {
+    IntPoint getPoint() {
       return pt;
     }
 
     /** getOffset() - get coordinates as an reference
      * @returns The coordinates of the structure as an offset
      */
-    off_t getOffset()
-    {
+    off_t getOffset() {
       return reference;
     }
 
     /** shift() - move the point by some displacements
      * @param[in] dx, dy[, dz] : amount to shift the reference structure
      */
-    void shift(off_t dx, off_t dy, off_t dz = 0)
-    {
+    void shift(off_t dx, off_t dy, off_t dz = 0) {
       pt.x += dx;
       pt.y += dy;
       pt.z += dz;
@@ -379,22 +358,19 @@ namespace smil
     /** shift() - move the point by some displacements given by a point
      * @param[in] dp :
      */
-    void shift(IntPoint dp)
-    {
+    void shift(IntPoint dp) {
       pt.x += dp.x;
       pt.y += dp.y;
       pt.z += dp.z;
       this->reference = pt.x + (pt.y + pt.z * height) * width;
     }
 
-
     /** inImage() - check if the reference point is inside image bounds
      *
      * @returns @b True if the three coordinates are inside image bounds,
      * @b False otherwise
      */
-    bool inImage()
-    {
+    bool inImage() {
       return inImage(pt.x, pt.y, pt.z);
     }
 
@@ -411,8 +387,7 @@ namespace smil
               z < depth);
     }
 #else
-    bool inImage(size_t x, size_t y, size_t z = 0)
-    {
+    bool inImage(size_t x, size_t y, size_t z = 0) {
       return (x < width && y < height && z < depth);
     }
 #endif
@@ -423,8 +398,7 @@ namespace smil
      * @returns @b True if the three coordinates are inside image bounds,
      * @b False otherwise
      */
-    bool inImage(IntPoint p)
-    {
+    bool inImage(IntPoint p) {
       return inImage(p.x, p.y, p.z);
     }
 
@@ -433,8 +407,7 @@ namespace smil
      *
      * @returns offset
      */
-    off_t getOffset(IntPoint p)
-    {
+    off_t getOffset(IntPoint p) {
       return p.x + width * (p.y + p.z * height);
     }
 
@@ -443,8 +416,7 @@ namespace smil
      *
      * @returns the coordinates as a point
      */
-    IntPoint getCoords(off_t off)
-    {
+    IntPoint getCoords(off_t off) {
       IntPoint p;
       p.x = off % width;
       off = (off - p.x) / width;
@@ -460,8 +432,7 @@ namespace smil
      * @param[in] pa, pb : points inside the image box
      * @returns Euclidean distance between points
      */
-    double getDistance(off_t pa, off_t pb)
-    {
+    double getDistance(off_t pa, off_t pb) {
       IntPoint a = getCoords(pa);
       IntPoint b = getCoords(pb);
 
@@ -474,8 +445,7 @@ namespace smil
      * @param[in] p : point inside the image box
      * @returns Euclidean distance between points
      */
-    double getDistance(off_t p)
-    {
+    double getDistance(off_t p) {
       return getDistance(reference, p);
     }
 
@@ -485,8 +455,7 @@ namespace smil
      * @param[in] p : point inside the image box
      * @returns Euclidean distance between points
      */
-    double getDistance(IntPoint p)
-    {
+    double getDistance(IntPoint p) {
       return getDistance(pt, p);
     }
 
@@ -496,13 +465,11 @@ namespace smil
      * @param[in] a, b : points inside the image box
      * @returns Euclidean distance between points
      */
-    double getDistance(IntPoint a, IntPoint b)
-    {
+    double getDistance(IntPoint a, IntPoint b) {
       return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
     }
 
-    void printSelf()
-    {
+    void printSelf() {
       cout << "ImageBox :" << endl;
       cout << "  Width :\t" << width << endl;
       cout << "  Height:\t" << height << endl;
@@ -537,12 +504,12 @@ namespace smil
 #define GET_7TH_ARG(...) EXPAND(_GET_7TH_ARG(__VA_ARGS__))
 #define GET_8TH_ARG(...) EXPAND(_GET_8TH_ARG(__VA_ARGS__))
 
-#define _xPP_NARGS_IMPL(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12,     \
-                        x13, x14, x15, N, ...)                                 \
+#define _xPP_NARGS_IMPL(                                                    \
+  x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, N, ...) \
   N
-#define PP_NARGS(...)                                                          \
-  EXPAND(_xPP_NARGS_IMPL(__VA_ARGS__, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,   \
-                         4, 3, 2, 1, 0))
+#define PP_NARGS(...)     \
+  EXPAND(_xPP_NARGS_IMPL( \
+    __VA_ARGS__, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
 
 #else // _MSC_VER
 
@@ -557,12 +524,12 @@ namespace smil
 #define GET_7TH_ARG(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ...) arg7
 #define GET_8TH_ARG(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, ...) arg8
 
-#define _xPP_NARGS_IMPL(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12,     \
-                        x13, x14, x15, N, ...)                                 \
+#define _xPP_NARGS_IMPL(                                                    \
+  x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, N, ...) \
   N
-#define PP_NARGS(...)                                                          \
-  _xPP_NARGS_IMPL(__VA_ARGS__, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, \
-                  1, 0)
+#define PP_NARGS(...) \
+  _xPP_NARGS_IMPL(    \
+    __VA_ARGS__, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
 #endif // _MSC_VER
   /** @endcond */

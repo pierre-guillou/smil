@@ -49,8 +49,7 @@
 
 #include "DAreaOpenUnionFind.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup AdvAreaOpen
    *
@@ -67,13 +66,15 @@ namespace smil
    * @param[in] method : algorithm. Nowadays, only "unionfind" is available
    */
   template <typename T>
-  RES_T areaOpening(const Image<T> &imIn, size_t size, Image<T> &imOut,
-                    StrElt &se = DEFAULT_SE, const string method = "unionfind")
-  {
+  RES_T areaOpening(const Image<T> &imIn,
+                    size_t size,
+                    Image<T> &imOut,
+                    StrElt &se = DEFAULT_SE,
+                    const string method = "unionfind") {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    if (method == "unionfind") {
+    if(method == "unionfind") {
       UnionFindFunctions<T> uff;
       return uff.areaOpen(imIn, size, imOut, se);
     }
@@ -92,20 +93,22 @@ namespace smil
    * @param[in] method : algorithm. Nowadays, only "unionfind" is available
    */
   template <typename T>
-  RES_T areaClosing(const Image<T> &imIn, size_t size, Image<T> &imOut,
-                    StrElt &se = DEFAULT_SE, const string method = "unionfind")
-  {
+  RES_T areaClosing(const Image<T> &imIn,
+                    size_t size,
+                    Image<T> &imOut,
+                    StrElt &se = DEFAULT_SE,
+                    const string method = "unionfind") {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    if (method == "unionfind") {
+    if(method == "unionfind") {
       Image<T> imTmp(imIn);
       RES_T res = inv(imIn, imTmp);
-      if (res == RES_OK) {
+      if(res == RES_OK) {
         UnionFindFunctions<T> uff;
         res = uff.areaOpen(imTmp, size, imOut, se);
       }
-      if (res == RES_OK)
+      if(res == RES_OK)
         res = inv(imOut, imOut);
       return res;
     }

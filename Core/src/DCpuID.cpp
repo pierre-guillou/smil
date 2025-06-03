@@ -41,15 +41,14 @@
 
 using namespace smil;
 
-CpuID::CpuID()
-{
-  cores         = 0;
-  logical       = 0;
+CpuID::CpuID() {
+  cores = 0;
+  logical = 0;
   hyperThreaded = true;
 #ifdef USE_OPEN_MP
   // #pragma omp parallel
   {
-    cores   = omp_get_num_procs();
+    cores = omp_get_num_procs();
     logical = omp_get_max_threads();
   }
   // if (hyperThreaded)
@@ -59,42 +58,41 @@ CpuID::CpuID()
 #if defined(__linux__)
   ifstream fin;
   fin = ifstream("/proc/cpuinfo");
-  if (fin.good()) {
-    int    nprocs = 0;
+  if(fin.good()) {
+    int nprocs = 0;
     string svendor;
     string smodel;
     string buffer;
 
     char line[1024];
-    while (fin.getline(line, sizeof line)) {
+    while(fin.getline(line, sizeof line)) {
       string sline = string(line);
 
-      if (_get_value(sline, "processor", buffer))
+      if(_get_value(sline, "processor", buffer))
         nprocs++;
-      if (_get_value(sline, "model name", buffer))
+      if(_get_value(sline, "model name", buffer))
         this->model = buffer;
-      if (_get_value(sline, "vendor_id", buffer))
+      if(_get_value(sline, "vendor_id", buffer))
         this->vendor = buffer;
-      if (_get_value(sline, "flags", buffer))
+      if(_get_value(sline, "flags", buffer))
         this->flags = buffer;
     }
-    if (cores == 0 || logical == 0)
+    if(cores == 0 || logical == 0)
       cores = logical = nprocs;
   }
 #endif // __linux__
 
-  cores   = max(cores, 4U);
+  cores = max(cores, 4U);
   logical = max(logical, 4U);
 }
 
-bool CpuID::_get_value(string &s, const char *prefix, string &value)
-{
-  bool   ok = false;
-  regex  re(string("^") + string(prefix) + "[[:space:]]*:[[:space:]]*");
+bool CpuID::_get_value(string &s, const char *prefix, string &value) {
+  bool ok = false;
+  regex re(string("^") + string(prefix) + "[[:space:]]*:[[:space:]]*");
   smatch sm;
-  if (regex_search(s, sm, re)) {
+  if(regex_search(s, sm, re)) {
     value = sm.suffix();
-    ok    = true;
+    ok = true;
   }
   return ok;
 }

@@ -14,15 +14,14 @@
 
 using namespace std;
 
-void *fun(void *_timer)
-{
-  timer *t = (timer *) _timer;
-  while (t->running) {
+void *fun(void *_timer) {
+  timer *t = (timer *)_timer;
+  while(t->running) {
     //          usleep(10000);
     //         sleep(1);
     //           cout << "ok" << endl;
     //         cout << QApplication::allWidgets().count() << endl;
-    foreach (QWidget *widget, QApplication::allWidgets()) {
+    foreach(QWidget *widget, QApplication::allWidgets()) {
       //           widget->repaint();
       widget->update();
     }
@@ -31,8 +30,7 @@ void *fun(void *_timer)
   return NULL;
 }
 
-void timer::start()
-{
+void timer::start() {
   // //   XInitThreads();
   //     running = true;
   //     pthread_t thread;
@@ -44,8 +42,7 @@ void timer::start()
   //     pthread_create (&thread, &thread_attr, &fun, this);
   //     end();
 }
-void timer::stop()
-{
+void timer::stop() {
   running = false;
 }
 

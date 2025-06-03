@@ -37,8 +37,7 @@
 #include "Core/include/DTime.h"
 #include "Core/include/private/DTraits.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup Base
    * @defgroup Arith Arithmetic operations
@@ -67,8 +66,7 @@ namespace smil
    * @see Image::operator~
    */
   template <class T>
-  RES_T inv(const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T inv(const Image<T> &imIn, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -86,8 +84,7 @@ namespace smil
    * @see Image::operator+
    */
   template <class T>
-  RES_T add(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T add(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -105,8 +102,7 @@ namespace smil
    * @see Image::operator+
    */
   template <class T>
-  RES_T add(const Image<T> &imIn1, const T &value, Image<T> &imOut)
-  {
+  RES_T add(const Image<T> &imIn1, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imOut);
 
@@ -123,8 +119,8 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T addNoSat(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    addNoSat(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -141,8 +137,7 @@ namespace smil
    * @param[out] imOut output image
    */
   template <class T>
-  RES_T addNoSat(const Image<T> &imIn1, const T &value, Image<T> &imOut)
-  {
+  RES_T addNoSat(const Image<T> &imIn1, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imOut);
 
@@ -157,8 +152,7 @@ namespace smil
    * @param[out] imOut : output image containing <b>imIn1 - imIn2</b>
    */
   template <class T>
-  RES_T sub(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T sub(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -173,8 +167,7 @@ namespace smil
    * @param[out] imOut : output image containing <b>imIn - val</b>
    */
   template <class T>
-  RES_T sub(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T sub(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     return binaryImageFunction<T, subLine<T>>(imIn, value, imOut);
   }
 
@@ -187,8 +180,7 @@ namespace smil
    * @param[out] imOut : output image containing <b>val - imIn</b>
    */
   template <class T>
-  RES_T sub(const T &value, const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T sub(const T &value, const Image<T> &imIn, Image<T> &imOut) {
     return binaryImageFunction<T, subLine<T>>(value, imIn, imOut);
   }
 
@@ -200,8 +192,8 @@ namespace smil
    * @param[out] imOut : output image containing <b>imIn1 - imIn2</b>
    */
   template <class T>
-  RES_T subNoSat(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    subNoSat(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -217,8 +209,7 @@ namespace smil
    * @param[out] imOut : output image containing <b>imIn - val</b>
    */
   template <class T>
-  RES_T subNoSat(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T subNoSat(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -235,8 +226,7 @@ namespace smil
    * @param[out] imOut : output image containing <b>val - imIn</b>
    */
   template <class T>
-  RES_T subNoSat(const T &value, const Image<T> &imIn, Image<T> &imOut)
-  {
+  RES_T subNoSat(const T &value, const Image<T> &imIn, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -251,8 +241,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T sup(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T sup(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -267,8 +256,7 @@ namespace smil
    * @return an image, which is the @b sup of @b imIn1 and @b imIn2
    */
   template <class T>
-  ResImage<T> sup(const Image<T> &imIn1, const Image<T> &imIn2)
-  {
+  ResImage<T> sup(const Image<T> &imIn1, const Image<T> &imIn2) {
     ResImage<T> newIm(imIn1);
 
     ASSERT(CHECK_ALLOCATED(&imIn1, &imIn2), newIm);
@@ -286,8 +274,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T sup(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T sup(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -302,8 +289,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T inf(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T inf(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -318,8 +304,7 @@ namespace smil
    * @return an image, which is the @b inf of @b imIn1 and @b imIn2
    */
   template <class T>
-  ResImage<T> inf(const Image<T> &imIn1, const Image<T> &imIn2)
-  {
+  ResImage<T> inf(const Image<T> &imIn1, const Image<T> &imIn2) {
     ResImage<T> newIm(imIn1);
 
     ASSERT(CHECK_ALLOCATED(&imIn1, &imIn2), newIm);
@@ -337,8 +322,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T inf(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T inf(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -363,8 +347,7 @@ namespace smil
    * The functions equ() are the inverse of functions diff()
    */
   template <class T>
-  RES_T equ(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T equ(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -389,8 +372,7 @@ namespace smil
    * The functions equ() are the inverse of functions diff()
    */
   template <class T>
-  RES_T equ(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T equ(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -409,17 +391,16 @@ namespace smil
    * checking equality for each pixel. The difference are in the parameters.
    */
   template <class T>
-  bool equ(const Image<T> &imIn1, const Image<T> &imIn2)
-  {
+  bool equ(const Image<T> &imIn1, const Image<T> &imIn2) {
     ASSERT(CHECK_ALLOCATED(&imIn1, &imIn2), false);
     ASSERT(CHECK_SAME_SIZE(&imIn1, &imIn2), false);
 
     typedef typename Image<T>::lineType lineType;
-    lineType                            pix1 = imIn1.getPixels();
-    lineType                            pix2 = imIn2.getPixels();
+    lineType pix1 = imIn1.getPixels();
+    lineType pix2 = imIn2.getPixels();
 
-    for (size_t i = 0; i < imIn1.getPixelCount(); i++)
-      if (pix1[i] != pix2[i])
+    for(size_t i = 0; i < imIn1.getPixelCount(); i++)
+      if(pix1[i] != pix2[i])
         return false;
 
     return true;
@@ -445,8 +426,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T diff(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T diff(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -472,8 +452,7 @@ namespace smil
    * The functions diff() are the inverse of functions equ()
    */
   template <class T>
-  RES_T diff(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T diff(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -491,8 +470,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T absDiff(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T absDiff(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -513,8 +491,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T grt(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T grt(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -535,8 +512,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T grt(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T grt(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -557,8 +533,8 @@ namespace smil
    *
    */
   template <class T>
-  RES_T grtOrEqu(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    grtOrEqu(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -579,8 +555,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T grtOrEqu(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T grtOrEqu(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -601,8 +576,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T low(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T low(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -623,8 +597,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T low(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T low(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -645,8 +618,8 @@ namespace smil
    *
    */
   template <class T>
-  RES_T lowOrEqu(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    lowOrEqu(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -667,8 +640,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T lowOrEqu(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T lowOrEqu(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -687,8 +659,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T div(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T div(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -698,12 +669,11 @@ namespace smil
   /** @cond */
   /*  JOE - 25/08/2020 Is this really needed ??? */
   template <class T>
-  RES_T div(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T div(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    return binaryImageFunction<T, divLine<T>>(imIn, (double) value, imOut);
+    return binaryImageFunction<T, divLine<T>>(imIn, (double)value, imOut);
   }
   /** @endcond */
 
@@ -719,15 +689,14 @@ namespace smil
    *
    */
   template <class T>
-  RES_T div(const Image<T> &imIn, double &dValue, Image<T> &imOut)
-  {
+  RES_T div(const Image<T> &imIn, double &dValue, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    typename ImDtTypes<T>::lineType pixIn  = imIn.getPixels();
+    typename ImDtTypes<T>::lineType pixIn = imIn.getPixels();
     typename ImDtTypes<T>::lineType pixOut = imOut.getPixels();
 
-    for (size_t i = 0; i < imIn.getPixelCount(); i++)
+    for(size_t i = 0; i < imIn.getPixelCount(); i++)
       pixOut[i] = pixIn[i] / dValue;
 
     return RES_OK;
@@ -746,8 +715,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T mul(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T mul(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -757,12 +725,11 @@ namespace smil
   /** @cond */
   /*  JOE - 25/08/2020 Is this really needed ??? */
   template <class T>
-  RES_T mul(const Image<T> &imIn1, const T &value, Image<T> &imOut)
-  {
+  RES_T mul(const Image<T> &imIn1, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imOut);
 
-    return binaryImageFunction<T, mulLine<T>>(imIn1, (double) value, imOut);
+    return binaryImageFunction<T, mulLine<T>>(imIn1, (double)value, imOut);
   }
   /** @endcond */
 
@@ -779,17 +746,16 @@ namespace smil
    *
    */
   template <class T>
-  RES_T mul(const Image<T> &imIn, const double &dValue, Image<T> &imOut)
-  {
+  RES_T mul(const Image<T> &imIn, const double &dValue, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    typename ImDtTypes<T>::lineType pixIn  = imIn.getPixels();
+    typename ImDtTypes<T>::lineType pixIn = imIn.getPixels();
     typename ImDtTypes<T>::lineType pixOut = imOut.getPixels();
-    double                          newVal;
+    double newVal;
 
-    for (size_t i = 0; i < imIn.getPixelCount(); i++) {
-      newVal    = pixIn[i] * dValue;
+    for(size_t i = 0; i < imIn.getPixelCount(); i++) {
+      newVal = pixIn[i] * dValue;
       pixOut[i] = newVal > double(ImDtTypes<T>::max()) ? ImDtTypes<T>::max()
                                                        : T(newVal);
     }
@@ -809,8 +775,8 @@ namespace smil
    * @note In reality mulNoSat() and mul() gives the same result
    */
   template <class T>
-  RES_T mulNoSat(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    mulNoSat(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -830,8 +796,7 @@ namespace smil
    * @note In reality mulNoSat() and mul() gives the same result
    */
   template <class T>
-  RES_T mulNoSat(const Image<T> &imIn, const T &value, Image<T> &imOut)
-  {
+  RES_T mulNoSat(const Image<T> &imIn, const T &value, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -851,8 +816,7 @@ namespace smil
    * @note Possible bases: 0 or none (natural logarithm, or base e), 2, 10
    */
   template <class T1, class T2>
-  RES_T log(const Image<T1> &imIn, Image<T2> &imOut, int base = 0)
-  {
+  RES_T log(const Image<T1> &imIn, Image<T2> &imOut, int base = 0) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -878,8 +842,7 @@ namespace smil
    * - log()
    */
   template <class T1, class T2>
-  RES_T exp(const Image<T1> &imIn, Image<T2> &imOut, int base = 0)
-  {
+  RES_T exp(const Image<T1> &imIn, Image<T2> &imOut, int base = 0) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -902,8 +865,7 @@ namespace smil
    * - Output value is limited to the maximum value of imOut data type
    */
   template <class T1, class T2>
-  RES_T pow(const Image<T1> &imIn, Image<T2> &imOut, double exponent = 2)
-  {
+  RES_T pow(const Image<T1> &imIn, Image<T2> &imOut, double exponent = 2) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -923,8 +885,7 @@ namespace smil
    *
    */
   template <class T1, class T2>
-  RES_T sqrt(const Image<T1> &imIn, Image<T2> &imOut)
-  {
+  RES_T sqrt(const Image<T1> &imIn, Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -956,8 +917,8 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T logicAnd(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    logicAnd(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -978,8 +939,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T bitAnd(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T bitAnd(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -1000,8 +960,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T logicOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T logicOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -1022,8 +981,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T bitOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T bitOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -1045,8 +1003,8 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T logicXOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T
+    logicXOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -1067,8 +1025,7 @@ namespace smil
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T bitXOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut)
-  {
+  RES_T bitXOr(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn1, &imIn2, &imOut);
     ASSERT_SAME_SIZE(&imIn1, &imIn2, &imOut);
 
@@ -1106,14 +1063,15 @@ namespace smil
    * @endcode
    */
   template <class T1, class T2>
-  RES_T test(const Image<T1> &imIn, const Image<T2> &imInT,
-             const Image<T2> &imInF, Image<T2> &imOut)
-  {
+  RES_T test(const Image<T1> &imIn,
+             const Image<T2> &imInT,
+             const Image<T2> &imInF,
+             Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imInT, &imInF, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imInT, &imInF, &imOut);
 
-    return tertiaryImageFunction<T1, testLine<T1, T2>>(imIn, imInT, imInF,
-                                                       imOut);
+    return tertiaryImageFunction<T1, testLine<T1, T2>>(
+      imIn, imInT, imInF, imOut);
   }
 
   /**
@@ -1129,14 +1087,15 @@ namespace smil
    *
    */
   template <class T1, class T2>
-  RES_T test(const Image<T1> &imIn, const Image<T2> &imInT, const T2 &value,
-             Image<T2> &imOut)
-  {
+  RES_T test(const Image<T1> &imIn,
+             const Image<T2> &imInT,
+             const T2 &value,
+             Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imInT, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imInT, &imOut);
 
-    return tertiaryImageFunction<T1, testLine<T1, T2>>(imIn, imInT, value,
-                                                       imOut);
+    return tertiaryImageFunction<T1, testLine<T1, T2>>(
+      imIn, imInT, value, imOut);
   }
 
   /**
@@ -1152,14 +1111,15 @@ namespace smil
    *
    */
   template <class T1, class T2>
-  RES_T test(const Image<T1> &imIn, const T2 &value, const Image<T2> &imInF,
-             Image<T2> &imOut)
-  {
+  RES_T test(const Image<T1> &imIn,
+             const T2 &value,
+             const Image<T2> &imInF,
+             Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imInF, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imInF, &imOut);
 
-    return tertiaryImageFunction<T1, testLine<T1, T2>>(imIn, value, imInF,
-                                                       imOut);
+    return tertiaryImageFunction<T1, testLine<T1, T2>>(
+      imIn, value, imInF, imOut);
   }
 
   /**
@@ -1175,37 +1135,40 @@ namespace smil
    *
    */
   template <class T1, class T2>
-  RES_T test(const Image<T1> &imIn, const T2 &valueT, const T2 &valueF,
-             Image<T2> &imOut)
-  {
+  RES_T test(const Image<T1> &imIn,
+             const T2 &valueT,
+             const T2 &valueF,
+             Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    return tertiaryImageFunction<T1, testLine<T1, T2>>(imIn, valueT, valueF,
-                                                       imOut);
+    return tertiaryImageFunction<T1, testLine<T1, T2>>(
+      imIn, valueT, valueF, imOut);
   }
 
   /** @cond */
   template <class T1, class imOrValT, class trueT, class falseT, class T2>
-  RES_T _compare_base(const Image<T1> &imIn, const char *compareType,
-                      const imOrValT &imOrVal, const trueT &trueImOrVal,
-                      const falseT &falseImOrVal, Image<T2> &imOut)
-  {
+  RES_T _compare_base(const Image<T1> &imIn,
+                      const char *compareType,
+                      const imOrValT &imOrVal,
+                      const trueT &trueImOrVal,
+                      const falseT &falseImOrVal,
+                      Image<T2> &imOut) {
     ImageFreezer freeze(imOut);
 
     Image<T1> tmpIm(imIn);
 
-    if (strcmp(compareType, "==") == 0) {
+    if(strcmp(compareType, "==") == 0) {
       ASSERT(equ(imIn, imOrVal, tmpIm) == RES_OK);
-    } else if (strcmp(compareType, "!=") == 0) {
+    } else if(strcmp(compareType, "!=") == 0) {
       ASSERT(diff(imIn, imOrVal, tmpIm) == RES_OK);
-    } else if (strcmp(compareType, ">") == 0) {
+    } else if(strcmp(compareType, ">") == 0) {
       ASSERT(grt(imIn, imOrVal, tmpIm) == RES_OK);
-    } else if (strcmp(compareType, "<") == 0) {
+    } else if(strcmp(compareType, "<") == 0) {
       ASSERT(low(imIn, imOrVal, tmpIm) == RES_OK);
-    } else if (strcmp(compareType, ">=") == 0) {
+    } else if(strcmp(compareType, ">=") == 0) {
       ASSERT(grtOrEqu(imIn, imOrVal, tmpIm) == RES_OK);
-    } else if (strcmp(compareType, "<=") == 0) {
+    } else if(strcmp(compareType, "<=") == 0) {
       ASSERT(lowOrEqu(imIn, imOrVal, tmpIm) == RES_OK);
     } else {
       ERR_MSG("Unknown operation");
@@ -1241,12 +1204,14 @@ namespace smil
    * @b falseVal). See the next function prototypes.
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn1, const char *compareType,
-                const Image<T1> &imIn2, const Image<T2> &trueIm,
-                const Image<T2> &falseIm, Image<T2> &imOut)
-  {
+  RES_T compare(const Image<T1> &imIn1,
+                const char *compareType,
+                const Image<T1> &imIn2,
+                const Image<T2> &trueIm,
+                const Image<T2> &falseIm,
+                Image<T2> &imOut) {
     return _compare_base<T1, Image<T1>, Image<T2>, Image<T2>, T2>(
-        imIn1, compareType, imIn2, trueIm, falseIm, imOut);
+      imIn1, compareType, imIn2, trueIm, falseIm, imOut);
   }
 
   /**
@@ -1267,12 +1232,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn1, const char *compareType,
-                const Image<T1> &imIn2, const T2 &trueVal,
-                const Image<T2> &falseIm, Image<T2> &imOut)
-  {
+  RES_T compare(const Image<T1> &imIn1,
+                const char *compareType,
+                const Image<T1> &imIn2,
+                const T2 &trueVal,
+                const Image<T2> &falseIm,
+                Image<T2> &imOut) {
     return _compare_base<T1, Image<T1>, T2, Image<T2>, T2>(
-        imIn1, compareType, imIn2, trueVal, falseIm, imOut);
+      imIn1, compareType, imIn2, trueVal, falseIm, imOut);
   }
 
   /**
@@ -1294,12 +1261,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn1, const char *compareType,
-                const Image<T1> &imIn2, const Image<T2> &trueIm,
-                const T2 &falseVal, Image<T2> &imOut)
-  {
+  RES_T compare(const Image<T1> &imIn1,
+                const char *compareType,
+                const Image<T1> &imIn2,
+                const Image<T2> &trueIm,
+                const T2 &falseVal,
+                Image<T2> &imOut) {
     return _compare_base<T1, Image<T1>, Image<T2>, T2, T2>(
-        imIn1, compareType, imIn2, trueIm, falseVal, imOut);
+      imIn1, compareType, imIn2, trueIm, falseVal, imOut);
   }
 
   /**
@@ -1319,12 +1288,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn1, const char *compareType,
-                const Image<T1> &imIn2, const T2 &trueVal, const T2 &falseVal,
-                Image<T2> &imOut)
-  {
-    return _compare_base<T1, Image<T1>, T2, T2, T2>(imIn1, compareType, imIn2,
-                                                    trueVal, falseVal, imOut);
+  RES_T compare(const Image<T1> &imIn1,
+                const char *compareType,
+                const Image<T1> &imIn2,
+                const T2 &trueVal,
+                const T2 &falseVal,
+                Image<T2> &imOut) {
+    return _compare_base<T1, Image<T1>, T2, T2, T2>(
+      imIn1, compareType, imIn2, trueVal, falseVal, imOut);
   }
 
   /**
@@ -1347,12 +1318,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn, const char *compareType, const T1 &value,
-                const Image<T2> &trueIm, const Image<T2> &falseIm,
-                Image<T2> &imOut)
-  {
+  RES_T compare(const Image<T1> &imIn,
+                const char *compareType,
+                const T1 &value,
+                const Image<T2> &trueIm,
+                const Image<T2> &falseIm,
+                Image<T2> &imOut) {
     return _compare_base<T1, T1, Image<T2>, Image<T2>, T2>(
-        imIn, compareType, value, trueIm, falseIm, imOut);
+      imIn, compareType, value, trueIm, falseIm, imOut);
   }
 
   /**
@@ -1373,11 +1346,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn, const char *compareType, const T1 &value,
-                const T2 &trueVal, const Image<T2> &falseIm, Image<T2> &imOut)
-  {
-    return _compare_base<T1, T1, T2, Image<T2>, T2>(imIn, compareType, value,
-                                                    trueVal, falseIm, imOut);
+  RES_T compare(const Image<T1> &imIn,
+                const char *compareType,
+                const T1 &value,
+                const T2 &trueVal,
+                const Image<T2> &falseIm,
+                Image<T2> &imOut) {
+    return _compare_base<T1, T1, T2, Image<T2>, T2>(
+      imIn, compareType, value, trueVal, falseIm, imOut);
   }
 
   /**
@@ -1399,11 +1375,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn, const char *compareType, const T1 &value,
-                const Image<T2> &trueIm, const T2 &falseVal, Image<T2> &imOut)
-  {
-    return _compare_base<T1, T1, Image<T2>, T2, T2>(imIn, compareType, value,
-                                                    trueIm, falseVal, imOut);
+  RES_T compare(const Image<T1> &imIn,
+                const char *compareType,
+                const T1 &value,
+                const Image<T2> &trueIm,
+                const T2 &falseVal,
+                Image<T2> &imOut) {
+    return _compare_base<T1, T1, Image<T2>, T2, T2>(
+      imIn, compareType, value, trueIm, falseVal, imOut);
   }
 
   /**
@@ -1423,11 +1402,14 @@ namespace smil
    * @see the first reference to this function
    */
   template <class T1, class T2>
-  RES_T compare(const Image<T1> &imIn, const char *compareType, const T1 &value,
-                const T2 &trueVal, const T2 &falseVal, Image<T2> &imOut)
-  {
-    return _compare_base<T1, T1, T2, T2, T2>(imIn, compareType, value, trueVal,
-                                             falseVal, imOut);
+  RES_T compare(const Image<T1> &imIn,
+                const char *compareType,
+                const T1 &value,
+                const T2 &trueVal,
+                const T2 &falseVal,
+                Image<T2> &imOut) {
+    return _compare_base<T1, T1, T2, T2, T2>(
+      imIn, compareType, value, trueVal, falseVal, imOut);
   }
   /** @} */
 
@@ -1453,8 +1435,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T fill(Image<T> &imOut, const T &value)
-  {
+  RES_T fill(Image<T> &imOut, const T &value) {
     ASSERT_ALLOCATED(&imOut);
 
     return unaryImageFunction<T, fillLine<T>>(imOut, value).retVal;
@@ -1469,8 +1450,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T randFill(Image<T> &imOut)
-  {
+  RES_T randFill(Image<T> &imOut) {
     ASSERT_ALLOCATED(&imOut);
 
     typename ImDtTypes<T>::lineType pixels = imOut.getPixels();
@@ -1481,9 +1461,9 @@ namespace smil
     srand(tv.tv_usec);
 
     double rangeT = ImDtTypes<T>::cardinal();
-    T      minT   = ImDtTypes<T>::min();
+    T minT = ImDtTypes<T>::min();
 
-    for (size_t i = 0; i < imOut.getPixelCount(); i++)
+    for(size_t i = 0; i < imOut.getPixelCount(); i++)
       pixels[i] = T(rand() / double(RAND_MAX) * rangeT + double(minT));
 
     imOut.modified();
@@ -1505,8 +1485,7 @@ namespace smil
    * imIn.
    */
   template <class T1, class T2>
-  RES_T cast(const Image<T1> &imIn, Image<T2> &imOut)
-  {
+  RES_T cast(const Image<T1> &imIn, Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -1517,10 +1496,10 @@ namespace smil
     // double coeff =
     //  double(ImDtTypes<T2>::cardinal()) /  double(ImDtTypes<T1>::cardinal());
 
-    double coeff = double(ImDtTypes<T2>::max() - ImDtTypes<T2>::min()) /
-                   double(ImDtTypes<T1>::max() - ImDtTypes<T1>::min());
+    double coeff = double(ImDtTypes<T2>::max() - ImDtTypes<T2>::min())
+                   / double(ImDtTypes<T1>::max() - ImDtTypes<T1>::min());
 
-    typename Image<T1>::lineType pixIn  = imIn.getPixels();
+    typename Image<T1>::lineType pixIn = imIn.getPixels();
     typename Image<T2>::lineType pixOut = imOut.getPixels();
 
     size_t i, nPix = imIn.getPixelCount();
@@ -1533,7 +1512,7 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-      for (i = 0; i < nPix; i++)
+      for(i = 0; i < nPix; i++)
         pixOut[i] = floor_t2 + T2(coeff * double(pixIn[i] - floor_t1));
     }
 
@@ -1560,9 +1539,12 @@ namespace smil
    *
    */
   template <class T1, class T2>
-  RES_T scaleRange(const Image<T1> &imIn, const T1 inMin, const T1 inMax,
-                   const T2 outMin, const T2 outMax, Image<T2> &imOut)
-  {
+  RES_T scaleRange(const Image<T1> &imIn,
+                   const T1 inMin,
+                   const T1 inMax,
+                   const T2 outMin,
+                   const T2 outMax,
+                   Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -1571,7 +1553,7 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    typename ImDtTypes<T1>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T1>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T2>::lineType bufferOut = imOut.getPixels();
 
     size_t W, H, D;
@@ -1579,35 +1561,35 @@ namespace smil
     H = S[1];
     D = S[2];
 
-    if ((inMax - inMin) == 0) {
+    if((inMax - inMin) == 0) {
       // a flat image - can generate division by 0
       return RES_ERR;
     }
 
-    T1 inTop  = imIn.getDataTypeMax();
+    T1 inTop = imIn.getDataTypeMax();
     T2 outTop = imOut.getDataTypeMax();
 
     double k1, k2, k3;
     k1 = k2 = k3 = 0;
 
-    if (inMin > 0)
-      k1 = ((double) (outMin - 0)) / ((double) (inMin - 0));
-    if (inMax > inMin)
-      k2 = ((double) (outMax - outMin)) / ((double) (inMax - inMin));
-    if (inTop > inMax)
-      k3 = ((double) (outTop - outMax)) / ((double) (inTop - inMax));
+    if(inMin > 0)
+      k1 = ((double)(outMin - 0)) / ((double)(inMin - 0));
+    if(inMax > inMin)
+      k2 = ((double)(outMax - outMin)) / ((double)(inMax - inMin));
+    if(inTop > inMax)
+      k3 = ((double)(outTop - outMax)) / ((double)(inTop - inMax));
 
     size_t iMax = W * H * D;
-    for (size_t i = 0; i < iMax; i++) {
-      if (bufferIn[i] < inMin) {
+    for(size_t i = 0; i < iMax; i++) {
+      if(bufferIn[i] < inMin) {
         bufferOut[i] = (T2)(k1 * bufferIn[i]);
         continue;
       }
-      if (bufferIn[i] >= inMin && bufferIn[i] < inMax) {
+      if(bufferIn[i] >= inMin && bufferIn[i] < inMax) {
         bufferOut[i] = (T2)(outMin + k2 * (bufferIn[i] - inMin));
         continue;
       }
-      if (bufferIn[i] >= inMax) {
+      if(bufferIn[i] >= inMax) {
         bufferOut[i] = (T2)(outMax + k3 * (bufferIn[i] - inMax));
       }
     }
@@ -1631,9 +1613,11 @@ namespace smil
    * @param[in] onlyNonZero : defines how to find input image range of values
    */
   template <class T1, class T2>
-  RES_T scaleRange(const Image<T1> &imIn, const T2 Min, const T2 Max,
-                   Image<T2> &imOut, bool onlyNonZero)
-  {
+  RES_T scaleRange(const Image<T1> &imIn,
+                   const T2 Min,
+                   const T2 Max,
+                   Image<T2> &imOut,
+                   bool onlyNonZero) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -1642,7 +1626,7 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    typename ImDtTypes<T1>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T1>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T2>::lineType bufferOut = imOut.getPixels();
 
     size_t W, H, D;
@@ -1651,22 +1635,22 @@ namespace smil
     D = S[2];
 
     T1 vMin, vMax;
-    if (onlyNonZero) {
+    if(onlyNonZero) {
       vMin = minVal(imIn);
       vMax = maxVal(imIn);
     } else {
       vMin = imIn.getDataTypeMin();
       vMax = imIn.getDataTypeMax();
     }
-    if ((vMax - vMin) == 0) {
+    if((vMax - vMin) == 0) {
       // a flat image - can generate division by 0
       return RES_ERR;
     }
 
-    double k = ((double) (Max - Min)) / ((double) (vMax - vMin));
+    double k = ((double)(Max - Min)) / ((double)(vMax - vMin));
 
     size_t iMax = W * H * D;
-    for (size_t i = 0; i < iMax; i++)
+    for(size_t i = 0; i < iMax; i++)
       bufferOut[i] = (T2)(Min + k * (bufferIn[i] - vMin));
 
     return RES_OK;
@@ -1687,14 +1671,13 @@ namespace smil
    * @param[in] onlyNonZero : defines how to find input image range of values
    */
   template <class T1, class T2>
-  RES_T scaleRange(const Image<T1> &imIn, Image<T2> &imOut, bool onlyNonZero)
-  {
+  RES_T scaleRange(const Image<T1> &imIn, Image<T2> &imOut, bool onlyNonZero) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
 #if 1
-    return scaleRange(imIn, imOut.getDataTypeMin(), imOut.getDataTypeMax(),
-                      imOut, onlyNonZero);
+    return scaleRange(
+      imIn, imOut.getDataTypeMin(), imOut.getDataTypeMax(), imOut, onlyNonZero);
 #else
 
     ImageFreezer freeze(imOut);
@@ -1702,7 +1685,7 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    typename ImDtTypes<T1>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T1>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T2>::lineType bufferOut = imOut.getPixels();
 
     size_t W, H, D;
@@ -1714,7 +1697,7 @@ namespace smil
     T2 Min = imOut.getDataTypeMin();
 
     T1 vMin, vMax;
-    if (onlyNonZero) {
+    if(onlyNonZero) {
       vMin = minVal(imIn);
       vMax = maxVal(imIn);
     } else {
@@ -1722,15 +1705,15 @@ namespace smil
       vMax = imIn.getDataTypeMax();
     }
 
-    if ((vMax - vMin) == 0) {
+    if((vMax - vMin) == 0) {
       // a flat image - can generate division by 0
       return RES_ERR;
     }
 
-    double k = ((double) (Max - Min)) / ((double) (vMax - vMin));
+    double k = ((double)(Max - Min)) / ((double)(vMax - vMin));
 
     size_t iMax = W * H * D;
-    for (size_t i = 0; i < iMax; i++)
+    for(size_t i = 0; i < iMax; i++)
       bufferOut[i] = (T2)(Min + k * (bufferIn[i] - vMin));
 
     return RES_OK;
@@ -1756,9 +1739,10 @@ namespace smil
    * @param[out] imOut : output Image
    */
   template <class T1, class T2>
-  RES_T sCurve(const Image<T1> &imIn, const T1 pivot, const double ratio,
-               Image<T2> &imOut)
-  {
+  RES_T sCurve(const Image<T1> &imIn,
+               const T1 pivot,
+               const double ratio,
+               Image<T2> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -1767,7 +1751,7 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    typename ImDtTypes<T1>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T1>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T2>::lineType bufferOut = imOut.getPixels();
 
     size_t W, H, D;
@@ -1777,21 +1761,21 @@ namespace smil
 
     T1 vMin = minVal(imIn);
     T1 vMax = maxVal(imIn);
-    if ((vMax - vMin) == 0) {
+    if((vMax - vMin) == 0) {
       // a flat image - can generate division by 0
       return RES_ERR;
     }
 
     T1 ctr = pivot;
-    if (pivot == 0 || pivot > vMax)
+    if(pivot == 0 || pivot > vMax)
       ctr = (vMax - vMin) / 2;
 
     double k = 4. * ratio / (vMax - vMin);
 
-    T2     Max  = imOut.getDataTypeMax();
+    T2 Max = imOut.getDataTypeMax();
     size_t iMax = W * H * D;
 
-    for (size_t i = 0; i < iMax; i++)
+    for(size_t i = 0; i < iMax; i++)
       bufferOut[i] = (T2)(Max / (1. + std::exp(-k * (bufferIn[i] - ctr))));
 
     return RES_OK;
@@ -1824,16 +1808,16 @@ namespace smil
    * @smilexample{multichannel_operations.py}
    */
   template <class MCT1, class T2>
-  RES_T copyChannel(const Image<MCT1> &imIn, const UINT &chanNum,
-                    Image<T2> &imOut)
-  {
+  RES_T copyChannel(const Image<MCT1> &imIn,
+                    const UINT &chanNum,
+                    Image<T2> &imOut) {
     ASSERT(chanNum < MCT1::channelNumber());
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     typedef typename MCT1::DataType T1;
-    typename Image<T1>::lineType    lineIn  = imIn.getPixels().arrays[chanNum];
-    typename Image<T2>::lineType    lineOut = imOut.getPixels();
+    typename Image<T1>::lineType lineIn = imIn.getPixels().arrays[chanNum];
+    typename Image<T2>::lineType lineOut = imOut.getPixels();
 
     copyLine<T1, T2>(lineIn, imIn.getPixelCount(), lineOut);
     imOut.modified();
@@ -1857,16 +1841,16 @@ namespace smil
    * @smilexample{multichannel_operations.py}
    */
   template <class T1, class MCT2>
-  RES_T copyToChannel(const Image<T1> &imIn, const UINT &chanNum,
-                      Image<MCT2> &imOut)
-  {
+  RES_T copyToChannel(const Image<T1> &imIn,
+                      const UINT &chanNum,
+                      Image<MCT2> &imOut) {
     ASSERT(chanNum < MCT2::channelNumber());
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     typedef typename MCT2::DataType T2;
-    typename Image<T1>::lineType    lineIn  = imIn.getPixels();
-    typename Image<T2>::lineType    lineOut = imOut.getPixels().arrays[chanNum];
+    typename Image<T1>::lineType lineIn = imIn.getPixels();
+    typename Image<T2>::lineType lineOut = imOut.getPixels().arrays[chanNum];
 
     copyLine<T1, T2>(lineIn, imIn.getPixelCount(), lineOut);
     imOut.modified();
@@ -1889,20 +1873,19 @@ namespace smil
    * @smilexample{multichannel_operations.py}
    */
   template <class MCT1, class T2>
-  RES_T splitChannels(const Image<MCT1> &imIn, Image<T2> &im3DOut)
-  {
+  RES_T splitChannels(const Image<MCT1> &imIn, Image<T2> &im3DOut) {
     ASSERT_ALLOCATED(&imIn);
 
     UINT width = imIn.getWidth(), height = imIn.getHeight();
-    UINT chanNum  = MCT1::channelNumber();
+    UINT chanNum = MCT1::channelNumber();
     UINT pixCount = width * height;
     ASSERT(im3DOut.setSize(width, height, chanNum) == RES_OK);
 
     typedef typename MCT1::DataType T1;
-    typename Image<MCT1>::lineType  lineIn  = imIn.getPixels();
-    typename Image<T2>::lineType    lineOut = im3DOut.getPixels();
+    typename Image<MCT1>::lineType lineIn = imIn.getPixels();
+    typename Image<T2>::lineType lineOut = im3DOut.getPixels();
 
-    for (UINT i = 0; i < chanNum; i++) {
+    for(UINT i = 0; i < chanNum; i++) {
       copyLine<T1, T2>(lineIn.arrays[i], pixCount, lineOut);
       lineOut += pixCount;
     }
@@ -1922,8 +1905,7 @@ namespace smil
    * @smilexample{multichannel_operations.py}
    */
   template <class T1, class MCT2>
-  RES_T mergeChannels(const Image<T1> &imIn, Image<MCT2> &imOut)
-  {
+  RES_T mergeChannels(const Image<T1> &imIn, Image<MCT2> &imOut) {
     ASSERT_ALLOCATED(&imIn);
     UINT chanNum = MCT2::channelNumber();
     ASSERT(imIn.getDepth() == chanNum);
@@ -1933,10 +1915,10 @@ namespace smil
     imOut.setSize(width, height);
 
     typedef typename MCT2::DataType T2;
-    typename Image<T1>::lineType    lineIn  = imIn.getPixels();
-    typename Image<MCT2>::lineType  lineOut = imOut.getPixels();
+    typename Image<T1>::lineType lineIn = imIn.getPixels();
+    typename Image<MCT2>::lineType lineOut = imOut.getPixels();
 
-    for (UINT i = 0; i < chanNum; i++) {
+    for(UINT i = 0; i < chanNum; i++) {
       copyLine<T1, T2>(lineIn, pixCount, lineOut.arrays[i]);
       lineIn += pixCount;
     }
@@ -1966,8 +1948,7 @@ namespace smil
    *
    */
   template <class T>
-  RES_T mask(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut)
-  {
+  RES_T mask(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut) {
     return test<T>(imMask, imIn, T(0), imOut);
   }
 
@@ -1987,27 +1968,28 @@ namespace smil
    *
    */
   template <class T1, class mapT, class T2>
-  RES_T applyLookup(const Image<T1> &imIn, const mapT &_map, Image<T2> &imOut,
-                    T2 defaultValue = T2(0))
-  {
+  RES_T applyLookup(const Image<T1> &imIn,
+                    const mapT &_map,
+                    Image<T2> &imOut,
+                    T2 defaultValue = T2(0)) {
     ASSERT(!_map.empty(), "Input map is empty", RES_ERR);
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     // Verify that the max(measure) doesn't exceed the T2 type max
-    typename mapT::const_iterator max_it =
-        std::max_element(_map.begin(), _map.end(), map_comp_value_less());
+    typename mapT::const_iterator max_it
+      = std::max_element(_map.begin(), _map.end(), map_comp_value_less());
     ASSERT((max_it->second <= ImDtTypes<T2>::max()),
            "Input map max exceeds data type max!", RES_ERR);
 
-    typename Image<T1>::lineType pixIn  = imIn.getPixels();
+    typename Image<T1>::lineType pixIn = imIn.getPixels();
     typename Image<T2>::lineType pixOut = imOut.getPixels();
 
     typename mapT::const_iterator it;
 
-    for (size_t i = 0; i < imIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imIn.getPixelCount(); i++) {
       it = _map.find(*pixIn);
-      if (it != _map.end())
+      if(it != _map.end())
         *pixOut = T2(it->second);
       else
         *pixOut = defaultValue;
@@ -2024,9 +2006,10 @@ namespace smil
   template <class T1, class T2>
   // SFINAE General case
   ENABLE_IF(!IS_SAME(T1, UINT8) && !IS_SAME(T1, UINT16), RES_T)
-      applyLookup(const Image<T1> &imIn, const map<T1, T2> &lut,
-                  Image<T2> &imOut, T2 defaultValue = T2(0))
-  {
+    applyLookup(const Image<T1> &imIn,
+                const map<T1, T2> &lut,
+                Image<T2> &imOut,
+                T2 defaultValue = T2(0)) {
     return applyLookup<T1, map<T1, T2>, T2>(imIn, lut, imOut, defaultValue);
   }
 
@@ -2034,26 +2017,27 @@ namespace smil
   template <class T1, class T2>
   // SFINAE For T1 == UINT8 || T1 == UINT16
   ENABLE_IF(IS_SAME(T1, UINT8) || IS_SAME(T1, UINT16), RES_T)
-      applyLookup(const Image<T1> &imIn, const map<T1, T2> &lut,
-                  Image<T2> &imOut, T2 defaultValue = T2(0))
-  {
+    applyLookup(const Image<T1> &imIn,
+                const map<T1, T2> &lut,
+                Image<T2> &imOut,
+                T2 defaultValue = T2(0)) {
     ASSERT(!lut.empty(), "Input map is empty", RES_ERR);
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     T2 *outVals = ImDtTypes<T2>::createLine(ImDtTypes<T1>::cardinal());
 
-    for (int i = 0; i < ImDtTypes<T1>::max(); i++)
+    for(int i = 0; i < ImDtTypes<T1>::max(); i++)
       outVals[i] = defaultValue;
 
-    typename Image<T1>::lineType pixIn  = imIn.getPixels();
+    typename Image<T1>::lineType pixIn = imIn.getPixels();
     typename Image<T2>::lineType pixOut = imOut.getPixels();
 
-    for (typename map<T1, T2>::const_iterator it = lut.begin(); it != lut.end();
-         it++)
+    for(typename map<T1, T2>::const_iterator it = lut.begin(); it != lut.end();
+        it++)
       outVals[it->first] = it->second;
 
-    for (size_t i = 0; i < imIn.getPixelCount(); i++)
+    for(size_t i = 0; i < imIn.getPixelCount(); i++)
       pixOut[i] = outVals[pixIn[i]];
 
     imOut.modified();
@@ -2063,10 +2047,12 @@ namespace smil
     return RES_OK;
   }
   /** @endcond */
-#else  // SWIG
+#else // SWIG
   template <class T1, class T2>
-  RES_T applyLookup(const Image<T1> &imIn, const map<T1, T2> &lut,
-                    Image<T2> &imOut, T2 defaultValue = T2(0));
+  RES_T applyLookup(const Image<T1> &imIn,
+                    const map<T1, T2> &lut,
+                    Image<T2> &imOut,
+                    T2 defaultValue = T2(0));
 #endif // SWIG
 
   /** @}*/

@@ -40,8 +40,7 @@ using namespace std;
 
 #ifdef USE_JPEG
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup IO
    */
@@ -49,28 +48,24 @@ namespace smil
 
   RES_T getJPGFileInfo(const char *filename, ImageFileInfo &fInfo);
 
-  template <class T> class Image;
+  template <class T>
+  class Image;
 
   template <class T = void>
-  class JPGImageFileHandler : public ImageFileHandler<T>
-  {
+  class JPGImageFileHandler : public ImageFileHandler<T> {
   public:
-    JPGImageFileHandler() : ImageFileHandler<T>("JPG")
-    {
+    JPGImageFileHandler() : ImageFileHandler<T>("JPG") {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
-    {
+    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
       fInfo.filename = filename;
       return getJPGFileInfo(filename, fInfo);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image)
-    {
+    virtual RES_T read(const char *filename, Image<T> &image) {
       return ImageFileHandler<T>::read(filename, image);
     }
-    virtual RES_T write(const Image<T> &image, const char *filename)
-    {
+    virtual RES_T write(const Image<T> &image, const char *filename) {
       return ImageFileHandler<T>::write(image, filename);
     }
   };

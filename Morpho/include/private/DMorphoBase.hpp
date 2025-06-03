@@ -36,8 +36,7 @@
 #include "DMorphImageOperations.hxx"
 #include "DHitOrMiss.hpp"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup MorphoBase
    *
@@ -62,9 +61,10 @@ namespace smil
    * @param[in] borderVal (optional) The border value
    */
   template <class T>
-  RES_T dilate(const Image<T> &imIn, Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE, const T borderVal = ImDtTypes<T>::min())
-  {
+  RES_T dilate(const Image<T> &imIn,
+               Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE,
+               const T borderVal = ImDtTypes<T>::min()) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -87,9 +87,10 @@ namespace smil
    * @smilexample{example-default-se.py}
    */
   template <class T>
-  RES_T dilate(const Image<T> &imIn, Image<T> &imOut, UINT seSize,
-               const T borderVal = ImDtTypes<T>::min())
-  {
+  RES_T dilate(const Image<T> &imIn,
+               Image<T> &imOut,
+               UINT seSize,
+               const T borderVal = ImDtTypes<T>::min()) {
     return dilate(imIn, imOut, DEFAULT_SE(seSize), borderVal);
   }
 
@@ -109,9 +110,10 @@ namespace smil
    * @param[in] borderVal : (optional) The border value
    */
   template <class T>
-  RES_T erode(const Image<T> &imIn, Image<T> &imOut,
-              const StrElt &se = DEFAULT_SE, const T borderVal = ImDtTypes<T>::max())
-  {
+  RES_T erode(const Image<T> &imIn,
+              Image<T> &imOut,
+              const StrElt &se = DEFAULT_SE,
+              const T borderVal = ImDtTypes<T>::max()) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -133,12 +135,12 @@ namespace smil
    * you should set it before
    */
   template <class T>
-  RES_T erode(const Image<T> &imIn, Image<T> &imOut, UINT seSize,
-              const T borderVal = ImDtTypes<T>::max())
-  {
+  RES_T erode(const Image<T> &imIn,
+              Image<T> &imOut,
+              UINT seSize,
+              const T borderVal = ImDtTypes<T>::max()) {
     return erode(imIn, imOut, DEFAULT_SE(seSize), borderVal);
   }
-
 
   /** @} */
 

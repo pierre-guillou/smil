@@ -31,10 +31,8 @@
 
 #include <complex>
 
-namespace smil
-{
-  RES_T RGBToXYZ(const Image<RGB> &imRgbIn, Image<RGB> &imXyzOut)
-  {
+namespace smil {
+  RES_T RGBToXYZ(const Image<RGB> &imRgbIn, Image<RGB> &imXyzOut) {
     ASSERT_ALLOCATED(&imRgbIn, &imXyzOut);
     ASSERT_SAME_SIZE(&imRgbIn, &imXyzOut);
 
@@ -53,7 +51,7 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imRgbIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imRgbIn.getPixelCount(); i++) {
       x[i] = UINT8(floor(0.5 + (yc1 * r[i] + yc2 * g[i] + yc3 * b[i]) / 0.982));
       y[i] = UINT8(floor(0.5 + uc1 * r[i] + uc2 * g[i] + uc3 * b[i]));
       z[i] = UINT8(floor(0.5 + (vc1 * r[i] + vc2 * g[i] + vc3 * b[i]) / 1.183));
@@ -64,8 +62,7 @@ namespace smil
     return RES_OK;
   }
 
-  RES_T XYZToRGB(const Image<RGB> &imXyzIn, Image<RGB> &imRgbOut)
-  {
+  RES_T XYZToRGB(const Image<RGB> &imXyzIn, Image<RGB> &imRgbOut) {
     ASSERT_ALLOCATED(&imXyzIn, &imRgbOut);
     ASSERT_SAME_SIZE(&imXyzIn, &imRgbOut);
 
@@ -80,7 +77,7 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imXyzIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imXyzIn.getPixelCount(); i++) {
       float Rf, Gf, Bf;
 
       /* X, Y, Z are extracted */
@@ -94,31 +91,31 @@ namespace smil
       Bf = (0.058164 * 0.982 * X) - (0.118078 * Y) + (0.896840 * 1.183 * Z);
 
       /* test to avoid values outside [0,255] */
-      if (Rf < 0)
+      if(Rf < 0)
         Rf = 0;
       else {
-        if (Rf > 255)
+        if(Rf > 255)
           Rf = 255;
       }
 
-      if (Gf < 0)
+      if(Gf < 0)
         Gf = 0;
       else {
-        if (Gf > 255)
+        if(Gf > 255)
           Gf = 255;
       }
 
-      if (Bf < 0)
+      if(Bf < 0)
         Bf = 0;
       else {
-        if (Bf > 255)
+        if(Bf > 255)
           Bf = 255;
       }
 
       /* rescaling and normalizing of output values */
-      r[i] = (UINT8) Rf;
-      g[i] = (UINT8) Gf;
-      b[i] = (UINT8) Bf;
+      r[i] = (UINT8)Rf;
+      g[i] = (UINT8)Gf;
+      b[i] = (UINT8)Bf;
     }
 
     imRgbOut.modified();
@@ -126,35 +123,30 @@ namespace smil
     return RES_OK;
   }
 
-  inline float scale_from_255(float x, float xmin, float xmax)
-  {
-    return (float) ((xmin) + (x) * ((xmax) - (xmin)) / 255.0);
+  inline float scale_from_255(float x, float xmin, float xmax) {
+    return (float)((xmin) + (x) * ((xmax) - (xmin)) / 255.0);
   }
 
-  inline UINT8 scale_to_255(float x, float xmin, float xmax)
-  {
+  inline UINT8 scale_to_255(float x, float xmin, float xmax) {
     UINT8 retVal;
-    if (x < xmin)
+    if(x < xmin)
       retVal = 0;
-    else if (x > xmax)
+    else if(x > xmax)
       retVal = 255;
     else
-      retVal =
-          (UINT8) floor(0.5 + (255.0 * ((x) - (xmin)) / ((xmax) - (xmin))));
+      retVal = (UINT8)floor(0.5 + (255.0 * ((x) - (xmin)) / ((xmax) - (xmin))));
 
     return retVal;
   }
 
-  inline float lab_conditional(float x)
-  {
-    if (x < 0.008856)
+  inline float lab_conditional(float x) {
+    if(x < 0.008856)
       return 7.787 * x + 16 / 116.0;
     else
       return std::pow(static_cast<double>(x), (1 / 3.0));
   }
 
-  RES_T XYZToLAB(const Image<RGB> &imXyzIn, Image<RGB> &imLabOut)
-  {
+  RES_T XYZToLAB(const Image<RGB> &imXyzIn, Image<RGB> &imLabOut) {
     ASSERT_ALLOCATED(&imXyzIn, &imLabOut);
     ASSERT_SAME_SIZE(&imXyzIn, &imLabOut);
 
@@ -169,18 +161,19 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imXyzIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imXyzIn.getPixelCount(); i++) {
       float L, A, B;
 
-      float Xf = (float) scale_from_255(x[i], 0.0, 0.982);
-      float Yf = (float) scale_from_255(y[i], 0.0, 1.0);
-      float Zf = (float) scale_from_255(z[i], 0.0, 1.183);
+      float Xf = (float)scale_from_255(x[i], 0.0, 0.982);
+      float Yf = (float)scale_from_255(y[i], 0.0, 1.0);
+      float Zf = (float)scale_from_255(z[i], 0.0, 1.183);
 
-      if (Yf >= 0.008856)
-        L = (float) (-16.0 +
-                     25.0 * std::pow(static_cast<double>(100 * Yf), (1 / 3.0)));
+      if(Yf >= 0.008856)
+        L = (float)(-16.0
+                    + 25.0
+                        * std::pow(static_cast<double>(100 * Yf), (1 / 3.0)));
       else
-        L = (float) (903.3 * Yf);
+        L = (float)(903.3 * Yf);
 
       float x_modified = lab_conditional(Xf / 0.982);
       float y_modified = lab_conditional(Yf);
@@ -190,9 +183,9 @@ namespace smil
       B = 200.0 * (y_modified - z_modified);
 
       /* rescaling and normalizing of output values */
-      l[i] = (float) scale_to_255(L, 0.0, 100.0397);
-      a[i] = (float) scale_to_255(A, -137.8146, 96.1775);
-      b[i] = (float) scale_to_255(B, -99.2331, 115.6697);
+      l[i] = (float)scale_to_255(L, 0.0, 100.0397);
+      a[i] = (float)scale_to_255(A, -137.8146, 96.1775);
+      b[i] = (float)scale_to_255(B, -99.2331, 115.6697);
     }
 
     imLabOut.modified();
@@ -200,8 +193,7 @@ namespace smil
     return RES_OK;
   }
 
-  RES_T LABToXYZ(const Image<RGB> &imLabIn, Image<RGB> &imXyzOut)
-  {
+  RES_T LABToXYZ(const Image<RGB> &imLabIn, Image<RGB> &imXyzOut) {
     ASSERT_ALLOCATED(&imLabIn, &imXyzOut);
     ASSERT_SAME_SIZE(&imLabIn, &imXyzOut);
 
@@ -216,26 +208,26 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imLabIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imLabIn.getPixelCount(); i++) {
       float X, Y, Z;
 
       UINT8 L = static_cast<float>(l[i]);
       UINT8 A = static_cast<float>(a[i]);
       UINT8 B = static_cast<float>(b[i]);
 
-      float Lf = (float) scale_from_255(L, 0.0, 100.0397);
-      float Af = (float) scale_from_255(A, -137.8146, 96.1775);
-      float Bf = (float) scale_from_255(B, -99.2331, 115.6697);
+      float Lf = (float)scale_from_255(L, 0.0, 100.0397);
+      float Af = (float)scale_from_255(A, -137.8146, 96.1775);
+      float Bf = (float)scale_from_255(B, -99.2331, 115.6697);
 
       /* calculus of Y */
-      if (Lf >= 7.996248)
-        Y = (float) (::powf(((Lf + 16) / 25), 3.0) / 100);
+      if(Lf >= 7.996248)
+        Y = (float)(::powf(((Lf + 16) / 25), 3.0) / 100);
       else
-        Y = (float) (Lf / 903.3);
+        Y = (float)(Lf / 903.3);
 
       /* calculus of X and Z */
-      X = (float) (0.982 * ::powf(::powf(Y, 1 / 3.0) + (Af / 500), 3.0));
-      Z = (float) (1.183 * ::powf(::powf(Y, 1 / 3.0) - (Bf / 200), 3.0));
+      X = (float)(0.982 * ::powf(::powf(Y, 1 / 3.0) + (Af / 500), 3.0));
+      Z = (float)(1.183 * ::powf(::powf(Y, 1 / 3.0) - (Bf / 200), 3.0));
 
       /* rescaling and normalizing of output values */
       x[i] = scale_to_255(X, 0.0, 0.982);
@@ -248,8 +240,7 @@ namespace smil
     return RES_OK;
   }
 
-  RES_T RGBToHLS(const Image<RGB> &imRgbIn, Image<RGB> &imHlsOut)
-  {
+  RES_T RGBToHLS(const Image<RGB> &imRgbIn, Image<RGB> &imHlsOut) {
     ASSERT_ALLOCATED(&imRgbIn, &imHlsOut);
     ASSERT_SAME_SIZE(&imRgbIn, &imHlsOut);
 
@@ -264,7 +255,7 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imRgbIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imRgbIn.getPixelCount(); i++) {
       /* R, G, B are extracted */
       float R = static_cast<float>(r[i]);
       float G = static_cast<float>(g[i]);
@@ -279,47 +270,47 @@ namespace smil
       double lambda = 0, phi, k;
       double Rf, Gf, Bf;
 
-      Rf    = ((double) (R) / 255.0) * (1.0);
-      Gf    = ((double) (G) / 255.0) * (1.0);
-      Bf    = ((double) (B) / 255.0) * (1.0);
+      Rf = ((double)(R) / 255.0) * (1.0);
+      Gf = ((double)(G) / 255.0) * (1.0);
+      Bf = ((double)(B) / 255.0) * (1.0);
       mymax = std::max(Bf, std::max(Rf, Gf));
       mymin = std::min(Bf, std::min(Rf, Gf));
       // RGB -> Mid
-      if ((mymax == Rf) && (mymin == Gf))
+      if((mymax == Rf) && (mymin == Gf))
         Mid = Bf;
-      else if ((mymax == Rf) && (mymin == Bf))
+      else if((mymax == Rf) && (mymin == Bf))
         Mid = Gf;
-      else if ((mymin == Rf) && (mymax == Gf))
+      else if((mymin == Rf) && (mymax == Gf))
         Mid = Bf;
-      else if ((mymin == Rf) && (mymax == Bf))
+      else if((mymin == Rf) && (mymax == Bf))
         Mid = Gf;
-      else if ((mymax == Gf) && (mymin == Bf))
+      else if((mymax == Gf) && (mymin == Bf))
         Mid = Rf;
-      else if ((mymin == Gf) && (mymax == Bf))
+      else if((mymin == Gf) && (mymax == Bf))
         Mid = Rf;
 
       // MaxMidMin -> L1re [0,255]
       L1re = (mymax + Mid + mymin) / 3.0;
 
       // MaxMinMidL1re ->  S1re [0,255]
-      if ((mymax + mymin) >= (2 * Mid)) {
+      if((mymax + mymin) >= (2 * Mid)) {
         S1re = (3.0 * (mymax - L1re)) / 2.0;
       } else {
         S1re = (3.0 * (L1re - mymin)) / 2.0;
       }
 
       // RGB -> lambda [0,1,2,3,4,5]
-      if ((Rf >= Gf) && (Gf >= Bf))
+      if((Rf >= Gf) && (Gf >= Bf))
         lambda = 0;
-      else if ((Gf >= Rf) && (Rf >= Bf))
+      else if((Gf >= Rf) && (Rf >= Bf))
         lambda = 1;
-      else if ((Gf >= Bf) && (Bf >= Rf))
+      else if((Gf >= Bf) && (Bf >= Rf))
         lambda = 2;
-      else if ((Bf >= Gf) && (Gf >= Rf))
+      else if((Bf >= Gf) && (Gf >= Rf))
         lambda = 3;
-      else if ((Bf >= Rf) && (Rf >= Gf))
+      else if((Bf >= Rf) && (Rf >= Gf))
         lambda = 4;
-      else if ((Rf >= Bf) && (Bf >= Gf))
+      else if((Rf >= Bf) && (Bf >= Gf))
         lambda = 5;
 
       // lambda phi k -> k=42 => Hre [0,252]
@@ -328,18 +319,18 @@ namespace smil
       k = 60.0;
 
       // MaxMidMin -> phi [0,1]
-      if (S1re == 0)
+      if(S1re == 0)
         phi = 0;
       else {
         // phi=(1/2)-((mymax+mymin-2*Mid)/(2*S1re));
         // phi=(1/2)-(pow(-1,lambda))*((mymax+mymin-2*Mid)/(2*S1re));
-        if ((lambda == 0) || (lambda == 2) || (lambda == 4))
+        if((lambda == 0) || (lambda == 2) || (lambda == 4))
           phi = (0.5) - ((mymax + mymin - 2 * Mid) / (2 * S1re));
         else
           phi = 0.5 + ((mymax + mymin - 2 * Mid) / (2 * S1re));
       }
 
-      if (S1re == 0)
+      if(S1re == 0)
         Hre = 0;
       else {
         // Hre=k*(lambda+0.5+phi);//BMI NOV 2010, erroneous version, with an
@@ -349,20 +340,20 @@ namespace smil
 
       // L1reHreS1re -> L1ouHouS1ou
       L1ou = L1re * 255.0;
-      Hou  = ((Hre * 255.0) / 360.0);
+      Hou = ((Hre * 255.0) / 360.0);
       S1ou = S1re * 255;
 
-      if (L1ou > 255)
+      if(L1ou > 255)
         L1ou = 255;
-      if (L1ou < 0)
+      if(L1ou < 0)
         L1ou = 0;
-      if (Hou > 255)
+      if(Hou > 255)
         Hou = 255;
-      if (Hou < 0)
+      if(Hou < 0)
         Hou = 0;
-      if (S1ou > 255)
+      if(S1ou > 255)
         S1ou = 255;
-      if (S1ou < 0)
+      if(S1ou < 0)
         S1ou = 0;
 
       h[i] = floor(0.5 + Hou);
@@ -375,29 +366,27 @@ namespace smil
     return RES_OK;
   }
 
-  static void RGB2HSV(float &r, float &g, float &b, float &h, float &s,
-                      float &v)
-  {
+  static void
+    RGB2HSV(float &r, float &g, float &b, float &h, float &s, float &v) {
     float K = 0.f;
 
-    if (g < b) {
+    if(g < b) {
       std::swap(g, b);
       K = -1.f;
     }
 
-    if (r < g) {
+    if(r < g) {
       std::swap(r, g);
       K = -2.f / 6.f - K;
     }
 
     float chroma = r - std::min(g, b);
-    h            = fabs(K + (g - b) / (6.f * chroma + 1e-20f));
-    s            = chroma / (r + 1e-20f);
-    v            = r;
+    h = fabs(K + (g - b) / (6.f * chroma + 1e-20f));
+    s = chroma / (r + 1e-20f);
+    v = r;
   }
 
-  RES_T RGBToHSV(const Image<RGB> &imRgbIn, Image<RGB> &imHsvOut)
-  {
+  RES_T RGBToHSV(const Image<RGB> &imRgbIn, Image<RGB> &imHsvOut) {
     ASSERT_ALLOCATED(&imRgbIn, &imHsvOut);
     ASSERT_SAME_SIZE(&imRgbIn, &imHsvOut);
 
@@ -412,7 +401,7 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imRgbIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imRgbIn.getPixelCount(); i++) {
       float r = static_cast<float>(R[i]);
       float g = static_cast<float>(G[i]);
       float b = static_cast<float>(B[i]);
@@ -431,8 +420,7 @@ namespace smil
     return RES_OK;
   }
 
-  RES_T HLSToRGB(const Image<RGB> &imHlsIn, Image<RGB> &imRgbOut)
-  {
+  RES_T HLSToRGB(const Image<RGB> &imHlsIn, Image<RGB> &imRgbOut) {
     ASSERT_ALLOCATED(&imHlsIn, &imRgbOut);
     ASSERT_SAME_SIZE(&imHlsIn, &imRgbOut);
 
@@ -447,10 +435,10 @@ namespace smil
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-    for (size_t i = 0; i < imHlsIn.getPixelCount(); i++) {
+    for(size_t i = 0; i < imHlsIn.getPixelCount(); i++) {
       float phi1, phi;
       float lambda1;
-      int   lambda;
+      int lambda;
       float Rou = 0, Gou = 0, Bou = 0;
       float k;
 
@@ -467,64 +455,64 @@ namespace smil
 
       lambda = floor(lambda1);
 
-      phi  = (H / k) - lambda;
+      phi = (H / k) - lambda;
       phi1 = phi + 0.0;
-      if (lambda >=
-          6) { // BMI NOV 2010, "no case lambda 6 afterwards". Be careful, phi
-               // definition should be before lambda becomes 0.
+      if(lambda
+         >= 6) { // BMI NOV 2010, "no case lambda 6 afterwards". Be careful, phi
+                 // definition should be before lambda becomes 0.
         lambda = 0;
       }
 
       // L1reS1re phi -> RouGouBou
-      if (phi <= 0.5) {
-        if (lambda == 0) { // Even
+      if(phi <= 0.5) {
+        if(lambda == 0) { // Even
 
           Rou = L + (2.0 / 3.0) * S;
           Gou = L - (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Bou = L - (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
-        } else if (lambda == 1) { // Odd
+        } else if(lambda == 1) { // Odd
           Gou = L + (2.0 / 3.0) * S;
           Rou = L + (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
           Bou = L - S + (2.0 / 3.0) * S * phi1;
-        } else if (lambda == 2) {
+        } else if(lambda == 2) {
           Gou = L + (2.0 / 3.0) * S;
           Bou = L - (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Rou = L - (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
-        } else if (lambda == 3) {
+        } else if(lambda == 3) {
           Bou = L + (2.0 / 3.0) * S;
           Gou = L + (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
           Rou = L - S + (2.0 / 3.0) * S * phi1;
-        } else if (lambda == 4) {
+        } else if(lambda == 4) {
           Bou = L + (2.0 / 3.0) * S;
           Rou = L - (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Gou = L - (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
-        } else if (lambda == 5) {
+        } else if(lambda == 5) {
           Rou = L + (2.0 / 3.0) * S;
           Bou = L + (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
           Gou = L - S + (2.0 / 3.0) * S * phi1;
         }
       } else {
-        if (lambda == 0) {
+        if(lambda == 0) {
           Rou = L + S - (2.0 / 3.0) * S * phi1;
           Gou = L - (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Bou = L - (2.0 / 3.0) * S;
-        } else if (lambda == 1) {
+        } else if(lambda == 1) {
           Gou = L + (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Rou = L + (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
           Bou = L - (2.0 / 3.0) * S;
-        } else if (lambda == 2) {
+        } else if(lambda == 2) {
           Gou = L + S - (2.0 / 3.0) * S * phi1;
           Bou = L - (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Rou = L - (2.0 / 3.0) * S;
-        } else if (lambda == 3) {
+        } else if(lambda == 3) {
           Bou = L + (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Gou = L + (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
           Rou = L - (2.0 / 3.0) * S;
-        } else if (lambda == 4) {
+        } else if(lambda == 4) {
           Bou = L + S - (2.0 / 3.0) * S * phi1;
           Rou = L - (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Gou = L - (2.0 / 3.0) * S;
-        } else if (lambda == 5) {
+        } else if(lambda == 5) {
           Rou = L + (1.0 / 3.0) * S + (2.0 / 3.0) * S * phi1;
           Bou = L + (1.0 / 3.0) * S - (2.0 / 3.0) * S * phi1;
           Gou = L - (2.0 / 3.0) * S;
@@ -535,17 +523,17 @@ namespace smil
       Gou = floor(0.5 + Gou * 255);
       Bou = floor(0.5 + Bou * 255);
 
-      if (Rou > 255)
+      if(Rou > 255)
         Rou = 255;
-      if (Rou < 0)
+      if(Rou < 0)
         Rou = 0;
-      if (Gou > 255)
+      if(Gou > 255)
         Gou = 255;
-      if (Gou < 0)
+      if(Gou < 0)
         Gou = 0;
-      if (Bou > 255)
+      if(Bou > 255)
         Bou = 255;
-      if (Bou < 0)
+      if(Bou < 0)
         Bou = 0;
 
       r[i] = Rou;
@@ -558,14 +546,12 @@ namespace smil
     return RES_OK;
   }
 
-  RES_T RGBToLAB(const Image<RGB> &imRgbIn, Image<RGB> &imLabOut)
-  {
+  RES_T RGBToLAB(const Image<RGB> &imRgbIn, Image<RGB> &imLabOut) {
     ASSERT(RGBToXYZ(imRgbIn, imLabOut) == RES_OK);
     return XYZToLAB(imLabOut, imLabOut);
   }
 
-  RES_T LABToRGB(const Image<RGB> &imLabIn, Image<RGB> &imRgbOut)
-  {
+  RES_T LABToRGB(const Image<RGB> &imLabIn, Image<RGB> &imRgbOut) {
     ASSERT(LABToXYZ(imLabIn, imRgbOut) == RES_OK);
     return XYZToRGB(imRgbOut, imRgbOut);
   }

@@ -31,15 +31,13 @@
 
 using namespace smil;
 
-StrElt &Morpho::getDefaultSE()
-{
+StrElt &Morpho::getDefaultSE() {
   Morpho *inst = Morpho::getInstance();
   return inst->defaultSE;
 }
 
-void Morpho::setDefaultSE(const StrElt &se)
-{
+void Morpho::setDefaultSE(const StrElt &se) {
   Morpho *inst = Morpho::getInstance();
-  if (inst)
+  if(inst)
     inst->defaultSE = se;
 }

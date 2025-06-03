@@ -41,8 +41,7 @@
 
 #include "private/DInstance.hpp"
 
-namespace smil
-{
+namespace smil {
   class BaseObject;
   class BaseImage;
 
@@ -54,8 +53,7 @@ namespace smil
   /**
    * Core module instance
    */
-  class Core : public UniqueInstance<Core>
-  {
+  class Core : public UniqueInstance<Core> {
     friend class UniqueInstance<Core>;
 
   protected:
@@ -74,8 +72,7 @@ namespace smil
     RES_T setNumberOfThreads(UINT nbr);
     void resetNumberOfThreads();
     size_t getAllocatedMemory();
-    const CpuID &getCpuID()
-    {
+    const CpuID &getCpuID() {
       return cpuID;
     }
 

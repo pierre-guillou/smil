@@ -44,16 +44,19 @@
 
 #include <math.h>
 
-namespace smil
-{
+namespace smil {
 #define VM_MAX(x, y) (((x) > (y)) ? (x) : (y))
 
   template <class T1, class T2>
-  static RES_T _computeGaborFilterConvolution(T1 *bufferIn, int W, int H,
-                                              double sigma, double theta,
-                                              double lambda, double psi,
-                                              double gamma, T2 *bufferOut)
-  {
+  static RES_T _computeGaborFilterConvolution(T1 *bufferIn,
+                                              int W,
+                                              int H,
+                                              double sigma,
+                                              double theta,
+                                              double lambda,
+                                              double psi,
+                                              double gamma,
+                                              T2 *bufferOut) {
     int i, j, k, l;
     int Xmax, Ymax;
     int nstds = 3;
@@ -72,32 +75,33 @@ namespace smil
                    std::abs(nstds * sigma_y * sin(theta)));
     dYmax = VM_MAX(std::abs(nstds * sigma_x * sin(theta)),
                    std::abs(nstds * sigma_y * cos(theta)));
-    Xmax  = (int) VM_MAX(1, std::ceil(dXmax));
-    Ymax  = (int) VM_MAX(1, std::ceil(dYmax));
-    dx    = 2 * Xmax + 1;
-    dy    = 2 * Ymax + 1;
+    Xmax = (int)VM_MAX(1, std::ceil(dXmax));
+    Ymax = (int)VM_MAX(1, std::ceil(dYmax));
+    dx = 2 * Xmax + 1;
+    dy = 2 * Ymax + 1;
 
     double *x_theta = new double[dx * dy];
     double *y_theta = new double[dx * dy];
 
     // 2D Rotation
-    for (i = 0; i < dx; i++)
-      for (j = 0; j < dy; j++) {
-        x_theta[i + j * dx] =
-            (i - dx / 2) * cos(theta) + (j - dy / 2) * sin(theta);
-        y_theta[i + j * dx] =
-            -(i - dx / 2) * sin(theta) + (j - dy / 2) * cos(theta);
+    for(i = 0; i < dx; i++)
+      for(j = 0; j < dy; j++) {
+        x_theta[i + j * dx]
+          = (i - dx / 2) * cos(theta) + (j - dy / 2) * sin(theta);
+        y_theta[i + j * dx]
+          = -(i - dx / 2) * sin(theta) + (j - dy / 2) * cos(theta);
       }
 
     double *gabor = new double[dx * dy];
-    for (i = 0; i < dx; i++) {
-      for (j = 0; j < dy; j++) {
+    for(i = 0; i < dx; i++) {
+      for(j = 0; j < dy; j++) {
         int pos = i + j * dx;
 
-        gabor[pos] =
-            std::exp(-0.5 * ((x_theta[pos] * x_theta[pos]) / (sigma_x * sigma_x) +
-                        (y_theta[pos] * y_theta[pos]) / (sigma_y * sigma_y))) *
-            cos(2 * 3.14159 / lambda * x_theta[pos] + psi);
+        gabor[pos]
+          = std::exp(-0.5
+                     * ((x_theta[pos] * x_theta[pos]) / (sigma_x * sigma_x)
+                        + (y_theta[pos] * y_theta[pos]) / (sigma_y * sigma_y)))
+            * cos(2 * 3.14159 / lambda * x_theta[pos] + psi);
       }
     }
     delete[] x_theta;
@@ -109,21 +113,21 @@ namespace smil
     //****************************
     // Start of the convolution
     //****************************
-    for (j = 0; j < H; j++)
-      for (i = 0; i < W; i++) {
+    for(j = 0; j < H; j++)
+      for(i = 0; i < W; i++) {
         D = 0;
-        for (k = -dx / 2; k <= dx / 2; k++)
-          for (l = -dy / 2; l <= dy / 2; l++) {
+        for(k = -dx / 2; k <= dx / 2; k++)
+          for(l = -dy / 2; l <= dy / 2; l++) {
             I = (i + k) % W;
             J = (j + l) % H;
-            if (I < 0)
+            if(I < 0)
               I += W; // Mirror
-            if (J < 0)
+            if(J < 0)
               J += H;
 
             D += gabor[k + dx / 2 + (l + dx / 2) * dx] * bufferIn[I + J * W];
           }
-        bufferOut[i + j * W] = (T2) D;
+        bufferOut[i + j * W] = (T2)D;
       }
 
     delete[] gabor;
@@ -135,9 +139,12 @@ namespace smil
    *
    */
   template <class T1>
-  static void t_createGaborKernel(T1 *gabor, double sigma, double theta,
-                                  double lambda, double psi, double gamma)
-  {
+  static void t_createGaborKernel(T1 *gabor,
+                                  double sigma,
+                                  double theta,
+                                  double lambda,
+                                  double psi,
+                                  double gamma) {
     int i, j, Xmax, Ymax, nstds = 3, dx, dy;
     double dXmax, dYmax;
 
@@ -152,31 +159,32 @@ namespace smil
                    std::fabs(nstds * sigma_y * sin(theta)));
     dYmax = VM_MAX(std::fabs(nstds * sigma_x * sin(theta)),
                    std::fabs(nstds * sigma_y * cos(theta)));
-    Xmax  = (int) VM_MAX(1, std::ceil(dXmax));
-    Ymax  = (int) VM_MAX(1, std::ceil(dYmax));
-    dx    = 2 * Xmax + 1;
-    dy    = 2 * Ymax + 1;
+    Xmax = (int)VM_MAX(1, std::ceil(dXmax));
+    Ymax = (int)VM_MAX(1, std::ceil(dYmax));
+    dx = 2 * Xmax + 1;
+    dy = 2 * Ymax + 1;
 
     double *x_theta = new double[dx * dy];
     double *y_theta = new double[dx * dy];
 
     // 2D Rotation
-    for (i = 0; i < dx; i++)
-      for (j = 0; j < dy; j++) {
-        x_theta[i + j * dx] =
-            (i - dx / 2) * cos(theta) + (j - dy / 2) * sin(theta);
-        y_theta[i + j * dx] =
-            -(i - dx / 2) * sin(theta) + (j - dy / 2) * cos(theta);
+    for(i = 0; i < dx; i++)
+      for(j = 0; j < dy; j++) {
+        x_theta[i + j * dx]
+          = (i - dx / 2) * cos(theta) + (j - dy / 2) * sin(theta);
+        y_theta[i + j * dx]
+          = -(i - dx / 2) * sin(theta) + (j - dy / 2) * cos(theta);
       }
 
-    for (j = 0; j < dy; j++)
-      for (i = 0; i < dx; i++)
-        gabor[i + j * dx] =
-            (T1) std::exp(-0.5 * ((x_theta[i + j * dx] * x_theta[i + j * dx]) /
-                                 (sigma_x * sigma_x) +
-                             (y_theta[i + j * dx] * y_theta[i + j * dx]) /
-                                 (sigma_y * sigma_y))) *
-            cos(2 * 3.14159 / lambda * x_theta[i + j * dx] + psi);
+    for(j = 0; j < dy; j++)
+      for(i = 0; i < dx; i++)
+        gabor[i + j * dx]
+          = (T1)std::exp(-0.5
+                         * ((x_theta[i + j * dx] * x_theta[i + j * dx])
+                              / (sigma_x * sigma_x)
+                            + (y_theta[i + j * dx] * y_theta[i + j * dx])
+                                / (sigma_y * sigma_y)))
+            * cos(2 * 3.14159 / lambda * x_theta[i + j * dx] + psi);
     delete[] x_theta;
     delete[] y_theta;
   }
@@ -185,10 +193,13 @@ namespace smil
    *
    */
   template <class T>
-  RES_T gaborFilterConvolution(const Image<T> &imIn, double sigma,
-                                 double theta, double lambda, double psi,
-                                 double gamma, Image<T> &imOut)
-  {
+  RES_T gaborFilterConvolution(const Image<T> &imIn,
+                               double sigma,
+                               double theta,
+                               double lambda,
+                               double psi,
+                               double gamma,
+                               Image<T> &imOut) {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -197,16 +208,16 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    if (S[2] > 1) {
+    if(S[2] > 1) {
       // This is a 3D Image...
       return RES_ERR;
     }
 
-    typename ImDtTypes<T>::lineType bufferIn  = imIn.getPixels();
+    typename ImDtTypes<T>::lineType bufferIn = imIn.getPixels();
     typename ImDtTypes<T>::lineType bufferOut = imOut.getPixels();
 
-    _computeGaborFilterConvolution(bufferIn, S[0], S[1], sigma, theta, lambda,
-                                   psi, gamma, bufferOut);
+    _computeGaborFilterConvolution(
+      bufferIn, S[0], S[1], sigma, theta, lambda, psi, gamma, bufferOut);
 
     return RES_OK;
   }
@@ -215,17 +226,22 @@ namespace smil
    *
    */
   template <class T>
-  RES_T gaborFilterConvolutionNorm(const Image<T> &imIn, double sigma,
-                                     double theta, double lambda, double psi,
-                                     double gamma, double Min, double Max,
-                                     Image<T> &imOut, Image<T> &imGabor)
-  {
+  RES_T gaborFilterConvolutionNorm(const Image<T> &imIn,
+                                   double sigma,
+                                   double theta,
+                                   double lambda,
+                                   double psi,
+                                   double gamma,
+                                   double Min,
+                                   double Max,
+                                   Image<T> &imOut,
+                                   Image<T> &imGabor) {
     ASSERT_ALLOCATED(&imIn, &imOut, &imGabor);
     ASSERT_SAME_SIZE(&imIn, &imOut, &imGabor);
 
-    RES_T res = gaborFilterConvolution(imIn, sigma, theta, lambda, psi, gamma,
-                                         imGabor);
-    if (res != RES_OK) {
+    RES_T res
+      = gaborFilterConvolution(imIn, sigma, theta, lambda, psi, gamma, imGabor);
+    if(res != RES_OK) {
       // tell something
       return res;
     }
@@ -233,20 +249,20 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    if (S[2] > 1) {
+    if(S[2] > 1) {
       // This is a 3D Image...
       return RES_ERR;
     }
 
     typename ImDtTypes<T>::lineType bufferGabor = imGabor.getPixels();
-    typename ImDtTypes<T>::lineType bufferOut   = imOut.getPixels();
+    typename ImDtTypes<T>::lineType bufferOut = imOut.getPixels();
 
     int W, H;
     W = S[0];
     H = S[1];
 
     T dtMax = imOut.getDataTypeMax();
-    for (int i = W * H - 1; i >= 0; i--) {
+    for(int i = W * H - 1; i >= 0; i--) {
       bufferOut[i] = (T)((bufferGabor[i] - Min) / (Max - Min) * dtMax);
     }
     return RES_OK;
@@ -256,18 +272,22 @@ namespace smil
    *
    */
   template <class T>
-  RES_T gaborFilterConvolutionNormAuto(const Image<T> &imIn, double sigma,
-                                         double theta, double lambda,
-                                         double psi, double gamma, double *Min,
-                                         double *Max, Image<T> &imOut,
-                                         Image<T> &imGabor)
-  {
+  RES_T gaborFilterConvolutionNormAuto(const Image<T> &imIn,
+                                       double sigma,
+                                       double theta,
+                                       double lambda,
+                                       double psi,
+                                       double gamma,
+                                       double *Min,
+                                       double *Max,
+                                       Image<T> &imOut,
+                                       Image<T> &imGabor) {
     ASSERT_ALLOCATED(&imIn, &imOut, &imGabor);
     ASSERT_SAME_SIZE(&imIn, &imOut, &imGabor);
 
-    RES_T res = gaborFilterConvolution(imIn, sigma, theta, lambda, psi, gamma,
-                                         imGabor);
-    if (res != RES_OK) {
+    RES_T res
+      = gaborFilterConvolution(imIn, sigma, theta, lambda, psi, gamma, imGabor);
+    if(res != RES_OK) {
       // tell something
       return res;
     }
@@ -275,13 +295,13 @@ namespace smil
     size_t S[3];
     imIn.getSize(S);
 
-    if (S[2] > 1) {
+    if(S[2] > 1) {
       // This is a 3D Image...
       return RES_ERR;
     }
 
     typename ImDtTypes<T>::lineType bufferGabor = imGabor.getPixels();
-    typename ImDtTypes<T>::lineType bufferOut   = imOut.getPixels();
+    typename ImDtTypes<T>::lineType bufferOut = imOut.getPixels();
 
     int W, H;
     W = S[0];
@@ -289,15 +309,15 @@ namespace smil
 
     *Min = bufferGabor[0];
     *Max = bufferGabor[0];
-    for (int i = W * H - 1; i > 0; i--) {
-      if (*Min > bufferGabor[i])
+    for(int i = W * H - 1; i > 0; i--) {
+      if(*Min > bufferGabor[i])
         *Min = bufferGabor[i];
-      if (*Max < bufferGabor[i])
+      if(*Max < bufferGabor[i])
         *Max = bufferGabor[i];
     }
 
     T dtMax = imOut.getDataTypeMax();
-    for (int i = W * H - 1; i >= 0; i--) {
+    for(int i = W * H - 1; i >= 0; i--) {
       bufferOut[i] = (T)((bufferGabor[i] - *Min) / (*Max - *Min) * dtMax);
     }
     return RES_OK;

@@ -41,8 +41,7 @@
 #define SMIL_OPEN(FILEPTR, NAME, MODE) FILEPTR = fopen(NAME, MODE)
 #endif // _MSC_VER
 
-namespace smil
-{
+namespace smil {
   /**
    * @addtogroup IO
    */
@@ -51,16 +50,13 @@ namespace smil
   string getFileExtension(const char *fileName);
 
   /** @cond */
-  class FileCloser
-  {
+  class FileCloser {
   public:
-    FileCloser(FILE *_fp)
-    {
+    FileCloser(FILE *_fp) {
       fp = _fp;
     }
-    ~FileCloser()
-    {
-      if (fp)
+    ~FileCloser() {
+      if(fp)
         fclose(fp);
     }
 
@@ -71,16 +67,14 @@ namespace smil
 
   struct ImageFileInfo {
     ImageFileInfo()
-        : colorType(COLOR_TYPE_UNKNOWN), scalarType(SCALAR_TYPE_UNKNOWN),
-          fileType(FILE_TYPE_BINARY), width(0), height(0), depth(0),
-          dataStartPos(0)
-    {
+      : colorType(COLOR_TYPE_UNKNOWN), scalarType(SCALAR_TYPE_UNKNOWN),
+        fileType(FILE_TYPE_BINARY), width(0), height(0), depth(0),
+        dataStartPos(0) {
       filename = "Unknown";
       valid = false;
     }
 
-    ~ImageFileInfo()
-    {
+    ~ImageFileInfo() {
     }
 
     enum ColorType {
@@ -128,7 +122,7 @@ namespace smil
 #ifdef USE_CURL
 
   /**
-   * Get a file from an URL 
+   * Get a file from an URL
    *
    * @param[in] url : URL where to get the file
    * @param[in] outfilename : name of the file where to save the file
@@ -136,7 +130,7 @@ namespace smil
   RES_T getHttpFile(const char *url, const char *outfilename);
 
   /**
-   * Get a file from an URL 
+   * Get a file from an URL
    *
    * @param[in] url : URL where to get the file
    * @return string : a buffer with file content

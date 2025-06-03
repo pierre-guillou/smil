@@ -38,16 +38,14 @@
 #include <curl/curl.h>
 #endif // USE_CURL
 
-namespace smil
-{
-  void ImageFileInfo::printSelf(ostream &os)
-  {
+namespace smil {
+  void ImageFileInfo::printSelf(ostream &os) {
     string s = "";
 
     os << "Image info in flie " << filename << endl;
     os << " filename    " << filename << endl;
     os << " channels    " << channels << endl;
-    switch (colorType) {
+    switch(colorType) {
       case COLOR_TYPE_GRAY:
         s = "GRAY";
         break;
@@ -98,7 +96,7 @@ namespace smil
         break;
     }
     os << " scalarType  " << s << endl;
-    switch (fileType) {
+    switch(fileType) {
       case FILE_TYPE_ASCII:
         s = "ASCII";
         break;
@@ -116,30 +114,27 @@ namespace smil
     os << " depth       " << depth << endl;
   }
 
-  string getFileExtension(const char *fileName)
-  {
+  string getFileExtension(const char *fileName) {
     string fName(fileName);
     string::size_type idx = fName.rfind('.');
-    string fExt           = fName.substr(idx + 1);
+    string fExt = fName.substr(idx + 1);
     transform(fExt.begin(), fExt.end(), fExt.begin(), ::toupper);
     return fExt;
   }
 
 #ifdef USE_CURL
-  size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream)
-  {
+  size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
     size_t written;
     written = fwrite(ptr, size, nmemb, stream);
     return written;
   }
 
-  RES_T getHttpFile(const char *url, const char *outfilename)
-  {
+  RES_T getHttpFile(const char *url, const char *outfilename) {
     CURL *curl_handle;
     FILE *fp;
     CURLcode res;
     curl_handle = curl_easy_init();
-    if (curl_handle) {
+    if(curl_handle) {
       SMIL_OPEN(fp, outfilename, "wb");
       curl_easy_setopt(curl_handle, CURLOPT_URL, url);
       curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
@@ -148,7 +143,7 @@ namespace smil
       curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 3L);
       curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0L);
       res = curl_easy_perform(curl_handle);
-      if (res != CURLE_OK) {
+      if(res != CURLE_OK) {
         cout << "Curl error : " << res << endl;
       }
       curl_easy_cleanup(curl_handle);
@@ -163,32 +158,32 @@ namespace smil
 
   static std::string memoryCallbackBuffer;
 
-  static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb,
-                                    void * /*stream*/)
-  {
-    memoryCallbackBuffer.append((char *) contents, size * nmemb);
+  static size_t WriteMemoryCallback(void *contents,
+                                    size_t size,
+                                    size_t nmemb,
+                                    void * /*stream*/) {
+    memoryCallbackBuffer.append((char *)contents, size * nmemb);
     return size * nmemb;
   }
 
   /**
    * Download file data into a string buffer.
    */
-  string getHttpFile(const char *url)
-  {
+  string getHttpFile(const char *url) {
     CURL *curl_handle;
     memoryCallbackBuffer.clear();
 
     //         curl_global_init(CURL_GLOBAL_ALL);
     CURLcode res = CURLE_OK;
-    curl_handle  = curl_easy_init();
-    if (curl_handle) {
+    curl_handle = curl_easy_init();
+    if(curl_handle) {
       curl_easy_setopt(curl_handle, CURLOPT_URL, url);
       curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
       curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 3L);
       res = curl_easy_perform(curl_handle);
       curl_easy_cleanup(curl_handle);
     }
-    if (res != CURLE_OK) {
+    if(res != CURLE_OK) {
       ERR_MSG("curl_easy_perform() failed");
     }
     //         else res = CURLE_FAILED_INIT;

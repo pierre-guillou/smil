@@ -3,8 +3,7 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil
-{
+namespace smil {
   /**
    * @ingroup    Advanced
    * @addtogroup AdvGeoTools
@@ -14,7 +13,6 @@ namespace smil
    * @cite morard:hal-00834415
    *
    * @{ */
-
 
   /** @} */
 } // namespace smil
