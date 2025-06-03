@@ -90,12 +90,8 @@ namespace smil
 #pragma pack(pop)
 
   struct BMPHeader {
-    BMPHeader()
-    {
-    }
-    ~BMPHeader()
-    {
-    }
+    BMPHeader()  = default;
+    ~BMPHeader() = default;
 
     bmpFileHeader fHeader;
     bmpInfoHeader iHeader;

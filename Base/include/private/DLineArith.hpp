@@ -67,9 +67,7 @@ namespace smil
   template <class T>
   struct fillLine : public unaryLineFunctionBase<T> {
     typedef typename unaryLineFunctionBase<T>::lineType lineType;
-    fillLine()
-    {
-    }
+    fillLine() = default;
     fillLine(const lineType lIn, const size_t size, const T value)
     {
       this->_exec(lIn, size, value);
@@ -547,9 +545,7 @@ namespace smil
     typedef typename unaryLineFunctionBase<T1, T2>::lineInType  lineInType;
     typedef typename unaryLineFunctionBase<T1, T2>::lineOutType lineOutType;
 
-    sqrtLine()
-    {
-    }
+    sqrtLine() = default;
     virtual void _exec(const lineInType lIn, const size_t size,
                        lineOutType lOut)
     {

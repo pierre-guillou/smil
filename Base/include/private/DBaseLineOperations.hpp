@@ -51,17 +51,13 @@ namespace smil
 
     typedef lineInType lineType;
 
-    unaryLineFunctionBase()
-    {
-    }
+    unaryLineFunctionBase() = default;
     unaryLineFunctionBase(const lineInType lineIn, const size_t size,
                           lineOutType lineOut)
     {
       this->_exec(lineIn, size, lineOut);
     }
-    virtual ~unaryLineFunctionBase()
-    {
-    }
+    virtual ~unaryLineFunctionBase() = default;
 
     virtual void _exec(const lineInType, const size_t, lineOutType) = 0;
     virtual void _exec_aligned(const lineInType lineIn, const size_t size,
@@ -117,9 +113,7 @@ namespace smil
   // Base abstract struct of line binary function
   template <class T1, class T2 = T1, class T_out = T1>
   struct binaryLineFunctionBase {
-    virtual ~binaryLineFunctionBase()
-    {
-    }
+    virtual ~binaryLineFunctionBase() = default;
     typedef typename Image<T1>::restrictLineType    lineType1;
     typedef typename Image<T2>::restrictLineType    lineType2;
     typedef typename Image<T_out>::restrictLineType lineOutType;
@@ -193,9 +187,7 @@ namespace smil
   // Base abstract struct of line binary function
   template <class T1, class T2 = T1, class T3 = T1, class T_out = T1>
   struct tertiaryLineFunctionBase {
-    virtual ~tertiaryLineFunctionBase()
-    {
-    }
+    virtual ~tertiaryLineFunctionBase() = default;
     typedef typename Image<T1>::restrictLineType    lineType1;
     typedef typename Image<T2>::restrictLineType    lineType2;
     typedef typename Image<T3>::restrictLineType    lineType3;

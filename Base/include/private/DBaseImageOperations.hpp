@@ -88,9 +88,7 @@ namespace smil
     typedef typename imageOutType::lineType  lineOutType;
     typedef typename imageOutType::sliceType sliceOutType;
 
-    unaryImageFunction()
-    {
-    }
+    unaryImageFunction() = default;
     unaryImageFunction(const imageInType &imIn, imageOutType &ImOut)
     {
       this->retVal = this->_exec(imIn, ImOut);
@@ -126,9 +124,7 @@ namespace smil
     typedef typename imageType::lineType  lineType;
     typedef typename imageType::sliceType sliceType;
 
-    binaryImageFunction()
-    {
-    }
+    binaryImageFunction() = default;
     binaryImageFunction(const imageType &imIn1, const imageType &imIn2,
                         imageType &ImOut)
     {
@@ -180,9 +176,7 @@ namespace smil
     typedef typename imageType::lineType  lineType;
     typedef typename imageType::sliceType sliceType;
 
-    tertiaryImageFunction()
-    {
-    }
+    tertiaryImageFunction() = default;
 
     template <class T2>
     tertiaryImageFunction(const imageType &imIn, const T2 &value1,
