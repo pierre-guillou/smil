@@ -580,13 +580,10 @@ namespace smil
 
     virtual void finalize(const Image<T> & /*imIn*/)
     {
-      using it_type = std::map<int, int>::iterator;
-
-      for (it_type my_iterator = nbList.begin(); my_iterator != nbList.end();
-           my_iterator++) {
-        acc_elem = acc_elem + my_iterator->second; //  nbList;
+      for (auto &my_iterator : nbList) {
+        acc_elem = acc_elem + my_iterator.second; //  nbList;
         if (acc_elem > total_elems / 2.0) {
-          medianval = my_iterator->first;
+          medianval = my_iterator.first;
           break;
         }
         // iterator->first = key
@@ -650,9 +647,8 @@ namespace smil
 
     typename Image<T>::sliceType lines = im.getSlices()[z];
 
-    for (vector<IntPoint>::iterator it = bPoints.begin(); it != bPoints.end();
-         it++)
-      vec.push_back(lines[(*it).y][(*it).x]);
+    for (auto &bPoint : bPoints)
+      vec.push_back(lines[bPoint.y][bPoint.x]);
 
     return vec;
   }
@@ -1026,8 +1022,8 @@ namespace smil
 
     if (normalize) {
       double orig = vec[0];
-      for (vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
-        *it /= orig;
+      for (double &it : vec)
+        it /= orig;
     }
 
     ImDtTypes<T>::deleteLine(bufLine);

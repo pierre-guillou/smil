@@ -141,8 +141,8 @@ namespace smil
 
     this->slices = nullptr;
     this->lines  = nullptr;
-    for (UINT n = 0; n < 3; n++)
-      this->pixels.arrays[n] = nullptr;
+    for (auto &array : this->pixels.arrays)
+      array = nullptr;
 
     this->allocated     = false;
     this->allocatedSize = 0;
@@ -160,8 +160,8 @@ namespace smil
     ImDtTypes<UINT8>::lineType pixels;
     double                     vol = 0;
 
-    for (UINT n = 0; n < 3; n++) {
-      pixels = imIn.getPixels().arrays[n];
+    for (auto &array : imIn.getPixels().arrays) {
+      pixels = array;
       for (int i = 0; i < npix; i++)
         vol += double(pixels[i]);
     }
