@@ -324,7 +324,7 @@ namespace smil {
   }
 
   template <class T>
-  RES_T Image<T>::restruct(void) {
+  RES_T Image<T>::restruct() {
     if(this->slices)
       delete[] this->slices;
     if(this->lines)

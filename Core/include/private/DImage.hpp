@@ -275,7 +275,7 @@ namespace smil {
     }
 
     //! Get pixels as a void pointer
-    void *getVoidPointer(void) override {
+    void *getVoidPointer() override {
       return pixels;
     }
 
@@ -435,7 +435,7 @@ namespace smil {
     sliceType lines;
     volType slices;
 
-    RES_T restruct(void);
+    RES_T restruct();
 
     ImageViewer<T> *viewer;
     void createViewer();
