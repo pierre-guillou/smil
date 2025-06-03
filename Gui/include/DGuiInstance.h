@@ -84,7 +84,7 @@ namespace smil {
     Gui() {
     }
 
-    virtual ~Gui() {
+    ~Gui() override {
     }
 
   public:

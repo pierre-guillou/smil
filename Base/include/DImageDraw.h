@@ -319,7 +319,7 @@ namespace smil {
                        + std::pow(pf.z - pi.z, 2));
     }
 
-    void printSelf(ostream &os = std::cout, string indent = "") const {
+    void printSelf(ostream &os = std::cout, string indent = "") const override {
       os << indent << "Bresenham Line" << endl;
       os << indent << "Class     : " << className << endl;
       // os << indent << "Name      : " << name << endl;

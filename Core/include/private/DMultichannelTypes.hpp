@@ -345,10 +345,10 @@ namespace smil {
         *_c[i] = mc.value(i);
       return *this;
     }
-    virtual const T &value(const UINT &i) const {
+    const T &value(const UINT &i) const override {
       return *_c[i];
     }
-    virtual T &value(const UINT &i) {
+    T &value(const UINT &i) override {
       return *_c[i];
     }
   };

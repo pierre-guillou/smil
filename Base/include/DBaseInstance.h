@@ -44,7 +44,7 @@ namespace smil {
 
   protected:
     Base();
-    ~Base();
+    ~Base() override;
 
   public:
     // Public interface

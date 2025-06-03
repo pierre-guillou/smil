@@ -115,7 +115,7 @@ namespace smil {
     RGB(const RGB &rhs)
       : MultichannelType<UINT8, 3>(rhs), r(c[0]), g(c[1]), b(c[2]) {
     }
-    virtual ~RGB() {
+    ~RGB() override {
     }
     RGB &operator=(const RGB &rhs) {
       for(UINT i = 0; i < 3; i++)

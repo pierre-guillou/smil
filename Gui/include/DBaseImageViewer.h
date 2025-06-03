@@ -47,7 +47,7 @@ namespace smil {
 
     BaseImageViewer(const char *_className = "BaseImageViewer");
 
-    virtual ~BaseImageViewer() {
+    ~BaseImageViewer() override {
     }
 
     virtual void show() {
@@ -59,7 +59,7 @@ namespace smil {
     virtual bool isVisible() {
       return false;
     }
-    virtual void setName(const char *_name) {
+    void setName(const char *_name) override {
       parentClass::setName(_name);
     }
     virtual void update() = 0;
