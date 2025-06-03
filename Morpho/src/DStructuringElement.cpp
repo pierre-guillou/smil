@@ -90,11 +90,8 @@ StrElt StrElt::homothety(const UINT s) const {
   int oddLine = 0;
   for(UINT i = 0; i < s - 1; i++) {
     vector<IntPoint> pts = newSE.points;
-    for(vector<IntPoint>::iterator it = pts.begin(); it != pts.end(); it++) {
-      const IntPoint &p = *it;
-      for(vector<IntPoint>::const_iterator it2 = points.begin();
-          it2 != points.end(); it2++) {
-        const IntPoint &p2 = *it2;
+    for(auto &p : pts) {
+      for(const auto &p2 : points) {
         if(odd)
           oddLine = (p2.z + 1) % 2 && p2.y % 2 && p.y % 2;
         newSE.addPoint(p2.x + p.x + oddLine, p2.y + p.y, p2.z + p.z);
@@ -118,9 +115,7 @@ StrElt StrElt::transpose() const {
   se.odd = this->odd;
   se.setName();
 
-  for(vector<IntPoint>::const_iterator it = this->points.begin();
-      it != this->points.end(); it++) {
-    const IntPoint &p = *it;
+  for(const auto &p : this->points) {
     se.addPoint(-p.x - (this->odd && p.y % 2), -p.y, -p.z);
   }
 
@@ -138,10 +133,10 @@ StrElt StrElt::merge(const StrElt &rhs) {
   se.odd = this->odd;
   se.setName();
 
-  for(auto it = this->points.begin(); it != this->points.end(); it++)
-    se.addPoint(*it);
-  for(auto it = rhs.points.begin(); it != rhs.points.end(); it++)
-    se.addPoint(*it);
+  for(auto &point : this->points)
+    se.addPoint(point);
+  for(const auto &point : rhs.points)
+    se.addPoint(point);
 
   return se;
 }

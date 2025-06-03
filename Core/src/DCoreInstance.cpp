@@ -117,8 +117,8 @@ void Core::unregisterObject(BaseObject *obj) {
 void Core::deleteRegisteredObjects() {
   vector<BaseObject *> objects = registeredObjects;
 
-  for(UINT i = 0; i < objects.size(); i++)
-    delete objects[i];
+  for(auto &object : objects)
+    delete object;
 }
 
 UINT Core::getNumberOfThreads() {
@@ -185,8 +185,8 @@ void Core::hideAllImages() {
 
 void Core::deleteAllImages() {
   vector<BaseImage *> imgs = this->registeredImages;
-  for(size_t i = 0; i < imgs.size(); i++)
-    delete imgs[i];
+  for(auto &img : imgs)
+    delete img;
 }
 
 void Core::getCompilationInfos(ostream &outStream) {
