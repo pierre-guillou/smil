@@ -54,8 +54,7 @@ namespace smil {
       this->defaultSE = SquSE();
     }
 
-    ~Morpho() override {
-    }
+    ~Morpho() override = default;
     /** @endcond */
   public:
     // Public interface

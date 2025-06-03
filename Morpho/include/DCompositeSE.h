@@ -60,7 +60,7 @@ namespace smil {
     StrElt bgSE;
 
     CompStrElt() : BaseObject("CompStrElt") {};
-    ~CompStrElt() override {};
+    ~CompStrElt() override = default;
 
     /** CompStrElt - Constructor
      *

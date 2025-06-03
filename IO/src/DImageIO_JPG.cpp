@@ -39,8 +39,7 @@ namespace smil {
   struct JPGHeader {
     JPGHeader(const string /*rw*/) {
     }
-    ~JPGHeader() {
-    }
+    ~JPGHeader() = default;
   };
 
   RES_T readJPGHeader(FILE * /*fp*/, JPGHeader & /*hStruct*/) {

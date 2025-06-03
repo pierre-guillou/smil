@@ -132,8 +132,7 @@ namespace smil {
     }
 
     /** @cond */
-    ~StrElt() override {
-    }
+    ~StrElt() override = default;
     /** @endcond */
 
     /**

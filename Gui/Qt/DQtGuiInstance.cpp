@@ -69,8 +69,7 @@ namespace smil {
   QtAppGui::QtAppGui() : QApplication(_argc, nullptr) {
   }
 
-  QtAppGui::~QtAppGui() {
-  }
+  QtAppGui::~QtAppGui() = default;
 
   void QtAppGui::_execLoop() {
     qtLoop();

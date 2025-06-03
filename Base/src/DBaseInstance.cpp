@@ -30,10 +30,8 @@
 #include "Base/include/DBaseInstance.h"
 
 namespace smil {
-  Base::Base() {
-  }
+  Base::Base() = default;
 
-  Base::~Base() {
-  }
+  Base::~Base() = default;
 
 } // namespace smil

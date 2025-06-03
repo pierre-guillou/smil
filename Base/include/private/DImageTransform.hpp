@@ -593,11 +593,9 @@ namespace smil {
   template <class T>
   class ImageRotateFunct {
   public:
-    ImageRotateFunct() {
-    }
+    ImageRotateFunct() = default;
 
-    ~ImageRotateFunct() {
-    }
+    ~ImageRotateFunct() = default;
 
     RES_T Rotate(Image<T> &imIn, int count, Image<T> &imOut) {
       count = count % 4;
@@ -870,8 +868,7 @@ namespace smil {
       method = "trilinear";
     }
 
-    ~ImageResizeFunc() {
-    }
+    ~ImageResizeFunc() = default;
 
     /*
      * Public resize members

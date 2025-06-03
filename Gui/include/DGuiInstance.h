@@ -84,8 +84,7 @@ namespace smil {
     Gui() {
     }
 
-    ~Gui() override {
-    }
+    ~Gui() override = default;
 
   public:
     // Public interface

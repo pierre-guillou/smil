@@ -47,8 +47,7 @@ namespace smil {
   public:
     TestCase() : stopIfError(false), outStream(nullptr) {
     }
-    virtual ~TestCase() {
-    }
+    virtual ~TestCase() = default;
     virtual void init() {
     }
     virtual void run() = 0;

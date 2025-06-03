@@ -39,8 +39,7 @@ namespace smil {
   struct TIFFHeader {
     TIFFHeader(const string /*rw*/) {
     }
-    ~TIFFHeader() {
-    }
+    ~TIFFHeader() = default;
   };
 
   RES_T readTIFFHeader(FILE * /*fp*/, TIFFHeader & /*hStruct*/) {

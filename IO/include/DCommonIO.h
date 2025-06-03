@@ -74,8 +74,7 @@ namespace smil {
       valid = false;
     }
 
-    ~ImageFileInfo() {
-    }
+    ~ImageFileInfo() = default;
 
     enum ColorType {
       COLOR_TYPE_GRAY,
