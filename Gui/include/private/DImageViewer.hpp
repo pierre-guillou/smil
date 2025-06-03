@@ -49,7 +49,7 @@ namespace smil {
   template <class T>
   class ImageViewer : public BaseImageViewer {
   public:
-    typedef BaseImageViewer parentClass;
+    using parentClass = BaseImageViewer;
     friend class Image<T>;
 
     ImageViewer()

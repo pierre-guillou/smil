@@ -45,7 +45,7 @@ namespace smil {
     const BaseImage *sender;
   };
 
-  typedef Slot<BaseImageEvent> BaseImageEventSlot;
+  using BaseImageEventSlot = Slot<BaseImageEvent>;
 
   template <class T>
   class ImageEvent : public Event {
@@ -55,8 +55,8 @@ namespace smil {
     const Image<T> *sender;
   };
 
-  typedef Slot<ImageEvent<UINT8>> ImageEventSlot_UINT8;
-  typedef Slot<ImageEvent<UINT16>> ImageEventSlot_UINT16;
+  using ImageEventSlot_UINT8 = Slot<ImageEvent<UINT8>>;
+  using ImageEventSlot_UINT16 = Slot<ImageEvent<UINT16>>;
 
 } // namespace smil
 

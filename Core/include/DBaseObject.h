@@ -91,7 +91,7 @@ namespace smil {
 
   public:
     Core *getCoreInstance();
-    typedef void parentClass;
+    using parentClass = void;
     virtual std::string getInfoString(const char * = "") const {
       return {};
     }
@@ -107,7 +107,7 @@ namespace smil {
     virtual const char *getName() const {
       return name.c_str();
     }
-    typedef void (BaseObject::*voidMemberFunc)();
+    using voidMemberFunc = void (BaseObject::*)();
 
     virtual size_t getAllocatedSize() const {
       return sizeof(*this);

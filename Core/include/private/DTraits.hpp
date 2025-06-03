@@ -33,7 +33,7 @@
 namespace smil {
   template <bool C, typename T = void>
   struct enable_if {
-    typedef T type;
+    using type = T;
   };
 
   template <typename T>

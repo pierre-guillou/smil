@@ -86,8 +86,8 @@ namespace smil {
   template <class T, class eventT = Event>
   class MemberFunctionSlot : public Slot<eventT> {
   public:
-    typedef void (T::*memberFunc)(eventT *);
-    typedef void (T::*voidMemberFunc)();
+    using memberFunc = void (T::*)(eventT *);
+    using voidMemberFunc = void (T::*)();
     MemberFunctionSlot() {
       _instance = nullptr;
       _function = nullptr;
@@ -125,8 +125,8 @@ namespace smil {
   template <class eventT = Event>
   class FunctionSlot : public Slot<eventT> {
   public:
-    typedef void (*funcPtr)(eventT *);
-    typedef void (*voidFuncPtr)();
+    using funcPtr = void (*)(eventT *);
+    using voidFuncPtr = void (*)();
     FunctionSlot(funcPtr func) {
       _function = func;
     }

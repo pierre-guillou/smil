@@ -54,8 +54,8 @@ namespace smil {
   template <class T, class _retType>
   struct MeasureFunctionBase {
     virtual ~MeasureFunctionBase() = default;
-    typedef typename Image<T>::lineType lineType;
-    typedef _retType retType;
+    using lineType = typename Image<T>::lineType;
+    using retType = _retType;
     retType retVal;
 
     virtual void initialize(const Image<T> & /*imIn*/) {
@@ -164,8 +164,8 @@ namespace smil {
    */
   template <class T, class _retType>
   struct MeasureFunctionWithPos : public MeasureFunctionBase<T, _retType> {
-    typedef typename Image<T>::lineType lineType;
-    typedef _retType retType;
+    using lineType = typename Image<T>::lineType;
+    using retType = _retType;
     virtual void processSequence(lineType /*lineIn*/,
                                  size_t /*size*/,
                                  size_t /*x*/,
@@ -249,7 +249,7 @@ namespace smil {
   template <class T, class labelT, class funcT>
   map<labelT, typename funcT::retType>
     processBlobMeasure(const Image<T> &imIn, const map<labelT, Blob> &blobs) {
-    typedef typename funcT::retType retType;
+    using retType = typename funcT::retType;
     map<labelT, typename funcT::retType> res;
 
     ASSERT(CHECK_ALLOCATED(&imIn), RES_ERR_BAD_ALLOCATION, res);
