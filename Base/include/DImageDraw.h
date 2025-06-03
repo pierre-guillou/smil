@@ -298,7 +298,7 @@ namespace smil {
     IntPoint getPoint(UINT i) {
       if(i < pts.size())
         return pts[i];
-      return IntPoint(0, 0, 0);
+      return {0, 0, 0};
     }
 
     /** nbPoints() - the number of pixels in the line
