@@ -60,8 +60,7 @@ namespace smil {
     }
 
     virtual void connect(BaseSlot *slot, bool _register = true) {
-      vector<BaseSlot *>::iterator it
-        = std::find(_slots.begin(), _slots.end(), slot);
+      auto it = std::find(_slots.begin(), _slots.end(), slot);
 
       if(it != _slots.end())
         return;
@@ -72,8 +71,7 @@ namespace smil {
     }
 
     virtual void disconnect(BaseSlot *slot, bool _unregister = true) {
-      vector<BaseSlot *>::iterator it
-        = std::find(_slots.begin(), _slots.end(), slot);
+      auto it = std::find(_slots.begin(), _slots.end(), slot);
 
       if(it == _slots.end())
         return;
@@ -85,7 +83,7 @@ namespace smil {
     }
 
     virtual void disconnectAll() {
-      vector<BaseSlot *>::iterator it = _slots.begin();
+      auto it = _slots.begin();
 
       while(it != _slots.end()) {
         (*it)->unregisterSignal(this, false);
@@ -100,7 +98,7 @@ namespace smil {
       if(e && sender)
         e->sender = sender;
 
-      vector<BaseSlot *>::iterator it = _slots.begin();
+      auto it = _slots.begin();
 
       while(it != _slots.end()) {
         (*it)->_run(e);

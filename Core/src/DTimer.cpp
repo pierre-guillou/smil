@@ -15,7 +15,7 @@
 using namespace std;
 
 void *fun(void *_timer) {
-  timer *t = (timer *)_timer;
+  auto *t = (timer *)_timer;
   while(t->running) {
     //          usleep(10000);
     //         sleep(1);

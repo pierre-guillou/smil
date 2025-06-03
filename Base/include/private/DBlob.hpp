@@ -161,13 +161,12 @@ namespace smil {
     typename map<labelT, Blob>::const_iterator blob_it;
     for(blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
       // Verify that the blob can fit in the image
-      Blob::sequences_const_reverse_iterator last
-        = blob_it->second.sequences.rbegin();
+      auto last = blob_it->second.sequences.rbegin();
       if((*last).offset + (*last).size > pixCount) {
         allBlobsFit = false;
       } else {
-        Blob::sequences_const_iterator it = blob_it->second.sequences.begin();
-        Blob::sequences_const_iterator it_end = blob_it->second.sequences.end();
+        auto it = blob_it->second.sequences.begin();
+        auto it_end = blob_it->second.sequences.end();
 
         T outVal = blobsValue != defaultValue ? blobsValue : blob_it->first;
         for(; it != it_end; it++) {
@@ -214,13 +213,12 @@ namespace smil {
     typename map<labelT, Blob>::const_iterator blob_it;
     for(blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
       // Verify that the blob can fit in the image
-      Blob::sequences_const_reverse_iterator last
-        = blob_it->second.sequences.rbegin();
+      auto last = blob_it->second.sequences.rbegin();
       if((*last).offset + (*last).size > pixCount) {
         allBlobsFit = false;
       } else {
-        Blob::sequences_const_iterator it = blob_it->second.sequences.begin();
-        Blob::sequences_const_iterator it_end = blob_it->second.sequences.end();
+        auto it = blob_it->second.sequences.begin();
+        auto it_end = blob_it->second.sequences.end();
 
         typename map<labelT, T>::const_iterator valIt
           = lut.find(blob_it->first);
@@ -253,13 +251,10 @@ namespace smil {
   int getBlobIDFromOffset(map<labelT, Blob> &blobs, size_t offset) {
     int id = 0;
 
-    typename map<labelT, Blob>::const_iterator blob_it;
-    using seqit_t = typename Blob::sequences_const_iterator;
+    for(auto blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
+      auto it_end = blob_it->second.sequences.end();
 
-    for(blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
-      seqit_t it_end = blob_it->second.sequences.end();
-
-      for(seqit_t it = blob_it->second.sequences.begin(); it != it_end; it++) {
+      for(auto it = blob_it->second.sequences.begin(); it != it_end; it++) {
         if(offset >= it->offset && offset < it->offset + it->size)
           id = blob_it->first;
       }
@@ -288,13 +283,10 @@ namespace smil {
 
     size_t offset = imIn.getOffsetFromCoords(x, y, z);
 
-    typename map<labelT, Blob>::const_iterator blob_it;
-    using seqit_t = typename Blob::sequences_const_iterator;
+    for(auto blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
+      auto it_end = blob_it->second.sequences.end();
 
-    for(blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
-      seqit_t it_end = blob_it->second.sequences.end();
-
-      for(seqit_t it = blob_it->second.sequences.begin(); it != it_end; it++) {
+      for(auto it = blob_it->second.sequences.begin(); it != it_end; it++) {
         if(offset >= it->offset && offset < it->offset + it->size)
           id = blob_it->first;
       }

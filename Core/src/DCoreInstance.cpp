@@ -145,7 +145,7 @@ void Core::resetNumberOfThreads() {
 }
 
 size_t Core::getAllocatedMemory() {
-  vector<BaseImage *>::iterator it = this->registeredImages.begin();
+  auto it = this->registeredImages.begin();
   size_t totAlloc = 0;
 
   while(it != this->registeredImages.end())
@@ -162,7 +162,7 @@ vector<BaseImage *> Core::getImages() {
 }
 
 int Core::getImageIndex(BaseImage *img) {
-  vector<BaseImage *>::iterator i
+  auto i
     = find(this->registeredImages.begin(), this->registeredImages.end(), img);
   if(i == this->registeredImages.end())
     return -1;
@@ -170,14 +170,14 @@ int Core::getImageIndex(BaseImage *img) {
 }
 
 void Core::showAllImages() {
-  vector<BaseImage *>::iterator it = this->registeredImages.begin();
+  auto it = this->registeredImages.begin();
 
   while(it != this->registeredImages.end())
     (*it++)->show();
 }
 
 void Core::hideAllImages() {
-  vector<BaseImage *>::iterator it = this->registeredImages.begin();
+  auto it = this->registeredImages.begin();
 
   while(it != this->registeredImages.end())
     (*it++)->hide();

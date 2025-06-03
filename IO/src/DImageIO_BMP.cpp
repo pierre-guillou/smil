@@ -198,7 +198,7 @@ namespace smil {
 
     // The scan line must be word-aligned. This means in multiples of 4.
     int scanlineSize = (width % 4 == 0) ? width : (width - width % 4) + 4;
-    UINT8 *scanBuf = new UINT8[scanlineSize];
+    auto *scanBuf = new UINT8[scanlineSize];
 
     for(int j = height - 1; j >= 0; j--) {
       curLine = lines[j];
@@ -242,7 +242,7 @@ namespace smil {
 
     Image<RGB>::sliceType lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
-    UINT8 *data = new UINT8[width * 3];
+    auto *data = new UINT8[width * 3];
 
     for(int j = height - 1; j >= 0; j--) {
       arrays = lines[j].arrays;
@@ -368,7 +368,7 @@ namespace smil {
 
     Image<RGB>::sliceType lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
-    UINT8 *data = new UINT8[width * 3];
+    auto *data = new UINT8[width * 3];
 
     for(int j = height - 1; j >= 0; j--) {
       arrays = lines[j].arrays;

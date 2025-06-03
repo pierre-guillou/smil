@@ -65,7 +65,7 @@ namespace smil {
   // Big/Little endian swap
   template <class T>
   void endswap(T *objp) {
-    unsigned char *memp = reinterpret_cast<unsigned char *>(objp);
+    auto *memp = reinterpret_cast<unsigned char *>(objp);
     std::reverse(memp, memp + sizeof(T));
   }
 

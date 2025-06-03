@@ -180,7 +180,7 @@ void ImageViewerWidget::createOverlayImage() {
   if(!qOverlayImage.isEmpty())
     deleteOverlayImage();
   for(size_t i = 0; i < imDepth; i++) {
-    QImage *im
+    auto *im
       = new QImage(imWidth, imHeight, QImage::Format_ARGB32_Premultiplied);
     im->setColorTable(overlayColorTable);
     im->fill(Qt::transparent);
@@ -825,7 +825,7 @@ void ImageViewerWidget::showContextMenu(const QPoint &pos) {
     } else if(selectedItem->parentWidget() == &linkMenu) {
       QWidget *widget
         = QApplication::topLevelWidgets()[selectedItem->data().toInt()];
-      ImageViewerWidget *w = static_cast<ImageViewerWidget *>(widget);
+      auto *w = static_cast<ImageViewerWidget *>(widget);
       if(linkedWidgets.contains(w))
         unlinkViewer(w);
       else
