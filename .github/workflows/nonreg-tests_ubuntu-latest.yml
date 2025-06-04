@@ -11,8 +11,6 @@ jobs:
     strategy:
       matrix:
         py: [
-          "3.9",
-          "3.10",
           "3.11",
           "3.12",
           "3.13",
@@ -23,32 +21,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -yq \
-            libaa1-dev \
-            libcurl4-openssl-dev \
-            libfreetype-dev \
-            libpng-dev \
-            libtiff-dev \
-            qtbase5-dev \
-            libqwt-qt5-dev \
-            ninja-build
+      - uses: prefix-dev/setup-pixi@v0.8.8
+        with:
+          cache: true
 
       - name: Setup Python Version
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.py }}
-
-      - name: Install Python dependencies
         run: |
-          python3 -m pip install numpy swig
+          pixi add python==${{ matrix.py }} numpy -p linux-64
 
       - name: Create & configure Smil build directory
         run: |
           mkdir build && cd build
-          cmake \
+          pixi run cmake \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
             -DUSE_NUMPY=ON \
@@ -60,7 +44,7 @@ jobs:
       - name: Build Smil
         run: |
           cd build
-          cmake --build . --parallel 3
+          pixi run cmake --build . --parallel 3
 
       - name: Install Smil
         run: |
@@ -71,7 +55,7 @@ jobs:
       - name: Execute non-regression tests and benchmarks
         run: |
           cd build
-          ctest
+          pixi run ctest
         env:
           PYTHONPATH: /usr/local/lib/Smil
         continue-on-error: true
