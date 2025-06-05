@@ -48,7 +48,7 @@
 
 namespace smil {
   RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
-    auto_ptr<ImageFileHandler<void>> fHandler(
+    std::unique_ptr<ImageFileHandler<void>> fHandler(
       getHandlerForFile<void>(filename));
 
     if(fHandler.get())
@@ -93,7 +93,7 @@ namespace smil {
     if(fInfo.colorType == ImageFileInfo::COLOR_TYPE_GRAY) {
       if(fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_UINT8) {
         auto *img = new Image<UINT8>();
-        auto_ptr<ImageFileHandler<UINT8>> fHandler(
+        std::unique_ptr<ImageFileHandler<UINT8>> fHandler(
           getHandlerForFile<UINT8>(filename));
         if(fHandler->read(filename, *img) == RES_OK)
           return img;
@@ -101,7 +101,7 @@ namespace smil {
           ERR_MSG("Error reading unsigned 8 bit image");
       } else if(fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_UINT16) {
         auto *img = new Image<UINT16>();
-        auto_ptr<ImageFileHandler<UINT16>> fHandler(
+        std::unique_ptr<ImageFileHandler<UINT16>> fHandler(
           getHandlerForFile<UINT16>(filename));
         if(fHandler->read(filename, *img) == RES_OK)
           return img;
@@ -109,7 +109,7 @@ namespace smil {
           ERR_MSG("Error reading unsigned 16 bit image");
       } else if(fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_INT16) {
         auto *img = new Image<INT16>();
-        auto_ptr<ImageFileHandler<INT16>> fHandler(
+        std::unique_ptr<ImageFileHandler<INT16>> fHandler(
           getHandlerForFile<INT16>(filename));
         if(fHandler->read(filename, *img) == RES_OK)
           return img;
@@ -121,7 +121,7 @@ namespace smil {
 #ifdef SMIL_WRAP_RGB
     else if(fInfo.colorType == ImageFileInfo::COLOR_TYPE_RGB) {
       auto *img = new Image<RGB>();
-      auto_ptr<ImageFileHandler<RGB>> fHandler(
+      std::unique_ptr<ImageFileHandler<RGB>> fHandler(
         getHandlerForFile<RGB>(filename));
       if(fHandler->read(filename, *img) == RES_OK)
         return img;
