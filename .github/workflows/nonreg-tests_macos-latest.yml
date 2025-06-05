@@ -1,9 +1,8 @@
 name: nonreg-tests_macos-latest
 
 on:
+  workflow_call:
   workflow_dispatch:
-  push:
-    branches: [dev]
 
 jobs:
   build:
