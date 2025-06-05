@@ -1,0 +1,64 @@
+name: nonreg-tests_windows-latest
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        py: [
+          "3.9",
+          "3.10",
+          "3.11",
+          "3.12",
+          "3.13",
+        ]
+    env:
+      QT_QPA_PLATFORM: offscreen
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: prefix-dev/setup-pixi@v0.8.8
+        with:
+          run-install: false
+
+      - name: Install dependencies
+        run: |
+          pixi init
+          pixi add python==${{ matrix.py }}
+          pixi add swig libpng libtiff libjpeg-turbo libcurl qwt numpy
+
+      - name: Create & configure Smil build directory
+        run: |
+          mkdir build
+          pixi run cmake `
+            -B build `
+            -DBUILD_TEST=ON `
+            -DWRAP_PYTHON=ON `
+            -DUSE_NUMPY=ON
+        env:
+          CMAKE_GENERATOR: Ninja
+          CMAKE_BUILD_TYPE: Release
+
+      - name: Build Smil
+        run: |
+          cd build
+          cmake --build . --parallel 3
+
+      - name: Install Smil
+        run: |
+          cd build
+          sudo cmake --build . --target install
+
+      - name: Execute non-regression tests and benchmarks
+        run: |
+          cd build
+          ctest
+        env:
+          PYTHONPATH: /usr/local/lib/Smil
+        continue-on-error: true
