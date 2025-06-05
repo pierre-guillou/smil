@@ -125,13 +125,12 @@ namespace smil {
       // vector<T> outX(nbPixels, 0);
       double sk = 0.;
 #ifdef USE_OPEN_MP
-#pragma omp parallel num_threads(nthreads) private(sk)
+#pragma omp parallel for num_threads(nthreads) private(sk)
 #endif // USE_OPEN_MP
-      {
         for(off_t z = 0; z < D; z++) {
           for(off_t y = 0; y < H; y++) {
 #ifdef USE_OPEN_MP
-#pragma omp for simd
+#pragma omp simd
 #endif // USE_OPEN_MP
             for(off_t x = 0; x < W; x++) {
               off_t i0 = (z * H + y) * W + x;
@@ -150,22 +149,19 @@ namespace smil {
             }
           }
         }
-      }
 
       /*
        * convolution in Y
        */
       copy(imOut, imTmp);
 #ifdef USE_OPEN_MP
-#pragma omp parallel num_threads(nthreads) private(sk)
+#pragma omp parallel for num_threads(nthreads) private(sk)
 #endif // USE_OPEN_MP
-      {
-        off_t stride = W;
-
         for(off_t z = 0; z < D; z++) {
+          off_t stride = W;
           for(off_t y = 0; y < H; y++) {
 #ifdef USE_OPEN_MP
-#pragma omp for simd
+#pragma omp simd
 #endif // USE_OPEN_MP
             for(off_t x = 0; x < W; x++) {
               off_t i0 = (z * H + y) * W + x;
@@ -184,7 +180,6 @@ namespace smil {
             }
           }
         }
-      }
 
       /*
        * convolution in Z
@@ -192,14 +187,13 @@ namespace smil {
       if(D > 1) {
         copy(imOut, imTmp);
 #ifdef USE_OPEN_MP
-#pragma omp parallel num_threads(nthreads)
+#pragma omp parallel for num_threads(nthreads)
 #endif // USE_OPEN_MP
-        {
-          off_t stride = W * H;
           for(off_t z = 0; z < D; z++) {
+            off_t stride = W * H;
             for(off_t y = 0; y < H; y++) {
 #ifdef USE_OPEN_MP
-#pragma omp for simd
+#pragma omp simd
 #endif // USE_OPEN_MP
               for(off_t x = 0; x < W; x++) {
                 off_t i0 = (z * H + y) * W + x;
@@ -218,7 +212,6 @@ namespace smil {
             }
           }
         }
-      }
       return RES_OK;
     }
   };
