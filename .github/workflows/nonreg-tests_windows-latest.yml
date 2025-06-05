@@ -30,29 +30,29 @@ jobs:
         run: |
           pixi init
           pixi add python==${{ matrix.py }}
-          pixi add swig libpng libtiff libjpeg-turbo libcurl qwt numpy
+          pixi add swig zlib libpng libtiff libjpeg-turbo libcurl qwt numpy
 
       - name: Create & configure Smil build directory
         run: |
-          mkdir build
           pixi run cmake `
             -B build `
             -DBUILD_TEST=ON `
             -DWRAP_PYTHON=ON `
             -DUSE_NUMPY=ON
         env:
-          CMAKE_GENERATOR: Ninja
+          CMAKE_GENERATOR: "Visual Studio 17 2022"
+          CMAKE_GENERATOR_TOOLSET: ClangCL
           CMAKE_BUILD_TYPE: Release
 
       - name: Build Smil
         run: |
           cd build
-          cmake --build . --parallel 3
+          cmake --build . --config Release --parallel 3
 
       - name: Install Smil
         run: |
           cd build
-          sudo cmake --build . --target install
+          cmake --build . --config Release --target install
 
       - name: Execute non-regression tests and benchmarks
         run: |
