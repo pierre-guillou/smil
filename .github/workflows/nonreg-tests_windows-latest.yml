@@ -53,11 +53,12 @@ jobs:
         run: |
           cd build
           cmake --build . --config Release --target install
+          mv "C:/Program Files (x86)/Smil/lib/_*.pyd" "C:/Program Files (x86)/Smil/lib/smilPython"
 
       - name: Execute non-regression tests and benchmarks
         run: |
           cd build
-          ctest
+          pixi run ctest -C Release
         env:
-          PYTHONPATH: /usr/local/lib/Smil
+          PYTHONPATH: C:/Program Files (x86)/Smil/lib/
         continue-on-error: true
