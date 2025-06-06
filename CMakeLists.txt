@@ -213,27 +213,6 @@ if(USE_STATIC_DEPEND_LIBS)
   add_link_options(-Bstatic)
 endif(USE_STATIC_DEPEND_LIBS)
 
-if(CMAKE_COMPILER_IS_GNUCC)
-  # Try to have a clean code to avoid silly bugs ADD_DEFINITIONS("-pedantic
-  # -Wall -Wextra -Weffc++ -Wsign-compare -Wsign-conversion -Wconversion")
-  add_compile_options(-Wall -Wextra -Wsign-compare)
-  # ADD_DEFINITIONS("-Wall -Wextra -Wsign-compare")
-  if(${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER_EQUAL "8.0")
-    add_compile_options(-Wno-error=class-memaccess)
-    add_compile_options(-Wno-error=ignored-qualifiers)
-    add_compile_options(-Wno-error=stringop-truncation)
-    add_compile_options(-Wno-unused-parameter)
-    # pour Swig
-    add_compile_options(-Wno-missing-field-initializers)
-  endif()
-  if(${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER_EQUAL "9.0")
-    add_compile_options(-Wno-deprecated-copy)
-  endif()
-  if(CMAKE_CROSSCOMPILING)
-    add_compile_options(-Wno-maybe-uninitialized)
-  endif(CMAKE_CROSSCOMPILING)
-endif(CMAKE_COMPILER_IS_GNUCC)
-
 # 64 Bits
 if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8" OR "${CMAKE_GENERATOR}" MATCHES
                                             "(Win64|IA64)")

@@ -99,6 +99,11 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
 
   if(LIB_SRCS)
     add_library(${LIB_NAME} ${LIB_SRCS} ${_TARGET_ADDITIONAL_SOURCES})
+
+    if(NOT MSVC)
+      target_compile_options(${LIB_NAME} PRIVATE -Wall -Wextra)
+    endif()
+
     if(_TARGET_COMPILE_FLAGS)
       set_target_properties(${LIB_NAME} PROPERTIES COMPILE_FLAGS
                                                    ${_TARGET_COMPILE_FLAGS})
@@ -166,9 +171,6 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
     if(NOT MSVC)
       add_definitions(-Wno-strict-aliasing -Wno-unused-function)
     endif(NOT MSVC)
-    if(NOT CMAKE_COMPILER_IS_CLANGXX AND NOT MSVC)
-      add_definitions("-Wno-maybe-uninitialized")
-    endif(NOT CMAKE_COMPILER_IS_CLANGXX AND NOT MSVC)
     if(MSVC)
       add_definitions("/bigobj")
     endif(MSVC)
