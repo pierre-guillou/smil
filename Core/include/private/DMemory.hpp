@@ -93,7 +93,7 @@ namespace smil {
 #elif defined(__FreeBSD__)
 #include <stdlib.h>
 namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+  inline void *aligned_malloc(size_t size, [[maybe_unused]] size_t align = SIMD_VEC_SIZE) {
     return malloc(size);
   }
 
@@ -104,7 +104,7 @@ namespace smil {
 #elif (defined(__MACOSX__) || defined(__APPLE__))
 #include <stdlib.h>
 namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+  inline void *aligned_malloc(size_t size, [[maybe_unused]] size_t align = SIMD_VEC_SIZE) {
     return malloc(size);
   }
 
