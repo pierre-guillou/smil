@@ -69,14 +69,12 @@ namespace smil {
   public:
     Slot() = default;
     ~Slot() override = default;
-    virtual void run(eventT * /*e*/) {
-    }
     void operator()(eventT * /*e*/) {
     }
 #ifndef SWIG
   protected:
     void _run(Event *e) override {
-      run(static_cast<eventT *>(e));
+      run(e);
     }
 #endif // SWIG
   private:
