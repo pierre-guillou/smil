@@ -499,6 +499,7 @@ endif(USE_AALIB)
 
 # IO ######
 
+set(ZLIB_USE_STATIC_LIBS ON)
 find_package(PNG)
 if(PNG_FOUND)
   option(USE_PNG "Use PNG" ON)

@@ -34,6 +34,10 @@ jobs:
             qtbase5-dev \
             libqwt-qt5-dev \
             ninja-build
+          sudo rm /usr/lib/x86_64-linux-gnu/libpng16.so*
+          sudo rm /usr/lib/x86_64-linux-gnu/libcurl.so*
+          sudo rm /usr/lib/x86_64-linux-gnu/libjpeg.so*
+          sudo rm /usr/lib/x86_64-linux-gnu/libtiff.so*
 
       - name: Setup Python Version
         uses: actions/setup-python@v5
