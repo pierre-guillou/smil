@@ -336,8 +336,8 @@ endif(WRAP_CPP)
 
 option(WRAP_PYTHON "Wrap Python" FALSE)
 if(WRAP_PYTHON)
-  find_package(Python3 COMPONENTS Interpreter Development)
-  link_libraries(Python3::Python)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
+  link_libraries(Python3::Module)
 
   add_custom_target(python)
 endif(WRAP_PYTHON)
