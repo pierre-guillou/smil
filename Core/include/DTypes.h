@@ -32,6 +32,8 @@
 
 #include "private/DTypes.hpp"
 
-namespace smil {} // namespace smil
+namespace smil
+{
+} // namespace smil
 
 #endif // _D_TYPES_H

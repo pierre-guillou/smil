@@ -41,7 +41,8 @@ using namespace std;
 
 #ifdef USE_PNG
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup IO
    */
@@ -55,20 +56,25 @@ namespace smil {
   class Image;
 
   template <class T = void>
-  class PNGImageFileHandler : public ImageFileHandler<T> {
+  class PNGImageFileHandler : public ImageFileHandler<T>
+  {
   public:
-    PNGImageFileHandler() : ImageFileHandler<T>("PNG") {
+    PNGImageFileHandler() : ImageFileHandler<T>("PNG")
+    {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
+    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
+    {
       fInfo.filename = filename;
       return getPNGFileInfo(filename, fInfo);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image) {
+    virtual RES_T read(const char *filename, Image<T> &image)
+    {
       return ImageFileHandler<T>::read(filename, image);
     }
-    virtual RES_T write(const Image<T> &image, const char *filename) {
+    virtual RES_T write(const Image<T> &image, const char *filename)
+    {
       return ImageFileHandler<T>::write(image, filename);
     }
   };

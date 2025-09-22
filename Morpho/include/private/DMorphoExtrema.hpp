@@ -33,7 +33,8 @@
 #include "DMorphoGeodesic.hpp"
 #include "DMorphoArrow.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Morpho
    * @defgroup Extrema Regional Minima and Maxima
@@ -50,13 +51,13 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T minima(const Image<T> &imIn,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T minima(const Image<T> &imIn, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> tmpIm(imIn);
       return minima(tmpIm, imOut, se);
     }
@@ -78,13 +79,13 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T maxima(const Image<T> &imIn,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T maxima(const Image<T> &imIn, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> tmpIm(imIn);
       return maxima(tmpIm, imOut, se);
     }
@@ -106,9 +107,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T1, class T2>
-  RES_T minimaLabeled(const Image<T1> &imIn,
-                      Image<T2> &imOut,
-                      const StrElt &se = DEFAULT_SE) {
+  RES_T minimaLabeled(const Image<T1> &imIn, Image<T2> &imOut,
+                      const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -129,9 +130,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T1, class T2>
-  RES_T maximaLabeled(const Image<T1> &imIn,
-                      Image<T2> &imOut,
-                      const StrElt &se = DEFAULT_SE) {
+  RES_T maximaLabeled(const Image<T1> &imIn, Image<T2> &imOut,
+                      const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -153,10 +154,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T hMinima(const Image<T> &imIn,
-                const T &height,
-                Image<T> &imOut,
-                const StrElt &se = DEFAULT_SE) {
+  RES_T hMinima(const Image<T> &imIn, const T &height, Image<T> &imOut,
+                const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -179,10 +179,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T1, class T2>
-  RES_T hMinimaLabeled(const Image<T1> &imIn,
-                       const T1 &height,
-                       Image<T2> &imOut,
-                       const StrElt &se = DEFAULT_SE) {
+  RES_T hMinimaLabeled(const Image<T1> &imIn, const T1 &height,
+                       Image<T2> &imOut, const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -204,10 +203,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T hMaxima(const Image<T> &imIn,
-                const T &height,
-                Image<T> &imOut,
-                const StrElt &se = DEFAULT_SE) {
+  RES_T hMaxima(const Image<T> &imIn, const T &height, Image<T> &imOut,
+                const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -230,10 +228,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T1, class T2>
-  RES_T hMaximaLabeled(const Image<T1> &imIn,
-                       const T1 &height,
-                       Image<T2> &imOut,
-                       const StrElt &se = DEFAULT_SE) {
+  RES_T hMaximaLabeled(const Image<T1> &imIn, const T1 &height,
+                       Image<T2> &imOut, const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -250,19 +247,17 @@ namespace smil {
    * Local function
    */
   template <class T>
-  RES_T fastExtrema(const Image<T> &imIn,
-                    Image<T> &imOut,
-                    const StrElt &se,
-                    const char *operation,
-                    const T &border_value) {
+  RES_T fastExtrema(const Image<T> &imIn, Image<T> &imOut, const StrElt &se,
+                    const char *operation, const T &border_value)
+  {
     // Typedefs
     // typedef Image<T> inT;
-    typedef Image<T> outT;
-    typedef Image<T> arrowT;
-    typedef typename outT::lineType outLineT;
+    typedef Image<T>                  outT;
+    typedef Image<T>                  arrowT;
+    typedef typename outT::lineType   outLineT;
     typedef typename arrowT::lineType arrowLineT;
     // typedef typename inT::volType inVolT;
-    typedef typename outT::volType outVolT;
+    typedef typename outT::volType   outVolT;
     typedef typename arrowT::volType arrowVolT;
 
     // Initialisation.
@@ -274,72 +269,72 @@ namespace smil {
     size_t size[3];
     imIn.getSize(size);
     UINT sePtsNumber = cpSe.points.size();
-    if(sePtsNumber == 0)
+    if (sePtsNumber == 0)
       return RES_OK;
     // Images related.
     // inVolT inSlices = imIn.getSlices();
-    outVolT outSlices = imOut.getSlices();
-    arrowVolT arrowSlices = arrows.getSlices();
-    outLineT *outLines;
+    outVolT     outSlices   = imOut.getSlices();
+    arrowVolT   arrowSlices = arrows.getSlices();
+    outLineT   *outLines;
     arrowLineT *arrowLines;
-    outLineT outP = imOut.getPixels();
-    arrowLineT arrowP = arrows.getPixels();
+    outLineT    outP   = imOut.getPixels();
+    arrowLineT  arrowP = arrows.getPixels();
     // Buffers.
     arrowLineT cstBuf = ImDtTypes<T>::createLine(size[0]);
     fillLine<T>(cstBuf, size[0], T(0));
     outLineT cstBuf2 = ImDtTypes<T>::createLine(size[0]);
     fillLine<T>(cstBuf2, size[0], ImDtTypes<T>::max());
 
-    equLine<T> equOp;
+    equLine<T>        equOp;
     rightShiftLine<T> shiftOp;
-    testLine<T, T> testOp;
+    testLine<T, T>    testOp;
 
     // Storing steep in imOut.
 #ifdef USE_OPEN_MP
 #pragma omp parallel
 #endif // USE_OPEN_MP
     {
-      size_t offset;
+      size_t                  offset;
       arrowPropagate<T, T, T> funcPropagation;
       funcPropagation.propagationValue = T(1);
 
       // Storing greater in out.
       arrow(imIn, operation, arrows, cpSe, border_value);
 
-      for(size_t s = 0; s < size[2]; ++s) {
+      for (size_t s = 0; s < size[2]; ++s) {
         arrowLines = arrowSlices[s];
-        outLines = outSlices[s];
+        outLines   = outSlices[s];
 
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-        for(size_t l = 0; l < size[1]; ++l) {
+        for (size_t l = 0; l < size[1]; ++l) {
           equOp._exec(arrowLines[l], cstBuf, size[0], outLines[l]);
         }
       }
 
       // Detecting plateaus and 1-pixel minimas.
       arrowEqu(imIn, arrows, cpSe);
-      for(size_t s = 0; s < size[2]; ++s) {
+      for (size_t s = 0; s < size[2]; ++s) {
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-        for(size_t l = 0; l < size[1]; ++l) {
-          for(size_t p = 0; p < size[0]; ++p) {
+        for (size_t l = 0; l < size[1]; ++l) {
+          for (size_t p = 0; p < size[0]; ++p) {
             offset = p + l * size[0] + s * size[1] * size[0];
-            if(outP[offset] == 0 && arrowP[offset] > 0) {
+            if (outP[offset] == 0 && arrowP[offset] > 0) {
               funcPropagation(arrows, imOut, cpSe, offset);
             }
           }
         }
       }
       // Values of minimas back to max value.
-      for(size_t s = 0; s < size[2]; ++s) {
+      for (size_t s = 0; s < size[2]; ++s) {
         outLines = outSlices[s];
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-        for(size_t l = 0; l < size[1]; ++l) {
+        for (size_t l = 0; l < size[1]; ++l) {
           shiftOp._exec(outLines[l], 1, size[0], outLines[l]);
           testOp._exec(outLines[l], cstBuf2, outLines[l], size[0], outLines[l]);
         }
@@ -358,8 +353,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  inline RES_T
-    fastMinima(const Image<T> &imIn, Image<T> &imOut, const StrElt &se) {
+  inline RES_T fastMinima(const Image<T> &imIn, Image<T> &imOut,
+                          const StrElt &se)
+  {
     return fastExtrema(imIn, imOut, se, ">", numeric_limits<T>::max());
   }
 
@@ -371,8 +367,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  inline RES_T
-    fastMaxima(const Image<T> &imIn, Image<T> &imOut, const StrElt &se) {
+  inline RES_T fastMaxima(const Image<T> &imIn, Image<T> &imOut,
+                          const StrElt &se)
+  {
     return fastExtrema(imIn, imOut, se, "<", numeric_limits<T>::min());
   }
 

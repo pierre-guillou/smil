@@ -32,30 +32,34 @@
 
 #include <algorithm>
 
-namespace smil {
+namespace smil
+{
 
-  void BaseSlot::registerSignal(Signal *signal) {
-    if(std::find(_signals.begin(), _signals.end(), signal) == _signals.end())
+  void BaseSlot::registerSignal(Signal *signal)
+  {
+    if (std::find(_signals.begin(), _signals.end(), signal) == _signals.end())
       _signals.push_back(signal);
   }
 
-  void BaseSlot::unregisterSignal(Signal *signal, bool _disconnect) {
-    vector<Signal *>::iterator it
-      = std::find(_signals.begin(), _signals.end(), signal);
+  void BaseSlot::unregisterSignal(Signal *signal, bool _disconnect)
+  {
+    vector<Signal *>::iterator it =
+        std::find(_signals.begin(), _signals.end(), signal);
 
-    if(it == _signals.end())
+    if (it == _signals.end())
       return;
 
-    if(_disconnect)
+    if (_disconnect)
       (*it)->disconnect(this, false);
 
     _signals.erase(it);
   }
 
-  void BaseSlot::unregisterAll() {
+  void BaseSlot::unregisterAll()
+  {
     vector<Signal *>::iterator it = _signals.begin();
 
-    while(it != _signals.end()) {
+    while (it != _signals.end()) {
       (*it)->disconnect(this, false);
       it++;
     }

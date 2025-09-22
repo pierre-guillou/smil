@@ -36,7 +36,8 @@
 #include "Base/include/private/DImageHistogram.hpp"
 #include "Morpho/include/private/DMorphoBase.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Morpho
    * @defgroup Geodesic Geodesic Transforms
@@ -70,10 +71,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T geoDilate(const Image<T> &imIn,
-                  const Image<T> &imMask,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T geoDilate(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imMask, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imMask, &imOut);
 
@@ -82,7 +82,7 @@ namespace smil {
     ASSERT((inf(imIn, imMask, imOut) == RES_OK));
     StrElt tmpSE(se(1));
 
-    for(UINT i = 0; i < se.size; i++) {
+    for (UINT i = 0; i < se.size; i++) {
       ASSERT((dilate<T>(imOut, imOut, tmpSE) == RES_OK));
       ASSERT((inf(imOut, imMask, imOut) == RES_OK));
     }
@@ -91,10 +91,9 @@ namespace smil {
 
   /** @cond */
   template <class T>
-  RES_T geoDil(const Image<T> &imIn,
-               const Image<T> &imMask,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T geoDil(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     return geoDilate(imIn, imMask, imOut, se);
   }
   /** @endcond */
@@ -108,10 +107,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T geoErode(const Image<T> &imIn,
-                 const Image<T> &imMask,
-                 Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE) {
+  RES_T geoErode(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imMask, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imMask, &imOut);
 
@@ -120,7 +118,7 @@ namespace smil {
     ASSERT((sup(imIn, imMask, imOut) == RES_OK));
     StrElt tmpSE(se(1));
 
-    for(UINT i = 0; i < se.size; i++) {
+    for (UINT i = 0; i < se.size; i++) {
       ASSERT((erode(imOut, imOut, tmpSE) == RES_OK));
       ASSERT((sup(imOut, imMask, imOut) == RES_OK));
     }
@@ -129,10 +127,9 @@ namespace smil {
 
   /** @cond */
   template <class T>
-  RES_T geoEro(const Image<T> &imIn,
-               const Image<T> &imMask,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T geoEro(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     return geoErode(imIn, imMask, imOut, se);
   }
   /** @endcond */
@@ -146,10 +143,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T geoBuild(const Image<T> &imIn,
-                 const Image<T> &imMask,
-                 Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE) {
+  RES_T geoBuild(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imMask, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imMask, &imOut);
 
@@ -158,11 +154,11 @@ namespace smil {
     ASSERT((inf(imIn, imMask, imOut) == RES_OK));
 
     double vol1 = vol(imOut), vol2;
-    while(true) {
+    while (true) {
       ASSERT((dilate<T>(imOut, imOut, se) == RES_OK));
       ASSERT((inf(imOut, imMask, imOut) == RES_OK));
       vol2 = vol(imOut);
-      if(vol2 == vol1)
+      if (vol2 == vol1)
         break;
       vol1 = vol2;
     }
@@ -178,10 +174,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T geoDualBuild(const Image<T> &imIn,
-                     const Image<T> &imMask,
-                     Image<T> &imOut,
-                     const StrElt &se = DEFAULT_SE) {
+  RES_T geoDualBuild(const Image<T> &imIn, const Image<T> &imMask,
+                     Image<T> &imOut, const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imMask, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imMask, &imOut);
 
@@ -191,11 +186,11 @@ namespace smil {
 
     double vol1 = vol(imOut), vol2;
 
-    while(true) {
+    while (true) {
       ASSERT((erode(imOut, imOut, se) == RES_OK));
       ASSERT((sup(imOut, imMask, imOut) == RES_OK));
       vol2 = vol(imOut);
-      if(vol2 == vol1)
+      if (vol2 == vol1)
         break;
       vol1 = vol2;
     }
@@ -212,8 +207,9 @@ namespace smil {
    */
   /** @cond */
   template <class T>
-  RES_T initBuildHierarchicalQueue(const Image<T> &imIn,
-                                   HierarchicalQueue<T> &hq) {
+  RES_T initBuildHierarchicalQueue(const Image<T>       &imIn,
+                                   HierarchicalQueue<T> &hq)
+  {
     // Initialize the priority queue
     hq.initialize(imIn);
 
@@ -224,7 +220,7 @@ namespace smil {
     imIn.getSize(s);
     size_t offset = 0;
 
-    for(size_t i = 0; i < imIn.getPixelCount(); i++) {
+    for (size_t i = 0; i < imIn.getPixelCount(); i++) {
       hq.push(*inPixels, offset);
       inPixels++;
       offset++;
@@ -235,9 +231,10 @@ namespace smil {
   }
 
   template <class T>
-  RES_T initBuildHierarchicalQueue(const Image<T> &imIn,
+  RES_T initBuildHierarchicalQueue(const Image<T>       &imIn,
                                    HierarchicalQueue<T> &hq,
-                                   const T noPushValue) {
+                                   const T               noPushValue)
+  {
     // Initialize the priority queue
     hq.initialize(imIn);
 
@@ -248,8 +245,8 @@ namespace smil {
     imIn.getSize(s);
     size_t offset = 0;
 
-    for(size_t i = 0; i < imIn.getPixelCount(); i++) {
-      if(*inPixels != noPushValue) {
+    for (size_t i = 0; i < imIn.getPixelCount(); i++) {
+      if (*inPixels != noPushValue) {
         hq.push(*inPixels, offset);
       }
       inPixels++;
@@ -261,20 +258,20 @@ namespace smil {
   }
 
   template <class T, class operatorT>
-  RES_T processBuildHierarchicalQueue(Image<T> &imIn,
-                                      const Image<T> &imMask,
-                                      Image<UINT8> &imStatus,
+  RES_T processBuildHierarchicalQueue(Image<T> &imIn, const Image<T> &imMask,
+                                      Image<UINT8>         &imStatus,
                                       HierarchicalQueue<T> &hq,
-                                      const StrElt &se) {
-    typename ImDtTypes<T>::lineType inPixels = imIn.getPixels();
-    typename ImDtTypes<T>::lineType markPixels = imMask.getPixels();
+                                      const StrElt         &se)
+  {
+    typename ImDtTypes<T>::lineType     inPixels   = imIn.getPixels();
+    typename ImDtTypes<T>::lineType     markPixels = imMask.getPixels();
     typename ImDtTypes<UINT8>::lineType statPixels = imStatus.getPixels();
 
     vector<int> dOffsets;
-    operatorT oper;
+    operatorT   oper;
 
     vector<IntPoint>::const_iterator it_start = se.points.begin();
-    vector<IntPoint>::const_iterator it_end = se.points.end();
+    vector<IntPoint>::const_iterator it_end   = se.points.end();
     vector<IntPoint>::const_iterator it;
 
     vector<size_t> tmpOffsets;
@@ -283,7 +280,7 @@ namespace smil {
     imIn.getSize(s);
 
     // set an offset distance for each se point
-    for(it = it_start; it != it_end; it++) {
+    for (it = it_start; it != it_end; it++) {
       dOffsets.push_back(it->x + it->y * s[0] + it->z * s[0] * s[1]);
     }
 
@@ -293,11 +290,11 @@ namespace smil {
     size_t x0, y0, z0;
     size_t curOffset;
 
-    int x, y, z;
+    int    x, y, z;
     size_t nbOffset;
-    UINT8 nbStat;
+    UINT8  nbStat;
 
-    while(!hq.isEmpty()) {
+    while (!hq.isEmpty()) {
       curOffset = hq.pop();
 
       // Give the point the label "FINAL" in the status image
@@ -307,28 +304,29 @@ namespace smil {
 
       bool oddLine = se.odd && (y0) % 2;
 
-      for(it = it_start, it_off = it_off_start; it != it_end; it++, it_off++)
-        if(it->x != 0 || it->y != 0 || it->z != 0) // useless if x=0 & y=0 & z=0
+      for (it = it_start, it_off = it_off_start; it != it_end; it++, it_off++)
+        if (it->x != 0 || it->y != 0 ||
+            it->z != 0) // useless if x=0 & y=0 & z=0
         {
           x = x0 + it->x;
           y = y0 + it->y;
           z = z0 + it->z;
 
-          if(oddLine)
+          if (oddLine)
             x += ((y + 1) % 2 != 0);
 
-          if(x >= 0 && x < (int)s[0] && y >= 0 && y < (int)s[1] && z >= 0
-             && z < (int)s[2]) {
+          if (x >= 0 && x < (int) s[0] && y >= 0 && y < (int) s[1] && z >= 0 &&
+              z < (int) s[2]) {
             nbOffset = curOffset + *it_off;
 
-            if(oddLine)
+            if (oddLine)
               nbOffset += ((y + 1) % 2 != 0);
 
             nbStat = statPixels[nbOffset];
 
-            if(nbStat == HQ_CANDIDATE) {
-              inPixels[nbOffset]
-                = oper(inPixels[curOffset], markPixels[nbOffset]);
+            if (nbStat == HQ_CANDIDATE) {
+              inPixels[nbOffset] =
+                  oper(inPixels[curOffset], markPixels[nbOffset]);
               statPixels[nbOffset] = HQ_QUEUED;
               hq.push(inPixels[nbOffset], nbOffset);
             }
@@ -340,14 +338,16 @@ namespace smil {
 
   template <class T>
   struct minFunctor {
-    inline T operator()(T a, T b) {
+    inline T operator()(T a, T b)
+    {
       return min(a, b);
     }
   };
 
   template <class T>
   struct maxFunctor {
-    inline T operator()(T a, T b) {
+    inline T operator()(T a, T b)
+    {
       return max(a, b);
     }
   };
@@ -363,10 +363,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T dualBuild(const Image<T> &imIn,
-                  const Image<T> &imMask,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T dualBuild(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     //         if (isBinary(imIn) && isBinary(imMask))
     //           return dualBinBuild(imIn, imMask, imOut, se);
 
@@ -375,19 +374,19 @@ namespace smil {
 
     ImageFreezer freeze(imOut);
 
-    Image<UINT8> imStatus(imIn);
+    Image<UINT8>         imStatus(imIn);
     HierarchicalQueue<T> pq;
 
     // Make sure that imIn >= imMask
     ASSERT((sup(imIn, imMask, imOut) == RES_OK));
 
     // Set all pixels in the status image to CANDIDATE
-    ASSERT((fill(imStatus, (UINT8)HQ_CANDIDATE) == RES_OK));
+    ASSERT((fill(imStatus, (UINT8) HQ_CANDIDATE) == RES_OK));
 
     // Initialize the PQ
     initBuildHierarchicalQueue(imOut, pq);
-    processBuildHierarchicalQueue<T, maxFunctor<T>>(
-      imOut, imMask, imStatus, pq, se);
+    processBuildHierarchicalQueue<T, maxFunctor<T>>(imOut, imMask, imStatus, pq,
+                                                    se);
 
     return RES_OK;
   }
@@ -401,11 +400,10 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T build(const Image<T> &imIn,
-              const Image<T> &imMask,
-              Image<T> &imOut,
-              const StrElt &se = DEFAULT_SE) {
-    if(isBinary(imIn) && isBinary(imMask))
+  RES_T build(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+              const StrElt &se = DEFAULT_SE)
+  {
+    if (isBinary(imIn) && isBinary(imMask))
       return binBuild(imIn, imMask, imOut, se);
 
     ASSERT_ALLOCATED(&imIn, &imMask, &imOut);
@@ -423,12 +421,12 @@ namespace smil {
     ASSERT((inf(imIn, imMask, imOut) == RES_OK));
 
     // Set all pixels in the status image to CANDIDATE
-    ASSERT((fill(imStatus, (UINT8)HQ_CANDIDATE) == RES_OK));
+    ASSERT((fill(imStatus, (UINT8) HQ_CANDIDATE) == RES_OK));
 
     // Initialize the PQ
     initBuildHierarchicalQueue(imOut, rpq);
-    processBuildHierarchicalQueue<T, minFunctor<T>>(
-      imOut, imMask, imStatus, rpq, se);
+    processBuildHierarchicalQueue<T, minFunctor<T>>(imOut, imMask, imStatus,
+                                                    rpq, se);
 
     return RES_OK;
   }
@@ -442,10 +440,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T binBuild(const Image<T> &imIn,
-                 const Image<T> &imMask,
-                 Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE) {
+  RES_T binBuild(const Image<T> &imIn, const Image<T> &imMask, Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imMask, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imMask, &imOut);
     //        T noPushValue = NUMERIC_LIMITS<T>::min();
@@ -463,13 +460,13 @@ namespace smil {
 
     // make a status image with all foreground pixels as CANDIDATE, otherwise as
     // FINAL
-    ASSERT(test(imMask, (UINT8)HQ_CANDIDATE, (UINT8)HQ_FINAL, imStatus)
-           == RES_OK);
+    ASSERT(test(imMask, (UINT8) HQ_CANDIDATE, (UINT8) HQ_FINAL, imStatus) ==
+           RES_OK);
 
     // Initialize the PQ
     initBuildHierarchicalQueue(imOut, rpq, imOut.getDataTypeMin());
-    processBuildHierarchicalQueue<T, minFunctor<T>>(
-      imOut, imMask, imStatus, rpq, se);
+    processBuildHierarchicalQueue<T, minFunctor<T>>(imOut, imMask, imStatus,
+                                                    rpq, se);
 
     return RES_OK;
   }
@@ -517,14 +514,13 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T hBuild(const Image<T> &imIn,
-               const T &height,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T hBuild(const Image<T> &imIn, const T &height, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> tmpIm = imIn;
       return hBuild(tmpIm, height, imOut, se);
     }
@@ -548,14 +544,13 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T hDualBuild(const Image<T> &imIn,
-                   const T &height,
-                   Image<T> &imOut,
-                   const StrElt &se = DEFAULT_SE) {
+  RES_T hDualBuild(const Image<T> &imIn, const T &height, Image<T> &imOut,
+                   const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> tmpIm = imIn;
       return hDualBuild(tmpIm, height, imOut, se);
     }
@@ -578,9 +573,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T buildOpen(const Image<T> &imIn,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T buildOpen(const Image<T> &imIn, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -603,9 +598,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T buildClose(const Image<T> &imIn,
-                   Image<T> &imOut,
-                   const StrElt &se = DEFAULT_SE) {
+  RES_T buildClose(const Image<T> &imIn, Image<T> &imOut,
+                   const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -631,16 +626,16 @@ namespace smil {
    *
    */
   template <class T>
-  RES_T asBuildOpen(const Image<T> &imIn,
-                    Image<T> &imOut,
-                    const StrElt &se = DEFAULT_SE) {
+  RES_T asBuildOpen(const Image<T> &imIn, Image<T> &imOut,
+                    const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     ImageFreezer freeze(imOut);
 
     Image<T> tmpIm(imIn, true); // clone
-    for(UINT i = 1; i <= se.size; i++) {
+    for (UINT i = 1; i <= se.size; i++) {
       ASSERT((buildOpen(tmpIm, imOut, se(i)) == RES_OK));
       ASSERT((buildClose(imOut, tmpIm, se(i)) == RES_OK));
     }
@@ -663,16 +658,16 @@ namespace smil {
    * @smilexample{example-asfclose.py}
    */
   template <class T>
-  RES_T asBuildClose(const Image<T> &imIn,
-                     Image<T> &imOut,
-                     const StrElt &se = DEFAULT_SE) {
+  RES_T asBuildClose(const Image<T> &imIn, Image<T> &imOut,
+                     const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     ImageFreezer freeze(imOut);
 
     Image<T> tmpIm(imIn, true); // clone
-    for(UINT i = 1; i <= se.size; i++) {
+    for (UINT i = 1; i <= se.size; i++) {
       ASSERT((buildClose(tmpIm, imOut, se(i)) == RES_OK));
       ASSERT((buildOpen(imOut, tmpIm, se(i)) == RES_OK));
     }
@@ -689,9 +684,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T fillHoles(const Image<T> &imIn,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T fillHoles(const Image<T> &imIn, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -707,25 +702,25 @@ namespace smil {
     off_t d = tmpIm.getDepth();
 
     T bVal = ImDtTypes<T>::min();
-    if(d > 2) {
-      for(off_t j = 0; j < h; j++) {
-        for(off_t i = 0; i < w; i++) {
+    if (d > 2) {
+      for (off_t j = 0; j < h; j++) {
+        for (off_t i = 0; i < w; i++) {
           tmpIm.setPixel(i, j, 0, bVal);
           tmpIm.setPixel(i, j, d - 1, bVal);
         }
       }
     }
-    if(h > 2) {
-      for(off_t k = 0; k < d; k++) {
-        for(off_t i = 0; i < w; i++) {
+    if (h > 2) {
+      for (off_t k = 0; k < d; k++) {
+        for (off_t i = 0; i < w; i++) {
           tmpIm.setPixel(i, 0, k, bVal);
           tmpIm.setPixel(i, h - 1, k, bVal);
         }
       }
     }
-    if(w > 2) {
-      for(off_t k = 0; k < d; k++) {
-        for(off_t j = 0; j < h; j++) {
+    if (w > 2) {
+      for (off_t k = 0; k < d; k++) {
+        for (off_t j = 0; j < h; j++) {
           tmpIm.setPixel(0, j, k, bVal);
           tmpIm.setPixel(w - 1, j, k, bVal);
         }
@@ -733,8 +728,7 @@ namespace smil {
     }
 #else
     ASSERT((drawRectangle(tmpIm, 0, 0, tmpIm.getWidth(), tmpIm.getHeight(),
-                          ImDtTypes<T>::min())
-            == RES_OK));
+                          ImDtTypes<T>::min()) == RES_OK));
 #endif
     ASSERT((dualBuild(tmpIm, imIn, imOut, se) == RES_OK));
 
@@ -749,9 +743,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T levelPics(const Image<T> &imIn,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T levelPics(const Image<T> &imIn, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 

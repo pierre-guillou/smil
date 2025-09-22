@@ -42,7 +42,8 @@
 #include <iterator> // std::back_inserter
 #include <mutex>
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Base
    * @defgroup Measures Base measures
@@ -57,7 +58,8 @@ namespace smil {
   struct measAreaFunc : public MeasureFunctionBase<T, double> {
     typedef typename Image<T>::lineType lineType;
 
-    virtual void processSequence(lineType /*lineIn*/, size_t size) {
+    virtual void processSequence(lineType /*lineIn*/, size_t size)
+    {
       this->retVal += size;
     }
   };
@@ -86,7 +88,8 @@ namespace smil {
    * This may be confusing for 3D images, but the idea remains the same.
    */
   template <class T>
-  size_t area(const Image<T> &imIn) {
+  size_t area(const Image<T> &imIn)
+  {
     measAreaFunc<T> func;
     return static_cast<size_t>(func(imIn, true));
   }
@@ -96,8 +99,9 @@ namespace smil {
   struct measVolFunc : public MeasureFunctionBase<T, double> {
     typedef typename Image<T>::lineType lineType;
 
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++)
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++)
         this->retVal += double(lineIn[i]);
     }
   };
@@ -122,7 +126,8 @@ namespace smil {
    *
    */
   template <class T>
-  double vol(const Image<T> &imIn) {
+  double vol(const Image<T> &imIn)
+  {
 #if 1
     return volume(imIn);
 #else
@@ -146,7 +151,8 @@ namespace smil {
    * This may be confusing for 3D images, but the idea remains the same.
    */
   template <class T>
-  double volume(const Image<T> &imIn) {
+  double volume(const Image<T> &imIn)
+  {
     measVolFunc<T> func;
     return func(imIn, false);
   }
@@ -163,26 +169,29 @@ namespace smil {
   template <class T>
   struct measMeanValFunc : public MeasureFunctionBase<T, Vector_double> {
     typedef typename Image<T>::lineType lineType;
-    double sum1, sum2;
-    double pixNbr;
+    double                              sum1, sum2;
+    double                              pixNbr;
 
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    virtual void initialize(const Image<T> & /*imIn*/)
+    {
       this->retVal.clear();
       sum1 = sum2 = pixNbr = 0.;
     }
-    virtual void processSequence(lineType lineIn, size_t size) {
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
       double curV;
-      for(size_t i = 0; i < size; i++) {
+      for (size_t i = 0; i < size; i++) {
         pixNbr += 1;
         curV = lineIn[i];
         sum1 += curV;
         sum2 += curV * curV;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       double mean_val = pixNbr == 0 ? 0 : sum1 / pixNbr;
-      double std_dev_val
-        = pixNbr == 0 ? 0 : std::sqrt(sum2 / pixNbr - mean_val * mean_val);
+      double std_dev_val =
+          pixNbr == 0 ? 0 : std::sqrt(sum2 / pixNbr - mean_val * mean_val);
 
       this->retVal.push_back(mean_val);
       this->retVal.push_back(std_dev_val);
@@ -199,7 +208,8 @@ namespace smil {
    * values
    */
   template <class T>
-  Vector_double meanVal(const Image<T> &imIn, bool onlyNonZero = false) {
+  Vector_double meanVal(const Image<T> &imIn, bool onlyNonZero = false)
+  {
     measMeanValFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -216,12 +226,14 @@ namespace smil {
   template <class T>
   struct measMinValFunc : public MeasureFunctionBase<T, T> {
     typedef typename Image<T>::lineType lineType;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    {
       this->retVal = numeric_limits<T>::max();
     }
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++)
-        if(lineIn[i] < this->retVal)
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++)
+        if (lineIn[i] < this->retVal)
           this->retVal = lineIn[i];
     }
   };
@@ -229,18 +241,20 @@ namespace smil {
   template <class T>
   struct measMinValPosFunc : public MeasureFunctionWithPos<T, T> {
     typedef typename Image<T>::lineType lineType;
-    Point<UINT> pt;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    Point<UINT>                         pt;
+    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    {
       this->retVal = numeric_limits<T>::max();
     }
-    virtual void processSequence(
-      lineType lineIn, size_t size, size_t x, size_t y, size_t z) {
-      for(size_t i = 0; i < size; i++, x++)
-        if(lineIn[i] < this->retVal) {
+    virtual void processSequence(lineType lineIn, size_t size, size_t x,
+                                 size_t y, size_t z)
+    {
+      for (size_t i = 0; i < size; i++, x++)
+        if (lineIn[i] < this->retVal) {
           this->retVal = lineIn[i];
-          pt.x = x;
-          pt.y = y;
-          pt.z = z;
+          pt.x         = x;
+          pt.y         = y;
+          pt.z         = z;
         }
     }
   };
@@ -254,7 +268,8 @@ namespace smil {
    * @return the min of the pixel values.
    */
   template <class T>
-  T minVal(const Image<T> &imIn, bool onlyNonZero = false) {
+  T minVal(const Image<T> &imIn, bool onlyNonZero = false)
+  {
     measMinValFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -268,7 +283,8 @@ namespace smil {
    * @return the min of the pixel values.
    */
   template <class T>
-  T minVal(const Image<T> &imIn, Point<UINT> &pt, bool onlyNonZero = false) {
+  T minVal(const Image<T> &imIn, Point<UINT> &pt, bool onlyNonZero = false)
+  {
     measMinValPosFunc<T> func;
     func(imIn, onlyNonZero);
     pt = func.pt;
@@ -287,12 +303,14 @@ namespace smil {
   template <class T>
   struct measMaxValFunc : public MeasureFunctionBase<T, T> {
     typedef typename Image<T>::lineType lineType;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    {
       this->retVal = numeric_limits<T>::min();
     }
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++)
-        if(lineIn[i] > this->retVal)
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++)
+        if (lineIn[i] > this->retVal)
           this->retVal = lineIn[i];
     }
   };
@@ -300,18 +318,20 @@ namespace smil {
   template <class T>
   struct measMaxValPosFunc : public MeasureFunctionWithPos<T, T> {
     typedef typename Image<T>::lineType lineType;
-    Point<UINT> pt;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    Point<UINT>                         pt;
+    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    {
       this->retVal = numeric_limits<T>::min();
     }
-    virtual void processSequence(
-      lineType lineIn, size_t size, size_t x, size_t y, size_t z) {
-      for(size_t i = 0; i < size; i++, x++)
-        if(lineIn[i] > this->retVal) {
+    virtual void processSequence(lineType lineIn, size_t size, size_t x,
+                                 size_t y, size_t z)
+    {
+      for (size_t i = 0; i < size; i++, x++)
+        if (lineIn[i] > this->retVal) {
           this->retVal = lineIn[i];
-          pt.x = x;
-          pt.y = y;
-          pt.z = z;
+          pt.x         = x;
+          pt.y         = y;
+          pt.z         = z;
         }
     }
   };
@@ -325,7 +345,8 @@ namespace smil {
    * @return the max of the pixel values.
    */
   template <class T>
-  T maxVal(const Image<T> &imIn, bool onlyNonZero = false) {
+  T maxVal(const Image<T> &imIn, bool onlyNonZero = false)
+  {
     measMaxValFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -339,7 +360,8 @@ namespace smil {
    * @return the max of the pixel values.
    */
   template <class T>
-  T maxVal(const Image<T> &imIn, Point<UINT> &pt, bool onlyNonZero = false) {
+  T maxVal(const Image<T> &imIn, Point<UINT> &pt, bool onlyNonZero = false)
+  {
     measMaxValPosFunc<T> func;
     func(imIn, onlyNonZero);
     pt = func.pt;
@@ -358,22 +380,25 @@ namespace smil {
   template <class T>
   struct measMinMaxValFunc : public MeasureFunctionBase<T, vector<T>> {
     typedef typename Image<T>::lineType lineType;
-    T minVal, maxVal;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    T                                   minVal, maxVal;
+    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    {
       this->retVal.clear();
       maxVal = numeric_limits<T>::min();
       minVal = numeric_limits<T>::max();
     }
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++) {
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
-        if(val > maxVal)
+        if (val > maxVal)
           maxVal = val;
-        if(val < minVal)
+        if (val < minVal)
           minVal = val;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       this->retVal.push_back(minVal);
       this->retVal.push_back(maxVal);
     }
@@ -388,7 +413,8 @@ namespace smil {
    * @returns a vector with the min and the max of the pixel values.
    */
   template <class T>
-  vector<T> rangeVal(const Image<T> &imIn, bool onlyNonZero = false) {
+  vector<T> rangeVal(const Image<T> &imIn, bool onlyNonZero = false)
+  {
     measMinMaxValFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -405,21 +431,24 @@ namespace smil {
   template <class T>
   struct valueListFunc : public MeasureFunctionBase<T, vector<T>> {
     typedef typename Image<T>::lineType lineType;
-    set<T> valList;
+    set<T>                              valList;
 
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    virtual void initialize(const Image<T> & /*imIn*/)
+    {
       this->retVal.clear();
       valList.clear();
     }
 
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++)
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++)
         valList.insert(lineIn[i]);
     }
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       // Copy the content of the set into the ret vector
-      std::copy(
-        valList.begin(), valList.end(), std::back_inserter(this->retVal));
+      std::copy(valList.begin(), valList.end(),
+                std::back_inserter(this->retVal));
     }
   };
   /** @endcond */
@@ -436,7 +465,8 @@ namespace smil {
    * huge vector.
    */
   template <class T>
-  vector<T> valueList(const Image<T> &imIn, bool onlyNonZero = true) {
+  vector<T> valueList(const Image<T> &imIn, bool onlyNonZero = true)
+  {
     valueListFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -455,25 +485,27 @@ namespace smil {
     typedef typename Image<T>::lineType lineType;
 
     map<int, int> nbList;
-    int maxNb;
-    T mode;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    int           maxNb;
+    T             mode;
+    virtual void  initialize(const Image<T>  &/*imIn*/)
+    {
       // BMI            this->retVal.clear();
       nbList.clear();
       maxNb = 0;
-      mode = 0;
+      mode  = 0;
     }
 
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++) {
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
-        if(val > 0) {
-          if(nbList.find(val) == nbList.end()) {
+        if (val > 0) {
+          if (nbList.find(val) == nbList.end()) {
             nbList.insert(std::pair<int, int>(val, 1));
           } else
             nbList[val]++;
-          if(nbList[val] > maxNb) {
-            mode = val;
+          if (nbList[val] > maxNb) {
+            mode  = val;
             maxNb = nbList[val];
           }
         } // if (val>0)
@@ -499,7 +531,8 @@ namespace smil {
    * - in a multimodal distribution, it returns the first biggest one;
    */
   template <class T>
-  T modeVal(const Image<T> &imIn, bool onlyNonZero = true) {
+  T modeVal(const Image<T> &imIn, bool onlyNonZero = true)
+  {
     measModeValFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -518,22 +551,24 @@ namespace smil {
     typedef typename Image<T>::lineType lineType;
 
     map<int, int> nbList;
-    size_t acc_elem, total_elems;
-    T medianval;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    size_t        acc_elem, total_elems;
+    T             medianval;
+    virtual void  initialize(const Image<T>  &/*imIn*/)
+    {
       // BMI            this->retVal.clear();
       nbList.clear();
-      medianval = 0;
-      acc_elem = 0;
+      medianval   = 0;
+      acc_elem    = 0;
       total_elems = 0;
     }
 
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++) {
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
-        if(val > 0) {
+        if (val > 0) {
           total_elems++;
-          if(nbList.find(val) == nbList.end()) {
+          if (nbList.find(val) == nbList.end()) {
             nbList.insert(std::pair<int, int>(val, 1));
           } else
             nbList[val]++;
@@ -543,13 +578,14 @@ namespace smil {
         //            this->retVal = medianval;
     } // virtual processSequence
 
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       typedef std::map<int, int>::iterator it_type;
 
-      for(it_type my_iterator = nbList.begin(); my_iterator != nbList.end();
-          my_iterator++) {
+      for (it_type my_iterator = nbList.begin(); my_iterator != nbList.end();
+           my_iterator++) {
         acc_elem = acc_elem + my_iterator->second; //  nbList;
-        if(acc_elem > total_elems / 2.0) {
+        if (acc_elem > total_elems / 2.0) {
           medianval = my_iterator->first;
           break;
         }
@@ -571,7 +607,8 @@ namespace smil {
    * @return the median of the image histogram
    */
   template <class T>
-  T medianVal(const Image<T> &imIn, bool onlyNonZero = true) {
+  T medianVal(const Image<T> &imIn, bool onlyNonZero = true)
+  {
     measMedianValFunc<T> func;
     return func(imIn, onlyNonZero);
   }
@@ -595,12 +632,9 @@ namespace smil {
    * @return vector with pixel values
    */
   template <class T>
-  vector<T> profile(const Image<T> &im,
-                    size_t x0,
-                    size_t y0,
-                    size_t x1,
-                    size_t y1,
-                    size_t z = 0) {
+  vector<T> profile(const Image<T> &im, size_t x0, size_t y0, size_t x1,
+                    size_t y1, size_t z = 0)
+  {
     vector<T> vec;
     ASSERT(im.isAllocated(), vec);
 
@@ -608,7 +642,7 @@ namespace smil {
     size_t imH = im.getHeight();
 
     vector<IntPoint> bPoints;
-    if(x0 >= imW || y0 >= imH || x1 >= imW || y1 >= imH)
+    if (x0 >= imW || y0 >= imH || x1 >= imW || y1 >= imH)
       bPoints = bresenhamPoints(x0, y0, x1, y1, imW, imH);
     else
       // no image range check (faster)
@@ -616,8 +650,8 @@ namespace smil {
 
     typename Image<T>::sliceType lines = im.getSlices()[z];
 
-    for(vector<IntPoint>::iterator it = bPoints.begin(); it != bPoints.end();
-        it++)
+    for (vector<IntPoint>::iterator it = bPoints.begin(); it != bPoints.end();
+         it++)
       vec.push_back(lines[(*it).y][(*it).x]);
 
     return vec;
@@ -635,14 +669,16 @@ namespace smil {
   template <class T>
   struct measBarycenterFunc : public MeasureFunctionWithPos<T, Vector_double> {
     typedef typename Image<T>::lineType lineType;
-    double xSum, ySum, zSum, tSum;
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    double                              xSum, ySum, zSum, tSum;
+    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    {
       this->retVal.clear();
       xSum = ySum = zSum = tSum = 0.;
     }
-    virtual void processSequence(
-      lineType lineIn, size_t size, size_t x, size_t y, size_t z) {
-      for(size_t i = 0; i < size; i++, x++) {
+    virtual void processSequence(lineType lineIn, size_t size, size_t x,
+                                 size_t y, size_t z)
+    {
+      for (size_t i = 0; i < size; i++, x++) {
         T pixVal = lineIn[i];
         xSum += double(pixVal) * x;
         ySum += double(pixVal) * y;
@@ -650,10 +686,11 @@ namespace smil {
         tSum += double(pixVal);
       }
     }
-    virtual void finalize(const Image<T> &imIn) {
+    virtual void finalize(const Image<T> &imIn)
+    {
       this->retVal.push_back(xSum / tSum);
       this->retVal.push_back(ySum / tSum);
-      if(imIn.getDimension() == 3)
+      if (imIn.getDimension() == 3)
         this->retVal.push_back(zSum / tSum);
     }
   };
@@ -665,7 +702,8 @@ namespace smil {
    * @return vector with the coordinates of barycenter
    */
   template <class T>
-  Vector_double measBarycenter(Image<T> &im) {
+  Vector_double measBarycenter(Image<T> &im)
+  {
     measBarycenterFunc<T> func;
     return func(im, false);
   }
@@ -682,9 +720,10 @@ namespace smil {
   template <class T>
   struct measBoundBoxFunc : public MeasureFunctionWithPos<T, vector<size_t>> {
     typedef typename Image<T>::lineType lineType;
-    double xMin, xMax, yMin, yMax, zMin, zMax;
-    bool im3d;
-    virtual void initialize(const Image<T> &imIn) {
+    double                              xMin, xMax, yMin, yMax, zMin, zMax;
+    bool                                im3d;
+    virtual void                        initialize(const Image<T> &imIn)
+    {
       this->retVal.clear();
       size_t imSize[3];
       imIn.getSize(imSize);
@@ -697,31 +736,33 @@ namespace smil {
       zMin = imSize[2];
       zMax = 0;
     }
-    virtual void processSequence(
-      lineType /*lineIn*/, size_t size, size_t x, size_t y, size_t z) {
-      if(x < xMin)
+    virtual void processSequence(lineType /*lineIn*/, size_t size, size_t x,
+                                 size_t y, size_t z)
+    {
+      if (x < xMin)
         xMin = x;
-      if(x + size - 1 > xMax)
+      if (x + size - 1 > xMax)
         xMax = x + size - 1;
-      if(y < yMin)
+      if (y < yMin)
         yMin = y;
-      if(y > yMax)
+      if (y > yMax)
         yMax = y;
-      if(im3d) {
-        if(z < zMin)
+      if (im3d) {
+        if (z < zMin)
           zMin = z;
-        if(z > zMax)
+        if (z > zMax)
           zMax = z;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       this->retVal.push_back(UINT(xMin));
       this->retVal.push_back(UINT(yMin));
-      if(im3d)
+      if (im3d)
         this->retVal.push_back(UINT(zMin));
       this->retVal.push_back(UINT(xMax));
       this->retVal.push_back(UINT(yMax));
-      if(im3d)
+      if (im3d)
         this->retVal.push_back(UINT(zMax));
     }
   };
@@ -735,7 +776,8 @@ namespace smil {
    * @return a vector with <b> xMin, yMin (,zMin), xMax, yMax (,zMax) </b>
    */
   template <class T>
-  vector<size_t> measBoundBox(Image<T> &im) {
+  vector<size_t> measBoundBox(Image<T> &im)
+  {
     measBoundBoxFunc<T> func;
     return func(im, true);
   }
@@ -752,16 +794,18 @@ namespace smil {
   template <class T>
   struct measMomentsFunc : public MeasureFunctionWithPos<T, Vector_double> {
     typedef typename Image<T>::lineType lineType;
-    double m000, m100, m010, m110, m200, m020, m001, m101, m011, m002;
-    bool im3d;
-    virtual void initialize(const Image<T> &imIn) {
+    double       m000, m100, m010, m110, m200, m020, m001, m101, m011, m002;
+    bool         im3d;
+    virtual void initialize(const Image<T> &imIn)
+    {
       im3d = (imIn.getDimension() == 3);
       this->retVal.clear();
       m000 = m100 = m010 = m110 = m200 = m020 = m001 = m101 = m011 = m002 = 0.;
     }
-    virtual void processSequence(
-      lineType lineIn, size_t size, size_t x, size_t y, size_t z) {
-      for(size_t i = 0; i < size; i++, x++) {
+    virtual void processSequence(lineType lineIn, size_t size, size_t x,
+                                 size_t y, size_t z)
+    {
+      for (size_t i = 0; i < size; i++, x++) {
         double pxVal = double(lineIn[i]);
         m000 += pxVal;
         m100 += pxVal * x;
@@ -769,7 +813,7 @@ namespace smil {
         m110 += pxVal * x * y;
         m200 += pxVal * x * x;
         m020 += pxVal * y * y;
-        if(im3d) {
+        if (im3d) {
           m001 += pxVal * z;
           m101 += pxVal * x * z;
           m011 += pxVal * y * z;
@@ -777,31 +821,33 @@ namespace smil {
         }
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       this->retVal.push_back(m000);
       this->retVal.push_back(m100);
       this->retVal.push_back(m010);
-      if(im3d)
+      if (im3d)
         this->retVal.push_back(m001);
       this->retVal.push_back(m110);
-      if(im3d) {
+      if (im3d) {
         this->retVal.push_back(m101);
         this->retVal.push_back(m011);
       }
       this->retVal.push_back(m200);
       this->retVal.push_back(m020);
-      if(im3d)
+      if (im3d)
         this->retVal.push_back(m002);
     }
   };
   /** @endcond */
 
   /** @cond */
-  inline Vector_double centerMoments(Vector_double &moments) {
+  inline Vector_double centerMoments(Vector_double &moments)
+  {
     double EPSILON = 1e-8;
 
     Vector_double m(moments.size(), 0);
-    if(moments[0] < EPSILON)
+    if (moments[0] < EPSILON)
       return m;
 
     bool im3d = (moments.size() == 10);
@@ -811,7 +857,7 @@ namespace smil {
      * 3D - m000  m100  m010  m001  m110  m101  m011  m200  m020  m002
      */
     m = moments;
-    if(im3d) {
+    if (im3d) {
       // m000
       m[0] = moments[0];
       // m100 m010 m001
@@ -882,15 +928,15 @@ namespace smil {
    *
    */
   template <class T>
-  Vector_double measMoments(Image<T> &im,
-                            const bool onlyNonZero = true,
-                            const bool centered = false) {
+  Vector_double measMoments(Image<T> &im, const bool onlyNonZero = true,
+                            const bool centered = false)
+  {
     Vector_double m;
 
     measMomentsFunc<T> func;
     m = func(im, onlyNonZero);
 
-    if(centered)
+    if (centered)
       m = centerMoments(m);
 
     return m;
@@ -905,13 +951,11 @@ namespace smil {
   //    ####    ####     ##    #    #  #    #  #  #    #  #    #   ####   ######
   //
   template <class T>
-  inline vector<double> genericCovariance(const Image<T> &imIn1,
-                                          const Image<T> &imIn2,
-                                          size_t dx,
-                                          size_t dy,
-                                          size_t dz,
-                                          size_t maxSteps = 0,
-                                          bool normalize = false) {
+  inline vector<double>
+  genericCovariance(const Image<T> &imIn1, const Image<T> &imIn2, size_t dx,
+                    size_t dy, size_t dz, size_t maxSteps = 0,
+                    bool normalize = false)
+  {
     vector<double> vec;
     ASSERT(areAllocated(&imIn1, &imIn2, NULL), vec);
     ASSERT(haveSameSize(&imIn1, &imIn2, NULL),
@@ -923,35 +967,35 @@ namespace smil {
     imIn1.getSize(s);
 
     size_t maxH = max(max(s[0], s[1]), s[2]);
-    if(dx > 0)
+    if (dx > 0)
       maxH = min(maxH, s[0]);
-    if(dy > 0)
+    if (dy > 0)
       maxH = min(maxH, s[1]);
-    if(dz > 0)
+    if (dz > 0)
       maxH = min(maxH, s[2]);
-    if(maxH > 0)
+    if (maxH > 0)
       maxH--;
 
-    if(maxSteps == 0)
+    if (maxSteps == 0)
       maxSteps = maxH;
 
     maxSteps = min(maxSteps, maxH);
-    if(maxSteps == 0) {
+    if (maxSteps == 0) {
       ERR_MSG("Too small");
       return vec;
     }
 
     vec.clear();
 
-    typename ImDtTypes<T>::volType slicesIn1 = imIn1.getSlices();
-    typename ImDtTypes<T>::volType slicesIn2 = imIn2.getSlices();
+    typename ImDtTypes<T>::volType   slicesIn1 = imIn1.getSlices();
+    typename ImDtTypes<T>::volType   slicesIn2 = imIn2.getSlices();
     typename ImDtTypes<T>::sliceType curSliceIn1;
     typename ImDtTypes<T>::sliceType curSliceIn2;
-    typename ImDtTypes<T>::lineType lineIn1;
-    typename ImDtTypes<T>::lineType lineIn2;
-    typename ImDtTypes<T>::lineType bufLine = ImDtTypes<T>::createLine(s[0]);
+    typename ImDtTypes<T>::lineType  lineIn1;
+    typename ImDtTypes<T>::lineType  lineIn2;
+    typename ImDtTypes<T>::lineType  bufLine = ImDtTypes<T>::createLine(s[0]);
 
-    for(size_t len = 0; len <= maxSteps; len++) {
+    for (size_t len = 0; len <= maxSteps; len++) {
       double prod = 0;
 
       size_t mdx = min(dx * len, s[0] - 1);
@@ -962,27 +1006,27 @@ namespace smil {
       size_t yLen = s[1] - mdy;
       size_t zLen = s[2] - mdz;
 
-      for(size_t z = 0; z < zLen; z++) {
+      for (size_t z = 0; z < zLen; z++) {
         curSliceIn1 = slicesIn1[z];
         curSliceIn2 = slicesIn2[z + mdz];
-        for(size_t y = 0; y < yLen; y++) {
+        for (size_t y = 0; y < yLen; y++) {
           lineIn1 = curSliceIn1[y];
           lineIn2 = curSliceIn2[y + mdy];
           copyLine<T>(lineIn2 + mdx, xLen, bufLine);
           // Vectorized loop
-          for(size_t x = 0; x < xLen; x++) {
+          for (size_t x = 0; x < xLen; x++) {
             prod += lineIn1[x] * bufLine[x];
           }
         }
       }
-      if(xLen * yLen * zLen != 0)
+      if (xLen * yLen * zLen != 0)
         prod /= (xLen * yLen * zLen);
       vec.push_back(prod);
     }
 
-    if(normalize) {
+    if (normalize) {
       double orig = vec[0];
-      for(vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+      for (vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         *it /= orig;
     }
 
@@ -1136,25 +1180,22 @@ namespace smil {
    *
    */
   template <class T>
-  vector<double> measCovariance(const Image<T> &imIn1,
-                                const Image<T> &imIn2,
-                                size_t dx,
-                                size_t dy,
-                                size_t dz,
-                                size_t maxSteps = 0,
-                                bool centered = false,
-                                bool normalize = false) {
-    if(centered) {
+  vector<double> measCovariance(const Image<T> &imIn1, const Image<T> &imIn2,
+                                size_t dx, size_t dy, size_t dz,
+                                size_t maxSteps = 0, bool centered = false,
+                                bool normalize = false)
+  {
+    if (centered) {
       Image<float> imMean1(imIn1, true);
-      float meanV1 = meanVal(imMean1)[0];
+      float        meanV1 = meanVal(imMean1)[0];
       sub(imMean1, meanV1, imMean1);
 
       Image<float> imMean2(imIn2, true);
-      float meanV2 = meanVal(imMean2)[0];
+      float        meanV2 = meanVal(imMean2)[0];
       sub(imMean2, meanV2, imMean2);
 
-      return genericCovariance(
-        imMean1, imMean2, dx, dy, dz, maxSteps, normalize);
+      return genericCovariance(imMean1, imMean2, dx, dy, dz, maxSteps,
+                               normalize);
     } else {
       return genericCovariance(imIn1, imIn2, dx, dy, dz, maxSteps, normalize);
     }
@@ -1175,16 +1216,14 @@ namespace smil {
    * @return vec[h]
    */
   template <class T>
-  vector<double> measAutoCovariance(const Image<T> &imIn,
-                                    size_t dx,
-                                    size_t dy,
-                                    size_t dz,
-                                    size_t maxSteps = 0,
-                                    bool centered = false,
-                                    bool normalize = false) {
-    if(centered) {
+  vector<double> measAutoCovariance(const Image<T> &imIn, size_t dx, size_t dy,
+                                    size_t dz, size_t maxSteps = 0,
+                                    bool centered  = false,
+                                    bool normalize = false)
+  {
+    if (centered) {
       Image<float> imMean(imIn, true);
-      float meanV = meanVal(imMean)[0];
+      float        meanV = meanVal(imMean)[0];
       sub(imMean, meanV, imMean);
       return genericCovariance(imMean, imMean, dx, dy, dz, maxSteps, normalize);
     } else {
@@ -1207,32 +1246,35 @@ namespace smil {
 
     map<T, UINT> histo;
 
-    virtual void initialize(const Image<T> & /*imIn*/) {
+    virtual void initialize(const Image<T> & /*imIn*/)
+    {
       histo.clear();
     }
 
-    virtual void processSequence(lineType lineIn, size_t size) {
-      for(size_t i = 0; i < size; i++) {
+    virtual void processSequence(lineType lineIn, size_t size)
+    {
+      for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
 
-        UINT nb = histo[val];
+        UINT nb    = histo[val];
         histo[val] = ++nb;
       }
     }
 
-    virtual void finalize(const Image<T> & /*imIn*/) {
+    virtual void finalize(const Image<T> & /*imIn*/)
+    {
       double entropy = 0.;
-      double sumP = 0.;
-      double sumN = 0.;
+      double sumP    = 0.;
+      double sumN    = 0.;
 
       typename map<T, UINT>::iterator it;
-      for(it = histo.begin(); it != histo.end(); it++) {
-        if(it->second > 0) {
+      for (it = histo.begin(); it != histo.end(); it++) {
+        if (it->second > 0) {
           sumN += it->second;
           sumP += it->second * log2(it->second);
         }
       }
-      if(sumN > 0)
+      if (sumN > 0)
         entropy = log2(sumN) - sumP / sumN;
 
       this->retVal = entropy;
@@ -1252,7 +1294,8 @@ namespace smil {
    * @see blobsEntropy() to compute entropy inside each label.
    */
   template <class T>
-  double measEntropy(const Image<T> &imIn) {
+  double measEntropy(const Image<T> &imIn)
+  {
     ASSERT_ALLOCATED(&imIn);
 
 #if 0
@@ -1292,24 +1335,25 @@ namespace smil {
    *
    */
   template <class T>
-  double measEntropy(const Image<T> &imIn, const Image<T> &imMask) {
+  double measEntropy(const Image<T> &imIn, const Image<T> &imMask)
+  {
     ASSERT_ALLOCATED(&imIn, &imMask);
     ASSERT_SAME_SIZE(&imIn, &imMask);
 
     double entropy = 0.;
-    double sumP = 0.;
-    double sumN = 0.;
+    double sumP    = 0.;
+    double sumN    = 0.;
 
-    map<T, UINT> hist = histogram(imIn, imMask, false);
+    map<T, UINT>                    hist = histogram(imIn, imMask, false);
     typename map<T, UINT>::iterator it;
-    for(it = hist.begin(); it != hist.end(); it++) {
-      if(it->second > 0) {
+    for (it = hist.begin(); it != hist.end(); it++) {
+      if (it->second > 0) {
         sumP += it->second * log2(it->second);
         sumN += it->second;
       }
     }
 
-    if(sumN > 0)
+    if (sumN > 0)
       entropy = log2(sumN) - sumP / sumN;
 
     return entropy;
@@ -1332,15 +1376,16 @@ namespace smil {
    * order than the image size.
    */
   template <class T>
-  Vector_size_t nonZeroOffsets(Image<T> &imIn) {
+  Vector_size_t nonZeroOffsets(Image<T> &imIn)
+  {
     Vector_size_t offsets;
 
     ASSERT(CHECK_ALLOCATED(&imIn), RES_ERR_BAD_ALLOCATION, offsets);
 
     typename Image<T>::lineType pixels = imIn.getPixels();
 
-    for(size_t i = 0; i < imIn.getPixelCount(); i++)
-      if(pixels[i] != 0)
+    for (size_t i = 0; i < imIn.getPixelCount(); i++)
+      if (pixels[i] != 0)
         offsets.push_back(i);
 
     return offsets;
@@ -1354,18 +1399,19 @@ namespace smil {
    * value.
    */
   template <class T>
-  bool isBinary(const Image<T> &imIn) {
+  bool isBinary(const Image<T> &imIn)
+  {
     CHECK_ALLOCATED(&imIn);
 
-    map<T, bool> h;
+    map<T, bool>                h;
     typename Image<T>::lineType pixels = imIn.getPixels();
 
 #if 1
     // Not using OpenMP
 
-    for(size_t i = 0; i < imIn.getPixelCount(); i++) {
+    for (size_t i = 0; i < imIn.getPixelCount(); i++) {
       h[pixels[i]] = true;
-      if(h.size() > 2)
+      if (h.size() > 2)
         return false;
     }
 #else
@@ -1373,7 +1419,7 @@ namespace smil {
 #ifdef USE_OPEN_MP
 #pragma omp parallel for
 #endif
-    for(size_t i = 0; i < imIn.getPixelCount() && h.size() <= 2; i++) {
+    for (size_t i = 0; i < imIn.getPixelCount() && h.size() <= 2; i++) {
       h[pixels[i]] = True;
     }
 #endif

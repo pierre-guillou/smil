@@ -38,11 +38,13 @@
 #include <qwt_series_data.h>
 #endif // QWT_VERSION < 0x060000
 
-class PlotWidget : public QwtPlot {
+class PlotWidget : public QwtPlot
+{
   Q_OBJECT
 public:
   PlotWidget(QWidget *parent = 0);
-  QwtPlotCurve *getCurrentCurve() {
+  QwtPlotCurve *getCurrentCurve()
+  {
     return currentCurve;
   }
 public slots:

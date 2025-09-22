@@ -38,88 +38,112 @@
 
 #if (defined(__ICL) || defined(__ICC))
 #include <fvec.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return _mm_malloc(size, align);
   }
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return _mm_free(p);
   }
 } // namespace smil
 #elif defined(_MSC_VER)
 #include <malloc.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return _aligned_malloc(size, align);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return _aligned_free(p);
   }
 } // namespace smil
 #elif defined(__CYGWIN__)
 #include <xmmintrin.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return _mm_malloc(size, align);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return _mm_free(p);
   }
 } // namespace smil
 #elif defined(__MINGW64__)
 #include <malloc.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return __mingw_aligned_malloc(size, align);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return __mingw_aligned_free(p);
   }
 } // namespace smil
 #elif defined(__MINGW32__)
 #include <malloc.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return __mingw_aligned_malloc(size, align);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return __mingw_aligned_free(p);
   }
 } // namespace smil
 #elif defined(__FreeBSD__)
 #include <stdlib.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return malloc(size);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return free(p);
   }
 } // namespace smil
 #elif (defined(__MACOSX__) || defined(__APPLE__))
 #include <stdlib.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return malloc(size);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return free(p);
   }
 } // namespace smil
 #else
 #include <malloc.h>
-namespace smil {
-  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE) {
+namespace smil
+{
+  inline void *aligned_malloc(size_t size, size_t align = SIMD_VEC_SIZE)
+  {
     return memalign(align, size);
   }
 
-  inline void aligned_free(void *p) {
+  inline void aligned_free(void *p)
+  {
     return free(p);
   }
 } // namespace smil
@@ -136,35 +160,40 @@ namespace smil {
 #include <algorithm>
 #endif
 
-namespace smil {
+namespace smil
+{
 #define ASSUME_ALIGNED(buf) __builtin_assume_aligned(buf, SIMD_VEC_SIZE)
 
   template <typename T>
-  inline T *createAlignedBuffer(size_t size) {
+  inline T *createAlignedBuffer(size_t size)
+  {
     void *ptr;
 
-    ptr = aligned_malloc(
-      (SIMD_VEC_SIZE * (size / SIMD_VEC_SIZE + 1)) * sizeof(T), SIMD_VEC_SIZE);
+    ptr =
+        aligned_malloc((SIMD_VEC_SIZE * (size / SIMD_VEC_SIZE + 1)) * sizeof(T),
+                       SIMD_VEC_SIZE);
 
-    return ((T *)(ptr));
+    return ((T *) (ptr));
   }
 
   template <typename T>
-  void deleteAlignedBuffer(T *ptr) {
-    aligned_free((void *)(ptr));
+  void deleteAlignedBuffer(T *ptr)
+  {
+    aligned_free((void *) (ptr));
   }
 
   template <typename T>
-  class Allocator : public std::allocator<T> {
+  class Allocator : public std::allocator<T>
+  {
   public:
     //    typedefs
-    typedef T value_type;
-    typedef value_type *pointer;
+    typedef T                 value_type;
+    typedef value_type       *pointer;
     typedef const value_type *const_pointer;
-    typedef value_type &reference;
+    typedef value_type       &reference;
     typedef const value_type &const_reference;
-    typedef std::size_t size_type;
-    typedef std::ptrdiff_t difference_type;
+    typedef std::size_t       size_type;
+    typedef std::ptrdiff_t    difference_type;
 
   public:
     //    convert an allocator<T> to allocator<U>
@@ -174,101 +203,112 @@ namespace smil {
     };
 
   public:
-    inline explicit Allocator() {
+    inline explicit Allocator()
+    {
     }
 
-    inline ~Allocator() {
+    inline ~Allocator()
+    {
     }
 
-    inline Allocator(Allocator const &) : std::allocator<T>() {
+    inline Allocator(Allocator const &) : std::allocator<T>()
+    {
     }
 
     template <typename U>
-    inline explicit Allocator(Allocator<U> const &) {
+    inline explicit Allocator(Allocator<U> const &)
+    {
     }
 
     //    address
-    inline pointer address(reference r) {
+    inline pointer address(reference r)
+    {
       return &r;
     }
 
-    inline const_pointer address(const_reference r) {
+    inline const_pointer address(const_reference r)
+    {
       return &r;
     }
 
     //    memory allocation
     inline pointer allocate(size_type cnt,
-                            typename std::allocator<void>::const_pointer = 0) {
+                            typename std::allocator<void>::const_pointer = 0)
+    {
       void *ptr;
-      ptr = aligned_malloc(
-        (SIMD_VEC_SIZE * (cnt / SIMD_VEC_SIZE + 1)) * sizeof(T), SIMD_VEC_SIZE);
+      ptr = aligned_malloc((SIMD_VEC_SIZE * (cnt / SIMD_VEC_SIZE + 1)) *
+                               sizeof(T),
+                           SIMD_VEC_SIZE);
 
       return reinterpret_cast<pointer>(ptr);
     }
 
-    inline void deallocate(pointer p, size_type) {
+    inline void deallocate(pointer p, size_type)
+    {
       aligned_free(p);
     }
 
     //    size
-    inline size_type max_size() const {
+    inline size_type max_size() const
+    {
       return std::numeric_limits<size_type>::max() / sizeof(T);
     }
 
     //    construction/destruction
-    inline void construct(pointer p, const T &t) {
-      new(p) T(t);
+    inline void construct(pointer p, const T &t)
+    {
+      new (p) T(t);
     }
 
-    inline void destroy(pointer p) {
+    inline void destroy(pointer p)
+    {
       p->~T();
     }
 
-    inline bool operator==(Allocator const &) {
+    inline bool operator==(Allocator const &)
+    {
       return true;
     }
 
-    inline bool operator!=(Allocator const &a) {
+    inline bool operator!=(Allocator const &a)
+    {
       return !operator==(a);
     }
   }; //    end of class Allocator
 
   template <typename T>
-  inline void Dmemcpy(T *out, const T *in, size_t size) {
-    while(size--) {
+  inline void Dmemcpy(T *out, const T *in, size_t size)
+  {
+    while (size--) {
       *out++ = *in++;
     }
   }
 
   template <typename T>
-  void t_LineCopyFromImage2D(T *rawImagePointerIn,
-                             const size_t lineSize,
-                             size_t y,
-                             T *lineout) {
+  void t_LineCopyFromImage2D(T *rawImagePointerIn, const size_t lineSize,
+                             size_t y, T *lineout)
+  {
     T *ptrin = rawImagePointerIn + y * lineSize;
 
     memcpy(lineout, ptrin, lineSize * sizeof(T));
   }
 
   template <typename T>
-  void t_LineCopyToImage2D(T *linein,
-                           const size_t lineSize,
-                           size_t y,
-                           T *rawImagePointerOut) {
+  void t_LineCopyToImage2D(T *linein, const size_t lineSize, size_t y,
+                           T *rawImagePointerOut)
+  {
     T *ptrout = rawImagePointerOut + y * lineSize;
 
     memcpy(ptrout, linein, lineSize * sizeof(T));
   }
 
   template <typename T>
-  void t_LineShiftRight(const T *linein,
-                        const int lineWidth,
-                        const int nbshift,
-                        const T shiftValue,
-                        T *lineout) {
+  void t_LineShiftRight(const T *linein, const int lineWidth, const int nbshift,
+                        const T shiftValue, T *lineout)
+  {
     int i;
 
-    for(i = 0; i < nbshift; i++) {
+    for (i = 0; i < nbshift; i++) {
       lineout[i] = shiftValue;
     }
 
@@ -276,34 +316,34 @@ namespace smil {
   }
 
   template <typename T>
-  void t_LineShiftLeft(const T *linein,
-                       const int lineWidth,
-                       const int nbshift,
-                       const T shiftValue,
-                       T *lineout) {
+  void t_LineShiftLeft(const T *linein, const int lineWidth, const int nbshift,
+                       const T shiftValue, T *lineout)
+  {
     int i;
 
-    for(i = lineWidth - nbshift; i < lineWidth; i++) {
+    for (i = lineWidth - nbshift; i < lineWidth; i++) {
       lineout[i] = shiftValue;
     }
 
     memcpy(lineout, linein + nbshift, (lineWidth - nbshift) * sizeof(T));
   }
 
-  inline size_t PTR_OFFSET(void *p, size_t n = SIMD_VEC_SIZE) {
-    return ((size_t)p) & (n - 1);
+  inline size_t PTR_OFFSET(void *p, size_t n = SIMD_VEC_SIZE)
+  {
+    return ((size_t) p) & (n - 1);
   }
 
-  inline std::string displayBytes(size_t bytes) {
+  inline std::string displayBytes(size_t bytes)
+  {
     std::ostringstream oss;
-    if(bytes == 0) {
+    if (bytes == 0) {
       oss << "0 B";
     } else {
-      const char *units[]
-        = {"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"};
-      const double base = 1024;
-      int c = std::min(
-        (int)(log((double)bytes) / log(base)), (int)sizeof(units) - 1);
+      const char  *units[] = {"B",   "KiB", "MiB", "GiB", "TiB",
+                              "PiB", "EiB", "ZiB", "YiB"};
+      const double base    = 1024;
+      int          c       = std::min((int) (log((double) bytes) / log(base)),
+                                      (int) sizeof(units) - 1);
       oss << bytes / pow(base, c) << units[c];
     }
     return oss.str();

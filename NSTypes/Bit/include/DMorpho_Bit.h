@@ -34,28 +34,31 @@
 #include "Morpho/include/private/DMorphoArrow.hpp"
 #include "Morpho/include/private/DMorphImageOperations.hpp"
 
-namespace smil {
+namespace smil
+{
   template <>
-  RES_T build(const Image<Bit> &imIn,
-              const Image<Bit> &imMark,
-              Image<Bit> &imOut,
-              const StrElt &se) {
+  RES_T build(const Image<Bit> &imIn, const Image<Bit> &imMark,
+              Image<Bit> &imOut, const StrElt &se)
+  {
     return binBuild(imIn, imMark, imOut, se);
   }
 
   template <class lineFunction_T>
-  class unaryMorphArrowImageFunction<Bit, lineFunction_T> {
+  class unaryMorphArrowImageFunction<Bit, lineFunction_T>
+  {
   public:
     typedef Image<Bit> imageType;
-    unaryMorphArrowImageFunction(Bit b = 0) {
+    unaryMorphArrowImageFunction(Bit b = 0)
+    {
     }
-    inline RES_T
-      operator()(const imageType &imIn, imageType &imOut, const StrElt &se) {
+    inline RES_T operator()(const imageType &imIn, imageType &imOut,
+                            const StrElt &se)
+    {
       return RES_ERR_NOT_IMPLEMENTED;
     }
-    RES_T _exec_single(const Image<Bit> &imIn,
-                       Image<Bit> &imOut,
-                       const StrElt &se) {
+    RES_T _exec_single(const Image<Bit> &imIn, Image<Bit> &imOut,
+                       const StrElt &se)
+    {
       return RES_ERR_NOT_IMPLEMENTED;
     }
   };

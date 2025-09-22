@@ -41,7 +41,8 @@
 #define SMIL_OPEN(FILEPTR, NAME, MODE) FILEPTR = fopen(NAME, MODE)
 #endif // _MSC_VER
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup IO
    */
@@ -50,13 +51,16 @@ namespace smil {
   string getFileExtension(const char *fileName);
 
   /** @cond */
-  class FileCloser {
+  class FileCloser
+  {
   public:
-    FileCloser(FILE *_fp) {
+    FileCloser(FILE *_fp)
+    {
       fp = _fp;
     }
-    ~FileCloser() {
-      if(fp)
+    ~FileCloser()
+    {
+      if (fp)
         fclose(fp);
     }
 
@@ -67,14 +71,16 @@ namespace smil {
 
   struct ImageFileInfo {
     ImageFileInfo()
-      : colorType(COLOR_TYPE_UNKNOWN), scalarType(SCALAR_TYPE_UNKNOWN),
-        fileType(FILE_TYPE_BINARY), width(0), height(0), depth(0),
-        dataStartPos(0) {
+        : colorType(COLOR_TYPE_UNKNOWN), scalarType(SCALAR_TYPE_UNKNOWN),
+          fileType(FILE_TYPE_BINARY), width(0), height(0), depth(0),
+          dataStartPos(0)
+    {
       filename = "Unknown";
-      valid = false;
+      valid    = false;
     }
 
-    ~ImageFileInfo() {
+    ~ImageFileInfo()
+    {
     }
 
     enum ColorType {
@@ -98,14 +104,14 @@ namespace smil {
 
     enum FileType { FILE_TYPE_ASCII, FILE_TYPE_BINARY };
 
-    bool valid;
-    string filename;
-    UINT channels;
-    ColorType colorType;
+    bool       valid;
+    string     filename;
+    UINT       channels;
+    ColorType  colorType;
     ScalarType scalarType;
-    FileType fileType;
-    size_t width, height, depth;
-    streampos dataStartPos;
+    FileType   fileType;
+    size_t     width, height, depth;
+    streampos  dataStartPos;
 
     // virtual void printSelf(ostream &os) const;
 

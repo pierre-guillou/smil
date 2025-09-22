@@ -44,7 +44,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup   AddonFilters
    * @defgroup  AddonSigmaFilter        Sigma Filter (2D)
@@ -69,12 +70,9 @@ namespace smil {
    * @param[out] imOut : output Image
    */
   template <class T>
-  RES_T sigmaFilter(const Image<T> &imIn,
-                    const UINT8 radius,
-                    const double sigma,
-                    const double percentageNbMinPixel,
-                    const bool excludeOutlier,
-                    Image<T> &imOut);
+  RES_T sigmaFilter(const Image<T> &imIn, const UINT8 radius,
+                    const double sigma, const double percentageNbMinPixel,
+                    const bool excludeOutlier, Image<T> &imOut);
 
   /**
    * @brief Performs a noise reduction following the Lee paper (RGB Images)
@@ -87,12 +85,9 @@ namespace smil {
    * @warning Yet to be done !!!
    */
   template <class T>
-  RES_T sigmaFilterRGB(const Image<T> &imIn,
-                       const UINT8 radius,
-                       const double sigma,
-                       const double percentageNbMinPixel,
-                       const bool excludeOutlier,
-                       Image<T> &imOut);
+  RES_T sigmaFilterRGB(const Image<T> &imIn, const UINT8 radius,
+                       const double sigma, const double percentageNbMinPixel,
+                       const bool excludeOutlier, Image<T> &imOut);
   /** @} */
 } // namespace smil
 

@@ -51,7 +51,8 @@
 
 using namespace std;
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup AddonMorphoExtrasAttrOpen      Attribute Open/Close
    *
@@ -59,18 +60,21 @@ namespace smil {
    */
   /** @cond */
   template <typename T>
-  class UnionFindFunctions {
+  class UnionFindFunctions
+  {
     //
     // P U B L I C
     //
   public:
-    UnionFindFunctions() {
+    UnionFindFunctions()
+    {
       se = DEFAULT_SE;
       // se = CrossSE();
     }
 
     RES_T
-    areaOpen(const Image<T> &imIn, size_t size, Image<T> &imOut, StrElt &se) {
+    areaOpen(const Image<T> &imIn, size_t size, Image<T> &imOut, StrElt &se)
+    {
       _init(imIn);
 
       this->se = se;
@@ -95,31 +99,32 @@ namespace smil {
 
     off_t lambda;
 
-    Image<T> imIn;
+    Image<T>                    imIn;
     typename Image<T>::lineType bufIn;
     typename Image<T>::lineType bufOut;
 
     StrElt se;
 
     map<T, vector<off_t>> histoMap;
-    vector<off_t> parent;
+    vector<off_t>         parent;
 
     bool debug;
 
     //
     // M E T H O D S
     //
-    void _init(const Image<T> &im) {
+    void _init(const Image<T> &im)
+    {
       imIn = im;
 
-      width = imIn.getWidth();
+      width  = imIn.getWidth();
       height = imIn.getHeight();
-      depth = imIn.getDepth();
-      slice = height * width;
+      depth  = imIn.getDepth();
+      slice  = height * width;
 
       parent.resize(imIn.getPixelCount(), 0);
 
-      bufIn = (T *)imIn.getPixels();
+      bufIn = (T *) imIn.getPixels();
 
       debug = false;
     }
@@ -127,53 +132,58 @@ namespace smil {
     //
     // H I S T O G R A M    M A P
     //
-    void mkHistogram(const Image<T> &im) {
+    void mkHistogram(const Image<T> &im)
+    {
       typename Image<T>::lineType pixels = im.getPixels();
-      mutex mtx;
+      mutex                       mtx;
 
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif
-      for(size_t i = 0; i < im.getPixelCount(); i++) {
+      for (size_t i = 0; i < im.getPixelCount(); i++) {
         T val = pixels[i];
 
         mtx.lock();
         size_t capacity = histoMap[val].capacity();
-        if((capacity - histoMap[val].size()) < 512)
+        if ((capacity - histoMap[val].size()) < 512)
           histoMap[val].reserve(capacity + 8192);
 
         histoMap[val].push_back(i);
         mtx.unlock();
       }
 
-      if(debug)
+      if (debug)
         dumpHistogram();
     }
 
     //
     // U N I O N   F I N D
     //
-    void MakeSet(off_t x) {
+    void MakeSet(off_t x)
+    {
       parent[x] = -1;
     }
 
-    off_t FindRoot(off_t x) {
-      if(parent[x] >= 0 && parent[x] != x) {
+    off_t FindRoot(off_t x)
+    {
+      if (parent[x] >= 0 && parent[x] != x) {
         parent[x] = FindRoot(parent[x]);
         return parent[x];
       } else
         return x;
     }
 
-    bool Criterion(off_t x, off_t y) {
+    bool Criterion(off_t x, off_t y)
+    {
       return (bufIn[x] == bufIn[y] || -parent[x] < lambda);
     }
 
-    void Union(off_t n, off_t p) {
+    void Union(off_t n, off_t p)
+    {
       off_t r = FindRoot(n);
 
-      if(r != p) {
-        if(Criterion(r, p)) {
+      if (r != p) {
+        if (Criterion(r, p)) {
           parent[p] += parent[r];
           parent[r] = p;
         } else {
@@ -188,12 +198,13 @@ namespace smil {
 
     // vector
     template <typename TD>
-    void dumpVector(vector<TD> &b, string head = "") {
+    void dumpVector(vector<TD> &b, string head = "")
+    {
       cout << endl;
       cout << "=========================== " << head << endl;
-      for(auto i = 0; i < height; i++) {
+      for (auto i = 0; i < height; i++) {
         cout << "Line " << setw(4) << i << " - ";
-        for(auto j = 0; j < width; j++) {
+        for (auto j = 0; j < width; j++) {
           cout << " " << setw(4) << int(b[i * width + j]);
         }
         cout << endl;
@@ -202,12 +213,13 @@ namespace smil {
 
     // image
     template <typename TI>
-    void dumpImage(TI *b, string head = "") {
+    void dumpImage(TI *b, string head = "")
+    {
       cout << endl;
       cout << "=========================== " << head << endl;
-      for(auto i = 0; i < height; i++) {
+      for (auto i = 0; i < height; i++) {
         cout << "Line " << setw(4) << i << " - ";
-        for(auto j = 0; j < width; j++) {
+        for (auto j = 0; j < width; j++) {
           cout << " " << setw(4) << int(b[i * width + j]);
         }
         cout << endl;
@@ -215,21 +227,22 @@ namespace smil {
     }
 
     // histogram
-    void dumpHistogram() {
-      for(auto itk = histoMap.rbegin(); itk != histoMap.rend(); itk++) {
+    void dumpHistogram()
+    {
+      for (auto itk = histoMap.rbegin(); itk != histoMap.rend(); itk++) {
         cout << "Level \t" << int(itk->first) << "\t" << itk->second.size()
              << endl;
       }
       cout << endl;
 
-      for(auto itk = histoMap.begin(); itk != histoMap.end(); itk++) {
+      for (auto itk = histoMap.begin(); itk != histoMap.end(); itk++) {
         auto i = 0;
         cout << endl;
         cout << "* Histogram Level " << setw(4) << int(itk->first) << "\t"
              << itk->second.size() << endl;
-        for(auto itv = itk->second.begin(); itv != itk->second.end();
-            itv++, i++) {
-          if(i % 16 == 0)
+        for (auto itv = itk->second.begin(); itv != itk->second.end();
+             itv++, i++) {
+          if (i % 16 == 0)
             cout << endl;
           cout << " " << setw(4) << *itv;
         }
@@ -240,9 +253,10 @@ namespace smil {
     //
     // L I T T L E   T O O L S
     //
-    void _pixel2coords(off_t pixel, off_t &x, off_t &y, off_t &z) {
+    void _pixel2coords(off_t pixel, off_t &x, off_t &y, off_t &z)
+    {
       x = pixel % width;
-      if(depth > 1) {
+      if (depth > 1) {
         y = (pixel % slice) / width;
         z = pixel / slice;
       } else {
@@ -251,19 +265,21 @@ namespace smil {
       }
     }
 
-    off_t _coords2pixel(off_t &x, off_t &y, off_t &z) {
-      if(depth > 1)
+    off_t _coords2pixel(off_t &x, off_t &y, off_t &z)
+    {
+      if (depth > 1)
         return x + y * width + z * slice;
       else
         return x + y * width;
     }
 
-    bool _pixelInWindow(off_t x, off_t y, off_t z) {
-      if(x < 0 || x >= width)
+    bool _pixelInWindow(off_t x, off_t y, off_t z)
+    {
+      if (x < 0 || x >= width)
         return false;
-      if(y < 0 || y >= height)
+      if (y < 0 || y >= height)
         return false;
-      if(z < 0 || z >= depth)
+      if (z < 0 || z >= depth)
         return false;
       return true;
     }
@@ -271,8 +287,9 @@ namespace smil {
     //
     // A R E A   O P E N
     //
-    RES_T _areaOpen(const Image<T> &imIn, size_t size, Image<T> &imOut) {
-      bufOut = (T *)imOut.getPixels();
+    RES_T _areaOpen(const Image<T> &imIn, size_t size, Image<T> &imOut)
+    {
+      bufOut = (T *) imOut.getPixels();
       lambda = size;
 
       // build histogram as a map
@@ -282,8 +299,8 @@ namespace smil {
       se = se.noCenter();
 
       // Tarjan algorithm
-      for(auto itk = histoMap.rbegin(); itk != histoMap.rend(); itk++) {
-        for(auto itv = itk->second.begin(); itv != itk->second.end(); itv++) {
+      for (auto itk = histoMap.rbegin(); itk != histoMap.rend(); itk++) {
+        for (auto itv = itk->second.begin(); itv != itk->second.end(); itv++) {
           off_t pix = *itv;
           off_t nbg;
 
@@ -292,28 +309,29 @@ namespace smil {
 
           MakeSet(pix);
 
-          for(auto its = se.points.begin(); its != se.points.end(); its++) {
+          for (auto its = se.points.begin(); its != se.points.end(); its++) {
             off_t dx = its->x;
             off_t dy = its->y;
             off_t dz = its->z;
 
-            if(!_pixelInWindow(x + dx, y + dy, z + dz))
+            if (!_pixelInWindow(x + dx, y + dy, z + dz))
               continue;
             nbg = pix + _coords2pixel(dx, dy, dz);
 
-            if((bufIn[pix] < bufIn[nbg])
-               || ((bufIn[pix] == bufIn[nbg]) && (nbg < pix)))
+            if ((bufIn[pix] < bufIn[nbg]) ||
+                ((bufIn[pix] == bufIn[nbg]) && (nbg < pix)))
               Union(nbg, pix);
           }
         }
       }
 
       // Making output image
-      for(auto itk = histoMap.begin(); itk != histoMap.end(); itk++) {
-        for(auto itv = itk->second.rbegin(); itv != itk->second.rend(); itv++) {
+      for (auto itk = histoMap.begin(); itk != histoMap.end(); itk++) {
+        for (auto itv = itk->second.rbegin(); itv != itk->second.rend();
+             itv++) {
           off_t pix = *itv;
 
-          if(parent[pix] >= 0)
+          if (parent[pix] >= 0)
             parent[pix] = parent[parent[pix]];
           else
             parent[pix] = bufIn[pix];

@@ -37,7 +37,8 @@
 #include "Morpho/include/DMorphoInstance.h"
 #include "DHitOrMiss.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Morpho
    * @defgroup Filters Morphological Filters
@@ -66,16 +67,16 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T close(const Image<T> &imIn,
-              Image<T> &imOut,
-              const StrElt &se = DEFAULT_SE) {
+  RES_T close(const Image<T> &imIn, Image<T> &imOut,
+              const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
     ImageFreezer freeze(imOut);
 
     bool inplaceSafe = MorphImageFunction<T, supLine<T>>::isInplaceSafe(se);
     Image<T> *imTmp;
-    if(inplaceSafe)
+    if (inplaceSafe)
       imTmp = &imOut;
     else
       imTmp = new Image<T>(imIn);
@@ -83,7 +84,7 @@ namespace smil {
     ASSERT((dilate(imIn, *imTmp, se) == RES_OK));
     ASSERT((erode(*imTmp, imOut, se) == RES_OK));
 
-    if(!inplaceSafe)
+    if (!inplaceSafe)
       delete imTmp;
 
     return RES_OK;
@@ -104,7 +105,8 @@ namespace smil {
    * you should set it before
    */
   template <class T>
-  RES_T close(const Image<T> &imIn, Image<T> &imOut, UINT seSize) {
+  RES_T close(const Image<T> &imIn, Image<T> &imOut, UINT seSize)
+  {
     return close(imIn, imOut, DEFAULT_SE(seSize));
   }
 
@@ -118,15 +120,16 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T
-    open(const Image<T> &imIn, Image<T> &imOut, const StrElt &se = DEFAULT_SE) {
+  RES_T open(const Image<T> &imIn, Image<T> &imOut,
+             const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
     ImageFreezer freeze(imOut);
 
     bool inplaceSafe = MorphImageFunction<T, supLine<T>>::isInplaceSafe(se);
     Image<T> *imTmp;
-    if(inplaceSafe)
+    if (inplaceSafe)
       imTmp = &imOut;
     else
       imTmp = new Image<T>(imIn);
@@ -134,7 +137,7 @@ namespace smil {
     ASSERT((erode(imIn, *imTmp, se) == RES_OK));
     ASSERT((dilate(*imTmp, imOut, se) == RES_OK));
 
-    if(!inplaceSafe)
+    if (!inplaceSafe)
       delete imTmp;
 
     return RES_OK;
@@ -155,7 +158,8 @@ namespace smil {
    * you should set it before
    */
   template <class T>
-  RES_T open(const Image<T> &imIn, Image<T> &imOut, UINT seSize) {
+  RES_T open(const Image<T> &imIn, Image<T> &imOut, UINT seSize)
+  {
     return open(imIn, imOut, DEFAULT_SE(seSize));
   }
 
@@ -173,16 +177,16 @@ namespace smil {
    * @smilexample{example-asfclose.py}
    */
   template <class T>
-  RES_T asfClose(const Image<T> &imIn,
-                 Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE) {
+  RES_T asfClose(const Image<T> &imIn, Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     ImageFreezer freeze(imOut);
 
     Image<T> tmpIm(imIn, true); // clone
-    for(UINT i = 1; i <= se.size; i++) {
+    for (UINT i = 1; i <= se.size; i++) {
       ASSERT((close(tmpIm, imOut, se(i)) == RES_OK));
       ASSERT((open(imOut, tmpIm, se(i)) == RES_OK));
     }
@@ -203,16 +207,16 @@ namespace smil {
    * @param[in] se : structuring element with the maximum size of the filter
    */
   template <class T>
-  RES_T asfOpen(const Image<T> &imIn,
-                Image<T> &imOut,
-                const StrElt &se = DEFAULT_SE) {
+  RES_T asfOpen(const Image<T> &imIn, Image<T> &imOut,
+                const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     ImageFreezer freeze(imOut);
 
     Image<T> tmpIm(imIn, true); // clone
-    for(UINT i = 1; i <= se.size; i++) {
+    for (UINT i = 1; i <= se.size; i++) {
       ASSERT((open(tmpIm, imOut, se(i)) == RES_OK));
       ASSERT((close(imOut, tmpIm, se(i)) == RES_OK));
     }
@@ -223,20 +227,22 @@ namespace smil {
 
   /** @cond */
   template <class T>
-  class meanFunct : public MorphImageFunctionBase<T, T> {
+  class meanFunct : public MorphImageFunctionBase<T, T>
+  {
   public:
     typedef MorphImageFunctionBase<T, T> parentClass;
 
-    virtual inline void processPixel(size_t pointOffset,
-                                     vector<int> &dOffsetList) {
-      double meanVal = 0;
+    virtual inline void processPixel(size_t       pointOffset,
+                                     vector<int> &dOffsetList)
+    {
+      double                meanVal = 0;
       vector<int>::iterator dOffset = dOffsetList.begin();
-      while(dOffset != dOffsetList.end()) {
+      while (dOffset != dOffsetList.end()) {
         meanVal += double(parentClass::pixelsIn[pointOffset + *dOffset]);
         dOffset++;
       }
-      parentClass::pixelsOut[pointOffset]
-        = T(meanVal / double(dOffsetList.size()));
+      parentClass::pixelsOut[pointOffset] =
+          T(meanVal / double(dOffsetList.size()));
     }
   };
   /** @endcond */
@@ -249,8 +255,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T
-    mean(const Image<T> &imIn, Image<T> &imOut, const StrElt &se = DEFAULT_SE) {
+  RES_T mean(const Image<T> &imIn, Image<T> &imOut,
+             const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -263,15 +270,17 @@ namespace smil {
 
   /** @cond */
   template <class T>
-  class medianFunct : public MorphImageFunctionBase<T, T> {
+  class medianFunct : public MorphImageFunctionBase<T, T>
+  {
   public:
     typedef MorphImageFunctionBase<T, T> parentClass;
 
-    virtual inline void processPixel(size_t pointOffset,
-                                     vector<int> &dOffsetList) {
-      vector<T> vals;
+    virtual inline void processPixel(size_t       pointOffset,
+                                     vector<int> &dOffsetList)
+    {
+      vector<T>             vals;
       vector<int>::iterator dOffset = dOffsetList.begin();
-      while(dOffset != dOffsetList.end()) {
+      while (dOffset != dOffsetList.end()) {
         vals.push_back(parentClass::pixelsIn[pointOffset + *dOffset]);
         dOffset++;
       }
@@ -289,9 +298,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T median(const Image<T> &imIn,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T median(const Image<T> &imIn, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -304,23 +313,26 @@ namespace smil {
 
   /** @cond */
   template <class T>
-  class rankFunct : public MorphImageFunctionBase<T, T> {
+  class rankFunct : public MorphImageFunctionBase<T, T>
+  {
   public:
     typedef MorphImageFunctionBase<T, T> parentClass;
 
-    rankFunct(double per) : MorphImageFunctionBase<T, T>(), percentile(per) {
+    rankFunct(double per) : MorphImageFunctionBase<T, T>(), percentile(per)
+    {
     }
-    virtual inline void processPixel(size_t pointOffset,
-                                     vector<int> &dOffsetList) {
-      vector<T> vals;
+    virtual inline void processPixel(size_t       pointOffset,
+                                     vector<int> &dOffsetList)
+    {
+      vector<T>             vals;
       vector<int>::iterator dOffset = dOffsetList.begin();
-      while(dOffset != dOffsetList.end()) {
+      while (dOffset != dOffsetList.end()) {
         vals.push_back(parentClass::pixelsIn[pointOffset + *dOffset]);
         dOffset++;
       }
       sort(vals.begin(), vals.end());
-      parentClass::pixelsOut[pointOffset]
-        = vals[static_cast<int>(dOffsetList.size() * this->percentile)];
+      parentClass::pixelsOut[pointOffset] =
+          vals[static_cast<int>(dOffsetList.size() * this->percentile)];
     }
 
   private:
@@ -336,10 +348,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T rank(const Image<T> &imIn,
-             Image<T> &imOut,
-             double percentile,
-             const StrElt &se = DEFAULT_SE) {
+  RES_T rank(const Image<T> &imIn, Image<T> &imOut, double percentile,
+             const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 

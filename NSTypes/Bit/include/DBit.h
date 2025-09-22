@@ -39,33 +39,36 @@
 
 #include "Base/include/private/DImageMatrix.hpp"
 
-namespace smil {
+namespace smil
+{
 
   template <>
   void QtImageViewer<Bit>::drawImage();
 
   template <>
-  RES_T VTKImageFileHandler<Bit>::read(const char *filename,
-                                       Image<Bit> &image) {
+  RES_T VTKImageFileHandler<Bit>::read(const char *filename, Image<Bit> &image)
+  {
     return RES_ERR_NOT_IMPLEMENTED;
   }
 
   template <>
   RES_T VTKImageFileHandler<Bit>::write(const Image<Bit> &image,
-                                        const char *filename) {
+                                        const char       *filename)
+  {
     return RES_ERR_NOT_IMPLEMENTED;
   }
 
   template <>
-  RES_T matMultiply<Bit>(const Image<Bit> &imIn1,
-                         const Image<Bit> &imIn2,
-                         Image<Bit> &imOut) {
+  RES_T matMultiply<Bit>(const Image<Bit> &imIn1, const Image<Bit> &imIn2,
+                         Image<Bit> &imOut)
+  {
     return RES_ERR_NOT_IMPLEMENTED;
   }
 
 #if defined SWIGPYTHON and defined USE_NUMPY
   template <>
-  PyObject *Image<Bit>::getNumpyArray(bool c_contigous) {
+  PyObject *Image<Bit>::getNumpyArray(bool c_contigous)
+  {
   }
 #endif // defined SWIGPYTHON and defined USE_NUMPY
 

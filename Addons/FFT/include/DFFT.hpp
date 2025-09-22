@@ -34,7 +34,8 @@
 
 #include <fftw3.h>
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Addons
    * @addtogroup AddonFFT FFT(W) based functions
@@ -57,58 +58,59 @@ namespace smil {
    * \endcode
    */
   template <class T1, class T2>
-  RES_T correlation(Image<T1> &imIn1, Image<T1> &imIn2, Image<T2> &imOut) {
+  RES_T correlation(Image<T1> &imIn1, Image<T1> &imIn2, Image<T2> &imOut)
+  {
     ASSERT_SAME_SIZE(&imIn1, &imIn2);
 
     size_t ncols = imIn1.getWidth();
     // complex data column nbr
     size_t nccols = ncols;
-    size_t nrows = imIn2.getHeight();
+    size_t nrows  = imIn2.getHeight();
 
     imOut.setSize(ncols, nrows);
 
     size_t pixNbr = ncols * nrows;
 
     // Allocate arrays for FFT of src and tpl
-    double *src1_real = fftw_alloc_real(pixNbr);
+    double       *src1_real  = fftw_alloc_real(pixNbr);
     fftw_complex *src1_compl = fftw_alloc_complex(nccols * nrows);
-    double *src2_real = fftw_alloc_real(pixNbr);
+    double       *src2_real  = fftw_alloc_real(pixNbr);
     fftw_complex *src2_compl = fftw_alloc_complex(nccols * nrows);
 
-    double *res_real = fftw_alloc_real(pixNbr);
+    double       *res_real  = fftw_alloc_real(pixNbr);
     fftw_complex *res_compl = fftw_alloc_complex(nccols * nrows);
 
     T1 *src1_data = imIn1.getPixels();
     T1 *src2_data = imIn2.getPixels();
-    T2 *out_data = imOut.getPixels();
+    T2 *out_data  = imOut.getPixels();
 
     // Copy image pixel values
-    for(size_t i = 0; i < pixNbr; i++) {
-      src1_real[i] = (double)src1_data[i];
-      src2_real[i] = (double)src2_data[i];
+    for (size_t i = 0; i < pixNbr; i++) {
+      src1_real[i] = (double) src1_data[i];
+      src2_real[i] = (double) src2_data[i];
     }
 
     // Create FFTW plans
-    fftw_plan forward1 = fftw_plan_dft_r2c_2d(
-      nrows, ncols, src1_real, src1_compl, FFTW_ESTIMATE);
-    fftw_plan forward2 = fftw_plan_dft_r2c_2d(
-      nrows, ncols, src2_real, src2_compl, FFTW_ESTIMATE);
-    fftw_plan backward = fftw_plan_dft_c2r_2d(
-      nrows, ncols, res_compl, res_real, FFTW_BACKWARD | FFTW_ESTIMATE);
+    fftw_plan forward1 = fftw_plan_dft_r2c_2d(nrows, ncols, src1_real,
+                                              src1_compl, FFTW_ESTIMATE);
+    fftw_plan forward2 = fftw_plan_dft_r2c_2d(nrows, ncols, src2_real,
+                                              src2_compl, FFTW_ESTIMATE);
+    fftw_plan backward = fftw_plan_dft_c2r_2d(nrows, ncols, res_compl, res_real,
+                                              FFTW_BACKWARD | FFTW_ESTIMATE);
 
     // Compute the FFT of the images
     fftw_execute(forward1);
     fftw_execute(forward2);
 
     // Compute the cross-correlation
-    for(size_t i = 0; i < pixNbr; i++) {
-      res_compl[i][0] = (src1_compl[i][0] * src2_compl[i][0]
-                         + src1_compl[i][1] * src2_compl[i][1]);
-      res_compl[i][1] = (src1_compl[i][1] * src2_compl[i][0]
-                         - src1_compl[i][0] * src2_compl[i][1]);
+    for (size_t i = 0; i < pixNbr; i++) {
+      res_compl[i][0] = (src1_compl[i][0] * src2_compl[i][0] +
+                         src1_compl[i][1] * src2_compl[i][1]);
+      res_compl[i][1] = (src1_compl[i][1] * src2_compl[i][0] -
+                         src1_compl[i][0] * src2_compl[i][1]);
 
-      double norm = std::sqrt(std::pow(res_compl[i][0], 2)
-                              + std::pow(res_compl[i][1], 2));
+      double norm = std::sqrt(std::pow(res_compl[i][0], 2) +
+                              std::pow(res_compl[i][1], 2));
       res_compl[i][0] /= norm;
       res_compl[i][1] /= norm;
     }
@@ -119,10 +121,9 @@ namespace smil {
     // Copy results to imOut
     // Base results are between -1 and 1. We stretch/translate values to the
     // output type value range.
-    for(size_t i = 0; i < pixNbr; i++) {
-      out_data[i]
-        = ImDtTypes<T2>::min()
-          + (res_real[i] / pixNbr + 1) * ImDtTypes<T2>::cardinal() / 2;
+    for (size_t i = 0; i < pixNbr; i++) {
+      out_data[i] = ImDtTypes<T2>::min() +
+                    (res_real[i] / pixNbr + 1) * ImDtTypes<T2>::cardinal() / 2;
     }
 
     // Clear memory

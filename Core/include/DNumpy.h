@@ -34,54 +34,66 @@
 
 #include "numpy/arrayobject.h"
 
-namespace smil {
+namespace smil
+{
 
   template <class T>
   class Image;
 
   template <class T>
-  int getNumpyType(Image<T> & /*im*/) {
+  int getNumpyType(Image<T> & /*im*/)
+  {
     return NPY_VOID;
   } // Default
 
   template <>
-  int getNumpyType(Image<UINT8> & /*im*/) {
+  int getNumpyType(Image<UINT8> & /*im*/)
+  {
     return NPY_UBYTE;
   }
   template <>
-  int getNumpyType(Image<INT8> & /*im*/) {
+  int getNumpyType(Image<INT8> & /*im*/)
+  {
     return NPY_BYTE;
   }
   template <>
-  int getNumpyType(Image<UINT16> & /*im*/) {
+  int getNumpyType(Image<UINT16> & /*im*/)
+  {
     return NPY_USHORT;
   }
   template <>
-  int getNumpyType(Image<INT16> & /*im*/) {
+  int getNumpyType(Image<INT16> & /*im*/)
+  {
     return NPY_SHORT;
   }
   template <>
-  int getNumpyType(Image<UINT32> & /*im*/) {
+  int getNumpyType(Image<UINT32> & /*im*/)
+  {
     return NPY_UINT;
   }
   template <>
-  int getNumpyType(Image<INT32> & /*im*/) {
+  int getNumpyType(Image<INT32> & /*im*/)
+  {
     return NPY_INT;
   }
   template <>
-  int getNumpyType(Image<unsigned long> & /*im*/) {
+  int getNumpyType(Image<unsigned long> & /*im*/)
+  {
     return NPY_ULONG;
   }
   template <>
-  int getNumpyType(Image<long> & /*im*/) {
+  int getNumpyType(Image<long> & /*im*/)
+  {
     return NPY_LONG;
   }
   template <>
-  int getNumpyType(Image<float> & /*im*/) {
+  int getNumpyType(Image<float> & /*im*/)
+  {
     return NPY_FLOAT;
   }
   template <>
-  int getNumpyType(Image<double> & /*im*/) {
+  int getNumpyType(Image<double> & /*im*/)
+  {
     return NPY_DOUBLE;
   }
 

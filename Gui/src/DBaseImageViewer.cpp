@@ -33,7 +33,8 @@
 using namespace smil;
 
 BaseImageViewer::BaseImageViewer(const char *_className)
-  : BaseObject(_className), labelImage(false) {
+    : BaseObject(_className), labelImage(false)
+{
   Gui::initialize();
   updateSlot.init(this, &BaseImageViewer::update);
 }

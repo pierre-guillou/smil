@@ -33,7 +33,8 @@
 #include "IO/include/DCommonIO.h"
 #include "Base/include/private/DImageArith.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup IO
    */
@@ -41,30 +42,37 @@ namespace smil {
   /**@{*/
 
   template <class T = void>
-  class ImageFileHandler {
+  class ImageFileHandler
+  {
   public:
-    ImageFileHandler(const char *ext) : fileExtention(ext) {
+    ImageFileHandler(const char *ext) : fileExtention(ext)
+    {
     }
-    virtual ~ImageFileHandler() {
+    virtual ~ImageFileHandler()
+    {
     }
 
     const char *fileExtention;
 
-    virtual RES_T getFileInfo(const char *, ImageFileInfo &) {
+    virtual RES_T getFileInfo(const char *, ImageFileInfo &)
+    {
       return RES_ERR;
     }
 
-    virtual RES_T read(const char *) {
+    virtual RES_T read(const char *)
+    {
       return RES_ERR;
     }
 
-    virtual RES_T read(const char *, Image<T> &) {
+    virtual RES_T read(const char *, Image<T> &)
+    {
       T *dum = NULL;
       cout << getDataTypeAsString<T>(dum) << " data type not implemented for "
            << fileExtention << " files (read)." << endl;
       return RES_ERR;
     }
-    virtual RES_T write(const Image<T> &, const char *) {
+    virtual RES_T write(const Image<T> &, const char *)
+    {
       T *dum = NULL;
       cout << getDataTypeAsString<T>(dum) << " data type not implemented for "
            << fileExtention << " files (write)." << endl;

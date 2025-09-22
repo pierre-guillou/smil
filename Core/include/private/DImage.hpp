@@ -35,7 +35,8 @@
 #include "Core/include/DBaseImage.h"
 #include "Gui/include/DBaseImageViewer.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup CoreImage
    * @{
@@ -56,7 +57,8 @@ namespace smil {
    * @tparam T Image data type (UINT8, UINT16, ...)
    */
   template <class T>
-  class Image : public BaseImage {
+  class Image : public BaseImage
+  {
     typedef BaseImage parentClass;
 
   public:
@@ -78,7 +80,8 @@ namespace smil {
     Image(const ResImage<T> &rhs, bool cloneData = true);
 
     // Assignment operator
-    Image<T> &operator=(const Image<T> &rhs) {
+    Image<T> &operator=(const Image<T> &rhs)
+    {
       this->clone(rhs);
       return *this;
     }
@@ -92,28 +95,32 @@ namespace smil {
 
     //! Get the image type.
     //! @return The type of the image data as a string ("UINT8", "UINT16", ...)
-    virtual const char *getTypeAsString() {
+    virtual const char *getTypeAsString()
+    {
       T *dum = NULL;
       return getDataTypeAsString<T>(dum);
     }
-    typedef typename ImDtTypes<T>::pixelType pixelType;
-    typedef typename ImDtTypes<T>::lineType lineType;
+    typedef typename ImDtTypes<T>::pixelType        pixelType;
+    typedef typename ImDtTypes<T>::lineType         lineType;
     typedef typename ImDtTypes<T>::restrictLineType restrictLineType;
-    typedef typename ImDtTypes<T>::sliceType sliceType;
-    typedef typename ImDtTypes<T>::volType volType;
+    typedef typename ImDtTypes<T>::sliceType        sliceType;
+    typedef typename ImDtTypes<T>::volType          volType;
 
     //! Get the pixels as a 1D array
-    lineType getPixels() const {
+    lineType getPixels() const
+    {
       return pixels;
     }
 
     //! Get an array containing the start offset of each line
-    sliceType getLines() const {
+    sliceType getLines() const
+    {
       return lines;
     }
 
     //! Get an array containing the start offset of each slice
-    volType getSlices() const {
+    volType getSlices() const
+    {
       return slices;
     }
 
@@ -123,24 +130,28 @@ namespace smil {
     SharedImage<T> getSlice(size_t sliceNum) const;
 
     //! Return the value of the pixel at pos x,y(,z)
-    inline T getPixel(size_t x, size_t y, size_t z = 0) const {
+    inline T getPixel(size_t x, size_t y, size_t z = 0) const
+    {
       ASSERT((x < width && y < height && z < depth),
              "Coords out of image range", T(0));
       return pixels[z * width * height + y * width + x];
     }
 
     //! Return the value of the pixel at a given offset
-    inline T getPixel(size_t offset) const {
+    inline T getPixel(size_t offset) const
+    {
       ASSERT((offset < pixelCount), "Offset out of image range", T(0));
       return pixels[offset];
     }
 
-    inline T getPixelNoCheck(size_t offset) const {
+    inline T getPixelNoCheck(size_t offset) const
+    {
       return pixels[offset];
     }
 
     //! Set the value of the pixel at pos x,y,z (for 3D image)
-    inline RES_T setPixel(size_t x, size_t y, size_t z, const T &value) {
+    inline RES_T setPixel(size_t x, size_t y, size_t z, const T &value)
+    {
       ASSERT((x < width && y < height && z < depth),
              "Coords out of image range", RES_ERR);
       pixels[z * width * height + y * width + x] = value;
@@ -149,19 +160,22 @@ namespace smil {
     }
 
     //! Set the value of the pixel at pos x,y
-    inline RES_T setPixel(size_t x, size_t y, const T &value) {
+    inline RES_T setPixel(size_t x, size_t y, const T &value)
+    {
       return setPixel(x, y, 0, value);
     }
 
     //! Set the value of the pixel at a given offset
-    inline RES_T setPixel(size_t offset, const T &value) {
+    inline RES_T setPixel(size_t offset, const T &value)
+    {
       ASSERT((offset < pixelCount), "Offset out of image range", RES_ERR);
       pixels[offset] = value;
       modified();
       return RES_OK;
     }
 
-    inline void setPixelNoCheck(size_t offset, const T &value) {
+    inline void setPixelNoCheck(size_t offset, const T &value)
+    {
       pixels[offset] = value;
     }
 
@@ -172,9 +186,10 @@ namespace smil {
     void fromArray(const T inArray[]);
 
     //! Copy pixel values to a given char array
-    void toCharArray(signed char outArray[]);
-    char *toCharArray() {
-      return (char *)pixels;
+    void  toCharArray(signed char outArray[]);
+    char *toCharArray()
+    {
+      return (char *) pixels;
     }
     //! Copy pixel values from a given char array
     void fromCharArray(const signed char inArray[]);
@@ -210,26 +225,30 @@ namespace smil {
     template <class T2>
     void clone(const Image<T2> &rhs);
     //! Create a clone of the image (with same size and content )
-    virtual Image<T> clone(bool cloneData = true) {
+    virtual Image<T> clone(bool cloneData = true)
+    {
       Image<T> im(*this, cloneData);
       return im;
     }
 
     //! Set the size of image
-    virtual RES_T
-      setSize(size_t w, size_t h, size_t d = 1, bool doAllocate = true);
+    virtual RES_T setSize(size_t w, size_t h, size_t d = 1,
+                          bool doAllocate = true);
     //! Set the size of image
-    virtual RES_T setSize(size_t s[3], bool doAllocate = true) {
+    virtual RES_T setSize(size_t s[3], bool doAllocate = true)
+    {
       return setSize(s[0], s[1], s[2], doAllocate);
     }
     //! Set the size of image
-    virtual RES_T setSize(const BaseImage &rhs, bool doAllocate = true) {
-      return setSize(
-        rhs.getWidth(), rhs.getHeight(), rhs.getDepth(), doAllocate);
+    virtual RES_T setSize(const BaseImage &rhs, bool doAllocate = true)
+    {
+      return setSize(rhs.getWidth(), rhs.getHeight(), rhs.getDepth(),
+                     doAllocate);
     }
     //! Set the size of image
-    virtual RES_T setSize(const vector<UINT> s, bool doAllocate = true) {
-      if(s.size() == 3)
+    virtual RES_T setSize(const vector<UINT> s, bool doAllocate = true)
+    {
+      if (s.size() == 3)
         return setSize(s[0], s[1], s[2], doAllocate);
       else
         return setSize(s[0], s[1], 1, doAllocate);
@@ -248,34 +267,36 @@ namespace smil {
      * values as an hexahedral grid
      * @param[in] indent Optional prefix
      */
-    void printSelf(ostream &os,
-                   bool displayPixVals,
-                   bool hexaGrid = false,
+    void printSelf(ostream &os, bool displayPixVals, bool hexaGrid = false,
                    string indent = "") const;
 
-    virtual void printSelf(ostream &os = std::cout, string indent = "") const {
+    virtual void printSelf(ostream &os = std::cout, string indent = "") const
+    {
       printSelf(os, false, false, indent);
     }
 
-    virtual void printSelf(string indent) {
+    virtual void printSelf(string indent)
+    {
       printSelf(std::cout, false, false, indent);
     }
 
-    void printSelf(bool displayPixVals,
-                   bool hexaGrid = false,
-                   string indent = "") {
+    void printSelf(bool displayPixVals, bool hexaGrid = false,
+                   string indent = "")
+    {
       printSelf(std::cout, displayPixVals, hexaGrid, indent);
     }
 
     //! Get the description of the image as a string
-    virtual std::string getInfoString(const char *indent = "") const {
+    virtual std::string getInfoString(const char *indent = "") const
+    {
       stringstream s;
       this->printSelf(s, indent);
       return s.str().c_str();
     }
 
     //! Get pixels as a void pointer
-    virtual void *getVoidPointer(void) {
+    virtual void *getVoidPointer(void)
+    {
       return pixels;
     }
 
@@ -315,17 +336,20 @@ namespace smil {
     virtual void modified();
 
     //! Get Maximum value of image data type
-    static T getDataTypeMin() {
+    static T getDataTypeMin()
+    {
       return ImDtTypes<T>::min();
     }
 
     //! Get Maximum value of image data type
-    static T getDataTypeMax() {
+    static T getDataTypeMax()
+    {
       return ImDtTypes<T>::max();
     }
 
-    inline T &operator[](size_t i) {
-      if(i < pixelCount)
+    inline T &operator[](size_t i)
+    {
+      if (i < pixelCount)
         return this->pixels[i];
       ERR_MSG("Offset out of range.");
       return this->dumPixel;
@@ -393,8 +417,8 @@ namespace smil {
 
     ResImage<T> operator|(const Image<T> &rhs);
     ResImage<T> operator|(const T &value);
-    Image<T> &operator|=(const Image<T> &rhs);
-    Image<T> &operator|=(const T &value);
+    Image<T>   &operator|=(const Image<T> &rhs);
+    Image<T>   &operator|=(const T &value);
 
     //! Bitwise and operator
     ResImage<T> operator&(const Image<T> &rhs);
@@ -421,24 +445,26 @@ namespace smil {
 #ifndef SWIG
     Image<T> &operator<<(const char *s);
 #endif // SWIG
-    inline Image<T> &operator<<(const string s) {
+    inline Image<T> &operator<<(const string s)
+    {
       return this->operator<<(s.c_str());
     }
 
-    Image<T> &operator>>(const char *s);
-    inline Image<T> &operator>>(const string s) {
+    Image<T>        &operator>>(const char *s);
+    inline Image<T> &operator>>(const string s)
+    {
       return this->operator>>(s.c_str());
     }
 
   protected:
-    lineType pixels;
+    lineType  pixels;
     sliceType lines;
-    volType slices;
+    volType   slices;
 
     RES_T restruct(void);
 
     ImageViewer<T> *viewer;
-    void createViewer();
+    void            createViewer();
 
     T dumPixel;
     // Specify if the viewer has been created internally
@@ -462,28 +488,34 @@ namespace smil {
   };
 
   template <class T>
-  class ResImage : public Image<T> {
+  class ResImage : public Image<T>
+  {
   public:
-    ResImage(const Image<T> &rhs) : Image<T>(rhs, false) {
+    ResImage(const Image<T> &rhs) : Image<T>(rhs, false)
+    {
     }
 
     // Warning ! This will empty the image rhs !
     // Allows to avoid multiple copy with SwigValueWrapper operations...
-    ResImage(const ResImage<T> &rhs) : Image<T>() {
+    ResImage(const ResImage<T> &rhs) : Image<T>()
+    {
       Image<T>::drain(const_cast<ResImage<T> *>(&rhs));
     }
 
-    ~ResImage() {
+    ~ResImage()
+    {
     }
   };
 
   template <class T>
-  Image<T> *createImage(const T) {
+  Image<T> *createImage(const T)
+  {
     return new Image<T>();
   }
 
   template <class T>
-  Image<T> *castBaseImage(BaseImage *img, const T &) {
+  Image<T> *castBaseImage(BaseImage *img, const T &)
+  {
     ASSERT(strcmp(getDataTypeAsString<T>(), img->getTypeAsString()) == 0,
            "Bad type for cast", NULL);
     return reinterpret_cast<Image<T> *>(img);
@@ -491,7 +523,8 @@ namespace smil {
 
   //! Draw overlay
   template <class T>
-  RES_T drawOverlay(const Image<T> &imToDraw, Image<T> &imOut) {
+  RES_T drawOverlay(const Image<T> &imToDraw, Image<T> &imOut)
+  {
     imOut.getViewer()->drawOverlay(imToDraw);
     return RES_OK;
   }

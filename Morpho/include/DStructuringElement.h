@@ -36,7 +36,8 @@
 
 #include <string>
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup StrElt
    *
@@ -65,13 +66,15 @@ namespace smil {
   /**
    * Base structuring element
    */
-  class StrElt : public BaseObject {
+  class StrElt : public BaseObject
+  {
   public:
     /** Class constructor - generic structurant element
      * @param[in] s : size of the structinrg element
      */
     StrElt(UINT s = 1)
-      : BaseObject("StrElt"), odd(false), seT(SE_Generic), size(s) {
+        : BaseObject("StrElt"), odd(false), seT(SE_Generic), size(s)
+    {
       this->setName();
     }
 
@@ -79,7 +82,8 @@ namespace smil {
      *
      * @param[in] rhs : structuring element
      */
-    StrElt(const StrElt &rhs) : BaseObject(rhs) {
+    StrElt(const StrElt &rhs) : BaseObject(rhs)
+    {
       this->clone(rhs);
       this->setName();
     }
@@ -88,12 +92,13 @@ namespace smil {
     /** @cond */
     /* Available only under C++ */
     StrElt(bool oddSE, UINT nbrPts, ...)
-      : BaseObject("StrElt"), odd(oddSE), seT(SE_Generic), size(1) {
-      UINT index;
+        : BaseObject("StrElt"), odd(oddSE), seT(SE_Generic), size(1)
+    {
+      UINT    index;
       va_list vl;
       va_start(vl, nbrPts);
 
-      for(UINT i = 0; i < nbrPts; i++) {
+      for (UINT i = 0; i < nbrPts; i++) {
         index = va_arg(vl, UINT);
         addPoint(index);
       }
@@ -124,15 +129,17 @@ namespace smil {
      * @endcode
      */
     StrElt(bool oddSE, vector<UINT> indexList)
-      : BaseObject("StrElt"), odd(oddSE), seT(SE_Generic), size(1) {
+        : BaseObject("StrElt"), odd(oddSE), seT(SE_Generic), size(1)
+    {
       vector<UINT>::iterator it;
-      for(it = indexList.begin(); it != indexList.end(); it++)
+      for (it = indexList.begin(); it != indexList.end(); it++)
         addPoint(*it);
       this->setName();
     }
 
     /** @cond */
-    ~StrElt() {
+    ~StrElt()
+    {
     }
     /** @endcond */
 
@@ -143,7 +150,8 @@ namespace smil {
      * @param[in] i : pixel index
      * @returns the coordinates of the pixel, relative to the StrElt center
      */
-    IntPoint getPoint(const UINT i) {
+    IntPoint getPoint(const UINT i)
+    {
       return points[i];
     }
 
@@ -152,7 +160,8 @@ namespace smil {
      *
      * @returns the size of the structuring element
      */
-    UINT getSize() const {
+    UINT getSize() const
+    {
       return size;
     }
 
@@ -280,7 +289,8 @@ namespace smil {
      *
      * @return the content of the @b seT private field
      */
-    virtual seType getType() const {
+    virtual seType getType() const
+    {
       return seT;
     }
 
@@ -288,7 +298,8 @@ namespace smil {
      *
      * @param[in] name - the new name
      */
-    void setName(const char *name) {
+    void setName(const char *name)
+    {
       this->name = name;
     }
 
@@ -296,27 +307,28 @@ namespace smil {
      *
      * Set the structuring element based on the type field @TB{seT}
      */
-    void setName() {
-      std::map<seType, string> seNames
-        = {{SE_Generic, "GenericSE"},
-           {SE_Squ, "SquSE"},
-           {SE_Squ0, "SquSE0"},
-           {SE_Hex, "HexSE"},
-           {SE_Hex0, "HexSE0"},
-           {SE_Cross, "CrossSE"},
-           {SE_Horiz, "HorizSE"},
-           {SE_Vert, "VertSE"},
-           {SE_Cube, "CubeSE"},
-           {SE_Cross3D, "Cross3DSE"},
-           {SE_Rhombicuboctahedron, "RhombicuboctahedronSE"},
-           {SE_Line, "LineSE"},
-           {SE_Line3D, "Line3DSE"},
-           {SE_CenteredLine, "CenteredLineSE"},
-           {SE_CenteredLine3D, "CenteredLine3DSE"}};
+    void setName()
+    {
+      std::map<seType, string> seNames = {
+          {SE_Generic, "GenericSE"},
+          {SE_Squ, "SquSE"},
+          {SE_Squ0, "SquSE0"},
+          {SE_Hex, "HexSE"},
+          {SE_Hex0, "HexSE0"},
+          {SE_Cross, "CrossSE"},
+          {SE_Horiz, "HorizSE"},
+          {SE_Vert, "VertSE"},
+          {SE_Cube, "CubeSE"},
+          {SE_Cross3D, "Cross3DSE"},
+          {SE_Rhombicuboctahedron, "RhombicuboctahedronSE"},
+          {SE_Line, "LineSE"},
+          {SE_Line3D, "Line3DSE"},
+          {SE_CenteredLine, "CenteredLineSE"},
+          {SE_CenteredLine3D, "CenteredLine3DSE"}};
 
       std::map<seType, string>::iterator it;
       it = seNames.find(seT);
-      if(it != seNames.end())
+      if (it != seNames.end())
         this->name = seNames[seT];
       else
         this->name = "Unknown";
@@ -327,7 +339,8 @@ namespace smil {
      *
      * @returns the name of the structuring element (as a string)
      */
-    const char *getName() const {
+    const char *getName() const
+    {
       return name.c_str();
       // return name;
     }
@@ -346,16 +359,18 @@ namespace smil {
      * @note
      * In @TB{Python} this has the same effect than @TB{print(se)}
      */
-    virtual void printSelf(string indent) const {
+    virtual void printSelf(string indent) const
+    {
       printSelf(std::cout, indent);
     }
 
-    bool odd;
+    bool   odd;
     seType seT;
-    UINT size;
+    UINT   size;
   };
 
-  inline void operator<<(ostream &os, StrElt &se) {
+  inline void operator<<(ostream &os, StrElt &se)
+  {
     se.printSelf(os);
   }
 
@@ -367,12 +382,14 @@ namespace smil {
    * @LatexImages{squ_se}
    *
    */
-  class SquSE : public StrElt {
+  class SquSE : public StrElt
+  {
   public:
-    SquSE(UINT s = 1) : StrElt(false, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8) {
+    SquSE(UINT s = 1) : StrElt(false, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8)
+    {
       className = "SquSE : StrElt";
-      seT = SE_Squ;
-      size = s;
+      seT       = SE_Squ;
+      size      = s;
       this->setName();
     }
   };
@@ -385,14 +402,16 @@ namespace smil {
    * @LatexImages{squ_se0}
    *
    */
-  class SquSE0 : public StrElt {
+  class SquSE0 : public StrElt
+  {
   public:
     typedef StrElt parentClass;
-    SquSE0(UINT s = 1) : StrElt(false, 8, 1, 2, 3, 4, 5, 6, 7, 8) {
+    SquSE0(UINT s = 1) : StrElt(false, 8, 1, 2, 3, 4, 5, 6, 7, 8)
+    {
       className = "SquSE0";
-      seT = SE_Squ0;
-      odd = false;
-      size = s;
+      seT       = SE_Squ0;
+      odd       = false;
+      size      = s;
       this->setName();
     }
   };
@@ -405,12 +424,14 @@ namespace smil {
    * @LatexImages{hex_se}
    *
    */
-  class HexSE : public StrElt {
+  class HexSE : public StrElt
+  {
   public:
-    HexSE(UINT s = 1) : StrElt(true, 7, 0, 1, 2, 3, 4, 5, 6) {
+    HexSE(UINT s = 1) : StrElt(true, 7, 0, 1, 2, 3, 4, 5, 6)
+    {
       className = "HexSE : StrElt";
-      seT = SE_Hex;
-      size = s;
+      seT       = SE_Hex;
+      size      = s;
       this->setName();
     }
   };
@@ -423,12 +444,14 @@ namespace smil {
    * @LatexImages{hex_se0}
    *
    */
-  class HexSE0 : public StrElt {
+  class HexSE0 : public StrElt
+  {
   public:
-    HexSE0(UINT s = 1) : StrElt(true, 6, 1, 2, 3, 4, 5, 6) {
+    HexSE0(UINT s = 1) : StrElt(true, 6, 1, 2, 3, 4, 5, 6)
+    {
       className = "HexSE0";
-      seT = SE_Hex0;
-      size = s;
+      seT       = SE_Hex0;
+      size      = s;
       this->setName();
     }
   };
@@ -442,12 +465,14 @@ namespace smil {
    *
    */
 
-  class CrossSE : public StrElt {
+  class CrossSE : public StrElt
+  {
   public:
-    CrossSE(UINT s = 1) : StrElt(false, 5, 0, 1, 5, 3, 7) {
+    CrossSE(UINT s = 1) : StrElt(false, 5, 0, 1, 5, 3, 7)
+    {
       className = "CrossSE : StrElt";
-      seT = SE_Cross;
-      size = s;
+      seT       = SE_Cross;
+      size      = s;
       this->setName();
     }
   };
@@ -461,12 +486,14 @@ namespace smil {
    *
    */
 
-  class HorizSE : public StrElt {
+  class HorizSE : public StrElt
+  {
   public:
-    HorizSE(UINT s = 1) : StrElt(false, 3, 0, 1, 5) {
+    HorizSE(UINT s = 1) : StrElt(false, 3, 0, 1, 5)
+    {
       className = "HorizSE : StrElt";
-      seT = SE_Horiz;
-      size = s;
+      seT       = SE_Horiz;
+      size      = s;
       this->setName();
     }
   };
@@ -480,12 +507,14 @@ namespace smil {
    *
    */
 
-  class VertSE : public StrElt {
+  class VertSE : public StrElt
+  {
   public:
-    VertSE(UINT s = 1) : StrElt(false, 3, 0, 3, 7) {
+    VertSE(UINT s = 1) : StrElt(false, 3, 0, 3, 7)
+    {
       className = "VertSE : StrElt";
-      seT = SE_Vert;
-      size = s;
+      seT       = SE_Vert;
+      size      = s;
       this->setName();
     }
   };
@@ -498,16 +527,18 @@ namespace smil {
    * @LatexImages{cube_se}
    *
    */
-  class CubeSE : public StrElt {
+  class CubeSE : public StrElt
+  {
   public:
-    CubeSE(UINT s = 1) : StrElt(s) {
+    CubeSE(UINT s = 1) : StrElt(s)
+    {
       className = "CubeSE : StrElt";
-      seT = SE_Cube;
-      odd = false;
+      seT       = SE_Cube;
+      odd       = false;
       this->setName();
 
       int zList[] = {0, -1, 1};
-      for(int i = 0; i < 3; i++) {
+      for (int i = 0; i < 3; i++) {
         int z = zList[i];
         addPoint(0, 0, z);
         addPoint(1, 0, z);
@@ -530,12 +561,14 @@ namespace smil {
    * @LatexImages{cross3d_se}
    *
    */
-  class Cross3DSE : public StrElt {
+  class Cross3DSE : public StrElt
+  {
   public:
-    Cross3DSE(UINT s = 1) : StrElt(s) {
+    Cross3DSE(UINT s = 1) : StrElt(s)
+    {
       className = "Cross3DSE : StrElt";
-      seT = SE_Cross3D;
-      odd = false;
+      seT       = SE_Cross3D;
+      odd       = false;
       this->setName();
 
       addPoint(0, 0, 0);
@@ -555,28 +588,30 @@ namespace smil {
    * @LatexImages{rhombicuboctaedron_se}
    *
    */
-  class RhombicuboctahedronSE : public StrElt {
+  class RhombicuboctahedronSE : public StrElt
+  {
   public:
-    RhombicuboctahedronSE(UINT s = 1) : StrElt(s) {
+    RhombicuboctahedronSE(UINT s = 1) : StrElt(s)
+    {
       className = "RhombicuboctahedronSE : StrElt";
-      seT = SE_Rhombicuboctahedron;
-      odd = false;
+      seT       = SE_Rhombicuboctahedron;
+      odd       = false;
       this->setName();
 
       int x, y, z;
 
       addPoint(0, 0, 0);
-      for(x = -2; x <= 2; x++)
-        for(y = -1; y <= 1; y++)
-          for(z = -1; z <= 1; z++)
+      for (x = -2; x <= 2; x++)
+        for (y = -1; y <= 1; y++)
+          for (z = -1; z <= 1; z++)
             addPoint(x, y, z);
-      for(x = -1; x <= 1; x++)
-        for(y = -2; y <= 2; y++)
-          for(z = -1; z <= 1; z++)
+      for (x = -1; x <= 1; x++)
+        for (y = -2; y <= 2; y++)
+          for (z = -1; z <= 1; z++)
             addPoint(x, y, z);
-      for(x = -1; x <= 1; x++)
-        for(y = -1; y <= 1; y++)
-          for(z = -2; z <= 2; z++)
+      for (x = -1; x <= 1; x++)
+        for (y = -1; y <= 1; y++)
+          for (z = -2; z <= 2; z++)
             addPoint(x, y, z);
     }
   };
@@ -602,7 +637,8 @@ namespace smil {
       se = sp.merge(se, se.transpose())
    @EndPython
    */
-  class LineSE : public StrElt {
+  class LineSE : public StrElt
+  {
   public:
     /**
      * LineSE() - flat structuring element of arbitrary length and direction
@@ -615,20 +651,21 @@ namespace smil {
      * - the angle @TB{theta} is defined in the usual counterclockwise
      *  direction (trigonometric convention).
      */
-    LineSE(int length, double theta) : StrElt(1) {
+    LineSE(int length, double theta) : StrElt(1)
+    {
       className = "LineSE : StrElt";
-      seT = SE_Line;
-      odd = false;
+      seT       = SE_Line;
+      odd       = false;
       this->setName();
 
       // int xf = (int) round(length * cos(-theta * PI / 180.));
       // int yf = (int) round(length * sin(-theta * PI / 180.));
-      int xf = (int)round(length * cos(-theta));
-      int yf = (int)round(length * sin(-theta));
+      int                xf = (int) round(length * cos(-theta));
+      int                yf = (int) round(length * sin(-theta));
       vector<Point<int>> v;
 
       v = bresenhamPoints(0, 0, xf, yf);
-      for(size_t i = 0; i < v.size(); i++)
+      for (size_t i = 0; i < v.size(); i++)
         addPoint(v[i].x, v[i].y, v[i].z);
     }
   };
@@ -655,7 +692,8 @@ namespace smil {
        se = sp.merge(se, se.transpose())
     @EndPython
     */
-  class Line3DSE : public StrElt {
+  class Line3DSE : public StrElt
+  {
   public:
     /**
      * Line3DSE() - constructor
@@ -670,21 +708,22 @@ namespace smil {
      * - the angle @TB{theta} is defined in the usual counterclockwise
      *  direction (trigonometric convention).
      */
-    Line3DSE(int length, double theta, double zeta) : StrElt(1) {
+    Line3DSE(int length, double theta, double zeta) : StrElt(1)
+    {
       className = "Line3DSE : StrElt";
-      seT = SE_Line3D;
-      odd = false;
+      seT       = SE_Line3D;
+      odd       = false;
       this->setName();
 
       double lenXY = abs(length * cos(zeta));
 
-      int zf = (int)round(length * sin(zeta));
-      int xf = (int)round(lenXY * cos(-theta));
-      int yf = (int)round(lenXY * sin(-theta));
+      int zf = (int) round(length * sin(zeta));
+      int xf = (int) round(lenXY * cos(-theta));
+      int yf = (int) round(lenXY * sin(-theta));
 
-      Bresenham line(0, 0, 0, xf, yf, zf);
+      Bresenham        line(0, 0, 0, xf, yf, zf);
       vector<IntPoint> v = line.getPoints();
-      for(size_t i = 0; i < v.size(); i++)
+      for (size_t i = 0; i < v.size(); i++)
         addPoint(v[i].x, v[i].y, v[i].z);
     }
   };
@@ -700,7 +739,8 @@ namespace smil {
    *  direction (trigonometric convention).
    */
 #if 1
-  class CenteredLineSE : public StrElt {
+  class CenteredLineSE : public StrElt
+  {
   public:
     /**
      * CenteredLineSE() -
@@ -712,30 +752,32 @@ namespace smil {
      * - the angle @TB{theta} is defined in the usual counterclockwise
      *  direction (trigonometric convention).
      */
-    CenteredLineSE(int length, double theta = 0) : StrElt(1) {
+    CenteredLineSE(int length, double theta = 0) : StrElt(1)
+    {
       className = "CenteredLineSE : StrElt";
-      seT = SE_CenteredLine;
-      odd = false;
+      seT       = SE_CenteredLine;
+      odd       = false;
       this->setName();
 
-      int xf = (int)round(length * cos(-theta) / 2);
-      int yf = (int)round(length * sin(-theta) / 2);
+      int xf = (int) round(length * cos(-theta) / 2);
+      int yf = (int) round(length * sin(-theta) / 2);
       // int xf = (int) round(length * cos(-theta));
       //  int yf = (int) round(length * sin(-theta));
 
       vector<Point<int>> v;
       v = bresenhamPoints(0, 0, xf, yf);
 
-      for(size_t i = 0; i < v.size(); i++) {
+      for (size_t i = 0; i < v.size(); i++) {
         addPoint(v[i].x, v[i].y, v[i].z);
-        if(v[i].x == 0 && v[i].y == 0 && v[i].z == 0)
+        if (v[i].x == 0 && v[i].y == 0 && v[i].z == 0)
           continue;
         addPoint(-v[i].x, -v[i].y, -v[i].z);
       }
     }
   };
 #else
-  inline StrElt CenteredLineSE(int length, double theta = 0) {
+  inline StrElt CenteredLineSE(int length, double theta = 0)
+  {
     StrElt se = LineSE(length / 2 + 1, theta);
     return se.merge(se.transpose());
   }
@@ -755,7 +797,8 @@ namespace smil {
    *  direction (trigonometric convention).
    */
 #if 1
-  class CenteredLine3DSE : public StrElt {
+  class CenteredLine3DSE : public StrElt
+  {
   public:
     /**
      * CenteredLine3DSE() -
@@ -769,34 +812,34 @@ namespace smil {
      * - the angle @TB{theta} is defined in the usual counterclockwise
      *  direction (trigonometric convention).
      */
-    CenteredLine3DSE(int length, double theta = 0, double zeta = 0)
-      : StrElt(1) {
+    CenteredLine3DSE(int length, double theta = 0, double zeta = 0) : StrElt(1)
+    {
       className = "CenteredLine3DSE : StrElt";
-      seT = SE_CenteredLine3D;
-      odd = false;
+      seT       = SE_CenteredLine3D;
+      odd       = false;
       this->setName();
 
       length /= 2;
       double lenXY = abs(length * cos(zeta));
 
-      int zf = (int)round(length * sin(zeta));
-      int xf = (int)round(lenXY * cos(-theta));
-      int yf = (int)round(lenXY * sin(-theta));
+      int zf = (int) round(length * sin(zeta));
+      int xf = (int) round(lenXY * cos(-theta));
+      int yf = (int) round(lenXY * sin(-theta));
 
-      Bresenham line(0, 0, 0, xf, yf, zf);
+      Bresenham        line(0, 0, 0, xf, yf, zf);
       vector<IntPoint> v = line.getPoints();
 
-      for(size_t i = 0; i < v.size(); i++) {
+      for (size_t i = 0; i < v.size(); i++) {
         addPoint(v[i].x, v[i].y, v[i].z);
-        if(v[i].x == 0 && v[i].y == 0 && v[i].z == 0)
+        if (v[i].x == 0 && v[i].y == 0 && v[i].z == 0)
           continue;
         addPoint(-v[i].x, -v[i].y, -v[i].z);
       }
     }
   };
 #else
-  inline StrElt
-    CenteredLine3DSE(int length, double theta = 0, double zeta = 0) {
+  inline StrElt CenteredLine3DSE(int length, double theta = 0, double zeta = 0)
+  {
     StrElt se = Line3DSE(length / 2 + 1, theta, zeta);
     return se.merge(se.transpose());
   }
@@ -804,25 +847,32 @@ namespace smil {
 
   // Shortcuts
   /** @cond */
-  inline HexSE hSE(UINT s = 1) {
+  inline HexSE hSE(UINT s = 1)
+  {
     return HexSE(s);
   }
-  inline HexSE0 hSE0(UINT s = 1) {
+  inline HexSE0 hSE0(UINT s = 1)
+  {
     return HexSE0(s);
   }
-  inline SquSE sSE(UINT s = 1) {
+  inline SquSE sSE(UINT s = 1)
+  {
     return SquSE(s);
   }
-  inline SquSE0 sSE0(UINT s = 1) {
+  inline SquSE0 sSE0(UINT s = 1)
+  {
     return SquSE0(s);
   }
-  inline CrossSE cSE(UINT s = 1) {
+  inline CrossSE cSE(UINT s = 1)
+  {
     return CrossSE(s);
   }
-  inline CubeSE cbSE(UINT s = 1) {
+  inline CubeSE cbSE(UINT s = 1)
+  {
     return CubeSE(s);
   }
-  inline RhombicuboctahedronSE rcoSE(UINT s = 1) {
+  inline RhombicuboctahedronSE rcoSE(UINT s = 1)
+  {
     return RhombicuboctahedronSE(s);
   }
   /** @endcond */
@@ -838,16 +888,17 @@ namespace smil {
    *  line
    * @returns a line structuring element
    */
-  inline StrElt buildLineSE(int length, double theta) {
+  inline StrElt buildLineSE(int length, double theta)
+  {
     StrElt se;
 
-    int xf = (int)round(length * cos(theta));
-    int yf = (int)round(length * sin(theta));
+    int xf = (int) round(length * cos(theta));
+    int yf = (int) round(length * sin(theta));
 
     vector<Point<int>> v;
 
     v = bresenhamPoints(0, 0, xf, yf);
-    for(size_t i = 0; i < v.size(); i++)
+    for (size_t i = 0; i < v.size(); i++)
       se.addPoint(v[i].x, v[i].y, v[i].z);
     return se;
   }
@@ -859,15 +910,16 @@ namespace smil {
    * @param[in] se2 : Second structuring Element
    * @returns a new structuring element with all points of @TT{se1} and @TT{se2}
    */
-  inline StrElt merge(StrElt se1, StrElt se2) {
+  inline StrElt merge(StrElt se1, StrElt se2)
+  {
     StrElt se;
 
     typename vector<IntPoint>::iterator it;
-    for(it = se1.points.begin(); it != se1.points.end(); it++) {
+    for (it = se1.points.begin(); it != se1.points.end(); it++) {
       const IntPoint &p = *it;
       se.addPoint(p);
     }
-    for(it = se2.points.begin(); it != se2.points.end(); it++) {
+    for (it = se2.points.begin(); it != se2.points.end(); it++) {
       const IntPoint &p = *it;
       se.addPoint(p);
     }

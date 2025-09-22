@@ -41,6 +41,7 @@ using namespace smil;
 //           Core::getInstance()->registerObject(this);
 //     }
 
-Core *BaseObject::getCoreInstance() {
+Core *BaseObject::getCoreInstance()
+{
   return Core::getInstance();
 }

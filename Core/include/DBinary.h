@@ -40,7 +40,8 @@
 
 using namespace std;
 
-namespace smil {
+namespace smil
+{
 
 #ifdef USE_64BIT_IDS
   //     typedef UINT8 INT_TYPE;
@@ -50,17 +51,19 @@ namespace smil {
 #endif // USE_64BIT_IDS
 
   struct bitIndex {
-    BIN_TYPE *byte;
+    BIN_TYPE    *byte;
     unsigned int index;
 
-    bitIndex &operator=(bool val) {
-      if(val)
+    bitIndex &operator=(bool val)
+    {
+      if (val)
         (*byte) |= (1UL << index);
       else
         (*byte) &= ~(1UL << index);
       return *this;
     }
-    operator bool() {
+    operator bool()
+    {
       return (*byte) & (1UL << index);
     }
   };
@@ -68,19 +71,24 @@ namespace smil {
   struct BIN {
     BIN_TYPE val;
 
-    BIN(BIN_TYPE v = numeric_limits<BIN_TYPE>::min()) : val(v) {
+    BIN(BIN_TYPE v = numeric_limits<BIN_TYPE>::min()) : val(v)
+    {
     }
-    BIN(bool b) : val(b ? this->max() : this->min()) {
+    BIN(bool b) : val(b ? this->max() : this->min())
+    {
     }
-    BIN(double v) : val(v == 0 ? this->min() : this->max()) {
+    BIN(double v) : val(v == 0 ? this->min() : this->max())
+    {
     }
 
     static const BIN_TYPE SIZE = sizeof(BIN_TYPE) * CHAR_BIT;
 
-    static inline BIN_TYPE min() {
+    static inline BIN_TYPE min()
+    {
       return numeric_limits<BIN_TYPE>::min();
     }
-    static inline BIN_TYPE max() {
+    static inline BIN_TYPE max()
+    {
       return numeric_limits<BIN_TYPE>::max();
     }
 
@@ -89,38 +97,44 @@ namespace smil {
     //! Less significant bit
     static const BIN_TYPE LS_BIT = 0x01;
 
-    typedef BIN_TYPE Type;
-    typedef Type *lineType;
+    typedef BIN_TYPE  Type;
+    typedef Type     *lineType;
     typedef lineType *sliceType;
 
-    static inline BIN_TYPE binLen(BIN_TYPE bitCount) {
+    static inline BIN_TYPE binLen(BIN_TYPE bitCount)
+    {
       return (bitCount - 1) / BIN::SIZE + 1;
     }
 
-    inline bitIndex &operator[](UINT8 pos) {
+    inline bitIndex &operator[](UINT8 pos)
+    {
       static bitIndex b;
-      b.byte = &val;
+      b.byte  = &val;
       b.index = pos;
       return b;
     }
-    ostream &printSelf(ostream &os = cout) {
-      for(int i = 0; i < SIZE; i++)
+    ostream &printSelf(ostream &os = cout)
+    {
+      for (int i = 0; i < SIZE; i++)
         os << this->operator[](i) << " ";
       return os;
     }
-    inline BIN &operator=(BIN_TYPE v) {
+    inline BIN &operator=(BIN_TYPE v)
+    {
       val = v;
       return *this;
     }
-    inline BIN &operator=(bool b) {
+    inline BIN &operator=(bool b)
+    {
       val = b ? this->max() : this->min();
       return *this;
     }
-    inline BIN &operator=(const char *s) {
+    inline BIN &operator=(const char *s)
+    {
       UINT iMax = strlen(s) < SIZE ? strlen(s) : SIZE;
 
       val = 0;
-      for(UINT i = 0; i < iMax; i++)
+      for (UINT i = 0; i < iMax; i++)
         val += (s[i] - 48) * (1 << i);
       return *this;
     }
@@ -130,7 +144,8 @@ namespace smil {
     //     }
   };
 
-  inline ostream &operator<<(ostream &os, BIN &b) {
+  inline ostream &operator<<(ostream &os, BIN &b)
+  {
     return b.printSelf(os);
   }
 

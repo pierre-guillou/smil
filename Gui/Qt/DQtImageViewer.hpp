@@ -40,7 +40,8 @@
 
 class PlotWidget;
 
-namespace smil {
+namespace smil
+{
 #define BASE_QT_VIEWER ImageViewerWidget
 
   template <class T>
@@ -68,8 +69,8 @@ namespace smil {
   template <class T>
   class QtImageViewer
 #ifndef SWIG
-    : public ImageViewer<T>,
-      public BASE_QT_VIEWER
+      : public ImageViewer<T>,
+        public BASE_QT_VIEWER
 #endif // SWIG
   {
   public:
@@ -90,14 +91,16 @@ namespace smil {
     {
       update();
     }
-    void updateIcon() {
-      if(!this->image)
+    void updateIcon()
+    {
+      if (!this->image)
         return;
 
       BASE_QT_VIEWER::updateIcon();
     }
     virtual void drawOverlay(const Image<T> &im);
-    virtual void clearOverlay() {
+    virtual void clearOverlay()
+    {
       BASE_QT_VIEWER::clearOverlay();
     }
     virtual RES_T getOverlay(Image<T> &img);
@@ -106,7 +109,8 @@ namespace smil {
     virtual void setLookup(const map<UINT8, RGB> &lut);
     virtual void resetLookup();
 
-    virtual void setCurSlice(int) {
+    virtual void setCurSlice(int)
+    {
       this->update();
     }
 

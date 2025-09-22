@@ -33,7 +33,8 @@
 #include "Core/include/DImage.h"
 #include "DMorphoBase.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Morpho
    * @defgroup MorphoMeasures Morphological Measures
@@ -59,11 +60,11 @@ namespace smil {
    *
    */
   template <class T>
-  vector<double> measGranulometry(const Image<T> &imIn,
-                                  const StrElt &se = DEFAULT_SE,
-                                  const unsigned int stepSize = 1,
-                                  bool CDF = true,
-                                  const unsigned int maxSeSize = 0) {
+  vector<double>
+  measGranulometry(const Image<T> &imIn, const StrElt &se = DEFAULT_SE,
+                   const unsigned int stepSize = 1, bool CDF = true,
+                   const unsigned int maxSeSize = 0)
+  {
     vector<double> res;
 
     ASSERT(imIn.isAllocated(), res);
@@ -73,9 +74,9 @@ namespace smil {
 
     size_t seSize = stepSize;
 
-    double v0 = vol(imIn);
-    T minv = minVal(imEro);
-    T maxv = maxVal(imEro);
+    double v0   = vol(imIn);
+    T      minv = minVal(imEro);
+    T      maxv = maxVal(imEro);
 
     do {
       erode(imEro, imEro, se(stepSize));
@@ -86,14 +87,14 @@ namespace smil {
       v0 = v1;
       seSize += stepSize;
       maxv = maxVal(imEro);
-    } while(maxv > minv && (maxSeSize == 0 || maxSeSize >= seSize));
+    } while (maxv > minv && (maxSeSize == 0 || maxSeSize >= seSize));
 
-    if(CDF) {
+    if (CDF) {
       double aSum = 0;
-      for(size_t i = 0; i < res.size(); i++)
+      for (size_t i = 0; i < res.size(); i++)
         aSum += res[i];
       res[0] /= aSum;
-      for(size_t i = 1; i < res.size(); i++)
+      for (size_t i = 1; i < res.size(); i++)
         res[i] = res[i] / aSum + res[i - 1];
     }
     return res;

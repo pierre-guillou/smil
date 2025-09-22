@@ -35,7 +35,8 @@
 #include "Core/include/DTypes.h"
 #include "DBitArray.h"
 
-namespace smil {
+namespace smil
+{
   template <>
   void Image<Bit>::init();
 

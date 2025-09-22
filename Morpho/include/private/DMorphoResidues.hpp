@@ -32,7 +32,8 @@
 
 #include "DMorphoBase.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Morpho
    * @defgroup Residues Morphological Residues
@@ -58,9 +59,9 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T gradient(const Image<T> &imIn,
-                 Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE) {
+  RES_T gradient(const Image<T> &imIn, Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE)
+  {
     return gradient(imIn, imOut, se, se);
   }
 
@@ -82,17 +83,16 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T gradient(const Image<T> &imIn,
-                 Image<T> &imOut,
-                 const StrElt &dilSe,
-                 const StrElt &eroSe) {
+  RES_T gradient(const Image<T> &imIn, Image<T> &imOut, const StrElt &dilSe,
+                 const StrElt &eroSe)
+  {
     Image<T> dilIm(imIn);
     Image<T> eroIm(imIn);
 
     RES_T res = dilate(imIn, dilIm, dilSe);
-    if(res == RES_OK)
+    if (res == RES_OK)
       res = erode(imIn, eroIm, eroSe);
-    if(res == RES_OK)
+    if (res == RES_OK)
       res = sub(dilIm, eroIm, imOut);
     return res;
   }
@@ -111,13 +111,13 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T topHat(const Image<T> &imIn,
-               Image<T> &imOut,
-               const StrElt &se = DEFAULT_SE) {
+  RES_T topHat(const Image<T> &imIn, Image<T> &imOut,
+               const StrElt &se = DEFAULT_SE)
+  {
     Image<T> openIm(imIn);
 
     RES_T res = open(imIn, openIm, se);
-    if(res == RES_OK)
+    if (res == RES_OK)
       res = sub(imIn, openIm, imOut);
     return res;
   }
@@ -136,13 +136,13 @@ namespace smil {
    * @param[in] se : structuring element
    */
   template <class T>
-  RES_T dualTopHat(const Image<T> &imIn,
-                   Image<T> &imOut,
-                   const StrElt &se = DEFAULT_SE) {
+  RES_T dualTopHat(const Image<T> &imIn, Image<T> &imOut,
+                   const StrElt &se = DEFAULT_SE)
+  {
     Image<T> closeIm(imIn);
 
     RES_T res = close(imIn, closeIm, se);
-    if(res == RES_OK)
+    if (res == RES_OK)
       res = sub(closeIm, imIn, imOut);
     return res;
   }

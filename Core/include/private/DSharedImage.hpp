@@ -33,7 +33,8 @@
 #include "Core/include/private/DImage.hpp"
 #include "Core/include/DErrors.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Core
    * @{
@@ -44,60 +45,68 @@ namespace smil {
    *
    */
   template <class T>
-  class SharedImage : public Image<T> {
+  class SharedImage : public Image<T>
+  {
   public:
-    typedef Image<T> parentClass;
+    typedef Image<T>                    parentClass;
     typedef typename Image<T>::lineType lineType;
 
     //! Default constructor
-    SharedImage() : Image<T>() {
+    SharedImage() : Image<T>()
+    {
       this->className = "SharedImage";
-      attached = false;
+      attached        = false;
     }
 
-    SharedImage(const Image<T> &img) : Image<T>() {
+    SharedImage(const Image<T> &img) : Image<T>()
+    {
       this->className = "SharedImage";
-      attached = false;
+      attached        = false;
 
       this->attach(img);
     }
 
     SharedImage(lineType dataPtr, size_t width, size_t height, size_t depth = 1)
-      : Image<T>() {
+        : Image<T>()
+    {
       this->className = "SharedImage";
-      attached = false;
+      attached        = false;
 
       this->attach(dataPtr, width, height, depth);
     }
 
-    SharedImage(const SharedImage<T> &img) : Image<T>() {
+    SharedImage(const SharedImage<T> &img) : Image<T>()
+    {
       this->className = "SharedImage";
-      attached = false;
+      attached        = false;
 
       this->clone(img);
     }
 
-    virtual ~SharedImage() {
+    virtual ~SharedImage()
+    {
       this->detach();
     }
 
-    SharedImage<T> &operator=(const SharedImage<T> &rhs) {
+    SharedImage<T> &operator=(const SharedImage<T> &rhs)
+    {
       attached = false;
 
       this->clone(rhs);
       return *this;
     }
 
-    virtual RES_T
-      attach(lineType dataPtr, size_t width, size_t height, size_t depth = 1) {
-      if(dataPtr == NULL) {
+    virtual RES_T attach(lineType dataPtr, size_t width, size_t height,
+                         size_t depth = 1)
+    {
+      if (dataPtr == NULL) {
         ERR_MSG("Source image isn't allocated");
         return RES_ERR;
-      } else if(dataPtr == this->pixels && width == this->width
-                && height == this->height && depth == this->depth) {
+      } else if (dataPtr == this->pixels && width == this->width &&
+                 height == this->height && depth == this->depth) {
         return RES_OK;
       } else {
-        if(attached)
+        if (attached)
           detach();
 
         this->pixels = dataPtr;
@@ -105,64 +114,69 @@ namespace smil {
 
         this->restruct();
 
-        this->attached = true;
+        this->attached  = true;
         this->allocated = true;
 
         return RES_OK;
       }
     }
 
-    virtual RES_T attach(const Image<T> &im) {
-      return attach(
-        im.getPixels(), im.getWidth(), im.getHeight(), im.getDepth());
+    virtual RES_T attach(const Image<T> &im)
+    {
+      return attach(im.getPixels(), im.getWidth(), im.getHeight(),
+                    im.getDepth());
     }
 
-    virtual RES_T attach(lineType dataPtr) {
+    virtual RES_T attach(lineType dataPtr)
+    {
       return attach(dataPtr, this->width, this->height, this->depth);
     }
 
-    virtual RES_T detach() {
-      if(!attached)
+    virtual RES_T detach()
+    {
+      if (!attached)
         return RES_OK;
 
-      if(this->slices)
+      if (this->slices)
         delete[] this->slices;
-      if(this->lines)
+      if (this->lines)
         delete[] this->lines;
 
       this->slices = NULL;
-      this->lines = NULL;
+      this->lines  = NULL;
       this->pixels = NULL;
 
-      this->width = 0;
+      this->width  = 0;
       this->height = 0;
-      this->depth = 0;
+      this->depth  = 0;
 
-      this->attached = false;
+      this->attached  = false;
       this->allocated = false;
 
       return RES_OK;
     }
 
-    virtual RES_T clone(const SharedImage<T> &rhs) {
-      return attach(
-        rhs.getPixels(), rhs.getWidth(), rhs.getHeight(), rhs.getDepth());
+    virtual RES_T clone(const SharedImage<T> &rhs)
+    {
+      return attach(rhs.getPixels(), rhs.getWidth(), rhs.getHeight(),
+                    rhs.getDepth());
     }
 
   protected:
     bool attached;
 
-    virtual RES_T
-      setSize(size_t w, size_t h, size_t d = 1, bool /*doAllocate*/ = true) {
-      this->width = w;
+    virtual RES_T setSize(size_t w, size_t h, size_t d = 1,
+                          bool /*doAllocate*/ = true)
+    {
+      this->width  = w;
       this->height = h;
-      this->depth = d;
+      this->depth  = d;
 
       this->sliceCount = d;
-      this->lineCount = d * h;
+      this->lineCount  = d * h;
       this->pixelCount = this->lineCount * w;
 
-      if(this->viewer)
+      if (this->viewer)
         this->viewer->setImage(*this);
 
       this->modified();
@@ -170,11 +184,13 @@ namespace smil {
       return RES_OK;
     }
 
-    virtual RES_T allocate() {
+    virtual RES_T allocate()
+    {
       return RES_ERR_BAD_ALLOCATION;
     }
 
-    virtual RES_T deallocate() {
+    virtual RES_T deallocate()
+    {
       return RES_ERR_BAD_ALLOCATION;
     }
   };

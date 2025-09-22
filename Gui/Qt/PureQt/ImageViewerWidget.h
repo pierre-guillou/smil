@@ -41,7 +41,8 @@
 #include "Core/include/DBinary.h"
 #include "Core/include/DCommon.h"
 
-class QImageGraphicsScene : public QGraphicsScene {
+class QImageGraphicsScene : public QGraphicsScene
+{
   Q_OBJECT
 public:
   QImageGraphicsScene(QObject *parent = 0);
@@ -54,7 +55,8 @@ signals:
   void onMouseRelease(QGraphicsSceneMouseEvent *event);
 };
 
-class ImageViewerWidget : public QGraphicsView {
+class ImageViewerWidget : public QGraphicsView
+{
   Q_OBJECT
 
 public:
@@ -69,37 +71,44 @@ public:
   virtual void leaveEvent(QEvent *event);
 
   virtual void setLabelImage(bool val);
-  virtual void displayPixelValue(size_t, size_t, size_t) {
+  virtual void displayPixelValue(size_t, size_t, size_t)
+  {
   }
-  virtual void displayMagnifyView(size_t, size_t, size_t) {
+  virtual void displayMagnifyView(size_t, size_t, size_t)
+  {
   }
-  virtual void displayMagnifyView() {
+  virtual void displayMagnifyView()
+  {
     displayMagnifyView(lastPixX, lastPixY, lastPixZ);
   }
-  virtual void setCurSlice(int) {
+  virtual void setCurSlice(int)
+  {
   }
-  virtual void redrawImage() {
+  virtual void redrawImage()
+  {
   }
   virtual void createOverlayImage();
   virtual void deleteOverlayImage();
 
-  void setName(QString name);
-  void setImageSize(int w, int h, int d = 1);
-  void dataChanged();
+  void         setName(QString name);
+  void         setImageSize(int w, int h, int d = 1);
+  void         dataChanged();
   virtual void clearOverlay();
 
-  QStatusBar *statusBar;
-  QImage *qImage;
+  QStatusBar       *statusBar;
+  QImage           *qImage;
   QVector<QImage *> qOverlayImage;
-  QImage::Format imageFormat;
+  QImage::Format    imageFormat;
 
   bool drawLabelized;
   // Auto adjust range
   bool autoRange;
 
-  virtual void displayHistogram(bool = false) {
+  virtual void displayHistogram(bool = false)
+  {
   }
-  virtual void displayProfile(bool = false) {
+  virtual void displayProfile(bool = false)
+  {
   }
 
   void linkViewer(ImageViewerWidget *viewer);
@@ -112,22 +121,22 @@ protected:
   QVector<QRgb> rainbowColorTable;
   QVector<QRgb> labelColorTable;
   QVector<QRgb> overlayColorTable;
-  void initColorTables();
+  void          initColorTables();
   void updatePixmaps(QImage *image, QList<QGraphicsPixmapItem *> *pixmaps);
 
-  double scaleFactor;
-  QImageGraphicsScene *imScene;
+  double                       scaleFactor;
+  QImageGraphicsScene         *imScene;
   QList<QGraphicsPixmapItem *> imagePixmaps;
   QList<QGraphicsPixmapItem *> overlayPixmaps;
 
-  QLabel *valueLabel;
-  QLabel *hintLabel;
-  QTimer *hintTimer;
-  QTimer *iconTimer;
+  QLabel      *valueLabel;
+  QLabel      *hintLabel;
+  QTimer      *hintTimer;
+  QTimer      *iconTimer;
   MagnifyView *magnView;
 
   size_t imWidth, imHeight, imDepth;
-  int lastPixX, lastPixY, lastPixZ;
+  int    lastPixX, lastPixY, lastPixZ;
 
   bool magnActivated;
   bool valueLblActivated;
@@ -143,20 +152,21 @@ protected:
 
   QSlider *slider;
 
-  virtual void dropEvent(QDropEvent *) {
+  virtual void dropEvent(QDropEvent *)
+  {
   }
   void dragMoveEvent(QDragMoveEvent *de);
   void dragEnterEvent(QDragEnterEvent *event);
 
   enum cursorMode { cursorMove, cursorDraw, cursorDrawLine, cursorDrawBox };
-  int cursorMode;
+  int                cursorMode;
   QGraphicsLineItem *line;
 
   QList<ImageViewerWidget *> linkedWidgets;
 
   ColorPicker *colorPicker;
-  QPen drawPen;
-  bool drawing;
+  QPen         drawPen;
+  bool         drawing;
 
   void scrollContentsBy(int dx, int dy);
 public slots:
@@ -164,21 +174,22 @@ public slots:
   void zoomIn();
   void zoomOut();
   void scale(double factor, bool absolute = true);
-  void sliderChanged(int newVal) {
-    displayHint(QString::number(newVal) + "/"
-                + QString::number(slider->maximum()));
+  void sliderChanged(int newVal)
+  {
+    displayHint(QString::number(newVal) + "/" +
+                QString::number(slider->maximum()));
     setCurSlice(newVal);
-    if(!qOverlayImage.isEmpty())
+    if (!qOverlayImage.isEmpty())
       updatePixmaps(qOverlayImage[newVal], &overlayPixmaps);
   }
   virtual void overlayDataChanged(bool triggerEvents = true);
-  void updateIcon();
-  void showContextMenu(const QPoint &pos);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-  void setCursorMode(const int &mode);
-  void setDrawPenColor(const QColor &color);
-  void showHelp();
-  void saveAs(const char *fileName = NULL);
+  void         updateIcon();
+  void         showContextMenu(const QPoint &pos);
+  void         mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  void         setCursorMode(const int &mode);
+  void         setDrawPenColor(const QColor &color);
+  void         showHelp();
+  void         saveAs(const char *fileName = NULL);
 
 protected slots:
   void setScrollBarPosition(int x, int y);

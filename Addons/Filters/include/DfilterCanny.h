@@ -44,7 +44,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup   AddonFilters
    * @defgroup  AddonFilterCanny        Canny Filter (2D)
@@ -86,8 +87,7 @@ namespace smil {
    * @param[out] imOut : output Image
    */
   template <class T1, class T2>
-  RES_T cannyEdgeDetection(const Image<T1> &imIn,
-                           const double sigma,
+  RES_T cannyEdgeDetection(const Image<T1> &imIn, const double sigma,
                            Image<T2> &imOut);
 
   /** @} */

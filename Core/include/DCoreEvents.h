@@ -34,13 +34,16 @@
 #include "DSlot.h"
 #include "DBaseImage.h"
 
-namespace smil {
+namespace smil
+{
   template <class T>
   class Image;
 
-  class BaseImageEvent : public Event {
+  class BaseImageEvent : public Event
+  {
   public:
-    BaseImageEvent(BaseImage *im) : sender(im) {
+    BaseImageEvent(BaseImage *im) : sender(im)
+    {
     }
     const BaseImage *sender;
   };
@@ -48,14 +51,16 @@ namespace smil {
   typedef Slot<BaseImageEvent> BaseImageEventSlot;
 
   template <class T>
-  class ImageEvent : public Event {
+  class ImageEvent : public Event
+  {
   public:
-    ImageEvent(Image<T> *im) : sender(im) {
+    ImageEvent(Image<T> *im) : sender(im)
+    {
     }
     const Image<T> *sender;
   };
 
-  typedef Slot<ImageEvent<UINT8>> ImageEventSlot_UINT8;
+  typedef Slot<ImageEvent<UINT8>>  ImageEventSlot_UINT8;
   typedef Slot<ImageEvent<UINT16>> ImageEventSlot_UINT16;
 
 } // namespace smil

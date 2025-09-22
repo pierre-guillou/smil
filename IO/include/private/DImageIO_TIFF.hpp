@@ -40,7 +40,8 @@ using namespace std;
 
 #ifdef USE_TIFF
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup IO
    */
@@ -52,19 +53,24 @@ namespace smil {
   class Image;
 
   template <class T = void>
-  class TIFFImageFileHandler : public ImageFileHandler<T> {
+  class TIFFImageFileHandler : public ImageFileHandler<T>
+  {
   public:
-    TIFFImageFileHandler() : ImageFileHandler<T>("TIFF") {
+    TIFFImageFileHandler() : ImageFileHandler<T>("TIFF")
+    {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
+    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
+    {
       return getTIFFFileInfo(filename, fInfo);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image) {
+    virtual RES_T read(const char *filename, Image<T> &image)
+    {
       return ImageFileHandler<T>::read(filename, image);
     }
-    virtual RES_T write(const Image<T> &image, const char *filename) {
+    virtual RES_T write(const Image<T> &image, const char *filename)
+    {
       return ImageFileHandler<T>::write(image, filename);
     }
   };

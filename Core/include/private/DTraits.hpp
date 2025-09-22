@@ -30,14 +30,16 @@
 #ifndef _D_TRAITS_HPP
 #define _D_TRAITS_HPP
 
-namespace smil {
+namespace smil
+{
   template <bool C, typename T = void>
   struct enable_if {
     typedef T type;
   };
 
   template <typename T>
-  struct enable_if<false, T> {};
+  struct enable_if<false, T> {
+  };
 
   template <typename, typename>
   struct is_same {
@@ -59,9 +61,9 @@ namespace smil {
     static long check(...);
 
   public:
-    static bool const value
-      = sizeof check(m_d) == 1
-        && !is_same<B volatile const, void volatile const>::value;
+    static bool const value =
+        sizeof check(m_d) == 1 &&
+        !is_same<B volatile const, void volatile const>::value;
   };
 
   template <typename T>
@@ -74,7 +76,7 @@ namespace smil {
     static bool const value = std::numeric_limits<T>::is_iec559;
   };
 
-#define ENABLE_IF(COND, RET_TYPE) \
+#define ENABLE_IF(COND, RET_TYPE)                                              \
   typename smil::enable_if<(COND), RET_TYPE>::type
 #define IS_SAME(A, B) (smil::is_same<A, B>::value)
 #define IS_DERIVED_FROM(D, B) (smil::is_base_of<B, D>::value)

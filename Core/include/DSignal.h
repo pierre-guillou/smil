@@ -39,77 +39,87 @@ using namespace std;
 #include "DCommon.h"
 #include "Core/include/DSlot.h"
 
-namespace smil {
+namespace smil
+{
   class BaseObject;
 
-  class Event {
+  class Event
+  {
   public:
-    Event(BaseObject *_sender = NULL) : sender(_sender) {
+    Event(BaseObject *_sender = NULL) : sender(_sender)
+    {
     }
     const BaseObject *sender;
   };
 
-  class Signal {
+  class Signal
+  {
     friend class BaseSlot;
 
   public:
-    Signal(BaseObject *_sender = NULL) : sender(_sender), enabled(true) {
+    Signal(BaseObject *_sender = NULL) : sender(_sender), enabled(true)
+    {
     }
-    virtual ~Signal() {
+    virtual ~Signal()
+    {
       disconnectAll();
     }
 
-    virtual void connect(BaseSlot *slot, bool _register = true) {
-      vector<BaseSlot *>::iterator it
-        = std::find(_slots.begin(), _slots.end(), slot);
+    virtual void connect(BaseSlot *slot, bool _register = true)
+    {
+      vector<BaseSlot *>::iterator it =
+          std::find(_slots.begin(), _slots.end(), slot);
 
-      if(it != _slots.end())
+      if (it != _slots.end())
         return;
 
       _slots.push_back(slot);
-      if(_register)
+      if (_register)
         slot->registerSignal(this);
     }
 
-    virtual void disconnect(BaseSlot *slot, bool _unregister = true) {
-      vector<BaseSlot *>::iterator it
-        = std::find(_slots.begin(), _slots.end(), slot);
+    virtual void disconnect(BaseSlot *slot, bool _unregister = true)
+    {
+      vector<BaseSlot *>::iterator it =
+          std::find(_slots.begin(), _slots.end(), slot);
 
-      if(it == _slots.end())
+      if (it == _slots.end())
         return;
 
       _slots.erase(it);
 
-      if(_unregister)
+      if (_unregister)
         slot->unregisterSignal(this, false);
     }
 
-    virtual void disconnectAll() {
+    virtual void disconnectAll()
+    {
       vector<BaseSlot *>::iterator it = _slots.begin();
 
-      while(it != _slots.end()) {
+      while (it != _slots.end()) {
         (*it)->unregisterSignal(this, false);
         it++;
       }
     }
 
-    virtual void trigger(Event *e = NULL) {
-      if(!enabled)
+    virtual void trigger(Event *e = NULL)
+    {
+      if (!enabled)
         return;
 
-      if(e && sender)
+      if (e && sender)
         e->sender = sender;
 
       vector<BaseSlot *>::iterator it = _slots.begin();
 
-      while(it != _slots.end()) {
+      while (it != _slots.end()) {
         (*it)->_run(e);
         it++;
       }
     }
 
     const BaseObject *sender;
-    bool enabled;
+    bool              enabled;
 
   protected:
     vector<BaseSlot *> _slots;

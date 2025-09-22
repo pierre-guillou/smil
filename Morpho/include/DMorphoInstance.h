@@ -33,7 +33,8 @@
 #include "Core/include/private/DInstance.hpp"
 #include "DStructuringElement.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @defgroup UniqueInstance Morpho Instance - Default Structuring Element
    * @ingroup StrElt
@@ -45,16 +46,19 @@ namespace smil {
   /** Morpho
    *
    */
-  class Morpho : public UniqueInstance<Morpho> {
+  class Morpho : public UniqueInstance<Morpho>
+  {
     /** @cond */
     friend class UniqueInstance<Morpho>;
 
   protected:
-    Morpho() {
+    Morpho()
+    {
       this->defaultSE = SquSE();
     }
 
-    ~Morpho() {
+    ~Morpho()
+    {
     }
     /** @endcond */
   public:

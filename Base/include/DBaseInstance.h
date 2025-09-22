@@ -33,13 +33,15 @@
 #include "Core/include/private/DInstance.hpp"
 #include "Core/include/DCommon.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Base
    */
   /**@{*/
 
-  class Base : public UniqueInstance<Base> {
+  class Base : public UniqueInstance<Base>
+  {
     friend class UniqueInstance<Base>;
 
   protected:

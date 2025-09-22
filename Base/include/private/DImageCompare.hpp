@@ -43,7 +43,8 @@
 
 #include <algorithm>
 
-namespace smil {
+namespace smil
+{
 // Estimator epsilon
 #define DXM 0.5
 
@@ -92,25 +93,27 @@ namespace smil {
    * - Wikipedia : @UrlWikipedia{Confusion_matrix, Confusion matrix}
    */
   template <typename T>
-  class ConfusionMatrix {
+  class ConfusionMatrix
+  {
   private:
     size_t FP, FN, TP, TN;
     size_t P, N;
     size_t aGT, aIM;
-    bool okTable;
+    bool   okTable;
 
   public:
-    ConfusionMatrix(const Image<T> &imGt, const Image<T> &imIn) {
+    ConfusionMatrix(const Image<T> &imGt, const Image<T> &imIn)
+    {
       okTable = false;
-      if(!imGt.isAllocated() || !imIn.isAllocated()) {
+      if (!imGt.isAllocated() || !imIn.isAllocated()) {
         ERR_MSG("imGt or imIn aren't allocated");
         return;
       }
-      if(!haveSameSize(&imGt, &imIn, NULL)) {
+      if (!haveSameSize(&imGt, &imIn, NULL)) {
         ERR_MSG("imGt and imIn don't have the same size");
         return;
       }
-      if(!isBinary(imGt) || !isBinary(imIn)) {
+      if (!isBinary(imGt) || !isBinary(imIn)) {
         ERR_MSG("This function is defined only for binary images");
         return;
       }
@@ -133,91 +136,103 @@ namespace smil {
       okTable = true;
     }
 
-    double Accuracy() {
-      if(!okTable)
+    double Accuracy()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TP + TN + DXM) / double(P + N + DXM);
     }
 
-    double Precision() {
-      if(!okTable)
+    double Precision()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TP + DXM) / double(TP + FP + DXM);
     }
 
-    double Recall() {
-      if(!okTable)
+    double Recall()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TP + DXM) / double(TP + FN + DXM);
     }
 
-    double FScore(double beta = 1.) {
-      if(!okTable)
+    double FScore(double beta = 1.)
+    {
+      if (!okTable)
         return 0.;
 
       double b2 = beta * beta;
-      double p = Precision();
-      double r = Recall();
+      double p  = Precision();
+      double r  = Recall();
 
       return (1 + b2) * (p * r) / (b2 * p + r);
     }
 
-    double Sensitivity() {
-      if(!okTable)
+    double Sensitivity()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TP + DXM) / double(TP + FN + DXM);
     }
 
-    double Specificity() {
-      if(!okTable)
+    double Specificity()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TN + DXM) / double(TN + FP + DXM);
     }
 
-    double FallOut() {
-      if(!okTable)
+    double FallOut()
+    {
+      if (!okTable)
         return 0.;
 
       return double(FP + DXM) / double(TN + FP + DXM);
     }
 
-    double MissRate() {
-      if(!okTable)
+    double MissRate()
+    {
+      if (!okTable)
         return 0.;
 
       return double(FN + DXM) / double(TP + FN + DXM);
     }
 
-    double Overlap() {
-      if(!okTable)
+    double Overlap()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TP + DXM) / double(min(aGT, aIM) + DXM);
     }
 
-    double Jaccard() {
-      if(!okTable)
+    double Jaccard()
+    {
+      if (!okTable)
         return 0.;
 
       return double(TP + DXM) / double(FN + TP + FP + DXM);
     }
 
-    size_t Hamming() {
-      if(!okTable)
+    size_t Hamming()
+    {
+      if (!okTable)
         return 0.;
 
       return aGT + aIM - TP;
     }
 
-    vector<size_t> getTable() {
+    vector<size_t> getTable()
+    {
       vector<size_t> table(0);
 
-      if(!okTable)
+      if (!okTable)
         return table;
 
       table.push_back(TN);
@@ -227,8 +242,9 @@ namespace smil {
       return table;
     }
 
-    void printSelf() {
-      if(!okTable)
+    void printSelf()
+    {
+      if (!okTable)
         return;
 
       cout << "Predicted Negative \t" << TN << "\t" << FN << endl;
@@ -262,10 +278,11 @@ namespace smil {
    * @returns returns @TB{Jaccard} similarity index between two images
    */
   template <typename T>
-  double indexJaccard(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexJaccard(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ASSERT_ALLOCATED(&imGt, &imIn);
     ASSERT_SAME_SIZE(&imGt, &imIn);
-    if(isBinary(imGt) && isBinary(imIn)) {
+    if (isBinary(imGt) && isBinary(imIn)) {
       ConfusionMatrix<T> cTable(imGt, imIn);
       return cTable.Jaccard();
     }
@@ -293,7 +310,8 @@ namespace smil {
    * @returns returns @TB{Ruzicka} similarity index between two images
    */
   template <typename T>
-  double indexRuzicka(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexRuzicka(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ASSERT_ALLOCATED(&imGt, &imIn);
     ASSERT_SAME_SIZE(&imGt, &imIn);
 
@@ -333,17 +351,17 @@ namespace smil {
    * @returns the @TB{Accuracy} index between two images
    */
   template <typename T>
-  double indexAccuracy(const Image<T> &imGt,
-                       const Image<T> &imIn,
-                       const T threshold = 0) {
+  double indexAccuracy(const Image<T> &imGt, const Image<T> &imIn,
+                       const T threshold = 0)
+  {
     ASSERT_ALLOCATED(&imGt, &imIn);
     ASSERT_SAME_SIZE(&imGt, &imIn);
 
-    if(isBinary(imGt) && isBinary(imIn)) {
+    if (isBinary(imGt) && isBinary(imIn)) {
       ConfusionMatrix<T> cTable(imGt, imIn);
       return cTable.Accuracy();
     } else {
-      size_t nbPixels = imGt.getPixelCount();
+      size_t   nbPixels = imGt.getPixelCount();
       Image<T> imOut(imGt);
       absDiff(imGt, imIn, imOut);
       T tVal = 0;
@@ -375,7 +393,8 @@ namespace smil {
    * @returns returns @TB{Precision} index between two images
    */
   template <typename T>
-  double indexPrecision(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexPrecision(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.Precision();
   }
@@ -401,7 +420,8 @@ namespace smil {
    * @returns returns @TB{Recall} index between two images
    */
   template <typename T>
-  double indexRecall(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexRecall(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.Recall();
   }
@@ -430,9 +450,9 @@ namespace smil {
    * @returns returns @TB{F-Score} index between two images
    */
   template <typename T>
-  double indexFScore(const Image<T> &imGt,
-                     const Image<T> &imIn,
-                     const double beta = 1.) {
+  double indexFScore(const Image<T> &imGt, const Image<T> &imIn,
+                     const double beta = 1.)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.FScore(beta);
   }
@@ -460,7 +480,8 @@ namespace smil {
    * @returns returns @TB{Sensitivity} index between two images
    */
   template <typename T>
-  double indexSensitivity(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexSensitivity(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.Sensitivity();
   }
@@ -488,7 +509,8 @@ namespace smil {
    * @returns returns @TB{Specificity} index between two images
    */
   template <typename T>
-  double indexSpecificity(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexSpecificity(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.Specificity();
   }
@@ -515,7 +537,8 @@ namespace smil {
    * @returns returns @TB{FallOut} index between two images
    */
   template <typename T>
-  double indexFallOut(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexFallOut(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.FallOut();
   }
@@ -542,7 +565,8 @@ namespace smil {
    * @returns returns @TB{MissRate} index between two images
    */
   template <typename T>
-  double indexMissRate(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexMissRate(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.MissRate();
   }
@@ -568,7 +592,8 @@ namespace smil {
    * @returns returns @TB{Overlap} index between two images
    */
   template <typename T>
-  double indexOverlap(const Image<T> &imGt, const Image<T> &imIn) {
+  double indexOverlap(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ConfusionMatrix<T> cTable(imGt, imIn);
     return cTable.Overlap();
   }
@@ -586,7 +611,8 @@ namespace smil {
    * @returns returns @TB{Hamming distance} between two images
    */
   template <typename T>
-  size_t distanceHamming(const Image<T> &imGt, const Image<T> &imIn) {
+  size_t distanceHamming(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ASSERT_ALLOCATED(&imGt, &imIn);
     ASSERT_SAME_SIZE(&imGt, &imIn);
 
@@ -611,11 +637,12 @@ namespace smil {
    * @returns returns @TB{Hausdorff distance} between two images
    */
   template <typename T>
-  double distanceHausdorff(const Image<T> &imGt, const Image<T> &imIn) {
+  double distanceHausdorff(const Image<T> &imGt, const Image<T> &imIn)
+  {
     ASSERT_ALLOCATED(&imGt, &imIn);
     ASSERT_SAME_SIZE(&imGt, &imIn);
 
-    if(!isBinary(imGt) || !isBinary(imIn)) {
+    if (!isBinary(imGt) || !isBinary(imIn)) {
       ERR_MSG("This function is defined only for binary images");
       return 0.;
     }
@@ -630,9 +657,9 @@ namespace smil {
     inf(imIn, imt, imt);
     vector<size_t> pixIn = nonZeroOffsets(imt);
 
-    off_t szGt = pixGt.size();
+    off_t          szGt = pixGt.size();
     vector<double> distGt(szGt, numeric_limits<double>::max());
-    off_t szIn = pixIn.size();
+    off_t          szIn = pixIn.size();
     vector<double> distIn(szIn, numeric_limits<double>::max());
 
     size_t Size[3];
@@ -642,13 +669,13 @@ namespace smil {
 #ifdef OPEN_MP
 #pragma omp parallel for
 #endif
-    for(off_t i = 0; i < szGt; i++) {
-      for(off_t j = 0; j < szIn; j++) {
+    for (off_t i = 0; i < szGt; i++) {
+      for (off_t j = 0; j < szIn; j++) {
         double d = box.getDistance(pixGt[i], pixIn[j]);
 
-        if(d < distGt[i])
+        if (d < distGt[i])
           distGt[i] = d;
-        if(d < distIn[j])
+        if (d < distIn[j])
           distIn[j] = d;
       }
     }

@@ -30,28 +30,30 @@
 #include "IO/include/private/DImageIO.hpp"
 #include "IO/include/private/DImageIO_VTK.hpp"
 
-namespace smil {
-  inline int splitStr(const std::string &s,
-                      char delim,
-                      std::vector<std::string> &elems) {
+namespace smil
+{
+  inline int splitStr(const std::string &s, char delim,
+                      std::vector<std::string> &elems)
+  {
     std::stringstream ss(s);
-    std::string item;
-    int nbr = 0;
+    std::string       item;
+    int               nbr = 0;
     elems.clear();
-    while(std::getline(ss, item, delim)) {
+    while (std::getline(ss, item, delim)) {
       elems.push_back(item);
     }
     return nbr;
   }
 
-  RES_T readVTKHeader(ifstream &fp, VTKHeader &hStruct) {
-    std::string buf, wrd;
+  RES_T readVTKHeader(ifstream &fp, VTKHeader &hStruct)
+  {
+    std::string              buf, wrd;
     std::vector<std::string> bufElems;
 
-    hStruct.scalarType
-      = ImageFileInfo::SCALAR_TYPE_UINT8; // default, if none specified
+    hStruct.scalarType =
+        ImageFileInfo::SCALAR_TYPE_UINT8; // default, if none specified
 
-    while(getline(fp, buf)) {
+    while (getline(fp, buf)) {
       // To uppercase
       transform(buf.begin(), buf.end(), buf.begin(), ::toupper);
       // Split
@@ -63,41 +65,41 @@ namespace smil {
       char fc = wrd[0];
 
       // Check if we reached the end of the header
-      if(isdigit(fc) || fc == '-') // number
+      if (isdigit(fc) || fc == '-') // number
         break;
-      else if(!isalnum(fc) && fc != '#') // binary data
+      else if (!isalnum(fc) && fc != '#') // binary data
         break;
       else
         hStruct.startPos = fp.tellg();
 
-      if(wrd == "DATASET") {
-        if(bufElems[1] != "STRUCTURED_POINTS") {
+      if (wrd == "DATASET") {
+        if (bufElems[1] != "STRUCTURED_POINTS") {
           cout << "Error: vtk file type " << bufElems[1]
                << " not supported (must be STRUCTURED_POINTS)" << endl;
           return RES_ERR;
         }
-      } else if(wrd == "ASCII")
+      } else if (wrd == "ASCII")
         hStruct.binaryFile = false;
-      else if(wrd == "BINARY")
+      else if (wrd == "BINARY")
         hStruct.binaryFile = true;
 
-      else if(wrd == "DIMENSIONS") {
-        hStruct.width = atoi(bufElems[1].c_str());
+      else if (wrd == "DIMENSIONS") {
+        hStruct.width  = atoi(bufElems[1].c_str());
         hStruct.height = atoi(bufElems[2].c_str());
-        hStruct.depth = atoi(bufElems[3].c_str());
-      } else if(wrd == "POINT_DATA")
+        hStruct.depth  = atoi(bufElems[3].c_str());
+      } else if (wrd == "POINT_DATA")
         hStruct.pointNbr = atoi(bufElems[1].c_str());
-      else if(wrd == "SCALARS") {
+      else if (wrd == "SCALARS") {
         hStruct.scalarTypeStr = bufElems[2];
-        if(hStruct.scalarTypeStr == "UNSIGNED_CHAR")
+        if (hStruct.scalarTypeStr == "UNSIGNED_CHAR")
           hStruct.scalarType = ImageFileInfo::SCALAR_TYPE_UINT8;
-        else if(hStruct.scalarTypeStr == "UNSIGNED_SHORT")
+        else if (hStruct.scalarTypeStr == "UNSIGNED_SHORT")
           hStruct.scalarType = ImageFileInfo::SCALAR_TYPE_UINT16;
-        else if(hStruct.scalarTypeStr == "SHORT")
+        else if (hStruct.scalarTypeStr == "SHORT")
           hStruct.scalarType = ImageFileInfo::SCALAR_TYPE_INT16;
         else
           hStruct.scalarType = ImageFileInfo::SCALAR_TYPE_UNKNOWN;
-      } else if(wrd == "COLOR_SCALARS") {
+      } else if (wrd == "COLOR_SCALARS") {
         hStruct.scalarCoeff = atoi(bufElems[2].c_str());
       }
     }
@@ -105,7 +107,8 @@ namespace smil {
     return RES_OK;
   }
 
-  RES_T getVTKFileInfo(const char * /*filename*/, ImageFileInfo & /*fInfo*/) {
+  RES_T getVTKFileInfo(const char * /*filename*/, ImageFileInfo & /*fInfo*/)
+  {
     return RES_OK;
   }
 

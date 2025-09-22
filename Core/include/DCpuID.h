@@ -35,39 +35,47 @@
 #include <string>
 #include <vector>
 
-namespace smil {
-  class CpuID {
+namespace smil
+{
+  class CpuID
+  {
   public:
     CpuID();
 
-    string getVendor() const {
+    string getVendor() const
+    {
       return vendor;
     }
 
-    string getModel() const {
+    string getModel() const
+    {
       return model;
     }
 
-    string getFlags() const {
+    string getFlags() const
+    {
       return flags;
     }
 
-    unsigned getCores() const {
+    unsigned getCores() const
+    {
       return cores;
     }
 
-    unsigned getLogical() const {
+    unsigned getLogical() const
+    {
       return logical;
     }
 
-    bool isHyperThreated() const {
+    bool isHyperThreated() const
+    {
       return hyperThreaded;
     }
 
   protected:
     unsigned cores;
     unsigned logical;
-    bool hyperThreaded;
+    bool     hyperThreaded;
 
     string vendor;
     string model;

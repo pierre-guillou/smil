@@ -49,19 +49,20 @@ using namespace std;
  */
 #define NEWTDEFS 0
 
-namespace smil {
-  typedef int INT;
-  typedef long LONG;
-  typedef unsigned int UINT;
+namespace smil
+{
+  typedef int           INT;
+  typedef long          LONG;
+  typedef unsigned int  UINT;
   typedef unsigned long ULONG;
 #if NEWTDEFS
-  typedef uint8_t UINT8;
+  typedef uint8_t  UINT8;
   typedef uint16_t UINT16;
   typedef uint32_t UINT32;
 #else
-  typedef unsigned char UINT8;
+  typedef unsigned char  UINT8;
   typedef unsigned short UINT16;
-  typedef unsigned int UINT32;
+  typedef unsigned int   UINT32;
 #endif
 #ifdef _MSC_VER
   typedef unsigned __int64 UINT64;
@@ -76,7 +77,7 @@ namespace smil {
   typedef signed char INT8;
   // #endif // _MSC_VER
   typedef short INT16;
-  typedef int INT32;
+  typedef int   INT32;
 
 #ifndef CHAR_BIT
 #define CHAR_BIT 8
@@ -86,13 +87,13 @@ namespace smil {
 
   template <class T>
   struct ImDtTypes {
-    typedef T pixelType;
+    typedef T          pixelType;
     typedef pixelType *lineType;
 #ifndef SWIG
     typedef pixelType *restrictLineType;
     // XXX JOE typedef pixelType * __restrict restrictLineType;
 #endif // SWIG
-    typedef lineType *sliceType;
+    typedef lineType  *sliceType;
     typedef sliceType *volType;
 
     typedef std::vector<T, Allocator<T>> vectorType;
@@ -101,25 +102,32 @@ namespace smil {
 
     typedef double floatType;
 
-    static inline pixelType min() {
+    static inline pixelType min()
+    {
       return numeric_limits<T>::min();
     }
-    static inline pixelType max() {
+    static inline pixelType max()
+    {
       return numeric_limits<T>::max();
     }
-    static inline size_t cardinal() {
+    static inline size_t cardinal()
+    {
       return size_t(max() - min()) + 1;
     }
-    static inline lineType createLine(size_t lineLen) {
+    static inline lineType createLine(size_t lineLen)
+    {
       return createAlignedBuffer<T>(lineLen);
     }
-    static inline void deleteLine(lineType line) {
+    static inline void deleteLine(lineType line)
+    {
       deleteAlignedBuffer<T>(line);
     }
-    static inline size_t ptrOffset(lineType p, size_t n = SIMD_VEC_SIZE) {
-      return ((size_t)p) & (n - 1);
+    static inline size_t ptrOffset(lineType p, size_t n = SIMD_VEC_SIZE)
+    {
+      return ((size_t) p) & (n - 1);
     }
-    static inline std::string toString(const T &val) {
+    static inline std::string toString(const T &val)
+    {
       stringstream str;
       str << double(val);
       return str.str();
@@ -127,14 +135,16 @@ namespace smil {
   };
 
   template <class T>
-  inline const char *getDataTypeAsString(T * /*val*/ = (T *)NULL) {
+  inline const char *getDataTypeAsString(T * /*val*/ = (T *) NULL)
+  {
     return "Unknown";
   }
 
-#define DECL_DATA_TYPE_STR(_type)                   \
-  template <>                                       \
-  inline const char *getDataTypeAsString(_type *) { \
-    return #_type;                                  \
+#define DECL_DATA_TYPE_STR(_type)                                              \
+  template <>                                                                  \
+  inline const char *getDataTypeAsString(_type *)                              \
+  {                                                                            \
+    return #_type;                                                             \
   }
 
   DECL_DATA_TYPE_STR(UINT8)

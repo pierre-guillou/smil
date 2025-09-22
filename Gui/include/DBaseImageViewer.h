@@ -32,7 +32,8 @@
 
 #include "Core/include/DBaseObject.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Gui
    */
@@ -41,36 +42,45 @@ namespace smil {
   template <class T>
   class Image;
 
-  class BaseImageViewer : public BaseObject {
+  class BaseImageViewer : public BaseObject
+  {
   public:
     typedef BaseObject parentClass;
 
     BaseImageViewer(const char *_className = "BaseImageViewer");
 
-    virtual ~BaseImageViewer() {
+    virtual ~BaseImageViewer()
+    {
     }
 
-    virtual void show() {
+    virtual void show()
+    {
     }
-    virtual void showLabel() {
+    virtual void showLabel()
+    {
     }
-    virtual void hide() {
+    virtual void hide()
+    {
     }
-    virtual bool isVisible() {
+    virtual bool isVisible()
+    {
       return false;
     }
-    virtual void setName(const char *_name) {
+    virtual void setName(const char *_name)
+    {
       parentClass::setName(_name);
     }
     virtual void update() = 0;
-    virtual void saveSnapshot(const char * /*fileName*/) {
+    virtual void saveSnapshot(const char * /*fileName*/)
+    {
     }
 
     // Slots
     MemberFunctionSlot<BaseImageViewer> updateSlot;
 
   protected:
-    virtual void drawImage() {
+    virtual void drawImage()
+    {
     }
     bool labelImage;
   };

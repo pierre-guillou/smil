@@ -35,7 +35,8 @@
 
 using namespace std;
 
-namespace smil {
+namespace smil
+{
   vector<string> splitString(const string &buf, const char *delimiters);
   vector<string> splitLines(const string &buf);
 

@@ -36,7 +36,8 @@
 
 #include <aalib.h>
 
-namespace smil {
+namespace smil
+{
   template <class T>
   class Image;
 
@@ -53,7 +54,8 @@ namespace smil {
    * ON.
    */
   template <class T>
-  class AaImageViewer : public ImageViewer<T> {
+  class AaImageViewer : public ImageViewer<T>
+  {
   public:
     typedef ImageViewer<T> parentClass;
     AaImageViewer();
@@ -63,29 +65,33 @@ namespace smil {
     virtual void show();
     virtual bool isVisible();
     virtual void setName(const char *_name);
-    virtual void clearOverlay() {
+    virtual void clearOverlay()
+    {
     }
 
   protected:
-    aa_context *context;
-    int createContext();
+    aa_context  *context;
+    int          createContext();
     virtual void drawImage();
   };
 
   template <class T>
-  AaImageViewer<T>::AaImageViewer() {
+  AaImageViewer<T>::AaImageViewer()
+  {
     context = NULL;
   }
 
   template <class T>
-  AaImageViewer<T>::AaImageViewer(Image<T> *im) : ImageViewer<T>(im) {
+  AaImageViewer<T>::AaImageViewer(Image<T> *im) : ImageViewer<T>(im)
+  {
     context = NULL;
   }
 
   template <class T>
-  int AaImageViewer<T>::createContext() {
+  int AaImageViewer<T>::createContext()
+  {
     context = aa_autoinit(&aa_defparams);
-    if(context == NULL) {
+    if (context == NULL) {
       fprintf(stderr, "Cannot initialize AA-lib. Sorry.\n");
       return -1;
     }
@@ -93,25 +99,29 @@ namespace smil {
   }
 
   template <class T>
-  AaImageViewer<T>::~AaImageViewer() {
+  AaImageViewer<T>::~AaImageViewer()
+  {
     hide();
   }
 
   template <class T>
-  void AaImageViewer<T>::show() {
+  void AaImageViewer<T>::show()
+  {
     drawImage();
   }
 
   template <class T>
-  void AaImageViewer<T>::hide() {
-    if(context)
+  void AaImageViewer<T>::hide()
+  {
+    if (context)
       aa_close(context);
     context = NULL;
   }
 
   template <class T>
-  void AaImageViewer<T>::drawImage() {
-    if(!context)
+  void AaImageViewer<T>::drawImage()
+  {
+    if (!context)
       createContext();
 
     aa_resize(context);
@@ -126,7 +136,7 @@ namespace smil {
 
     size_t w, h;
     // find dimensions to fit screen
-    if(scrR > imR) {
+    if (scrR > imR) {
       w = imW * scrH / imH;
       h = scrH;
     } else {
@@ -138,15 +148,15 @@ namespace smil {
     Image<T> tmpIm(w, h);
     resize(*this->image, w, h, tmpIm);
 
-    unsigned char *data = aa_image(context);
+    unsigned char              *data   = aa_image(context);
     typename Image<T>::lineType pixels = tmpIm.getPixels();
-    double coeff
-      = double(numeric_limits<UINT8>::max()) / double(numeric_limits<T>::max());
+    double                      coeff =
+        double(numeric_limits<UINT8>::max()) / double(numeric_limits<T>::max());
 
-    for(int j = 0; j < scrH; j++)
-      for(int i = 0; i < scrW; i++, data++) {
-        if(i < w && j < h)
-          *data = (UINT8)(coeff * double(*pixels++));
+    for (int j = 0; j < scrH; j++)
+      for (int i = 0; i < scrW; i++, data++) {
+        if (i < w && j < h)
+          *data = (UINT8) (coeff * double(*pixels++));
         else
           *data = 0;
       }
@@ -157,12 +167,14 @@ namespace smil {
   }
 
   template <class T>
-  bool AaImageViewer<T>::isVisible() {
+  bool AaImageViewer<T>::isVisible()
+  {
     return context != NULL;
   }
 
   template <class T>
-  void AaImageViewer<T>::setName(const char *_name) {
+  void AaImageViewer<T>::setName(const char *_name)
+  {
   }
 
   /*@{*/

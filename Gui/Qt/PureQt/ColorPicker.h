@@ -38,13 +38,15 @@
 #include <QEvent>
 #include <QFocusEvent>
 
-class ColorButton : public QPushButton {
+class ColorButton : public QPushButton
+{
   Q_OBJECT
 public:
   ColorButton(QWidget *parent = 0);
   ~ColorButton();
 
-  QColor getColor() {
+  QColor getColor()
+  {
     return color;
   }
   int colorIndex;
@@ -55,7 +57,7 @@ signals:
   void colorChosen(ColorButton *button);
 
 protected:
-  int iconSize;
+  int  iconSize;
   void paintEvent(QPaintEvent *e);
 
 private slots:
@@ -65,7 +67,8 @@ private:
   QColor color;
 };
 
-class ColorPannel : public QFrame {
+class ColorPannel : public QFrame
+{
   Q_OBJECT
 
 public:
@@ -86,12 +89,13 @@ private:
 
 protected:
   QVector<QRgb> colors;
-  void hideEvent(QHideEvent *e);
-  void clearGrid();
-  ColorButton *lastButtonSelected;
+  void          hideEvent(QHideEvent *e);
+  void          clearGrid();
+  ColorButton  *lastButtonSelected;
 };
 
-class ColorPicker : public ColorButton {
+class ColorPicker : public ColorButton
+{
   Q_OBJECT
 
 public:

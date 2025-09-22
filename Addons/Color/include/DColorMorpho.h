@@ -36,7 +36,8 @@
 
 #include "NSTypes/RGB/include/DRGB.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @addtogroup AddonColor
    * @{
@@ -49,10 +50,9 @@ namespace smil {
    * @param[in] se : Structuring Element
    * @param[in] convertFirstToLAB : Convert to LAB
    */
-  RES_T gradientLAB(const Image<RGB> &imIn,
-                    Image<UINT8> &imOut,
-                    const StrElt &se = DEFAULT_SE,
-                    bool convertFirstToLAB = true);
+  RES_T gradientLAB(const Image<RGB> &imIn, Image<UINT8> &imOut,
+                    const StrElt &se                = DEFAULT_SE,
+                    bool          convertFirstToLAB = true);
 
   /**
    * @brief gradientLAB
@@ -62,8 +62,8 @@ namespace smil {
    * @return Image (UINT8 Gray Level)
    */
   Image<UINT8> gradientLAB(const Image<RGB> &imIn,
-                           const StrElt &se = DEFAULT_SE,
-                           bool convertFirstToLAB = true);
+                           const StrElt     &se                = DEFAULT_SE,
+                           bool              convertFirstToLAB = true);
 
   /**
    * @brief gradientHLS
@@ -72,10 +72,9 @@ namespace smil {
    * @param[in] se : Structuring Element
    * @param[in] convertFirstToHLS : Convert to LAB
    */
-  RES_T gradientHLS(const Image<RGB> &imIn,
-                    Image<UINT8> &imOut,
-                    const StrElt &se = DEFAULT_SE,
-                    bool convertFirstToHLS = true);
+  RES_T gradientHLS(const Image<RGB> &imIn, Image<UINT8> &imOut,
+                    const StrElt &se                = DEFAULT_SE,
+                    bool          convertFirstToHLS = true);
 
   /**
    * @brief gradientHLS
@@ -85,8 +84,8 @@ namespace smil {
    * @return Image  (UINT8 Gray Level)
    */
   Image<UINT8> gradientHLS(const Image<RGB> &imIn,
-                           const StrElt &se = DEFAULT_SE,
-                           bool convertFirstToHLS = true);
+                           const StrElt     &se                = DEFAULT_SE,
+                           bool              convertFirstToHLS = true);
   /** @} */
 } // namespace smil
 

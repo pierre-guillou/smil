@@ -13,4 +13,4 @@
 #include "DSamgLineArith.hpp"
 
 #endif // _DCHABARDES_H_
-  @endcond
+    @endcond

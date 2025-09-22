@@ -3,7 +3,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup    Advanced
    * @addtogroup AdvAreaOpen

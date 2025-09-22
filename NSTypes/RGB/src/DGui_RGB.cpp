@@ -30,4 +30,6 @@
 #include "Core/include/DColor.h"
 #include "DRGB.h"
 
-namespace smil {} // namespace smil
+namespace smil
+{
+} // namespace smil

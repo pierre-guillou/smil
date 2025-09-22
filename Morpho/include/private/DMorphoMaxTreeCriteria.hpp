@@ -45,26 +45,31 @@
 
 #include "DMorphoHierarQ.hpp" //BMI
 
-namespace smil {
+namespace smil
+{
 
   /// Generic criterion for the max-tree. A user-defined criterion should be
   /// derived from this class.
   template <class Attr_T>
-  class GenericCriterion {
+  class GenericCriterion
+  {
   public:
-    GenericCriterion() {
+    GenericCriterion()
+    {
     }
 
-    virtual ~GenericCriterion() {
+    virtual ~GenericCriterion()
+    {
     }
 
   public:
-    virtual void initialize() = 0;
-    virtual void reset() = 0;
-    virtual void merge(GenericCriterion *other_criteron) = 0;
+    virtual void initialize()                                           = 0;
+    virtual void reset()                                                = 0;
+    virtual void merge(GenericCriterion *other_criteron)                = 0;
     virtual void update(const size_t x, const size_t y, const size_t z) = 0;
-    virtual bool operator<(const Attr_T &other_attribute) = 0;
-    Attr_T getAttributeValue() {
+    virtual bool operator<(const Attr_T &other_attribute)               = 0;
+    Attr_T       getAttributeValue()
+    {
       compute();
       return attribute_value_;
     }
@@ -78,89 +83,105 @@ namespace smil {
 
   /// Area criterion. Useful for Area Opening/Closing algorithms based on
   /// max-tree.
-  class AreaCriterion : public GenericCriterion<size_t> {
+  class AreaCriterion : public GenericCriterion<size_t>
+  {
   public:
-    AreaCriterion() {
+    AreaCriterion()
+    {
       initialize();
     }
 
-    virtual ~AreaCriterion() {
+    virtual ~AreaCriterion()
+    {
     }
 
   public:
-    virtual void initialize() {
+    virtual void initialize()
+    {
       attribute_value_ = 1;
     }
 
-    virtual void reset() {
+    virtual void reset()
+    {
       attribute_value_ = 0;
     }
 
-    virtual void merge(GenericCriterion *other_criteron) {
+    virtual void merge(GenericCriterion *other_criteron)
+    {
       // AreaCriterion &oc = dynamic_cast<AreaCriterion &>(*other_criteron);
 
-      attribute_value_
-        += dynamic_cast<AreaCriterion &>(*other_criteron).attribute_value_;
+      attribute_value_ +=
+          dynamic_cast<AreaCriterion &>(*other_criteron).attribute_value_;
     }
 
-    virtual void update(SMIL_UNUSED const size_t x,
-                        SMIL_UNUSED const size_t y,
-                        SMIL_UNUSED const size_t z) {
+    virtual void update(SMIL_UNUSED const size_t x, SMIL_UNUSED const size_t y,
+                        SMIL_UNUSED const size_t z)
+    {
       attribute_value_ += 1;
     }
-    virtual bool operator<(const size_t &other_attribute) {
+    virtual bool operator<(const size_t &other_attribute)
+    {
       return (attribute_value_ < other_attribute);
     }
 
   protected:
-    virtual void compute() {
+    virtual void compute()
+    {
     }
   };
 
   /// Height criterion. Useful for Height Opening/Closing algorithms based on
   /// max-tree.
-  class HeightCriterion : public GenericCriterion<size_t> {
+  class HeightCriterion : public GenericCriterion<size_t>
+  {
   public:
-    HeightCriterion() {
+    HeightCriterion()
+    {
       initialize();
     }
 
-    virtual ~HeightCriterion() {
+    virtual ~HeightCriterion()
+    {
     }
 
   public:
-    virtual void initialize() {
+    virtual void initialize()
+    {
       attribute_value_ = 0;
       // lowest instead of min in Andres code
       y_max_ = std::numeric_limits<size_t>::min();
       y_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset() {
+    virtual void reset()
+    {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron) {
+    virtual void merge(GenericCriterion *other_criteron)
+    {
       // HeightCriterion &oc = dynamic_cast<HeightCriterion &>(*other_criteron);
 
       y_max_ = std::max(
-        y_max_, dynamic_cast<HeightCriterion &>(*other_criteron).y_max_);
+          y_max_, dynamic_cast<HeightCriterion &>(*other_criteron).y_max_);
       y_min_ = std::min(
-        y_min_, dynamic_cast<HeightCriterion &>(*other_criteron).y_min_);
+          y_min_, dynamic_cast<HeightCriterion &>(*other_criteron).y_min_);
     }
 
-    virtual void update(SMIL_UNUSED const size_t x,
-                        const size_t y,
-                        SMIL_UNUSED const size_t z) {
+    virtual void update(SMIL_UNUSED const size_t x, const size_t y,
+                        SMIL_UNUSED const size_t z)
+    {
       y_max_ = std::max(y_max_, y);
       y_min_ = std::min(y_min_, y);
     }
-    virtual bool operator<(const size_t &other_attribute) {
+    virtual bool operator<(const size_t &other_attribute)
+    {
       return (attribute_value_ < other_attribute);
     }
 
   protected:
-    virtual void compute() {
+    virtual void compute()
+    {
       attribute_value_ = y_max_ - y_min_ + 1;
     }
 
@@ -172,48 +193,56 @@ namespace smil {
 
   /// Width criterion. Useful for Width Opening/Closing algorithms based on
   /// max-tree.
-  class WidthCriterion : public GenericCriterion<size_t> {
+  class WidthCriterion : public GenericCriterion<size_t>
+  {
   public:
-    WidthCriterion() {
+    WidthCriterion()
+    {
       initialize();
     }
 
-    virtual ~WidthCriterion() {
+    virtual ~WidthCriterion()
+    {
     }
 
   public:
-    virtual void initialize() {
+    virtual void initialize()
+    {
       attribute_value_ = 0;
       // lowest instead of min in Andres code
       x_max_ = std::numeric_limits<size_t>::min();
       x_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset() {
+    virtual void reset()
+    {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron) {
+    virtual void merge(GenericCriterion *other_criteron)
+    {
       // WidthCriterion &oc = dynamic_cast<WidthCriterion &>(*other_criteron);
 
-      x_max_ = std::max(
-        x_max_, dynamic_cast<WidthCriterion &>(*other_criteron).x_max_);
-      x_min_ = std::min(
-        x_min_, dynamic_cast<WidthCriterion &>(*other_criteron).x_min_);
+      x_max_ = std::max(x_max_,
+                        dynamic_cast<WidthCriterion &>(*other_criteron).x_max_);
+      x_min_ = std::min(x_min_,
+                        dynamic_cast<WidthCriterion &>(*other_criteron).x_min_);
     }
 
-    virtual void update(const size_t x,
-                        SMIL_UNUSED const size_t y,
-                        SMIL_UNUSED const size_t z) {
+    virtual void update(const size_t x, SMIL_UNUSED const size_t y,
+                        SMIL_UNUSED const size_t z)
+    {
       x_max_ = std::max(x_max_, x);
       x_min_ = std::min(x_min_, x);
     }
-    virtual bool operator<(const size_t &other_attribute) {
+    virtual bool operator<(const size_t &other_attribute)
+    {
       return (attribute_value_ < other_attribute);
     }
 
   protected:
-    virtual void compute() {
+    virtual void compute()
+    {
       attribute_value_ = x_max_ - x_min_ + 1;
     }
 
@@ -235,17 +264,21 @@ namespace smil {
 
   /// HeightArea criterion. Useful for Height Opening/Closing algorithms based
   /// on max-tree.
-  class HACriterion : public GenericCriterion<HA> {
+  class HACriterion : public GenericCriterion<HA>
+  {
   public:
-    HACriterion() {
+    HACriterion()
+    {
       initialize();
     }
 
-    virtual ~HACriterion() {
+    virtual ~HACriterion()
+    {
     }
 
   public:
-    virtual void initialize() {
+    virtual void initialize()
+    {
       attribute_value_.H = 1;
       attribute_value_.A = 0;
 
@@ -254,35 +287,39 @@ namespace smil {
       y_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset() {
+    virtual void reset()
+    {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron) {
+    virtual void merge(GenericCriterion *other_criteron)
+    {
       // HACriterion &oc = dynamic_cast<HACriterion &>(*other_criteron);
 
-      attribute_value_.A
-        += dynamic_cast<HACriterion &>(*other_criteron).getAttributeValue().A;
+      attribute_value_.A +=
+          dynamic_cast<HACriterion &>(*other_criteron).getAttributeValue().A;
 
-      y_max_
-        = std::max(y_max_, dynamic_cast<HACriterion &>(*other_criteron).y_max_);
-      y_min_
-        = std::min(y_min_, dynamic_cast<HACriterion &>(*other_criteron).y_min_);
+      y_max_ =
+          std::max(y_max_, dynamic_cast<HACriterion &>(*other_criteron).y_max_);
+      y_min_ =
+          std::min(y_min_, dynamic_cast<HACriterion &>(*other_criteron).y_min_);
     }
 
-    virtual void update(SMIL_UNUSED const size_t x,
-                        const size_t y,
-                        SMIL_UNUSED const size_t z) {
+    virtual void update(SMIL_UNUSED const size_t x, const size_t y,
+                        SMIL_UNUSED const size_t z)
+    {
       attribute_value_.A += 1;
       y_max_ = std::max(y_max_, y);
       y_min_ = std::min(y_min_, y);
     }
-    virtual bool operator<(const HA &other_attribute) {
+    virtual bool operator<(const HA &other_attribute)
+    {
       return (attribute_value_.H < other_attribute.H);
     }
 
   protected:
-    virtual void compute() {
+    virtual void compute()
+    {
       attribute_value_.H = y_max_ - y_min_ + 1;
     }
 
@@ -294,17 +331,21 @@ namespace smil {
 
   /// HeightArea criterion. Useful for Height Opening/Closing algorithms based
   /// on max-tree.
-  class HWACriterion : public GenericCriterion<HWA> {
+  class HWACriterion : public GenericCriterion<HWA>
+  {
   public:
-    HWACriterion() {
+    HWACriterion()
+    {
       initialize();
     }
 
-    virtual ~HWACriterion() {
+    virtual ~HWACriterion()
+    {
     }
 
   public:
-    virtual void initialize() {
+    virtual void initialize()
+    {
       attribute_value_.H = 1;
       attribute_value_.W = 1;
       attribute_value_.A = 0;
@@ -317,29 +358,32 @@ namespace smil {
       y_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset() {
+    virtual void reset()
+    {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron) {
+    virtual void merge(GenericCriterion *other_criteron)
+    {
       // HWACriterion &oc = dynamic_cast<HWACriterion &>(*other_criteron);
 
-      attribute_value_.A
-        += dynamic_cast<HWACriterion &>(*other_criteron).getAttributeValue().A;
+      attribute_value_.A +=
+          dynamic_cast<HWACriterion &>(*other_criteron).getAttributeValue().A;
 
-      x_max_ = std::max(
-        x_max_, dynamic_cast<HWACriterion &>(*other_criteron).x_max_);
-      x_min_ = std::min(
-        x_min_, dynamic_cast<HWACriterion &>(*other_criteron).x_min_);
+      x_max_ = std::max(x_max_,
+                        dynamic_cast<HWACriterion &>(*other_criteron).x_max_);
+      x_min_ = std::min(x_min_,
+                        dynamic_cast<HWACriterion &>(*other_criteron).x_min_);
 
-      y_max_ = std::max(
-        y_max_, dynamic_cast<HWACriterion &>(*other_criteron).y_max_);
-      y_min_ = std::min(
-        y_min_, dynamic_cast<HWACriterion &>(*other_criteron).y_min_);
+      y_max_ = std::max(y_max_,
+                        dynamic_cast<HWACriterion &>(*other_criteron).y_max_);
+      y_min_ = std::min(y_min_,
+                        dynamic_cast<HWACriterion &>(*other_criteron).y_min_);
     }
 
-    virtual void
-      update(const size_t x, const size_t y, SMIL_UNUSED const size_t z) {
+    virtual void update(const size_t x, const size_t y,
+                        SMIL_UNUSED const size_t z)
+    {
       attribute_value_.A += 1;
       x_max_ = std::max(x_max_, x);
       x_min_ = std::min(x_min_, x);
@@ -348,12 +392,14 @@ namespace smil {
       y_max_ = std::max(y_max_, y);
       y_min_ = std::min(y_min_, y);
     }
-    virtual bool operator<(const HWA &other_attribute) {
+    virtual bool operator<(const HWA &other_attribute)
+    {
       return (attribute_value_.H < other_attribute.H);
     }
 
   protected:
-    virtual void compute() {
+    virtual void compute()
+    {
       attribute_value_.W = x_max_ - x_min_ + 1;
       attribute_value_.H = y_max_ - y_min_ + 1;
     }

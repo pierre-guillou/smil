@@ -39,75 +39,84 @@
 #include "Gui/Qt/DQtImageViewer.hpp"
 #include "Gui/Qt/DQtImageViewer.hxx"
 
-namespace smil {
+namespace smil
+{
   template <>
-  inline void QtImageViewer<RGB>::setImage(Image<RGB> &im) {
+  inline void QtImageViewer<RGB>::setImage(Image<RGB> &im)
+  {
     BASE_QT_VIEWER::imageFormat = QImage::Format_ARGB32_Premultiplied;
     ImageViewer<RGB>::setImage(im);
     BASE_QT_VIEWER::setImageSize(im.getWidth(), im.getHeight(), im.getDepth());
-    if(im.getName() != string(""))
+    if (im.getName() != string(""))
       setName(this->image->getName());
   }
 
   template <>
-  inline void QtImageViewer<RGB>::drawImage() {
+  inline void QtImageViewer<RGB>::drawImage()
+  {
     Image<RGB>::sliceType lines = this->image->getSlices()[slider->value()];
-    Image<RGB>::lineType pixels;
+    Image<RGB>::lineType  pixels;
     typedef Image<UINT8>::lineType arrayType;
 
     size_t w = this->image->getWidth();
     size_t h = this->image->getHeight();
 
-    QRgb *destLine;
+    QRgb     *destLine;
     arrayType rArray, gArray, bArray;
 
-    for(size_t j = 0; j < h; j++) {
-      destLine = (QRgb *)(this->qImage->scanLine(j));
-      pixels = *lines++;
-      rArray = pixels.arrays[0];
-      gArray = pixels.arrays[1];
-      bArray = pixels.arrays[2];
-      for(size_t i = 0; i < w; i++) {
+    for (size_t j = 0; j < h; j++) {
+      destLine = (QRgb *) (this->qImage->scanLine(j));
+      pixels   = *lines++;
+      rArray   = pixels.arrays[0];
+      gArray   = pixels.arrays[1];
+      bArray   = pixels.arrays[2];
+      for (size_t i = 0; i < w; i++) {
         destLine[i] = qRgb(rArray[i], gArray[i], bArray[i]);
       }
     }
   }
 
   template <>
-  inline void
-    QtImageViewer<RGB>::displayPixelValue(size_t x, size_t y, size_t z) {
+  inline void QtImageViewer<RGB>::displayPixelValue(size_t x, size_t y,
+                                                    size_t z)
+  {
     RGB pixVal;
 
-    pixVal = this->image->getPixel(x, y, z);
+    pixVal      = this->image->getPixel(x, y, z);
     QString txt = "(" + QString::number(x) + ", " + QString::number(y);
-    if(this->image->getDepth() > 1)
+    if (this->image->getDepth() > 1)
       txt = txt + ", " + QString::number(z);
-    txt = txt + ") " + QString::number(pixVal[0]) + ","
-          + QString::number(pixVal[1]) + "," + QString::number(pixVal[2]);
+    txt = txt + ") " + QString::number(pixVal[0]) + "," +
+          QString::number(pixVal[1]) + "," + QString::number(pixVal[2]);
     valueLabel->setText(txt);
     valueLabel->adjustSize();
   }
 
   template <>
-  inline void QtImageViewer<RGB>::drawOverlay(const Image<RGB> & /*im*/) {
+  inline void QtImageViewer<RGB>::drawOverlay(const Image<RGB> & /*im*/)
+  {
   }
 
 #ifdef USE_QWT
   template <>
-  inline void QtImageViewer<RGB>::displayHistogram(bool /*update*/) {
+  inline void QtImageViewer<RGB>::displayHistogram(bool /*update*/)
+  {
   }
   template <>
-  inline void QtImageViewer<RGB>::displayProfile(bool /*update*/) {
+  inline void QtImageViewer<RGB>::displayProfile(bool /*update*/)
+  {
   }
 #endif // USE_QWT
 } // namespace smil
 
 #endif // USE_QT
 
-namespace smil {
+namespace smil
+{
 #if defined SWIGPYTHON && defined USE_NUMPY
   template <>
-  PyObject *Image<RGB>::getNumpyArray(bool /*c_contigous*/) {
+  PyObject *Image<RGB>::getNumpyArray(bool /*c_contigous*/)
+  {
     return NULL;
   }
 #endif // defined SWIGPYTHON and defined USE_NUMPY

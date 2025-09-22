@@ -31,13 +31,15 @@
 #include "DLineArith_Bit.h"
 #include "DImageArith_Bit.h"
 
-namespace smil {
+namespace smil
+{
   template <>
-  void Image<Bit>::init() {
+  void Image<Bit>::init()
+  {
     className = "Image";
 
     slices = NULL;
-    lines = NULL;
+    lines  = NULL;
     //     pixels = NULL;
 
     dataTypeSize = sizeof(pixelType);
@@ -45,7 +47,7 @@ namespace smil {
     allocatedSize = 0;
 
     viewer = NULL;
-    name = "";
+    name   = "";
 
     updatesEnabled = true;
 
@@ -53,31 +55,33 @@ namespace smil {
   }
 
   template <>
-  void *Image<Bit>::getVoidPointer(void) {
+  void *Image<Bit>::getVoidPointer(void)
+  {
     return pixels.intArray;
   }
 
   template <>
-  RES_T Image<Bit>::restruct(void) {
-    if(slices)
+  RES_T Image<Bit>::restruct(void)
+  {
+    if (slices)
       delete[] slices;
-    if(lines)
+    if (lines)
       delete[] lines;
 
-    lines = new lineType[lineCount];
+    lines  = new lineType[lineCount];
     slices = new sliceType[sliceCount];
 
-    lineType *cur_array = lines;
+    lineType  *cur_array = lines;
     sliceType *cur_slice = slices;
 
-    UINT intWidth = pixels.getIntWidth();
-    UINT intNbrPerSlice = intWidth * height;
-    BitArray::INT_TYPE *int0 = pixels.intArray;
+    UINT                intWidth       = pixels.getIntWidth();
+    UINT                intNbrPerSlice = intWidth * height;
+    BitArray::INT_TYPE *int0           = pixels.intArray;
 
-    for(int k = 0; k < (int)depth; k++, cur_slice++) {
+    for (int k = 0; k < (int) depth; k++, cur_slice++) {
       *cur_slice = cur_array;
 
-      for(int j = 0; j < (int)height; j++, cur_array++) {
+      for (int j = 0; j < (int) height; j++, cur_array++) {
         cur_array->setSize(width);
         cur_array->intArray = int0 + k * intNbrPerSlice + j * intWidth;
       }
@@ -87,14 +91,15 @@ namespace smil {
   }
 
   template <>
-  RES_T Image<Bit>::allocate(void) {
-    if(allocated)
+  RES_T Image<Bit>::allocate(void)
+  {
+    if (allocated)
       return RES_ERR_BAD_ALLOCATION;
 
     pixels.setSize(width, height * depth);
     pixels.createIntArray();
 
-    allocated = true;
+    allocated     = true;
     allocatedSize = pixels.getIntNbr() * BitArray::INT_TYPE_SIZE;
 
     restruct();
@@ -103,29 +108,31 @@ namespace smil {
   }
 
   template <>
-  RES_T Image<Bit>::deallocate(void) {
-    if(!allocated)
+  RES_T Image<Bit>::deallocate(void)
+  {
+    if (!allocated)
       return RES_OK;
 
-    if(slices)
+    if (slices)
       delete[] slices;
-    if(lines)
+    if (lines)
       delete[] lines;
-    if(pixels.intArray)
+    if (pixels.intArray)
       pixels.deleteIntArray();
 
     slices = NULL;
-    lines = NULL;
+    lines  = NULL;
     //     pixels = NULL;
 
-    allocated = false;
+    allocated     = false;
     allocatedSize = 0;
 
     return RES_OK;
   }
 
   template <>
-  void Image<Bit>::clone(const Image<Bit> &rhs) {
+  void Image<Bit>::clone(const Image<Bit> &rhs)
+  {
     bool isAlloc = rhs.isAllocated();
     setSize(rhs.getWidth(), rhs.getHeight(), rhs.getDepth(), isAlloc);
     copy(rhs, *this);
@@ -133,17 +140,19 @@ namespace smil {
   }
 
   template <>
-  RES_T Image<Bit>::setPixel(size_t offset, const Bit &value) {
+  RES_T Image<Bit>::setPixel(size_t offset, const Bit &value)
+  {
     this->lines[offset / width][offset % width] = value;
     return RES_OK;
   }
 
   template <>
-  RES_T SharedImage<Bit>::allocate() {
-    if(this->allocated)
+  RES_T SharedImage<Bit>::allocate()
+  {
+    if (this->allocated)
       return RES_ERR_BAD_ALLOCATION;
 
-    if(this->pixels.intArray == NULL)
+    if (this->pixels.intArray == NULL)
       return RES_ERR_BAD_ALLOCATION;
 
     this->allocated = true;

@@ -44,7 +44,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup   AddonFilters
    * @defgroup  AddonMeanShiftFilter         Mean Shift Filter (2D)
@@ -67,10 +68,8 @@ namespace smil {
    * @param[out] imOut : output Image
    */
   template <class T>
-  RES_T meanShiftFilter(const Image<T> &imIn,
-                        const UINT8 radius,
-                        const int tonalDistance,
-                        Image<T> &imOut);
+  RES_T meanShiftFilter(const Image<T> &imIn, const UINT8 radius,
+                        const int tonalDistance, Image<T> &imOut);
 
   /**
    * @brief Performs a noise an efficient reduction using clustering (RGB
@@ -82,10 +81,8 @@ namespace smil {
    * @warning Yet to be done !!!
    */
   template <class T>
-  RES_T meanShiftFilterRGB(const Image<T> &imIn,
-                           const UINT8 radius,
-                           const int tonalDistance,
-                           Image<T> &imOut);
+  RES_T meanShiftFilterRGB(const Image<T> &imIn, const UINT8 radius,
+                           const int tonalDistance, Image<T> &imOut);
 
   /** @} */
 } // namespace smil

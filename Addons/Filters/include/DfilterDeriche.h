@@ -44,7 +44,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup   AddonFilters
    * @defgroup  AddonDericheFilter        Deriche Filter (2D)
@@ -69,8 +70,7 @@ namespace smil {
    * @param[out] imOut Edges of imIn
    */
   template <class T>
-  RES_T dericheEdgeDetection(const Image<T> &imIn,
-                             const double Alpha,
+  RES_T dericheEdgeDetection(const Image<T> &imIn, const double Alpha,
                              Image<T> &imOut);
 
   /** @} */

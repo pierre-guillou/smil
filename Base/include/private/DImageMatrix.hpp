@@ -33,7 +33,8 @@
 #include "Core/include/private/DImage.hpp"
 #include "Core/include/DErrors.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Base
    * @defgroup Matrix Matrix operations
@@ -44,37 +45,39 @@ namespace smil {
 
   /** @cond */
   template <class T>
-  class ImageTransposeFunc {
+  class ImageTransposeFunc
+  {
   private:
     vector<int> lut{1, 0, 2};
 
-    bool setOrder(string order) {
+    bool setOrder(string order)
+    {
       lut.resize(3);
-      if(order == "yxz" || order == "yx") {
+      if (order == "yxz" || order == "yx") {
         lut[0] = 1;
         lut[1] = 0;
         lut[2] = 2;
         return true;
       }
-      if(order == "xzy") {
+      if (order == "xzy") {
         lut[0] = 0;
         lut[1] = 2;
         lut[2] = 1;
         return true;
       }
-      if(order == "yzx") {
+      if (order == "yzx") {
         lut[0] = 1;
         lut[1] = 2;
         lut[2] = 0;
         return true;
       }
-      if(order == "zxy") {
+      if (order == "zxy") {
         lut[0] = 2;
         lut[1] = 0;
         lut[2] = 1;
         return true;
       }
-      if(order == "zyx") {
+      if (order == "zyx") {
         lut[0] = 2;
         lut[1] = 1;
         lut[2] = 0;
@@ -84,39 +87,42 @@ namespace smil {
     }
 
   public:
-    ImageTransposeFunc() {
+    ImageTransposeFunc()
+    {
       setOrder("yxz");
     }
-    ImageTransposeFunc(string order) {
-      if(!setOrder(order))
+    ImageTransposeFunc(string order)
+    {
+      if (!setOrder(order))
         ERR_MSG("Unknown transpose order " + order);
     }
 
-    RES_T transpose(const Image<T> &imIn, Image<T> &imOut, string order) {
+    RES_T transpose(const Image<T> &imIn, Image<T> &imOut, string order)
+    {
       ASSERT_ALLOCATED(&imIn, &imOut);
 
-      if(&imIn == &imOut) {
+      if (&imIn == &imOut) {
         Image<T> imTmp(imIn, true);
         return transpose(imTmp, imOut, order);
       }
 
       size_t szIn[3], szOut[3];
 
-      if(order == "xyz" || order == "xy") {
+      if (order == "xyz" || order == "xy") {
         imOut = Image<T>(imIn, true);
         return RES_OK;
       }
 
-      if(order == "")
+      if (order == "")
         order = "yxz";
 
-      if(!setOrder(order)) {
+      if (!setOrder(order)) {
         ERR_MSG("Wrong value for parameter order");
         return RES_ERR;
       }
 
       imIn.getSize(szIn);
-      for(int i = 0; i < 3; i++)
+      for (int i = 0; i < 3; i++)
         szOut[i] = szIn[lut[i]];
 
       ASSERT(imOut.setSize(szOut) == RES_OK);
@@ -129,9 +135,9 @@ namespace smil {
         int nthreads = Core::getInstance()->getNumberOfThreads();
 #pragma omp parallel private(ix) num_threads(nthreads)
 #endif // USE_OPEN_MP
-        for(ix[2] = 0; ix[2] < szIn[2]; ix[2]++) {
-          for(ix[1] = 0; ix[1] < szIn[1]; ix[1]++) {
-            for(ix[0] = 0; ix[0] < szIn[0]; ix[0]++) {
+        for (ix[2] = 0; ix[2] < szIn[2]; ix[2]++) {
+          for (ix[1] = 0; ix[1] < szIn[1]; ix[1]++) {
+            for (ix[0] = 0; ix[0] < szIn[0]; ix[0]++) {
               T pixVal = imIn.getPixel(ix[0], ix[1], ix[2]);
               imOut.setPixel(ix[lut[0]], ix[lut[1]], ix[lut[2]], pixVal);
             }
@@ -167,8 +173,9 @@ namespace smil {
    *
    */
   template <class T>
-  RES_T
-    matTranspose(const Image<T> &imIn, Image<T> &imOut, string order = "yxz") {
+  RES_T matTranspose(const Image<T> &imIn, Image<T> &imOut,
+                     string order = "yxz")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ImageTransposeFunc<T> tmat(order);
     return tmat.transpose(imIn, imOut, order);
@@ -183,7 +190,8 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T matTranspose(Image<T> &im, const string order = "yxz") {
+  RES_T matTranspose(Image<T> &im, const string order = "yxz")
+  {
     ASSERT_ALLOCATED(&im);
     ImageTransposeFunc<T> tmat(order);
     return tmat.transpose(im, im, order);
@@ -200,14 +208,15 @@ namespace smil {
    * @parallelized
    */
   template <class T>
-  RES_T
-    matMultiply(const Image<T> &imIn1, const Image<T> &imIn2, Image<T> &imOut) {
+  RES_T matMultiply(const Image<T> &imIn1, const Image<T> &imIn2,
+                    Image<T> &imOut)
+  {
     ASSERT_ALLOCATED(&imIn1, &imIn2);
     size_t size1[3], size2[3];
     imIn1.getSize(size1);
     imIn2.getSize(size2);
 
-    if(size1[2] != 1 || size2[2] != 1)
+    if (size1[2] != 1 || size2[2] != 1)
       return RES_ERR_NOT_IMPLEMENTED;
 
     ImageFreezer freezer(imOut);
@@ -223,14 +232,14 @@ namespace smil {
     ASSERT((matTranspose(imIn2, transIm) == RES_OK));
 
     typedef typename ImDtTypes<T>::sliceType sliceType;
-    typedef typename ImDtTypes<T>::lineType lineType;
+    typedef typename ImDtTypes<T>::lineType  lineType;
 
-    sliceType lines = imIn1.getLines();
+    sliceType lines    = imIn1.getLines();
     sliceType outLines = imOut.getLines();
-    sliceType cols = transIm.getLines();
-    lineType line;
-    lineType outLine;
-    lineType col;
+    sliceType cols     = transIm.getLines();
+    lineType  line;
+    lineType  outLine;
+    lineType  col;
 
     size_t y;
 
@@ -242,13 +251,13 @@ namespace smil {
 #ifdef USE_OPEN_MP
 #pragma omp for schedule(dynamic, nthreads) nowait
 #endif // USE_OPEN_MP
-      for(y = 0; y < size1[1]; y++) {
-        line = lines[y];
+      for (y = 0; y < size1[1]; y++) {
+        line    = lines[y];
         outLine = outLines[y];
-        for(size_t x = 0; x < size2[0]; x++) {
-          col = cols[x];
+        for (size_t x = 0; x < size2[0]; x++) {
+          col      = cols[x];
           T outVal = 0;
-          for(size_t i = 0; i < size1[0]; i++)
+          for (size_t i = 0; i < size1[0]; i++)
             outVal += line[i] * col[i];
           outLine[x] = outVal;
         }

@@ -37,48 +37,60 @@ using namespace std;
 
 #include "DCommon.h"
 
-namespace smil {
+namespace smil
+{
   class Event;
   class Signal;
 
-  class BaseSlot {
+  class BaseSlot
+  {
     friend class Signal;
 
   public:
-    BaseSlot() {
+    BaseSlot()
+    {
     }
-    virtual ~BaseSlot() {
+    virtual ~BaseSlot()
+    {
       unregisterAll();
     }
-    virtual void run(Event * /*e*/ = NULL) {
+    virtual void run(Event * /*e*/ = NULL)
+    {
     }
 
   protected:
 #ifndef SWIG
-    virtual void _run(Event *e = NULL) {
+    virtual void _run(Event *e = NULL)
+    {
       run(e);
     }
-    virtual void registerSignal(Signal *signal);
-    virtual void unregisterSignal(Signal *signal, bool _disconnect = true);
-    virtual void unregisterAll();
+    virtual void     registerSignal(Signal *signal);
+    virtual void     unregisterSignal(Signal *signal, bool _disconnect = true);
+    virtual void     unregisterAll();
     vector<Signal *> _signals;
 #endif // SWIG
   };
 
   template <class eventT>
-  class Slot : public BaseSlot {
+  class Slot : public BaseSlot
+  {
   public:
-    Slot() {
+    Slot()
+    {
     }
-    virtual ~Slot() {
+    virtual ~Slot()
+    {
     }
-    virtual void run(eventT * /*e*/) {
+    virtual void run(eventT * /*e*/)
+    {
     }
-    void operator()(eventT * /*e*/) {
+    void operator()(eventT * /*e*/)
+    {
     }
 #ifndef SWIG
   protected:
-    virtual void _run(Event *e) {
+    virtual void _run(Event *e)
+    {
       run(static_cast<eventT *>(e));
     }
 #endif // SWIG
@@ -87,56 +99,66 @@ namespace smil {
   };
 
   template <class T, class eventT = Event>
-  class MemberFunctionSlot : public Slot<eventT> {
+  class MemberFunctionSlot : public Slot<eventT>
+  {
   public:
     typedef void (T::*memberFunc)(eventT *);
     typedef void (T::*voidMemberFunc)();
-    MemberFunctionSlot() {
+    MemberFunctionSlot()
+    {
       _instance = NULL;
       _function = NULL;
     }
-    MemberFunctionSlot(T *inst, memberFunc func) {
+    MemberFunctionSlot(T *inst, memberFunc func)
+    {
       init(inst, func);
     }
-    MemberFunctionSlot(T *inst, voidMemberFunc func) {
+    MemberFunctionSlot(T *inst, voidMemberFunc func)
+    {
       init(inst, func);
     }
-    void init(T *inst, memberFunc func) {
+    void init(T *inst, memberFunc func)
+    {
       _instance = inst;
       _function = func;
     }
-    void init(T *inst, voidMemberFunc func) {
-      _instance = inst;
+    void init(T *inst, voidMemberFunc func)
+    {
+      _instance      = inst;
       _void_function = func;
     }
 
   protected:
-    T *_instance;
-    memberFunc _function;
+    T             *_instance;
+    memberFunc     _function;
     voidMemberFunc _void_function;
-    virtual void run(eventT *e = NULL) {
-      if(!_instance)
+    virtual void   run(eventT *e = NULL)
+    {
+      if (!_instance)
         return;
 
-      if(_function)
+      if (_function)
         (_instance->*_function)(e);
-      if(_void_function)
+      if (_void_function)
         (_instance->*_void_function)();
     }
   };
 
   template <class eventT = Event>
-  class FunctionSlot : public Slot<eventT> {
+  class FunctionSlot : public Slot<eventT>
+  {
   public:
     typedef void (*funcPtr)(eventT *);
     typedef void (*voidFuncPtr)();
-    FunctionSlot(funcPtr func) {
+    FunctionSlot(funcPtr func)
+    {
       _function = func;
     }
 
   protected:
-    funcPtr _function;
-    virtual void run(eventT *e) {
+    funcPtr      _function;
+    virtual void run(eventT *e)
+    {
       (*_function)(e);
     }
   };

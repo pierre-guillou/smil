@@ -34,7 +34,8 @@
 #include "Base/include/private/DBaseMeasureOperations.hpp"
 #include "Base/include/private/DLineArith.hpp"
 
-namespace smil {
+namespace smil
+{
   /*
    * @ingroup Addons
    * @addtogroup AddonMeasures
@@ -46,14 +47,15 @@ namespace smil {
    *
    */
   template <class T>
-  vector<double> measHaralickFeatures(Image<T> &imIn, const StrElt &s) {
+  vector<double> measHaralickFeatures(Image<T> &imIn, const StrElt &s)
+  {
     map<T, UINT> hist = histogram(imIn);
-    map<T, T> equivalence;
+    map<T, T>    equivalence;
 
     size_t nbr_components = 0;
-    for(typename map<T, UINT>::iterator it = hist.begin(); it != hist.end();
-        ++it) {
-      if(it->second != 0) {
+    for (typename map<T, UINT>::iterator it = hist.begin(); it != hist.end();
+         ++it) {
+      if (it->second != 0) {
         equivalence.insert(pair<T, T>(it->first, nbr_components));
         nbr_components++;
       }
@@ -62,54 +64,58 @@ namespace smil {
     size_t S[3];
     imIn.getSize(S);
     size_t nbrPixelsInSlice = S[0] * S[1];
-    size_t nbrPixels = nbrPixelsInSlice * S[2];
-    T *in = imIn.getPixels();
-    StrElt se = s.noCenter();
-    UINT sePtsNumber = se.points.size();
+    size_t nbrPixels        = nbrPixelsInSlice * S[2];
+    T     *in               = imIn.getPixels();
+    StrElt se               = s.noCenter();
+    UINT   sePtsNumber      = se.points.size();
 
     vector<double> vec = vector<double>(nbr_components * nbr_components, 0.0);
 
     UINT SMIL_UNUSED nthreads = Core::getInstance()->getNumberOfThreads();
     // # pragma omp parallel num_threads(nthreads)
     {
-      index_T p, q;
-      UINT pts;
-      vector<double> vec_local
-        = vector<double>(nbr_components * nbr_components, 0.0);
+      index_T        p, q;
+      UINT           pts;
+      vector<double> vec_local =
+          vector<double>(nbr_components * nbr_components, 0.0);
       T *counts = new T[nbr_components];
-      T max = 0;
+      T  max    = 0;
 
 #pragma omp for
-      ForEachPixel(p) {
+      ForEachPixel(p)
+      {
         max = 0;
-        for(size_t i = 0; i < nbr_components; ++i) {
+        for (size_t i = 0; i < nbr_components; ++i) {
           counts[i] = 0;
         }
 
-        ForEachNeighborOf(p, q) {
-          if(in[q.o] != in[p.o]) {
+        ForEachNeighborOf(p, q)
+        {
+          if (in[q.o] != in[p.o]) {
             counts[equivalence[in[q.o]]]++;
           }
         }
         ENDForEachNeighborOf
 
-          for(uint32_t i = 0; i < nbr_components; ++i) {
-          max = (counts[i] > counts[max]
-                 || (counts[i] == counts[max] && vec_local[i] < vec_local[max]))
-                  ? i
-                  : max;
+            for (uint32_t i = 0; i < nbr_components; ++i)
+        {
+          max = (counts[i] > counts[max] ||
+                 (counts[i] == counts[max] && vec_local[i] < vec_local[max]))
+                    ? i
+                    : max;
         }
 
-        if(counts[max] != 0)
+        if (counts[max] != 0)
           vec_local[equivalence[in[p.o]] * nbr_components + max]++;
       }
       ENDForEachPixel
 
 #pragma omp for ordered schedule(static, 1)
-        for(int t = 0; t < omp_get_num_threads(); ++t) {
+          for (int t = 0; t < omp_get_num_threads(); ++t)
+      {
 #pragma omp ordered
         {
-          for(uint64_t i = 0; i < vec.size(); ++i) {
+          for (uint64_t i = 0; i < vec.size(); ++i) {
             vec[i] += vec_local[i];
           }
         }
@@ -127,62 +133,59 @@ namespace smil {
    * The lenght corresponds to the max number of steps \b maxSteps
    */
   template <class T>
-  vector<double> measCrossCorrelation(const Image<T> &imIn,
-                                      const T &val1,
-                                      const T &val2,
-                                      size_t dx,
-                                      size_t dy,
-                                      size_t dz,
-                                      UINT maxSteps = 0,
-                                      bool normalize = false) {
+  vector<double> measCrossCorrelation(const Image<T> &imIn, const T &val1,
+                                      const T &val2, size_t dx, size_t dy,
+                                      size_t dz, UINT maxSteps = 0,
+                                      bool normalize = false)
+  {
     vector<double> vec;
     ASSERT(areAllocated(&imIn, NULL), vec);
 
     size_t s[3];
     imIn.getSize(s);
-    if(maxSteps == 0)
+    if (maxSteps == 0)
       maxSteps = max(max(s[0], s[1]), s[2]) - 1;
     vec.clear();
 
-    typename ImDtTypes<T>::volType slicesIn = imIn.getSlices();
+    typename ImDtTypes<T>::volType   slicesIn = imIn.getSlices();
     typename ImDtTypes<T>::sliceType curSliceIn1;
     typename ImDtTypes<T>::sliceType curSliceIn2;
-    typename ImDtTypes<T>::lineType lineIn1;
-    typename ImDtTypes<T>::lineType lineIn2;
-    typename ImDtTypes<T>::lineType bufLine1 = ImDtTypes<T>::createLine(s[0]);
-    typename ImDtTypes<T>::lineType bufLine2 = ImDtTypes<T>::createLine(s[0]);
-    typename ImDtTypes<T>::lineType val1L = ImDtTypes<T>::createLine(s[0]);
+    typename ImDtTypes<T>::lineType  lineIn1;
+    typename ImDtTypes<T>::lineType  lineIn2;
+    typename ImDtTypes<T>::lineType  bufLine1 = ImDtTypes<T>::createLine(s[0]);
+    typename ImDtTypes<T>::lineType  bufLine2 = ImDtTypes<T>::createLine(s[0]);
+    typename ImDtTypes<T>::lineType  val1L    = ImDtTypes<T>::createLine(s[0]);
     fillLine<T>(val1L, s[0], val1);
     typename ImDtTypes<T>::lineType val2L = ImDtTypes<T>::createLine(s[0]);
     fillLine<T>(val2L, s[0], val2);
     equLine<T> eqOp;
 
-    for(UINT len = 0; len <= maxSteps; len++) {
+    for (UINT len = 0; len <= maxSteps; len++) {
       double prod = 0;
       size_t xLen = s[0] - dx * len;
       size_t yLen = s[1] - dy * len;
       size_t zLen = s[2] - dz * len;
 
-      for(size_t z = 0; z < zLen; z++) {
+      for (size_t z = 0; z < zLen; z++) {
         curSliceIn1 = slicesIn[z];
         curSliceIn2 = slicesIn[z + len * dz];
-        for(UINT y = 0; y < yLen; y++) {
+        for (UINT y = 0; y < yLen; y++) {
           lineIn1 = curSliceIn1[y];
           lineIn2 = curSliceIn2[y + len * dy];
           eqOp(lineIn1, val1L, xLen, bufLine1);
           eqOp(lineIn2, val2L, xLen, bufLine2);
-          for(size_t x = 0; x < xLen; x++) // Vectorized loop
+          for (size_t x = 0; x < xLen; x++) // Vectorized loop
             prod += bufLine1[x] * bufLine2[x];
         }
       }
-      if(xLen * yLen * zLen != 0)
+      if (xLen * yLen * zLen != 0)
         prod /= (xLen * yLen * zLen);
       vec.push_back(prod);
     }
 
-    if(normalize) {
+    if (normalize) {
       double orig = vec[0];
-      for(vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+      for (vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         *it /= orig;
     }
 

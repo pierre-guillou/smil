@@ -37,57 +37,66 @@
 #include "Core/include/private/DTypes.hpp"
 #include "Core/include/DErrors.h"
 
-namespace smil {
+namespace smil
+{
 
   template <class T>
-  class BufferPool {
+  class BufferPool
+  {
   public:
     BufferPool(size_t bufSize = 0)
-      : bufferSize(bufSize), numberOfBuffers(0),
-        maxNumberOfBuffers(std::numeric_limits<size_t>::max()) {
+        : bufferSize(bufSize), numberOfBuffers(0),
+          maxNumberOfBuffers(std::numeric_limits<size_t>::max())
+    {
     }
-    ~BufferPool() {
-      for(typename vector<bufferType>::iterator it = buffers.begin();
-          it != buffers.end(); it++) {
+    ~BufferPool()
+    {
+      for (typename vector<bufferType>::iterator it = buffers.begin();
+           it != buffers.end(); it++) {
         ImDtTypes<T>::deleteLine(*it);
       }
     }
 
     typedef typename ImDtTypes<T>::lineType bufferType;
 
-    RES_T initialize(size_t bufSize, SMIL_UNUSED size_t nbr = 0) {
-      if(buffers.size() != 0)
+    RES_T initialize(size_t bufSize, SMIL_UNUSED size_t nbr = 0)
+    {
+      if (buffers.size() != 0)
         clear();
       this->bufferSize = bufSize;
       return RES_OK;
     }
-    void clear() {
+    void clear()
+    {
 #ifdef USE_OPEN_MP
 #pragma omp critical
 #endif // USE_OPEN_MP
       {
-        while(!availableBuffers.empty()) {
+        while (!availableBuffers.empty()) {
           ImDtTypes<T>::deleteLine(availableBuffers.top());
           availableBuffers.pop();
         }
       }
     }
-    void setMaxNumberOfBuffers(size_t nbr) {
+    void setMaxNumberOfBuffers(size_t nbr)
+    {
       maxNumberOfBuffers = nbr;
     }
-    size_t getMaxNumberOfBuffers() {
+    size_t getMaxNumberOfBuffers()
+    {
       return maxNumberOfBuffers;
     }
-    bufferType getBuffer() {
+    bufferType getBuffer()
+    {
       bufferType buf;
 
 #ifdef USE_OPEN_MP
 #pragma omp critical
 #endif // USE_OPEN_MP
       {
-        if(availableBuffers.empty()) {
-          if(!createBuffer())
-            while(availableBuffers.empty())
+        if (availableBuffers.empty()) {
+          if (!createBuffer())
+            while (availableBuffers.empty())
               ; // wait
         }
 
@@ -96,35 +105,40 @@ namespace smil {
       }
       return buf;
     }
-    vector<bufferType> getBuffers(size_t nbr) {
+    vector<bufferType> getBuffers(size_t nbr)
+    {
       vector<bufferType> buffVect;
 
-      for(int i = 0; i < nbr; i++)
+      for (int i = 0; i < nbr; i++)
         buffVect.push_back(this->getBuffer());
 
       return buffVect;
     }
 
-    void releaseBuffer(bufferType &buf) {
+    void releaseBuffer(bufferType &buf)
+    {
       availableBuffers.push(buf);
       buf = NULL;
     }
-    void releaseBuffers(vector<bufferType> &bufs) {
-      for(int i = 0; i < bufs.size(); i++)
+    void releaseBuffers(vector<bufferType> &bufs)
+    {
+      for (int i = 0; i < bufs.size(); i++)
         availableBuffers.push(bufs[i]);
       bufs.clear();
     }
-    void releaseAllBuffers() {
-      while(!availableBuffers.empty())
+    void releaseAllBuffers()
+    {
+      while (!availableBuffers.empty())
         availableBuffers.pop();
-      for(typename vector<bufferType>::iterator it = buffers.begin();
-          it != buffers.end(); it++)
+      for (typename vector<bufferType>::iterator it = buffers.begin();
+           it != buffers.end(); it++)
         availableBuffers.push(*it);
     }
 
   protected:
-    bool createBuffer() {
-      if(buffers.size() >= maxNumberOfBuffers)
+    bool createBuffer()
+    {
+      if (buffers.size() >= maxNumberOfBuffers)
         return false;
 
       bufferType buf = ImDtTypes<T>::createLine(this->bufferSize);
@@ -133,11 +147,11 @@ namespace smil {
 
       return true;
     }
-    stack<bufferType> availableBuffers;
+    stack<bufferType>  availableBuffers;
     vector<bufferType> buffers;
-    size_t bufferSize;
-    size_t numberOfBuffers;
-    size_t maxNumberOfBuffers;
+    size_t             bufferSize;
+    size_t             numberOfBuffers;
+    size_t             maxNumberOfBuffers;
   };
 
 } // namespace smil

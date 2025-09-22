@@ -35,13 +35,15 @@
 #include "DLineArith_Bit.h"
 #include "Base/include/private/DImageArith.hpp"
 
-namespace smil {
+namespace smil
+{
 
   template <>
-  inline RES_T copy<Bit>(const Image<Bit> &imIn, Image<Bit> &imOut) {
+  inline RES_T copy<Bit>(const Image<Bit> &imIn, Image<Bit> &imOut)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
 
-    if(!CHECK_SAME_SIZE(&imIn, &imOut))
+    if (!CHECK_SAME_SIZE(&imIn, &imOut))
       return copy<Bit, Bit>(imIn, 0, 0, 0, imOut, 0, 0, 0);
 
     typename Image<Bit>::sliceType l1 = imIn.getLines();
@@ -49,7 +51,7 @@ namespace smil {
 
     UINT width = imIn.getWidth();
 
-    for(UINT i = 0; i < imIn.getLineCount(); i++)
+    for (UINT i = 0; i < imIn.getLineCount(); i++)
       copyLine<Bit>(l1[i], width, l2[i]);
 
     imOut.modified();

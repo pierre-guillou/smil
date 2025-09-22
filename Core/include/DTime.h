@@ -39,7 +39,8 @@
 #include <sys/time.h>
 #endif
 
-namespace smil {
+namespace smil
+{
 #ifdef _MSC_VER
 
   typedef struct timeval {
@@ -47,31 +48,34 @@ namespace smil {
     UINT64 tv_usec;
   } timeval;
 
-  inline int gettimeofday(struct timeval *tp, void *tz) {
+  inline int gettimeofday(struct timeval *tp, void *tz)
+  {
     struct _timeb timebuffer;
     _ftime_s(&timebuffer);
-    tp->tv_sec = timebuffer.time;
+    tp->tv_sec  = timebuffer.time;
     tp->tv_usec = timebuffer.millitm * 1000;
     return 0;
   }
 
 #endif // _MSC_VER
 
-  static inline double getCpuTime() {
+  static inline double getCpuTime()
+  {
     struct timeval tv;
-    if(gettimeofday(&tv, 0)) {
+    if (gettimeofday(&tv, 0)) {
       cout << "gettimeofday returned error" << endl;
     }
     return tv.tv_sec + double(tv.tv_usec) / 1E6;
   }
 
-  inline string displayTime(double tSec) {
+  inline string displayTime(double tSec)
+  {
     stringstream s;
     s << std::fixed;
 
-    if(tSec >= 1.)
+    if (tSec >= 1.)
       s << std::setprecision(2) << tSec << " secs";
-    else if(tSec * 1E3 >= 1.)
+    else if (tSec * 1E3 >= 1.)
       s << std::setprecision(2) << tSec * 1E3 << " msecs";
     else
       s << std::setprecision(0) << tSec * 1E6 << " usecs";

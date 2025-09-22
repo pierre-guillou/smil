@@ -35,7 +35,8 @@
 #include <QStyle>
 #include <QApplication>
 
-ColorButton::ColorButton(QWidget *parent) : QPushButton(parent) {
+ColorButton::ColorButton(QWidget *parent) : QPushButton(parent)
+{
   //     setFlat(true);
   setFocusPolicy(Qt::StrongFocus);
   setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -50,19 +51,22 @@ ColorButton::ColorButton(QWidget *parent) : QPushButton(parent) {
   connect(this, SIGNAL(toggled(bool)), SLOT(buttonPressed(bool)));
 }
 
-ColorButton::~ColorButton() {
+ColorButton::~ColorButton()
+{
 }
 
-void ColorButton::setColor(const QColor &col, const int index) {
+void ColorButton::setColor(const QColor &col, const int index)
+{
   color = col;
-  if(index >= 0) {
+  if (index >= 0) {
     colorIndex = index;
     setText(QString::number(index));
   }
   repaint();
 }
 
-void ColorButton::paintEvent(QPaintEvent *e) {
+void ColorButton::paintEvent(QPaintEvent *e)
+{
   QPixmap pix(iconSize + 6, iconSize + 4);
   pix.fill(palette().button().color());
 
@@ -79,12 +83,14 @@ void ColorButton::paintEvent(QPaintEvent *e) {
   QPushButton::paintEvent(e);
 }
 
-void ColorButton::buttonPressed(bool toggled) {
-  if(toggled)
+void ColorButton::buttonPressed(bool toggled)
+{
+  if (toggled)
     emit colorChosen(this);
 }
 
-ColorPannel::ColorPannel(QWidget *parent) : QFrame(parent, Qt::Popup) {
+ColorPannel::ColorPannel(QWidget *parent) : QFrame(parent, Qt::Popup)
+{
   setMouseTracking(true);
 
   grid = new QGridLayout();
@@ -95,37 +101,41 @@ ColorPannel::ColorPannel(QWidget *parent) : QFrame(parent, Qt::Popup) {
   lastButtonSelected = NULL;
 }
 
-ColorPannel::~ColorPannel() {
+ColorPannel::~ColorPannel()
+{
   clearGrid();
   delete grid;
 }
 
-void ColorPannel::clearGrid() {
-  for(int i = 0; i < grid->count(); i++) {
+void ColorPannel::clearGrid()
+{
+  for (int i = 0; i < grid->count(); i++) {
     QLayoutItem *item = grid->itemAt(0);
     grid->removeItem(item);
     delete item->widget();
   }
 }
 
-void ColorPannel::hideEvent(QHideEvent *e) {
+void ColorPannel::hideEvent(QHideEvent *e)
+{
   QWidget::hideEvent(e);
   emit(onHide());
 }
 
-void ColorPannel::setColors(const QVector<QRgb> &cols) {
+void ColorPannel::setColors(const QVector<QRgb> &cols)
+{
   clearGrid();
 
   int colorCount = cols.count();
-  int colCount = 16;
-  int rowCount = colorCount / colCount;
+  int colCount   = 16;
+  int rowCount   = colorCount / colCount;
 
   ColorButton but;
   setFixedSize(colCount * but.width(), rowCount * but.height());
   int index = 0;
-  for(int j = 0; j < rowCount; j++)
-    for(int i = 0; i < colCount; i++) {
-      if(index >= colorCount)
+  for (int j = 0; j < rowCount; j++)
+    for (int i = 0; i < colCount; i++) {
+      if (index >= colorCount)
         break;
       ColorButton *button = new ColorButton(this);
       button->setColor(cols[index], index);
@@ -138,15 +148,17 @@ void ColorPannel::setColors(const QVector<QRgb> &cols) {
     }
 }
 
-void ColorPannel::colorButtonSelected(ColorButton *button) {
+void ColorPannel::colorButtonSelected(ColorButton *button)
+{
   emit(colorSelected(button->getColor(), button->colorIndex));
-  if(lastButtonSelected)
+  if (lastButtonSelected)
     lastButtonSelected->setChecked(false);
   hide();
   lastButtonSelected = button;
 }
 
-ColorPicker::ColorPicker(QWidget *parent) : ColorButton(parent) {
+ColorPicker::ColorPicker(QWidget *parent) : ColorButton(parent)
+{
   setFlat(false);
 
   pannel = new ColorPannel(this);
@@ -159,34 +171,40 @@ ColorPicker::ColorPicker(QWidget *parent) : ColorButton(parent) {
   connect(this, SIGNAL(toggled(bool)), SLOT(buttonPressed(bool)));
 }
 
-ColorPicker::~ColorPicker() {
+ColorPicker::~ColorPicker()
+{
   delete pannel;
 }
 
-void ColorPicker::popup() {
+void ColorPicker::popup()
+{
   pannel->move(mapToGlobal(QPoint(0, height())));
   pannel->show();
 }
 
-void ColorPicker::buttonPressed(bool toggled) {
-  if(!toggled)
+void ColorPicker::buttonPressed(bool toggled)
+{
+  if (!toggled)
     return;
 
   popup();
 }
 
-void ColorPicker::pannelClosed() {
+void ColorPicker::pannelClosed()
+{
   setChecked(false);
 }
 
-void ColorPicker::setColors(const QVector<QRgb> &cols) {
-  if(cols.count() == 0)
+void ColorPicker::setColors(const QVector<QRgb> &cols)
+{
+  if (cols.count() == 0)
     return;
   pannel->setColors(cols);
   setColor(cols[1], 1);
 }
 
-void ColorPicker::colorSelected(const QColor &col, const int &index) {
+void ColorPicker::colorSelected(const QColor &col, const int &index)
+{
   setColor(col, index);
   emit(colorChanged(col));
 }

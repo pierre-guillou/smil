@@ -41,7 +41,8 @@
 
 #include "private/DInstance.hpp"
 
-namespace smil {
+namespace smil
+{
   class BaseObject;
   class BaseImage;
 
@@ -53,7 +54,8 @@ namespace smil {
   /**
    * Core module instance
    */
-  class Core : public UniqueInstance<Core> {
+  class Core : public UniqueInstance<Core>
+  {
     friend class UniqueInstance<Core>;
 
   protected:
@@ -66,25 +68,26 @@ namespace smil {
     bool keepAlive;
     bool autoResizeImages;
 
-    UINT getNumberOfThreads();
-    UINT getNumberOfCores();
-    UINT getMaxNumberOfThreads();
-    RES_T setNumberOfThreads(UINT nbr);
-    void resetNumberOfThreads();
-    size_t getAllocatedMemory();
-    const CpuID &getCpuID() {
+    UINT         getNumberOfThreads();
+    UINT         getNumberOfCores();
+    UINT         getMaxNumberOfThreads();
+    RES_T        setNumberOfThreads(UINT nbr);
+    void         resetNumberOfThreads();
+    size_t       getAllocatedMemory();
+    const CpuID &getCpuID()
+    {
       return cpuID;
     }
 
-    void registerObject(BaseObject *obj);
-    void unregisterObject(BaseObject *obj);
+    void                 registerObject(BaseObject *obj);
+    void                 unregisterObject(BaseObject *obj);
     vector<BaseObject *> getRegisteredObjects();
-    vector<BaseImage *> getImages();
+    vector<BaseImage *>  getImages();
 
     void showAllImages();
     void hideAllImages();
     void deleteAllImages();
-    int getImageIndex(BaseImage *img);
+    int  getImageIndex(BaseImage *img);
 
     void getCompilationInfos(ostream &outStream = std::cout);
 
@@ -98,11 +101,11 @@ namespace smil {
 
     const char *systemName;
     const char *targetArchitecture;
-    const bool supportOpenMP;
+    const bool  supportOpenMP;
 
     vector<BaseObject *> registeredObjects;
-    vector<BaseImage *> registeredImages;
-    void deleteRegisteredObjects();
+    vector<BaseImage *>  registeredImages;
+    void                 deleteRegisteredObjects();
 
     const CpuID cpuID;
   };

@@ -41,7 +41,8 @@
 
 #include "Core/include/DCommon.h"
 
-class MagnifyView : public QGraphicsView {
+class MagnifyView : public QGraphicsView
+{
   Q_OBJECT
 public:
   explicit MagnifyView(QWidget *parent = 0);
@@ -51,11 +52,11 @@ public:
 private:
   QImage *fullImage;
 
-  int gridSize;
-  QGraphicsScene *scene;
+  int                  gridSize;
+  QGraphicsScene      *scene;
   QGraphicsPixmapItem *pixItem;
-  QGraphicsPathItem *pathItem;
-  QGraphicsPathItem *centerRectPathItem;
+  QGraphicsPathItem   *pathItem;
+  QGraphicsPathItem   *centerRectPathItem;
 
   QList<QGraphicsTextItem *> *textItemList;
 
@@ -64,20 +65,25 @@ private:
   void mouseMoveEvent(QMouseEvent *pEvent);
 
 public:
-  void setGridSize(int s);
-  inline int getGridSize() {
+  void       setGridSize(int s);
+  inline int getGridSize()
+  {
     return gridSize;
   }
-  inline double getScaleFactor() {
+  inline double getScaleFactor()
+  {
     return scaleFactor;
   }
-  inline QGraphicsPixmapItem *getPixItem() {
+  inline QGraphicsPixmapItem *getPixItem()
+  {
     return pixItem;
   }
-  inline QList<QGraphicsTextItem *> *getTextItemList() {
+  inline QList<QGraphicsTextItem *> *getTextItemList()
+  {
     return textItemList;
   }
-  inline QGraphicsPathItem *getCenterRectPathItem() {
+  inline QGraphicsPathItem *getCenterRectPathItem()
+  {
     return centerRectPathItem;
   }
   void displayAt(int x, int y);

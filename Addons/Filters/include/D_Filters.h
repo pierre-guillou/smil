@@ -42,7 +42,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup  AddonFilters    Filters (Non Morphological)
    *

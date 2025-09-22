@@ -34,16 +34,17 @@
 #include "Core/include/DColor.h"
 #include "Base/include/private/DMeasures.hpp"
 
-namespace smil {
+namespace smil
+{
 
-  RES_T readNetPBMFileInfo(ifstream &fp,
-                           ImageFileInfo &fInfo,
-                           unsigned int &maxval) {
+  RES_T readNetPBMFileInfo(ifstream &fp, ImageFileInfo &fInfo,
+                           unsigned int &maxval)
+  {
     std::string buf;
 
     getline(fp, buf);
 
-    if((buf[0] != 'P' && buf[0] != 'p')) {
+    if ((buf[0] != 'P' && buf[0] != 'p')) {
       ERR_MSG("Error reading NetPBM header");
       return RES_ERR_IO;
     }
@@ -51,36 +52,36 @@ namespace smil {
     int pbmFileType;
     pbmFileType = atoi(buf.data() + 1);
 
-    switch(pbmFileType) {
+    switch (pbmFileType) {
       case 1: // Portable BitMap ASCII
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_BINARY;
-        fInfo.fileType = ImageFileInfo::FILE_TYPE_ASCII;
-        fInfo.channels = 1;
+        fInfo.fileType  = ImageFileInfo::FILE_TYPE_ASCII;
+        fInfo.channels  = 1;
         break;
       case 2: // Portable GrayMap ASCII
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_GRAY;
-        fInfo.fileType = ImageFileInfo::FILE_TYPE_ASCII;
-        fInfo.channels = 1;
+        fInfo.fileType  = ImageFileInfo::FILE_TYPE_ASCII;
+        fInfo.channels  = 1;
         break;
       case 3: // Portable PixMap ASCII
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_RGB;
-        fInfo.fileType = ImageFileInfo::FILE_TYPE_ASCII;
-        fInfo.channels = 3;
+        fInfo.fileType  = ImageFileInfo::FILE_TYPE_ASCII;
+        fInfo.channels  = 3;
         break;
       case 4: // Portable BitMap ASCII
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_BINARY;
-        fInfo.fileType = ImageFileInfo::FILE_TYPE_BINARY;
-        fInfo.channels = 1;
+        fInfo.fileType  = ImageFileInfo::FILE_TYPE_BINARY;
+        fInfo.channels  = 1;
         break;
       case 5: // Portable GrayMap ASCII
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_GRAY;
-        fInfo.fileType = ImageFileInfo::FILE_TYPE_BINARY;
-        fInfo.channels = 1;
+        fInfo.fileType  = ImageFileInfo::FILE_TYPE_BINARY;
+        fInfo.channels  = 1;
         break;
       case 6: // Portable PixMap ASCII
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_RGB;
-        fInfo.fileType = ImageFileInfo::FILE_TYPE_BINARY;
-        fInfo.channels = 3;
+        fInfo.fileType  = ImageFileInfo::FILE_TYPE_BINARY;
+        fInfo.channels  = 3;
         break;
       default:
         ERR_MSG("Unknown NetPBM format");
@@ -92,31 +93,31 @@ namespace smil {
     do {
       curpos = fp.tellg();
       getline(fp, buf);
-    } while(buf[0] == '#');
+    } while (buf[0] == '#');
 
     // Read image dimensions
     fp.seekg(curpos);
     fp >> fInfo.width >> fInfo.height;
 
-    if(fInfo.colorType != ImageFileInfo::COLOR_TYPE_BINARY) {
+    if (fInfo.colorType != ImageFileInfo::COLOR_TYPE_BINARY) {
       fp >> maxval; // Max pixel value
     }
 
     fp.seekg(1, ios_base::cur); // endl
 
     fInfo.dataStartPos = fp.tellg();
-    fInfo.scalarType = ImageFileInfo::SCALAR_TYPE_UINT8;
+    fInfo.scalarType   = ImageFileInfo::SCALAR_TYPE_UINT8;
 
     return RES_OK;
   }
 
-  RES_T readNetPBMFileInfo(const char *filename,
-                           ImageFileInfo &fInfo,
-                           unsigned int &maxval) {
+  RES_T readNetPBMFileInfo(const char *filename, ImageFileInfo &fInfo,
+                           unsigned int &maxval)
+  {
     /* open image file */
     ifstream fp(filename, ios_base::binary);
 
-    if(!fp.is_open()) {
+    if (!fp.is_open()) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -127,36 +128,37 @@ namespace smil {
     return ret;
   }
 
-  RES_T PGMImageFileHandler<UINT8>::read(const char *filename,
-                                         Image<UINT8> &image) {
+  RES_T PGMImageFileHandler<UINT8>::read(const char   *filename,
+                                         Image<UINT8> &image)
+  {
     /* open image file */
     ifstream fp(filename, ios_base::binary);
 
-    if(!fp.is_open()) {
+    if (!fp.is_open()) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
 
     ImageFileInfo fInfo;
-    unsigned int maxval;
+    unsigned int  maxval;
     ASSERT(readNetPBMFileInfo(fp, fInfo, maxval) == RES_OK, RES_ERR_IO);
     ASSERT(fInfo.colorType == ImageFileInfo::COLOR_TYPE_GRAY,
            "Not an 8bit gray image", RES_ERR_IO);
 
-    int width = fInfo.width;
+    int width  = fInfo.width;
     int height = fInfo.height;
 
     ASSERT((image.setSize(width, height) == RES_OK), RES_ERR_BAD_ALLOCATION);
 
-    if(fInfo.fileType == ImageFileInfo::FILE_TYPE_BINARY) {
-      fp.read((char *)image.getPixels(), width * height);
+    if (fInfo.fileType == ImageFileInfo::FILE_TYPE_BINARY) {
+      fp.read((char *) image.getPixels(), width * height);
     } else {
       ImDtTypes<UINT8>::lineType pixels = image.getPixels();
 
-      for(size_t i = 0; i < image.getPixelCount(); i++, pixels++) {
+      for (size_t i = 0; i < image.getPixelCount(); i++, pixels++) {
         int px;
         fp >> px;
-        *((int *)pixels) = px * ImDtTypes<UINT8>::max() / maxval;
+        *((int *) pixels) = px * ImDtTypes<UINT8>::max() / maxval;
       }
     }
 
@@ -166,11 +168,12 @@ namespace smil {
   }
 
   RES_T PGMImageFileHandler<UINT8>::write(const Image<UINT8> &image,
-                                          const char *filename) {
+                                          const char         *filename)
+  {
     /* open image file */
     ofstream fp(filename, ios_base::binary);
 
-    if(!fp.is_open()) {
+    if (!fp.is_open()) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -182,7 +185,7 @@ namespace smil {
     fp << width << " " << height << endl;
     fp << "255" << endl;
 
-    fp.write((char *)image.getPixels(), width * height);
+    fp.write((char *) image.getPixels(), width * height);
 
     fp.close();
 
@@ -191,7 +194,8 @@ namespace smil {
 
 #ifdef SMIL_WRAP_RGB
   RES_T PGMImageFileHandler<RGB>::read(const char * /*filename*/,
-                                       Image<RGB> & /*image*/) {
+                                       Image<RGB> & /*image*/)
+  {
     //         FILE *fp = fopen( filename, "rb" );
     //
     //         ASSERT(fp!=NULL, string("Cannot open file ") + filename + " for
@@ -240,7 +244,8 @@ namespace smil {
 
 #ifdef SMIL_WRAP_RGB
   RES_T PGMImageFileHandler<RGB>::write(const Image<RGB> & /*image*/,
-                                        const char * /*filename*/) {
+                                        const char * /*filename*/)
+  {
     //         FILE* fp = fopen( filename, "wb" );
     //
     //         if ( fp == NULL )

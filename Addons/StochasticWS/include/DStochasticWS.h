@@ -46,7 +46,8 @@
 #include "Core/include/DCore.h"
 #include "Morpho/include/DMorpho.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Addons
    * @addtogroup AddonStochasticWatershed Stochastic Watershed
@@ -68,10 +69,8 @@ namespace smil {
    */
   template <class labelT, class T>
   void stochasticWatershedParallel(const Image<labelT> &primary,
-                                   const Image<T> &gradient,
-                                   Image<labelT> &out,
-                                   const size_t &n_seeds,
-                                   const StrElt &se);
+                                   const Image<T> &gradient, Image<labelT> &out,
+                                   const size_t &n_seeds, const StrElt &se);
 
   /**
    * stochasticWatershed
@@ -84,10 +83,8 @@ namespace smil {
    */
   template <class labelT, class T>
   void stochasticWatershed(const Image<labelT> &primary,
-                           const Image<T> &gradient,
-                           Image<labelT> &out,
-                           const size_t &n_seeds,
-                           const StrElt &se);
+                           const Image<T> &gradient, Image<labelT> &out,
+                           const size_t &n_seeds, const StrElt &se);
 
   /**
    * stochasticFlatZonesParallel
@@ -101,11 +98,9 @@ namespace smil {
    */
   template <class labelT, class T>
   size_t stochasticFlatZonesParallel(const Image<labelT> &primary,
-                                     const Image<T> &gradient,
-                                     Image<labelT> &out,
-                                     const size_t &n_seeds,
-                                     const double &t0,
-                                     const StrElt &se);
+                                     const Image<T>      &gradient,
+                                     Image<labelT> &out, const size_t &n_seeds,
+                                     const double &t0, const StrElt &se);
 
   /**
    *  Over Segmentation Correction
@@ -119,10 +114,8 @@ namespace smil {
    */
   template <class labelT, class T>
   size_t stochasticFlatZones(const Image<labelT> &primary,
-                             const Image<T> &gradient,
-                             Image<labelT> &out,
-                             const size_t &n_seeds,
-                             const double &t0,
+                             const Image<T> &gradient, Image<labelT> &out,
+                             const size_t &n_seeds, const double &t0,
                              const StrElt &se);
 
   /**
@@ -137,11 +130,9 @@ namespace smil {
    */
   template <class labelT, class T>
   size_t overSegmentationCorrection(const Image<labelT> &primary,
-                                    const Image<T> &gradient,
-                                    Image<labelT> &out,
-                                    const size_t &n_seeds,
-                                    const double &r0,
-                                    const StrElt &se);
+                                    const Image<T>      &gradient,
+                                    Image<labelT> &out, const size_t &n_seeds,
+                                    const double &r0, const StrElt &se);
 
   /** @} */
 

@@ -38,7 +38,8 @@
 #include FT_FREETYPE_H
 #endif // USE_FREETYPE
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Draw
    * @{
@@ -54,21 +55,18 @@ namespace smil {
    * @param[in] value : value to set pixels in the line
    */
   template <class T>
-  RES_T drawLine(Image<T> &im,
-                 int x0,
-                 int y0,
-                 int x1,
-                 int y1,
-                 T value = ImDtTypes<T>::max()) {
-    if(!im.isAllocated())
+  RES_T drawLine(Image<T> &im, int x0, int y0, int x1, int y1,
+                 T value = ImDtTypes<T>::max())
+  {
+    if (!im.isAllocated())
       return RES_ERR_BAD_ALLOCATION;
 
     size_t imW = im.getWidth();
     size_t imH = im.getHeight();
 
     vector<IntPoint> bPoints;
-    if(x0 < 0 || x0 >= int(imW) || y0 < 0 || y0 >= int(imH) || x1 < 0
-       || x1 >= int(imW) || y1 < 0 || y1 >= int(imH)) {
+    if (x0 < 0 || x0 >= int(imW) || y0 < 0 || y0 >= int(imH) || x1 < 0 ||
+        x1 >= int(imW) || y1 < 0 || y1 >= int(imH)) {
       bPoints = bresenhamPoints(x0, y0, x1, y1, imW, imH);
     } else {
       // no image range check (faster)
@@ -77,8 +75,8 @@ namespace smil {
 
     typename Image<T>::sliceType lines = im.getLines();
 
-    for(vector<IntPoint>::iterator it = bPoints.begin(); it != bPoints.end();
-        it++)
+    for (vector<IntPoint>::iterator it = bPoints.begin(); it != bPoints.end();
+         it++)
       lines[(*it).y][(*it).x] = value;
 
     im.modified();
@@ -94,13 +92,13 @@ namespace smil {
    * @param[in] value : value to set pixels in the line
    */
   template <class T>
-  RES_T drawLine(Image<T> &imOut,
-                 vector<UINT> coords,
-                 T value = ImDtTypes<T>::max()) {
-    if(coords.size() != 4)
+  RES_T drawLine(Image<T> &imOut, vector<UINT> coords,
+                 T value = ImDtTypes<T>::max())
+  {
+    if (coords.size() != 4)
       return RES_ERR;
-    return drawLine<T>(
-      imOut, coords[0], coords[1], coords[2], coords[3], value);
+    return drawLine<T>(imOut, coords[0], coords[1], coords[2], coords[3],
+                       value);
   }
 
   /**
@@ -115,14 +113,10 @@ namespace smil {
    * @param[in] zSlice : Select the slice (for 3D images)
    */
   template <class T>
-  RES_T drawRectangle(Image<T> &imOut,
-                      int x0,
-                      int y0,
-                      size_t width,
-                      size_t height,
-                      T value = ImDtTypes<T>::max(),
-                      bool fill = false,
-                      size_t zSlice = 0) {
+  RES_T drawRectangle(Image<T> &imOut, int x0, int y0, size_t width,
+                      size_t height, T value = ImDtTypes<T>::max(),
+                      bool fill = false, size_t zSlice = 0)
+  {
     ASSERT_ALLOCATED(&imOut);
 
     ImageFreezer freeze(imOut);
@@ -135,23 +129,23 @@ namespace smil {
 
     size_t x1 = x0 + width - 1;
     size_t y1 = y0 + height - 1;
-    x1 = x1 < imW ? x1 : imW - 1;
-    y1 = y1 < imH ? y1 : imH - 1;
+    x1        = x1 < imW ? x1 : imW - 1;
+    y1        = y1 < imH ? y1 : imH - 1;
 
     x0 = x0 >= 0 ? x0 : 0;
     y0 = y0 >= 0 ? y0 : 0;
 
-    typename Image<T>::volType slices = imOut.getSlices();
-    const typename Image<T>::sliceType lines = slices[zSlice];
-    fillLine<T> fillFunc;
+    typename Image<T>::volType         slices = imOut.getSlices();
+    const typename Image<T>::sliceType lines  = slices[zSlice];
+    fillLine<T>                        fillFunc;
 
-    if(fill) {
-      for(size_t j = y0; j <= y1; j++)
+    if (fill) {
+      for (size_t j = y0; j <= y1; j++)
         fillFunc(lines[j] + x0, width, value);
     } else {
       fillFunc(lines[y0] + x0, width, value);
       fillFunc(lines[y1] + x0, width, value);
-      for(size_t j = y0 + 1; j <= y1; j++) {
+      for (size_t j = y0 + 1; j <= y1; j++) {
         lines[j][x0] = value;
         lines[j][x1] = value;
       }
@@ -176,11 +170,10 @@ namespace smil {
    * x1, y1</b>
    */
   template <class T>
-  RES_T drawRectangle(Image<T> &imOut,
-                      vector<UINT> coords,
-                      T value = ImDtTypes<T>::max(),
-                      bool fill = false) {
-    if(coords.size() != 4)
+  RES_T drawRectangle(Image<T> &imOut, vector<UINT> coords,
+                      T value = ImDtTypes<T>::max(), bool fill = false)
+  {
+    if (coords.size() != 4)
       return RES_ERR;
     return drawRectangle<T>(imOut, coords[0], coords[1],
                             coords[2] - coords[0] + 1,
@@ -201,23 +194,23 @@ namespace smil {
    * y0, x1, y1)</b>
    */
   template <class T, class MapT>
-  RES_T drawRectangles(Image<T> &imOut,
+  RES_T drawRectangles(Image<T>                        &imOut,
                        const map<MapT, vector<size_t>> &coordsVectMap,
-                       bool fill = false) {
+                       bool                             fill = false)
+  {
     ASSERT_ALLOCATED(&imOut);
     ImageFreezer freeze(imOut);
 
-    typename map<MapT, vector<size_t>>::const_iterator it
-      = coordsVectMap.begin();
-    if(it->second.size() != 4)
+    typename map<MapT, vector<size_t>>::const_iterator it =
+        coordsVectMap.begin();
+    if (it->second.size() != 4)
       return RES_ERR;
-    for(; it != coordsVectMap.end(); it++) {
+    for (; it != coordsVectMap.end(); it++) {
       const vector<size_t> &coords = it->second;
-      T val = T(it->first);
-      if(drawRectangle<T>(imOut, coords[0], coords[1],
-                          coords[2] - coords[0] + 1, coords[3] - coords[1] + 1,
-                          val, fill)
-         != RES_OK) {
+      T                     val    = T(it->first);
+      if (drawRectangle<T>(imOut, coords[0], coords[1],
+                           coords[2] - coords[0] + 1, coords[3] - coords[1] + 1,
+                           val, fill) != RES_OK) {
         return RES_ERR;
       }
     }
@@ -237,12 +230,9 @@ namespace smil {
    * @param zSlice Select the slice (for 3D images)
    */
   template <class T>
-  RES_T drawCircle(Image<T> &imOut,
-                   int x0,
-                   int y0,
-                   int radius,
-                   T value = ImDtTypes<T>::max(),
-                   size_t zSlice = 0) {
+  RES_T drawCircle(Image<T> &imOut, int x0, int y0, int radius,
+                   T value = ImDtTypes<T>::max(), size_t zSlice = 0)
+  {
     ASSERT_ALLOCATED(&imOut);
     ASSERT((zSlice < imOut.getDepth()), "zSlice is out of range", RES_ERR);
 
@@ -259,30 +249,30 @@ namespace smil {
     //         int ptX, ptY;
 
     do {
-      if(x0 + x >= 0 && x0 + x <= imW - 1 && y0 + y >= 0 && y0 + y <= imH - 1)
+      if (x0 + x >= 0 && x0 + x <= imW - 1 && y0 + y >= 0 && y0 + y <= imH - 1)
         lines[y0 + y][x0 + x] = value;
-      if(x0 + x >= 0 && x0 + x <= imW - 1 && y0 - y >= 0 && y0 - y <= imH - 1)
+      if (x0 + x >= 0 && x0 + x <= imW - 1 && y0 - y >= 0 && y0 - y <= imH - 1)
         lines[y0 - y][x0 + x] = value;
-      if(x0 - x >= 0 && x0 - x <= imW - 1 && y0 + y >= 0 && y0 + y <= imH - 1)
+      if (x0 - x >= 0 && x0 - x <= imW - 1 && y0 + y >= 0 && y0 + y <= imH - 1)
         lines[y0 + y][x0 - x] = value;
-      if(x0 - x >= 0 && x0 - x <= imW - 1 && y0 - y >= 0 && y0 - y <= imH - 1)
+      if (x0 - x >= 0 && x0 - x <= imW - 1 && y0 - y >= 0 && y0 - y <= imH - 1)
         lines[y0 - y][x0 - x] = value;
-      if(x0 + y >= 0 && x0 + y <= imW - 1 && y0 + x >= 0 && y0 + x <= imH - 1)
+      if (x0 + y >= 0 && x0 + y <= imW - 1 && y0 + x >= 0 && y0 + x <= imH - 1)
         lines[y0 + x][x0 + y] = value;
-      if(x0 + y >= 0 && x0 + y <= imW - 1 && y0 - x >= 0 && y0 - x <= imH - 1)
+      if (x0 + y >= 0 && x0 + y <= imW - 1 && y0 - x >= 0 && y0 - x <= imH - 1)
         lines[y0 - x][x0 + y] = value;
-      if(x0 - y >= 0 && x0 - y <= imW - 1 && y0 + x >= 0 && y0 + x <= imH - 1)
+      if (x0 - y >= 0 && x0 - y <= imW - 1 && y0 + x >= 0 && y0 + x <= imH - 1)
         lines[y0 + x][x0 - y] = value;
-      if(x0 - y >= 0 && x0 - y <= imW - 1 && y0 - x >= 0 && y0 - x <= imH - 1)
+      if (x0 - y >= 0 && x0 - y <= imW - 1 && y0 - x >= 0 && y0 - x <= imH - 1)
         lines[y0 - x][x0 - y] = value;
-      if(d < 0) {
+      if (d < 0) {
         d = d + (4 * x) + 6;
       } else {
         d = d + 4 * (x - y) + 10;
         y--;
       }
       x++;
-    } while(x <= y);
+    } while (x <= y);
 
     return RES_OK;
   }
@@ -296,12 +286,9 @@ namespace smil {
    * @param value Pixel value on the sphere
    */
   template <class T>
-  RES_T drawSphere(Image<T> &imOut,
-                   int x0,
-                   int y0,
-                   int z0,
-                   int radius,
-                   T value = ImDtTypes<T>::max()) {
+  RES_T drawSphere(Image<T> &imOut, int x0, int y0, int z0, int radius,
+                   T value = ImDtTypes<T>::max())
+  {
     ASSERT_ALLOCATED(&imOut);
 
     ImageFreezer freeze(imOut);
@@ -320,17 +307,17 @@ namespace smil {
 
     int r2 = radius * radius;
 
-    typename Image<T>::volType slices = imOut.getSlices();
+    typename Image<T>::volType   slices = imOut.getSlices();
     typename Image<T>::sliceType lines;
-    typename Image<T>::lineType curLine;
+    typename Image<T>::lineType  curLine;
 
-    for(int z = z1; z <= z2; z++) {
+    for (int z = z1; z <= z2; z++) {
       lines = slices[z];
-      for(int y = y1; y <= y2; y++) {
+      for (int y = y1; y <= y2; y++) {
         curLine = lines[y];
-        for(int x = x1; x <= x2; x++)
-          if((x - x0) * (x - x0) + (y - y0) * (y - y0) + (z - z0) * (z - z0)
-             <= r2)
+        for (int x = x1; x <= x2; x++)
+          if ((x - x0) * (x - x0) + (y - y0) * (y - y0) + (z - z0) * (z - z0) <=
+              r2)
             curLine[x] = value;
       }
     }
@@ -350,12 +337,9 @@ namespace smil {
    * @param zSlice Select the slice (for 3D images)
    */
   template <class T>
-  RES_T drawDisc(Image<T> &imOut,
-                 int x0,
-                 int y0,
-                 size_t zSlice,
-                 int radius,
-                 T value = ImDtTypes<T>::max()) {
+  RES_T drawDisc(Image<T> &imOut, int x0, int y0, size_t zSlice, int radius,
+                 T value = ImDtTypes<T>::max())
+  {
     ASSERT_ALLOCATED(&imOut);
     ASSERT((zSlice < imOut.getDepth()), "zSlice is out of range", RES_ERR);
 
@@ -373,12 +357,12 @@ namespace smil {
     int r2 = radius * radius;
 
     typename Image<T>::sliceType lines = imOut.getSlices()[zSlice];
-    typename Image<T>::lineType curLine;
+    typename Image<T>::lineType  curLine;
 
-    for(int y = y1; y <= y2; y++) {
+    for (int y = y1; y <= y2; y++) {
       curLine = lines[y];
-      for(int x = x1; x <= x2; x++)
-        if((x - x0) * (x - x0) + (y - y0) * (y - y0) <= r2)
+      for (int x = x1; x <= x2; x++)
+        if ((x - x0) * (x - x0) + (y - y0) * (y - y0) <= r2)
           curLine[x] = value;
     }
 
@@ -387,11 +371,9 @@ namespace smil {
 
   // 2D Overload
   template <class T>
-  RES_T drawDisc(Image<T> &imOut,
-                 int x0,
-                 int y0,
-                 int radius,
-                 T value = ImDtTypes<T>::max()) {
+  RES_T drawDisc(Image<T> &imOut, int x0, int y0, int radius,
+                 T value = ImDtTypes<T>::max())
+  {
     return drawDisc(imOut, x0, y0, 0, radius, value);
   }
 
@@ -406,27 +388,21 @@ namespace smil {
    * @param fill Fill the box
    */
   template <class T>
-  RES_T drawBox(Image<T> &imOut,
-                size_t x0,
-                size_t y0,
-                size_t z0,
-                size_t width,
-                size_t height,
-                size_t depth,
-                T value = ImDtTypes<T>::max(),
-                bool fill = false) {
+  RES_T drawBox(Image<T> &imOut, size_t x0, size_t y0, size_t z0, size_t width,
+                size_t height, size_t depth, T value = ImDtTypes<T>::max(),
+                bool fill = false)
+  {
     ASSERT_ALLOCATED(&imOut);
 
     ImageFreezer freeze(imOut);
 
-    ASSERT(
-      (drawRectangle(imOut, x0, y0, width, height, value, true, z0) == RES_OK));
-    for(size_t z = z0 + 1; z < z0 + depth - 1; z++)
-      ASSERT((drawRectangle(imOut, x0, y0, width, height, value, fill, z)
-              == RES_OK));
-    ASSERT(
-      (drawRectangle(imOut, x0, y0, width, height, value, true, z0 + depth - 1)
-       == RES_OK));
+    ASSERT((drawRectangle(imOut, x0, y0, width, height, value, true, z0) ==
+            RES_OK));
+    for (size_t z = z0 + 1; z < z0 + depth - 1; z++)
+      ASSERT((drawRectangle(imOut, x0, y0, width, height, value, fill, z) ==
+              RES_OK));
+    ASSERT((drawRectangle(imOut, x0, y0, width, height, value, true,
+                          z0 + depth - 1) == RES_OK));
 
     return RES_OK;
   }
@@ -439,27 +415,22 @@ namespace smil {
    * Requires the FreeType library
    */
   template <class T>
-  RES_T drawText(Image<T> &imOut,
-                 size_t x,
-                 size_t y,
-                 size_t z,
-                 string txt,
-                 string font,
-                 UINT size = 20,
-                 T value = ImDtTypes<T>::max()) {
+  RES_T drawText(Image<T> &imOut, size_t x, size_t y, size_t z, string txt,
+                 string font, UINT size = 20, T value = ImDtTypes<T>::max())
+  {
     ASSERT_ALLOCATED(&imOut);
 
     size_t imW = imOut.getWidth();
     size_t imH = imOut.getHeight();
 
-    ASSERT((x >= 0 && x < imW && y >= 0 && y < imH && z >= 0
-            && z < imOut.getDepth()),
+    ASSERT((x >= 0 && x < imW && y >= 0 && y < imH && z >= 0 &&
+            z < imOut.getDepth()),
            "Text position out of image range.", RES_ERR);
 
-    FT_Library library;
-    FT_Face face;
+    FT_Library   library;
+    FT_Face      face;
     FT_GlyphSlot slot;
-    const char *text = txt.c_str();
+    const char  *text = txt.c_str();
 
     ASSERT((!FT_Init_FreeType(&library)),
            "Problem initializing freetype library.", RES_ERR);
@@ -470,7 +441,7 @@ namespace smil {
 
     slot = face->glyph;
 
-    for(UINT c = 0; c < txt.length(); c++) {
+    for (UINT c = 0; c < txt.length(); c++) {
       FT_Load_Char(face, text[c],
                    FT_LOAD_NO_BITMAP | FT_LOAD_RENDER | FT_LOAD_TARGET_MONO);
 
@@ -484,16 +455,16 @@ namespace smil {
 
       typename ImDtTypes<T>::sliceType slc = imOut.getSlices()[z];
 
-      for(j = y_min, q = 0; j < y_max; j++, q++) {
-        unsigned char *in = bitmap->buffer + q * bitmap->pitch;
+      for (j = y_min, q = 0; j < y_max; j++, q++) {
+        unsigned char                  *in = bitmap->buffer + q * bitmap->pitch;
         typename ImDtTypes<T>::lineType out = slc[j];
-        unsigned char bit = 0x80;
-        for(i = x_min, p = 0; i < x_max; i++, p++) {
-          if(i >= 0 && j >= 0 && i < (int)imW && j < (int)imH)
-            if(*in & bit)
+        unsigned char                   bit = 0x80;
+        for (i = x_min, p = 0; i < x_max; i++, p++) {
+          if (i >= 0 && j >= 0 && i < (int) imW && j < (int) imH)
+            if (*in & bit)
               out[i] = value;
           bit >>= 1;
-          if(bit == 0) {
+          if (bit == 0) {
             bit = 0x80;
             in++;
           }
@@ -512,13 +483,9 @@ namespace smil {
   }
 
   template <class T>
-  RES_T drawText(Image<T> &imOut,
-                 size_t x,
-                 size_t y,
-                 string txt,
-                 string font,
-                 UINT size = 20,
-                 T value = ImDtTypes<T>::max()) {
+  RES_T drawText(Image<T> &imOut, size_t x, size_t y, string txt, string font,
+                 UINT size = 20, T value = ImDtTypes<T>::max())
+  {
     return drawText(imOut, x, y, 0, txt, font, size, value);
   }
 
@@ -545,28 +512,23 @@ namespace smil {
    */
   // TODO Extend to 3D
   template <class T>
-  RES_T copyPattern(const Image<T> &imIn,
-                    int x0,
-                    int y0,
-                    int width,
-                    int height,
-                    Image<T> &imOut,
-                    int nbr_along_x,
-                    int nbr_along_y) {
+  RES_T copyPattern(const Image<T> &imIn, int x0, int y0, int width, int height,
+                    Image<T> &imOut, int nbr_along_x, int nbr_along_y)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
 
-    typename ImDtTypes<T>::sliceType linesIn = imIn.getSlices()[0];
+    typename ImDtTypes<T>::sliceType linesIn  = imIn.getSlices()[0];
     typename ImDtTypes<T>::sliceType linesOut = imOut.getSlices()[0];
 
     size_t imSize[3];
     imOut.getSize(imSize);
 
-    int nX = min(int(ceil(double(imSize[0]) / width)), nbr_along_x);
-    int xPad = imSize[0] % width;
+    int nX     = min(int(ceil(double(imSize[0]) / width)), nbr_along_x);
+    int xPad   = imSize[0] % width;
     int nXfull = xPad == 0 ? nX : nX - 1;
 
-    int nY = min(int(ceil(double(imSize[1]) / height)), nbr_along_y);
-    int yPad = imSize[1] % height;
+    int nY     = min(int(ceil(double(imSize[1]) / height)), nbr_along_y);
+    int yPad   = imSize[1] % height;
     int nYfull = yPad == 0 ? nY : nY - 1;
 
     size_t cpLen = nXfull * width + xPad;
@@ -581,11 +543,11 @@ namespace smil {
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-      for(int j = 0; j < height; j++) {
-        typename ImDtTypes<T>::lineType lineIn = linesIn[y0 + j] + x0;
+      for (int j = 0; j < height; j++) {
+        typename ImDtTypes<T>::lineType lineIn  = linesIn[y0 + j] + x0;
         typename ImDtTypes<T>::lineType lineOut = linesOut[j];
 
-        for(int i = 0; i < nXfull; i++) {
+        for (int i = 0; i < nXfull; i++) {
           copyLine<T>(lineIn, width, lineOut);
           lineOut += width;
         }
@@ -598,23 +560,23 @@ namespace smil {
 
       // Copy along Y
 
-      for(int n = 1; n < nYfull; n++) {
+      for (int n = 1; n < nYfull; n++) {
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-        for(int j = 0; j < height; j++) {
-          typename ImDtTypes<T>::lineType lineIn = linesOut[j];
+        for (int j = 0; j < height; j++) {
+          typename ImDtTypes<T>::lineType lineIn  = linesOut[j];
           typename ImDtTypes<T>::lineType lineOut = linesOut[n * height + j];
 
           copyLine<T>(lineIn, cpLen, lineOut);
         }
       }
-      for(int n = nYfull; n < nY; n++) {
+      for (int n = nYfull; n < nY; n++) {
 #ifdef USE_OPEN_MP
 #pragma omp for
 #endif // USE_OPEN_MP
-        for(int j = 0; j < yPad; j++) {
-          typename ImDtTypes<T>::lineType lineIn = linesOut[j];
+        for (int j = 0; j < yPad; j++) {
+          typename ImDtTypes<T>::lineType lineIn  = linesOut[j];
           typename ImDtTypes<T>::lineType lineOut = linesOut[n * height + j];
 
           copyLine<T>(lineIn, cpLen, lineOut);
@@ -626,27 +588,24 @@ namespace smil {
   }
 
   template <class T>
-  RES_T copyPattern(const Image<T> &imIn,
-                    int x0,
-                    int y0,
-                    int width,
-                    int height,
-                    Image<T> &imOut) {
+  RES_T copyPattern(const Image<T> &imIn, int x0, int y0, int width, int height,
+                    Image<T> &imOut)
+  {
     return copyPattern(imIn, x0, y0, width, height, imOut,
                        numeric_limits<int>::max(), numeric_limits<int>::max());
   }
 
   template <class T>
-  RES_T copyPattern(const Image<T> &imIn,
-                    Image<T> &imOut,
-                    int nbr_along_x,
-                    int nbr_along_y) {
+  RES_T copyPattern(const Image<T> &imIn, Image<T> &imOut, int nbr_along_x,
+                    int nbr_along_y)
+  {
     return copyPattern(imIn, 0, 0, imIn.getWidth(), imIn.getHeight(), imOut,
                        nbr_along_x, nbr_along_y);
   }
 
   template <class T>
-  RES_T copyPattern(const Image<T> &imIn, Image<T> &imOut) {
+  RES_T copyPattern(const Image<T> &imIn, Image<T> &imOut)
+  {
     return copyPattern(imIn, 0, 0, imIn.getWidth(), imIn.getHeight(), imOut,
                        numeric_limits<int>::max(), numeric_limits<int>::max());
   }

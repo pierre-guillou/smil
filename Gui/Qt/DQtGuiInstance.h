@@ -34,16 +34,19 @@
 
 class HelpForm;
 
-namespace smil {
+namespace smil
+{
 
   /**
    * @ingroup Gui
    */
   /*@{*/
 
-  class QtGui : public Gui {
+  class QtGui : public Gui
+  {
   public:
-    QtGui() : helpForm(NULL) {
+    QtGui() : helpForm(NULL)
+    {
     }
     virtual ~QtGui();
 
@@ -56,7 +59,8 @@ namespace smil {
     HelpForm *helpForm;
   };
 
-  class QtAppGui : public QtGui, public QApplication {
+  class QtAppGui : public QtGui, public QApplication
+  {
   public:
     QtAppGui();
     ~QtAppGui();

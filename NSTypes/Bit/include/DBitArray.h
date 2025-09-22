@@ -35,24 +35,29 @@
 #include <iostream>
 #include <algorithm>
 
-namespace smil {
+namespace smil
+{
   typedef bool Bit;
 
-  class BitArray {
+  class BitArray
+  {
   public:
     typedef size_t INT_TYPE;
 
-    UINT index;
+    UINT      index;
     INT_TYPE *intArray;
 
-    static const INT_TYPE INT_TYPE_SIZE = sizeof(INT_TYPE) * CHAR_BIT;
-    static inline INT_TYPE INT_TYPE_MIN() {
+    static const INT_TYPE  INT_TYPE_SIZE = sizeof(INT_TYPE) * CHAR_BIT;
+    static inline INT_TYPE INT_TYPE_MIN()
+    {
       return numeric_limits<INT_TYPE>::min();
     }
-    static inline INT_TYPE INT_TYPE_MAX() {
+    static inline INT_TYPE INT_TYPE_MAX()
+    {
       return numeric_limits<INT_TYPE>::max();
     }
-    static inline UINT INT_SIZE(UINT bitCount) {
+    static inline UINT INT_SIZE(UINT bitCount)
+    {
       return (bitCount - 1) / INT_TYPE_SIZE + 1;
     }
 
@@ -68,92 +73,110 @@ namespace smil {
     BitArray(bool *arr, UINT _bitWidth, UINT _bitHeight = 1);
     ~BitArray();
 
-    inline UINT getBitWidth() {
+    inline UINT getBitWidth()
+    {
       return bitWidth;
     }
-    inline UINT getIntWidth() {
+    inline UINT getIntWidth()
+    {
       return intWidth;
     }
-    inline UINT getIntNbr() {
+    inline UINT getIntNbr()
+    {
       return intWidth * height;
     }
-    inline UINT getHeight() {
+    inline UINT getHeight()
+    {
       return height;
     }
-    inline UINT getBitPadX() const {
+    inline UINT getBitPadX() const
+    {
       return intWidth * INT_TYPE_SIZE - bitWidth;
     }
 
     void setSize(UINT _bitWidth, UINT _bitHeight = 1);
-    void createIntArray() {
-      if(!intArray)
+    void createIntArray()
+    {
+      if (!intArray)
         intArray = createAlignedBuffer<INT_TYPE>(intWidth * height);
     }
-    void deleteIntArray() {
-      if(intArray)
+    void deleteIntArray()
+    {
+      if (intArray)
         deleteAlignedBuffer<INT_TYPE>(intArray);
       intArray = NULL;
     }
 
-    inline bool getValue() const {
+    inline bool getValue() const
+    {
       return getValue(index);
     }
-    inline bool getValue(UINT ind) const {
+    inline bool getValue(UINT ind) const
+    {
       int Y = ind / bitWidth;
       int X = (ind + Y * this->getBitPadX()) / INT_TYPE_SIZE;
       int x = (ind - Y * bitWidth) % INT_TYPE_SIZE;
       return (intArray[X] & (1UL << x)) != 0;
     }
-    inline void setValue(bool v) {
+    inline void setValue(bool v)
+    {
       setValue(index, v);
     }
-    inline void setValue(UINT ind, bool val) {
+    inline void setValue(UINT ind, bool val)
+    {
       int Y = ind / bitWidth;
       int X = (ind + Y * this->getBitPadX()) / INT_TYPE_SIZE;
       int x = (ind - Y * bitWidth) % INT_TYPE_SIZE;
-      if(val)
+      if (val)
         intArray[X] |= (1UL << x);
       else
         intArray[X] &= ~(1UL << x);
     }
 
-    operator bool() {
+    operator bool()
+    {
       return getValue(index);
     }
-    BitArray operator[](UINT i); // lValue
+    BitArray   operator[](UINT i);       // lValue
     const bool operator[](UINT i) const; // rValue
 
-    inline BitArray &operator*() {
+    inline BitArray &operator*()
+    {
       return *this;
     }
 
     //     operator void* () { return (void*)this->intArray; }
     //     operator char* () { return (char*)this->intArray; }
     //         void operator=(void *ptr) { this->intArray = (INT_TYPE*)ptr; }
-    const bool &operator=(const bool &b) {
+    const bool &operator=(const bool &b)
+    {
       setValue(b);
       return b;
     }
     inline BitArray operator+(int dp) const;
-    inline BitArray operator+(long unsigned int dp) const {
-      return operator+((int)dp);
+    inline BitArray operator+(long unsigned int dp) const
+    {
+      return operator+((int) dp);
     }
-    inline BitArray operator+(UINT dp) const {
-      return operator+((int)dp);
+    inline BitArray operator+(UINT dp) const
+    {
+      return operator+((int) dp);
     }
-    BitArray operator-(int dp) const;
+    BitArray  operator-(int dp) const;
     BitArray &operator++(int);
     BitArray &operator++();
 
-    BitArray &operator+=(int dp) {
+    BitArray &operator+=(int dp)
+    {
       index += dp;
       return *this;
     }
 
-    inline BitArray &operator=(const BitArray &rhs) {
+    inline BitArray &operator=(const BitArray &rhs)
+    {
       this->setSize(rhs.bitWidth, rhs.height);
       this->intArray = rhs.intArray;
-      this->index = rhs.index;
+      this->index    = rhs.index;
       return *this;
     }
 
@@ -165,50 +188,60 @@ namespace smil {
     UINT height;
   };
 
-  BitArray BitArray::operator+(int dp) const {
+  BitArray BitArray::operator+(int dp) const
+  {
     BitArray ba(this->intArray, this->bitWidth, this->height);
     ba.index = this->index + dp;
     return ba;
   }
 
-  inline ostream &operator<<(ostream &os, BitArray &b) {
+  inline ostream &operator<<(ostream &os, BitArray &b)
+  {
     return b.printSelf(os);
   }
 
   template <>
-  inline const char *getDataTypeAsString(Bit *val) {
+  inline const char *getDataTypeAsString(Bit *val)
+  {
     return "Bit";
   }
 
   template <>
   struct ImDtTypes<Bit> {
-    typedef Bit pixelType;
-    typedef BitArray lineType;
-    typedef lineType *sliceType;
+    typedef Bit        pixelType;
+    typedef BitArray   lineType;
+    typedef lineType  *sliceType;
     typedef sliceType *volType;
 
-    static inline pixelType min() {
+    static inline pixelType min()
+    {
       return Bit(0);
     }
-    static inline pixelType max() {
+    static inline pixelType max()
+    {
       return Bit(1);
     }
-    static inline size_t cardinal() {
+    static inline size_t cardinal()
+    {
       return 2;
     }
-    static inline lineType createLine(UINT lineLen) {
+    static inline lineType createLine(UINT lineLen)
+    {
       BitArray ba(lineLen, 1);
       ba.createIntArray();
       return ba;
     }
-    static inline void deleteLine(lineType line) {
+    static inline void deleteLine(lineType line)
+    {
       line.deleteIntArray();
     }
-    static inline unsigned long ptrOffset(lineType p,
-                                          unsigned long n = SIMD_VEC_SIZE) {
-      return ((unsigned long)(p.intArray)) & (n - 1);
+    static inline unsigned long ptrOffset(lineType      p,
+                                          unsigned long n = SIMD_VEC_SIZE)
+    {
+      return ((unsigned long) (p.intArray)) & (n - 1);
     }
-    static inline std::string toString(const Bit &val) {
+    static inline std::string toString(const Bit &val)
+    {
       stringstream str;
       str << int(val);
       return str.str();

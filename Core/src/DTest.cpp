@@ -29,27 +29,30 @@
 
 #include "Core/include/DTest.h"
 
-namespace smil {
-  void TestSuite::add(TestCase *f) {
+namespace smil
+{
+  void TestSuite::add(TestCase *f)
+  {
     funcList.push_back(f);
   }
 
-  int TestSuite::run() {
+  int TestSuite::run()
+  {
     RES_T retVal = RES_OK;
 
     list<TestCase *>::iterator f;
-    int totTestsNbr = funcList.size();
-    int curTestNbr = 1;
-    int nPassed = 0;
-    int nFailed = 0;
+    int                        totTestsNbr = funcList.size();
+    int                        curTestNbr  = 1;
+    int                        nPassed     = 0;
+    int                        nFailed     = 0;
 
     double t1, t2;
 
-    for(f = funcList.begin(); f != funcList.end(); f++) {
-      TestCase *tc = *f;
+    for (f = funcList.begin(); f != funcList.end(); f++) {
+      TestCase         *tc = *f;
       std::stringstream ss;
       tc->init();
-      tc->retVal = RES_OK;
+      tc->retVal    = RES_OK;
       tc->outStream = &ss;
 
       cout << "Test #" << (curTestNbr++) << "/" << totTestsNbr << ": "
@@ -59,13 +62,13 @@ namespace smil {
 
       try {
         tc->run();
-      } catch(...) {
+      } catch (...) {
         tc->retVal = RES_ERR;
       }
 
       t2 = getCpuTime();
 
-      if(tc->retVal == RES_OK) {
+      if (tc->retVal == RES_OK) {
         cout << "Passed\t" << displayTime(t2 - t1) << endl;
         nPassed += 1;
       } else {
@@ -76,7 +79,7 @@ namespace smil {
       }
       (*f)->end();
     }
-    if(retVal == RES_OK)
+    if (retVal == RES_OK)
       return 0;
     else
       return -1;

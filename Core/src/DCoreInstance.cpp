@@ -40,40 +40,42 @@
 using namespace smil;
 
 Core::Core()
-  // : BaseObject("Core", false),
-  : keepAlive(true), autoResizeImages(true), threadNumber(1),
-    maxThreadNumber(1), systemName(SYSTEM_NAME),
-    targetArchitecture(TARGET_ARCHITECTURE),
+    // : BaseObject("Core", false),
+    : keepAlive(true), autoResizeImages(true), threadNumber(1),
+      maxThreadNumber(1), systemName(SYSTEM_NAME),
+      targetArchitecture(TARGET_ARCHITECTURE),
 #ifdef USE_OPEN_MP
-    supportOpenMP(true)
-#else // USE_OPEN_MP
-    supportOpenMP(false)
+      supportOpenMP(true)
+#else  // USE_OPEN_MP
+      supportOpenMP(false)
 #endif // USE_OPEN_MP
 {
 #ifdef USE_OPEN_MP
   maxThreadNumber = cpuID.getLogical();
-  coreNumber = cpuID.getCores();
-  threadNumber = maxThreadNumber;
+  coreNumber      = cpuID.getCores();
+  threadNumber    = maxThreadNumber;
   // threadNumber    = coreNumber;
-#else // USE_OPEN_MP
+#else  // USE_OPEN_MP
   maxThreadNumber = 1;
-  coreNumber = cpuID.getCores();
-  threadNumber = 1;
+  coreNumber      = cpuID.getCores();
+  threadNumber    = 1;
 #endif // USE_OPEN_MP
 #if DEBUG_LEVEL > 1
   cout << "Core created" << endl;
 #endif // DEBUG_LEVEL > 1
 }
 
-Core::~Core() {
+Core::~Core()
+{
   deleteRegisteredObjects();
 #if DEBUG_LEVEL > 1
   cout << "Core deleted" << endl;
 #endif // DEBUG_LEVEL > 1
 }
 
-void Core::registerObject(BaseObject *obj) {
-  if(obj->registered)
+void Core::registerObject(BaseObject *obj)
+{
+  if (obj->registered)
     return;
 
   Core *inst = Core::getInstance();
@@ -81,7 +83,7 @@ void Core::registerObject(BaseObject *obj) {
 
   obj->registered = true;
 
-  if(string(obj->getClassName()) == "Image")
+  if (string(obj->getClassName()) == "Image")
     inst->registeredImages.push_back(reinterpret_cast<BaseImage *>(obj));
 
 #if DEBUG_LEVEL > 1
@@ -90,106 +92,121 @@ void Core::registerObject(BaseObject *obj) {
 #endif // DEBUG_LEVEL > 1
 }
 
-void Core::unregisterObject(BaseObject *obj) {
-  if(!obj->registered)
+void Core::unregisterObject(BaseObject *obj)
+{
+  if (!obj->registered)
     return;
 
   Core *inst = Core::getInstance();
   inst->registeredObjects.erase(std::remove(
-    inst->registeredObjects.begin(), inst->registeredObjects.end(), obj));
+      inst->registeredObjects.begin(), inst->registeredObjects.end(), obj));
 
   obj->registered = false;
 
-  if(string(obj->getClassName()) == "Image")
-    inst->registeredImages.erase(
-      std::remove(inst->registeredImages.begin(), inst->registeredImages.end(),
-                  reinterpret_cast<BaseImage *>(obj)));
+  if (string(obj->getClassName()) == "Image")
+    inst->registeredImages.erase(std::remove(
+        inst->registeredImages.begin(), inst->registeredImages.end(),
+        reinterpret_cast<BaseImage *>(obj)));
 
 #if DEBUG_LEVEL > 1
   cout << "Core::unregisterObject: " << obj->getClassName() << " " << obj
        << " deleted." << endl;
 #endif // DEBUG_LEVEL > 1
 
-  if(!inst->keepAlive && inst->registeredObjects.size() == 0)
+  if (!inst->keepAlive && inst->registeredObjects.size() == 0)
     inst->kill();
 }
 
-void Core::deleteRegisteredObjects() {
+void Core::deleteRegisteredObjects()
+{
   vector<BaseObject *> objects = registeredObjects;
 
-  for(UINT i = 0; i < objects.size(); i++)
+  for (UINT i = 0; i < objects.size(); i++)
     delete objects[i];
 }
 
-UINT Core::getNumberOfThreads() {
+UINT Core::getNumberOfThreads()
+{
   return this->threadNumber;
 }
 
-UINT Core::getNumberOfCores() {
+UINT Core::getNumberOfCores()
+{
   return this->threadNumber;
 }
 
-UINT Core::getMaxNumberOfThreads() {
+UINT Core::getMaxNumberOfThreads()
+{
   return this->maxThreadNumber;
 }
 
-RES_T Core::setNumberOfThreads(UINT nbr) {
+RES_T Core::setNumberOfThreads(UINT nbr)
+{
   ASSERT((nbr <= maxThreadNumber), "Nbr of thread exceeds system capacity !",
          RES_ERR);
   this->threadNumber = nbr;
   return RES_OK;
 }
 
-void Core::resetNumberOfThreads() {
+void Core::resetNumberOfThreads()
+{
   this->threadNumber = this->maxThreadNumber;
 }
 
-size_t Core::getAllocatedMemory() {
-  vector<BaseImage *>::iterator it = this->registeredImages.begin();
-  size_t totAlloc = 0;
+size_t Core::getAllocatedMemory()
+{
+  vector<BaseImage *>::iterator it       = this->registeredImages.begin();
+  size_t                        totAlloc = 0;
 
-  while(it != this->registeredImages.end())
+  while (it != this->registeredImages.end())
     totAlloc += (*it++)->getAllocatedSize();
   return totAlloc;
 }
 
-vector<BaseObject *> Core::getRegisteredObjects() {
+vector<BaseObject *> Core::getRegisteredObjects()
+{
   return this->registeredObjects;
 }
 
-vector<BaseImage *> Core::getImages() {
+vector<BaseImage *> Core::getImages()
+{
   return this->registeredImages;
 }
 
-int Core::getImageIndex(BaseImage *img) {
-  vector<BaseImage *>::iterator i
-    = find(this->registeredImages.begin(), this->registeredImages.end(), img);
-  if(i == this->registeredImages.end())
+int Core::getImageIndex(BaseImage *img)
+{
+  vector<BaseImage *>::iterator i =
+      find(this->registeredImages.begin(), this->registeredImages.end(), img);
+  if (i == this->registeredImages.end())
     return -1;
   return i - this->registeredImages.begin();
 }
 
-void Core::showAllImages() {
+void Core::showAllImages()
+{
   vector<BaseImage *>::iterator it = this->registeredImages.begin();
 
-  while(it != this->registeredImages.end())
+  while (it != this->registeredImages.end())
     (*it++)->show();
 }
 
-void Core::hideAllImages() {
+void Core::hideAllImages()
+{
   vector<BaseImage *>::iterator it = this->registeredImages.begin();
 
-  while(it != this->registeredImages.end())
+  while (it != this->registeredImages.end())
     (*it++)->hide();
 }
 
-void Core::deleteAllImages() {
+void Core::deleteAllImages()
+{
   vector<BaseImage *> imgs = this->registeredImages;
-  for(size_t i = 0; i < imgs.size(); i++)
+  for (size_t i = 0; i < imgs.size(); i++)
     delete imgs[i];
 }
 
-void Core::getCompilationInfos(ostream &outStream) {
+void Core::getCompilationInfos(ostream &outStream)
+{
   outStream << "Build date: " << __DATE__ << " (" << __TIME__ << ")" << endl;
 #ifdef DEBUG
   outStream << "Build type: debug" << endl;

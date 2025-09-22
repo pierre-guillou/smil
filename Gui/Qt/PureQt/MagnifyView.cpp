@@ -32,8 +32,9 @@
 #include <QPainter>
 #include <iostream>
 
-MagnifyView::MagnifyView(QWidget *parent) : QGraphicsView(parent) {
-  fullImage = NULL;
+MagnifyView::MagnifyView(QWidget *parent) : QGraphicsView(parent)
+{
+  fullImage   = NULL;
   scaleFactor = 250;
 
   scene = NULL;
@@ -43,27 +44,31 @@ MagnifyView::MagnifyView(QWidget *parent) : QGraphicsView(parent) {
   setGridSize(7);
 }
 
-MagnifyView::~MagnifyView() {
+MagnifyView::~MagnifyView()
+{
   delete scene;
   delete textItemList;
 }
 
-void MagnifyView::mouseMoveEvent(QMouseEvent *pEvent) {
+void MagnifyView::mouseMoveEvent(QMouseEvent *pEvent)
+{
   // avoid to have the mouse blocked on me...
   hide();
   QGraphicsView::mouseMoveEvent(pEvent);
 }
 
-void MagnifyView::setImage(QImage *img) {
+void MagnifyView::setImage(QImage *img)
+{
   fullImage = img;
   //     hide();
 }
 
-void MagnifyView::setGridSize(int s) {
-  gridSize = s;
+void MagnifyView::setGridSize(int s)
+{
+  gridSize        = s;
   double cellSize = scaleFactor / gridSize;
 
-  if(scene)
+  if (scene)
     delete scene;
 
   scene = new QGraphicsScene(this);
@@ -73,15 +78,15 @@ void MagnifyView::setGridSize(int s) {
 
   QPainterPath path;
 
-  for(int j = 0; j < gridSize; j++)
-    for(int i = 0; i < gridSize; i++) {
+  for (int j = 0; j < gridSize; j++)
+    for (int i = 0; i < gridSize; i++) {
       path.addRect(i * cellSize, j * cellSize, cellSize, cellSize);
       QGraphicsTextItem *textItem = scene->addText(QString::number(i));
       textItem->setTextWidth(cellSize);
       textItem->setPos(i * cellSize, j * cellSize);
       textItemList->append(textItem);
     }
-  int c = gridSize / 2;
+  int c    = gridSize / 2;
   pathItem = scene->addPath(path);
 
   QPainterPath path2;
@@ -93,31 +98,35 @@ void MagnifyView::setGridSize(int s) {
   resize(width() + 1, height() + 1); // adjusted size is sometimes to short...
 }
 
-void MagnifyView::displayAt(int x, int y) {
-  if(!fullImage)
+void MagnifyView::displayAt(int x, int y)
+{
+  if (!fullImage)
     return;
 
   int xi = x - (gridSize - 1) / 2;
   int yi = y - (gridSize - 1) / 2;
 
   QImage img = fullImage->copy(xi, yi, gridSize, gridSize)
-                 .scaled(scaleFactor, scaleFactor);
+                   .scaled(scaleFactor, scaleFactor);
   pixItem->setPixmap(QPixmap::fromImage(img));
 }
 
-void MagnifyView::zoomIn() {
-  if(gridSize > 20)
+void MagnifyView::zoomIn()
+{
+  if (gridSize > 20)
     return;
   scaleFactor *= double(gridSize + 2) / double(gridSize);
   setGridSize(gridSize + 2);
 }
 
-void MagnifyView::zoomOut() {
-  if(gridSize == 1)
+void MagnifyView::zoomOut()
+{
+  if (gridSize == 1)
     return;
   scaleFactor *= double(gridSize - 2) / double(gridSize);
   setGridSize(gridSize - 2);
 }
 
-void MagnifyView::scaleImage(double /*factor*/) {
+void MagnifyView::scaleImage(double /*factor*/)
+{
 }

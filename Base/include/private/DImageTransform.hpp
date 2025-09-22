@@ -33,7 +33,8 @@
 #include "DBaseImageOperations.hpp"
 #include "DLineArith.hpp"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Base
    * @defgroup Transform Image Transformations
@@ -80,17 +81,10 @@ namespace smil {
    * @smilexample{copy_crop.py}
    */
   template <class T1, class T2>
-  RES_T copy(const Image<T1> &imIn,
-             size_t startX,
-             size_t startY,
-             size_t startZ,
-             size_t sizeX,
-             size_t sizeY,
-             size_t sizeZ,
-             Image<T2> &imOut,
-             size_t outStartX = 0,
-             size_t outStartY = 0,
-             size_t outStartZ = 0) {
+  RES_T copy(const Image<T1> &imIn, size_t startX, size_t startY, size_t startZ,
+             size_t sizeX, size_t sizeY, size_t sizeZ, Image<T2> &imOut,
+             size_t outStartX = 0, size_t outStartY = 0, size_t outStartZ = 0)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
 
     size_t inW = imIn.getWidth();
@@ -108,13 +102,13 @@ namespace smil {
     size_t realSy = min(min(sizeY, inH - startY), outH - outStartY);
     size_t realSz = min(min(sizeZ, inD - startZ), outD - outStartZ);
 
-    typename Image<T1>::volType slIn = imIn.getSlices() + startZ;
+    typename Image<T1>::volType slIn  = imIn.getSlices() + startZ;
     typename Image<T2>::volType slOut = imOut.getSlices() + outStartZ;
 
     // size_t y;
 
-    for(size_t z = 0; z < realSz; z++) {
-      typename Image<T1>::sliceType lnIn = *slIn + startY;
+    for (size_t z = 0; z < realSz; z++) {
+      typename Image<T1>::sliceType lnIn  = *slIn + startY;
       typename Image<T2>::sliceType lnOut = *slOut + outStartY;
 
 #ifdef USE_OPEN_MP
@@ -125,7 +119,7 @@ namespace smil {
 #ifdef USE_OPEN_MP
 #pragma omp for schedule(dynamic, nthreads) nowait
 #endif // USE_OPEN_MP
-        for(size_t y = 0; y < realSy; y++)
+        for (size_t y = 0; y < realSy; y++)
           copyLine<T1, T2>(lnIn[y] + startX, realSx, lnOut[y] + outStartX);
       }
 
@@ -145,15 +139,10 @@ namespace smil {
    * @overload
    */
   template <class T1, class T2>
-  RES_T copy(const Image<T1> &imIn,
-             size_t startX,
-             size_t startY,
-             size_t sizeX,
-             size_t sizeY,
-             Image<T2> &imOut,
-             size_t outStartX = 0,
-             size_t outStartY = 0,
-             size_t outStartZ = 0) {
+  RES_T copy(const Image<T1> &imIn, size_t startX, size_t startY, size_t sizeX,
+             size_t sizeY, Image<T2> &imOut, size_t outStartX = 0,
+             size_t outStartY = 0, size_t outStartZ = 0)
+  {
     return copy(imIn, startX, startY, 0, sizeX, sizeY, 1, imOut, outStartX,
                 outStartY, outStartZ);
   }
@@ -168,14 +157,10 @@ namespace smil {
    * @overload
    */
   template <class T1, class T2>
-  RES_T copy(const Image<T1> &imIn,
-             size_t startX,
-             size_t startY,
-             size_t startZ,
-             Image<T2> &imOut,
-             size_t outStartX = 0,
-             size_t outStartY = 0,
-             size_t outStartZ = 0) {
+  RES_T copy(const Image<T1> &imIn, size_t startX, size_t startY, size_t startZ,
+             Image<T2> &imOut, size_t outStartX = 0, size_t outStartY = 0,
+             size_t outStartZ = 0)
+  {
     return copy(imIn, startX, startY, startZ, imIn.getWidth(), imIn.getHeight(),
                 imIn.getDepth(), imOut, outStartX, outStartY, outStartZ);
   }
@@ -189,13 +174,10 @@ namespace smil {
    * @overload
    */
   template <class T1, class T2>
-  RES_T copy(const Image<T1> &imIn,
-             size_t startX,
-             size_t startY,
-             Image<T2> &imOut,
-             size_t outStartX = 0,
-             size_t outStartY = 0,
-             size_t outStartZ = 0) {
+  RES_T copy(const Image<T1> &imIn, size_t startX, size_t startY,
+             Image<T2> &imOut, size_t outStartX = 0, size_t outStartY = 0,
+             size_t outStartZ = 0)
+  {
     return copy(imIn, startX, startY, 0, imIn.getWidth(), imIn.getHeight(), 1,
                 imOut, outStartX, outStartY, outStartZ);
   }
@@ -209,11 +191,9 @@ namespace smil {
    * @overload
    */
   template <class T1, class T2>
-  RES_T copy(const Image<T1> &imIn,
-             Image<T2> &imOut,
-             size_t outStartX,
-             size_t outStartY,
-             size_t outStartZ = 0) {
+  RES_T copy(const Image<T1> &imIn, Image<T2> &imOut, size_t outStartX,
+             size_t outStartY, size_t outStartZ = 0)
+  {
     return copy(imIn, 0, 0, 0, imIn.getWidth(), imIn.getHeight(),
                 imIn.getDepth(), imOut, outStartX, outStartY, outStartZ);
   }
@@ -231,15 +211,16 @@ namespace smil {
    *
    */
   template <class T1, class T2>
-  RES_T copy(const Image<T1> &imIn, Image<T2> &imOut) {
+  RES_T copy(const Image<T1> &imIn, Image<T2> &imOut)
+  {
     // Swig is (surprisingly;)) lost with overloads of template functions, so we
     // try to reorient him
-    if(typeid(imIn) == typeid(imOut))
+    if (typeid(imIn) == typeid(imOut))
       return copy(imIn, imOut);
 
     ASSERT_ALLOCATED(&imIn, &imOut);
 
-    if(!haveSameSize(&imIn, &imOut, NULL))
+    if (!haveSameSize(&imIn, &imOut, NULL))
       return copy<T1, T2>(imIn, 0, 0, 0, imOut, 0, 0, 0);
 
     copyLine<T1, T2>(imIn.getPixels(), imIn.getPixelCount(), imOut.getPixels());
@@ -258,7 +239,8 @@ namespace smil {
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T copy(const Image<T> &imIn, Image<T> &imOut) {
+  RES_T copy(const Image<T> &imIn, Image<T> &imOut)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
 
     imOut.setSize(imIn);
@@ -280,7 +262,8 @@ namespace smil {
    * of @b imIn.
    */
   template <class T>
-  RES_T clone(const Image<T> &imIn, Image<T> &imOut) {
+  RES_T clone(const Image<T> &imIn, Image<T> &imOut)
+  {
     ASSERT_ALLOCATED(&imIn);
 
     ASSERT((imOut.setSize(imIn) == RES_OK));
@@ -312,14 +295,9 @@ namespace smil {
    * @smilexample{copy_crop.py}
    */
   template <class T>
-  RES_T crop(const Image<T> &imIn,
-             size_t startX,
-             size_t startY,
-             size_t startZ,
-             size_t sizeX,
-             size_t sizeY,
-             size_t sizeZ,
-             Image<T> &imOut) {
+  RES_T crop(const Image<T> &imIn, size_t startX, size_t startY, size_t startZ,
+             size_t sizeX, size_t sizeY, size_t sizeZ, Image<T> &imOut)
+  {
     ASSERT_ALLOCATED(&imIn);
 
     size_t inW = imIn.getWidth();
@@ -331,8 +309,8 @@ namespace smil {
     size_t realSz = min(sizeZ, inD - startZ);
 
     imOut.setSize(realSx, realSy, realSz);
-    return copy(
-      imIn, startX, startY, startZ, realSx, realSy, realSz, imOut, 0, 0, 0);
+    return copy(imIn, startX, startY, startZ, realSx, realSy, realSz, imOut, 0,
+                0, 0);
   }
 
   /**
@@ -347,13 +325,9 @@ namespace smil {
    *
    */
   template <class T>
-  RES_T crop(Image<T> &imInOut,
-             size_t startX,
-             size_t startY,
-             size_t startZ,
-             size_t sizeX,
-             size_t sizeY,
-             size_t sizeZ) {
+  RES_T crop(Image<T> &imInOut, size_t startX, size_t startY, size_t startZ,
+             size_t sizeX, size_t sizeY, size_t sizeZ)
+  {
     Image<T> tmpIm(imInOut, true); // clone
     return crop(tmpIm, startX, startY, startZ, sizeX, sizeY, sizeZ, imInOut);
   }
@@ -372,12 +346,9 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T crop(const Image<T> &imIn,
-             size_t startX,
-             size_t startY,
-             size_t sizeX,
-             size_t sizeY,
-             Image<T> &imOut) {
+  RES_T crop(const Image<T> &imIn, size_t startX, size_t startY, size_t sizeX,
+             size_t sizeY, Image<T> &imOut)
+  {
     return crop(imIn, startX, startY, 0, sizeX, sizeY, 1, imOut);
   }
 
@@ -394,11 +365,9 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T crop(Image<T> &imInOut,
-             size_t startX,
-             size_t startY,
-             size_t sizeX,
-             size_t sizeY) {
+  RES_T crop(Image<T> &imInOut, size_t startX, size_t startY, size_t sizeX,
+             size_t sizeY)
+  {
     return crop(imInOut, startX, startY, 0, sizeX, sizeY, 1);
   }
 
@@ -423,13 +392,12 @@ namespace smil {
    *
    */
   template <class T>
-  RES_T addBorder(const Image<T> &imIn,
-                  const size_t &bSize,
-                  Image<T> &imOut,
-                  const T &borderValue = ImDtTypes<T>::max()) {
+  RES_T addBorder(const Image<T> &imIn, const size_t &bSize, Image<T> &imOut,
+                  const T &borderValue = ImDtTypes<T>::max())
+  {
     ASSERT_ALLOCATED(&imIn)
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> tmpIm(imIn, true); // clone
       return addBorder(tmpIm, bSize, imOut, borderValue);
     }
@@ -439,7 +407,7 @@ namespace smil {
     size_t s[3];
     imIn.getSize(s);
 
-    if(imIn.getDimension() == 3) {
+    if (imIn.getDimension() == 3) {
       imOut.setSize(s[0] + 2 * bSize, s[1] + 2 * bSize, s[2] + 2 * bSize);
       ASSERT_ALLOCATED(&imOut)
       fill(imOut, borderValue);
@@ -475,48 +443,51 @@ namespace smil {
    * FlipClassFunc
    */
   template <class T>
-  class FlipClassFunc {
+  class FlipClassFunc
+  {
   private:
-    void copyReverse(T *in, size_t width, T *out) {
-      for(size_t i = 0; i < width; i++)
+    void copyReverse(T *in, size_t width, T *out)
+    {
+      for (size_t i = 0; i < width; i++)
         out[i] = in[width - 1 - i];
     }
 
   public:
-    RES_T flipIt(Image<T> &imIn, Image<T> &imOut, string direction) {
+    RES_T flipIt(Image<T> &imIn, Image<T> &imOut, string direction)
+    {
       ASSERT_ALLOCATED(&imIn, &imOut);
       ASSERT_SAME_SIZE(&imIn, &imOut);
 
-      if(&imIn == &imOut) {
+      if (&imIn == &imOut) {
         Image<T> imTmp = Image<T>(imIn, true);
         return flipIt(imTmp, imOut, direction);
       }
 
       bool vflip = (direction == "vertical");
 
-      typename Image<T>::sliceType *slicesIn = imIn.getSlices();
+      typename Image<T>::sliceType *slicesIn  = imIn.getSlices();
       typename Image<T>::sliceType *slicesOut = imOut.getSlices();
 
-      size_t width = imIn.getWidth();
+      size_t width  = imIn.getWidth();
       size_t height = imIn.getHeight();
-      size_t depth = imIn.getDepth();
+      size_t depth  = imIn.getDepth();
 
       ImageFreezer freeze(imOut);
 #ifdef USE_OPEN_MP
       int nthreads = Core::getInstance()->getNumberOfThreads();
 #pragma omp parallel for num_threads(nthreads)
 #endif // USE_OPEN_MP
-      for(size_t k = 0; k < depth; k++) {
+      for (size_t k = 0; k < depth; k++) {
         typename Image<T>::sliceType linesIn;
         typename Image<T>::sliceType linesOut;
-        linesIn = slicesIn[k];
+        linesIn  = slicesIn[k];
         linesOut = slicesOut[k];
 
-        if(vflip)
-          for(size_t j = 0; j < height; j++)
+        if (vflip)
+          for (size_t j = 0; j < height; j++)
             copyLine<T>(linesIn[j], width, linesOut[height - 1 - j]);
         else
-          for(size_t j = 0; j < height; j++)
+          for (size_t j = 0; j < height; j++)
             copyReverse(linesIn[j], width, linesOut[j]);
       }
 
@@ -535,8 +506,9 @@ namespace smil {
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T vertFlip(Image<T> &imIn, Image<T> &imOut) {
-    string direction = "vertical";
+  RES_T vertFlip(Image<T> &imIn, Image<T> &imOut)
+  {
+    string           direction = "vertical";
     FlipClassFunc<T> flip;
     return flip.flipIt(imIn, imOut, "vertical");
   }
@@ -549,7 +521,8 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T vertFlip(Image<T> &im) {
+  RES_T vertFlip(Image<T> &im)
+  {
     return vertFlip(im, im);
   }
 
@@ -563,8 +536,9 @@ namespace smil {
    * @param[out] imOut : output image
    */
   template <class T>
-  RES_T horizFlip(Image<T> &imIn, Image<T> &imOut) {
-    string direction = "horizontal";
+  RES_T horizFlip(Image<T> &imIn, Image<T> &imOut)
+  {
+    string           direction = "horizontal";
     FlipClassFunc<T> flip;
     return flip.flipIt(imIn, imOut, direction);
   }
@@ -577,7 +551,8 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T horizFlip(Image<T> &im) {
+  RES_T horizFlip(Image<T> &im)
+  {
     return horizFlip(im, im);
   }
 
@@ -591,28 +566,33 @@ namespace smil {
    */
   /** @cond */
   template <class T>
-  class ImageRotateFunct {
+  class ImageRotateFunct
+  {
   public:
-    ImageRotateFunct() {
+    ImageRotateFunct()
+    {
     }
 
-    ~ImageRotateFunct() {
+    ~ImageRotateFunct()
+    {
     }
 
-    RES_T Rotate(Image<T> &imIn, int count, Image<T> &imOut) {
+    RES_T Rotate(Image<T> &imIn, int count, Image<T> &imOut)
+    {
       count = count % 4;
 
       return RotateX90(imIn, count, imOut);
     }
 
   private:
-    RES_T RotateX90(Image<T> &imIn, int count, Image<T> &imOut) {
+    RES_T RotateX90(Image<T> &imIn, int count, Image<T> &imOut)
+    {
       ASSERT_ALLOCATED(&imIn, &imOut);
 
-      count = count % 4;
+      count     = count % 4;
       int angle = count * 90;
 
-      if(angle == 0) {
+      if (angle == 0) {
         ImageFreezer freeze(imOut);
         return copy(imIn, imOut);
       }
@@ -622,7 +602,7 @@ namespace smil {
       off_t d = imIn.getDepth();
 
       /* 90 and 270 degres */
-      if(angle == 90 || angle == 270) {
+      if (angle == 90 || angle == 270) {
         imOut.setSize(h, w, d);
       } else {
         imOut.setSize(w, h, d);
@@ -631,20 +611,20 @@ namespace smil {
       ImageFreezer freeze(imOut);
 
       typedef typename ImDtTypes<T>::lineType lineType;
-      lineType pixIn = imIn.getPixels();
-      lineType pixOut = imOut.getPixels();
+      lineType                                pixIn  = imIn.getPixels();
+      lineType                                pixOut = imOut.getPixels();
 
-      switch(angle) {
+      switch (angle) {
         case 90:
 #ifdef USE_OPEN_MP
 #pragma omp parallel for
 #endif // USE_OPEN_MP
-          for(off_t k = 0; k < d; k++) {
+          for (off_t k = 0; k < d; k++) {
             off_t offset = k * w * h;
-            T *sIn = (T *)(pixIn + offset);
-            T *sOut = (T *)(pixOut + offset);
-            for(off_t j = 0; j < h; j++) {
-              for(off_t i = 0; i < w; i++) {
+            T    *sIn    = (T *) (pixIn + offset);
+            T    *sOut   = (T *) (pixOut + offset);
+            for (off_t j = 0; j < h; j++) {
+              for (off_t i = 0; i < w; i++) {
                 sOut[i * h + (w - 1 - j)] = sIn[j * w + i];
               }
             }
@@ -654,12 +634,12 @@ namespace smil {
 #ifdef USE_OPEN_MP
 #pragma omp parallel for
 #endif // USE_OPEN_MP
-          for(off_t k = 0; k < d; k++) {
+          for (off_t k = 0; k < d; k++) {
             off_t offset = k * w * h;
-            T *sIn = (T *)(pixIn + offset);
-            T *sOut = (T *)(pixOut + offset);
-            for(off_t j = 0; j < h; j++) {
-              for(off_t i = 0; i < w; i++) {
+            T    *sIn    = (T *) (pixIn + offset);
+            T    *sOut   = (T *) (pixOut + offset);
+            for (off_t j = 0; j < h; j++) {
+              for (off_t i = 0; i < w; i++) {
                 sOut[(h - 1 - j) * w + (w - 1 - i)] = sIn[j * w + i];
               }
             }
@@ -669,12 +649,12 @@ namespace smil {
 #ifdef USE_OPEN_MP
 #pragma omp parallel for
 #endif // USE_OPEN_MP
-          for(off_t k = 0; k < d; k++) {
+          for (off_t k = 0; k < d; k++) {
             off_t offset = k * w * h;
-            T *sIn = (T *)(pixIn + offset);
-            T *sOut = (T *)(pixOut + offset);
-            for(off_t j = 0; j < h; j++) {
-              for(off_t i = 0; i < w; i++) {
+            T    *sIn    = (T *) (pixIn + offset);
+            T    *sOut   = (T *) (pixOut + offset);
+            for (off_t j = 0; j < h; j++) {
+              for (off_t i = 0; i < w; i++) {
                 sOut[(w - 1 - i) * h + j] = sIn[j * w + i];
               }
             }
@@ -708,10 +688,11 @@ namespace smil {
    * @smilexample{Rotation around axis y, example-3D-image-rotate.py}
    */
   template <class T>
-  RES_T rotateX90(Image<T> &imIn, int count, Image<T> &imOut) {
+  RES_T rotateX90(Image<T> &imIn, int count, Image<T> &imOut)
+  {
     ImageRotateFunct<T> imr;
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp(imIn, true);
       return imr.Rotate(imTmp, count, imOut);
     }
@@ -728,7 +709,8 @@ namespace smil {
    * @overload
    */
   template <class T>
-  RES_T rotateX90(Image<T> &im, int count) {
+  RES_T rotateX90(Image<T> &im, int count)
+  {
     return rotateX90(im, count, im);
   }
 
@@ -749,31 +731,28 @@ namespace smil {
    * @param[in] borderValue : value to be assigned to moved pixels
    */
   template <class T>
-  RES_T translate(const Image<T> &imIn,
-                  int dx,
-                  int dy,
-                  int dz,
-                  Image<T> &imOut,
-                  T borderValue = ImDtTypes<T>::min()) {
+  RES_T translate(const Image<T> &imIn, int dx, int dy, int dz, Image<T> &imOut,
+                  T borderValue = ImDtTypes<T>::min())
+  {
     ASSERT_ALLOCATED(&imIn)
     ASSERT_SAME_SIZE(&imIn, &imOut)
 
-    size_t lineLen = imIn.getWidth();
-    typename ImDtTypes<T>::lineType borderBuf
-      = ImDtTypes<T>::createLine(lineLen);
+    size_t                          lineLen = imIn.getWidth();
+    typename ImDtTypes<T>::lineType borderBuf =
+        ImDtTypes<T>::createLine(lineLen);
     fillLine<T>(borderBuf, lineLen, borderValue);
 
     size_t height = imIn.getHeight();
-    size_t depth = imIn.getDepth();
+    size_t depth  = imIn.getDepth();
 
-    for(size_t k = 0; k < depth; k++) {
+    for (size_t k = 0; k < depth; k++) {
       typename Image<T>::sliceType lOut = imOut.getSlices()[k];
 
       int z = k - dz;
-      for(size_t j = 0; j < height; j++, lOut++) {
+      for (size_t j = 0; j < height; j++, lOut++) {
         int y = j - dy;
 
-        if(z < 0 || z >= (int)depth || y < 0 || y >= (int)height)
+        if (z < 0 || z >= (int) depth || y < 0 || y >= (int) height)
           copyLine<T>(borderBuf, lineLen, *lOut);
         else
           shiftLine<T>(imIn.getSlices()[z][y], dx, lineLen, *lOut, borderValue);
@@ -796,7 +775,8 @@ namespace smil {
    * @returns translated image
    */
   template <class T>
-  ResImage<T> translate(const Image<T> &imIn, int dx, int dy, int dz) {
+  ResImage<T> translate(const Image<T> &imIn, int dx, int dy, int dz)
+  {
     ResImage<T> imOut(imIn);
     translate<T>(imIn, dx, dy, dz, imOut);
     return imOut;
@@ -813,11 +793,9 @@ namespace smil {
    * @param[in] borderValue : value to be assigned to moved pixels
    */
   template <class T>
-  RES_T translate(const Image<T> &imIn,
-                  int dx,
-                  int dy,
-                  Image<T> &imOut,
-                  T borderValue = ImDtTypes<T>::min()) {
+  RES_T translate(const Image<T> &imIn, int dx, int dy, Image<T> &imOut,
+                  T borderValue = ImDtTypes<T>::min())
+  {
     return translate<T>(imIn, dx, dy, 0, imOut, borderValue);
   }
 
@@ -829,7 +807,8 @@ namespace smil {
    * @returns translated image
    */
   template <class T>
-  ResImage<T> translate(const Image<T> &imIn, int dx, int dy) {
+  ResImage<T> translate(const Image<T> &imIn, int dx, int dy)
+  {
     ResImage<T> imOut(imIn);
     translate<T>(imIn, dx, dy, 0, imOut);
     return imOut;
@@ -857,50 +836,51 @@ namespace smil {
    *
    */
   template <class T>
-  class ImageResizeFunc {
+  class ImageResizeFunc
+  {
   public:
-    ImageResizeFunc(string method) {
-      if(method != "linear" && method != "trilinear" && method != "closest")
+    ImageResizeFunc(string method)
+    {
+      if (method != "linear" && method != "trilinear" && method != "closest")
         this->method = "trilinear";
       else
         this->method = method;
     }
 
-    ImageResizeFunc() {
+    ImageResizeFunc()
+    {
       method = "trilinear";
     }
 
-    ~ImageResizeFunc() {
+    ~ImageResizeFunc()
+    {
     }
 
     /*
      * Public resize members
      */
-    RES_T resize(Image<T> &imIn,
-                 size_t width,
-                 size_t height,
-                 size_t depth,
-                 Image<T> &imOut,
-                 string method = "trilinear") {
+    RES_T resize(Image<T> &imIn, size_t width, size_t height, size_t depth,
+                 Image<T> &imOut, string method = "trilinear")
+    {
       ASSERT_ALLOCATED(&imIn, &imOut)
 
       size_t dz = imIn.getDepth();
-      if(method == "auto") {
-        if(isBinary(imIn))
+      if (method == "auto") {
+        if (isBinary(imIn))
           method = "closest";
         else
           method = dz > 1 ? "trilinear" : "bilinear";
       }
 
-      if(method == "closest") {
-        if(dz > 1)
+      if (method == "closest") {
+        if (dz > 1)
           return resize3DClosest(imIn, width, height, depth, imOut);
         else
           return resize2DClosest(imIn, width, height, imOut);
       }
 
-      if(method == "bilinear" || method == "trilinear") {
-        if(dz > 1)
+      if (method == "bilinear" || method == "trilinear") {
+        if (dz > 1)
           return resizeTrilinear(imIn, width, height, depth, imOut);
         else
           return resizeBilinear(imIn, width, height, imOut);
@@ -909,11 +889,9 @@ namespace smil {
       return RES_ERR;
     }
 
-    RES_T resize(Image<T> &imIn,
-                 size_t width,
-                 size_t height,
-                 Image<T> &imOut,
-                 string method = "trilinear") {
+    RES_T resize(Image<T> &imIn, size_t width, size_t height, Image<T> &imOut,
+                 string method = "trilinear")
+    {
       ASSERT_ALLOCATED(&imIn, &imOut)
 
       size_t depth = imIn.getDepth();
@@ -923,33 +901,28 @@ namespace smil {
     /*
      * Public scale member
      */
-    RES_T scale(Image<T> &imIn,
-                double kx,
-                double ky,
-                double kz,
-                Image<T> &imOut,
-                string method = "trilinear") {
+    RES_T scale(Image<T> &imIn, double kx, double ky, double kz,
+                Image<T> &imOut, string method = "trilinear")
+    {
       ASSERT_ALLOCATED(&imIn, &imOut)
 
-      size_t width = imIn.getWidth();
+      size_t width  = imIn.getWidth();
       size_t height = imIn.getHeight();
-      size_t depth = imIn.getDepth();
+      size_t depth  = imIn.getDepth();
 
-      if(width > 1)
+      if (width > 1)
         width = max(1L, lround(kx * width));
-      if(height > 1)
+      if (height > 1)
         height = max(1L, lround(ky * height));
-      if(depth > 1)
+      if (depth > 1)
         depth = max(1L, lround(kz * depth));
 
       return resize(imIn, width, height, depth, imOut, method);
     }
 
-    RES_T scale(Image<T> &imIn,
-                size_t kx,
-                size_t ky,
-                Image<T> &imOut,
-                string method = "trilinear") {
+    RES_T scale(Image<T> &imIn, size_t kx, size_t ky, Image<T> &imOut,
+                string method = "trilinear")
+    {
       return scale(imIn, kx, ky, 1., imOut, method);
     }
 
@@ -966,37 +939,38 @@ namespace smil {
      * 2D - closest interpolation method - naive loop implementation
      */
     RES_T
-    resize2DClosest(Image<T> &imIn, size_t sx, size_t sy, Image<T> &imOut) {
-      size_t width = imIn.getWidth();
+    resize2DClosest(Image<T> &imIn, size_t sx, size_t sy, Image<T> &imOut)
+    {
+      size_t width  = imIn.getWidth();
       size_t height = imIn.getHeight();
-      size_t depth = imIn.getDepth();
+      size_t depth  = imIn.getDepth();
 
-      if(depth > 1) {
+      if (depth > 1) {
         return resize3DClosest(imIn, sx, sy, depth, imOut);
       }
 
       imOut.setSize(sx, sy, 1);
       ImageFreezer freeze(imOut);
 
-      double cx = ((double)(width - 1)) / (sx - 1);
-      double cy = ((double)(height - 1)) / (sy - 1);
+      double cx = ((double) (width - 1)) / (sx - 1);
+      double cy = ((double) (height - 1)) / (sy - 1);
 
-      T *pixIn = imIn.getPixels();
+      T *pixIn  = imIn.getPixels();
       T *pixOut = imOut.getPixels();
 
-      for(size_t j = 0; j < sy; j++) {
+      for (size_t j = 0; j < sy; j++) {
 #ifdef USE_OPEN_MP
         int nthreads = Core::getInstance()->getNumberOfThreads();
 #pragma omp parallel for num_threads(nthreads)
 #endif // USE_OPEN_MP
-        for(size_t i = 0; i < sx; i++) {
+        for (size_t i = 0; i < sx; i++) {
           size_t xo = round(cx * i);
           size_t yo = round(cy * j);
 
           xo = min(xo, width - 1);
           yo = min(yo, height - 1);
 
-          T v = pixIn[yo * width + xo];
+          T v                = pixIn[yo * width + xo];
           pixOut[j * sx + i] = v;
         }
       }
@@ -1007,33 +981,34 @@ namespace smil {
     /*
      * 3D - closest interpolation method - naive loop implementation
      */
-    RES_T resize3DClosest(
-      Image<T> &imIn, size_t sx, size_t sy, size_t sz, Image<T> &imOut) {
-      size_t width = imIn.getWidth();
+    RES_T resize3DClosest(Image<T> &imIn, size_t sx, size_t sy, size_t sz,
+                          Image<T> &imOut)
+    {
+      size_t width  = imIn.getWidth();
       size_t height = imIn.getHeight();
-      size_t depth = imIn.getDepth();
+      size_t depth  = imIn.getDepth();
 
-      if(depth > 1) {
+      if (depth > 1) {
         return resize2DClosest(imIn, sx, sy, imOut);
       }
       imOut.setSize(sx, sy, sz);
 
       ImageFreezer freeze(imOut);
 
-      double cx = ((double)(width - 1)) / (sx - 1);
-      double cy = ((double)(height - 1)) / (sy - 1);
-      double cz = ((double)(depth - 1)) / (sz - 1);
+      double cx = ((double) (width - 1)) / (sx - 1);
+      double cy = ((double) (height - 1)) / (sy - 1);
+      double cz = ((double) (depth - 1)) / (sz - 1);
 
-      T *pixIn = imIn.getPixels();
+      T *pixIn  = imIn.getPixels();
       T *pixOut = imOut.getPixels();
 
-      for(size_t k = 0; k < sz; k++) {
-        for(size_t j = 0; j < sy; j++) {
+      for (size_t k = 0; k < sz; k++) {
+        for (size_t j = 0; j < sy; j++) {
 #ifdef USE_OPEN_MP
           int nthreads = Core::getInstance()->getNumberOfThreads();
 #pragma omp parallel for num_threads(nthreads)
 #endif // USE_OPEN_MP
-          for(size_t i = 0; i < sx; i++) {
+          for (size_t i = 0; i < sx; i++) {
             size_t xo = round(cx * i);
             size_t yo = round(cy * j);
             size_t zo = round(cz * k);
@@ -1062,36 +1037,37 @@ namespace smil {
      * 2D - Bilinear interpolation method - naive loop implementation
      */
     RES_T
-    resizeBilinear(Image<T> &imIn, size_t sx, size_t sy, Image<T> &imOut) {
-      off_t width = imIn.getWidth();
+    resizeBilinear(Image<T> &imIn, size_t sx, size_t sy, Image<T> &imOut)
+    {
+      off_t width  = imIn.getWidth();
       off_t height = imIn.getHeight();
-      off_t depth = imIn.getDepth();
+      off_t depth  = imIn.getDepth();
 
-      if(depth > 1) {
+      if (depth > 1) {
         return resizeTrilinear(imIn, sx, sy, depth, imOut);
       }
 
       imOut.setSize(sx, sy, 1);
       ImageFreezer freeze(imOut);
 
-      double cx = ((double)(width - 1)) / (sx - 1);
-      double cy = ((double)(height - 1)) / (sy - 1);
+      double cx = ((double) (width - 1)) / (sx - 1);
+      double cy = ((double) (height - 1)) / (sy - 1);
 
-      T *pixIn = imIn.getPixels();
+      T *pixIn  = imIn.getPixels();
       T *pixOut = imOut.getPixels();
 
-      for(size_t j = 0; j < sy; j++) {
+      for (size_t j = 0; j < sy; j++) {
         off_t dy = width;
 #ifdef USE_OPEN_MP
         int nthreads = Core::getInstance()->getNumberOfThreads();
 #pragma omp parallel for num_threads(nthreads)
 #endif
-        for(size_t i = 0; i < sx; i++) {
+        for (size_t i = 0; i < sx; i++) {
           Point<double> P(cx * i, cy * j, 0);
 
-          off_t xl = (off_t)floor(P.x);
+          off_t xl = (off_t) floor(P.x);
           off_t xh = (xl + 1) < width ? xl + 1 : xl;
-          off_t yl = (off_t)floor(P.y);
+          off_t yl = (off_t) floor(P.y);
           off_t yh = (yl + 1) < height ? yl + 1 : yl;
 
           double cxl = xh > xl ? (P.x - xl) : 1.;
@@ -1099,10 +1075,10 @@ namespace smil {
           double cyl = yh > yl ? (P.y - yl) : 1.;
           double cyh = 1. - cyl;
 
-          T vp = pixIn[yl * dy + xl] * cxh * cyh
-                 + pixIn[yl * dy + xh] * cxl * cyh
-                 + pixIn[yh * dy + xl] * cxh * cyl
-                 + pixIn[yh * dy + xh] * cxl * cyl;
+          T vp = pixIn[yl * dy + xl] * cxh * cyh +
+                 pixIn[yl * dy + xh] * cxl * cyh +
+                 pixIn[yh * dy + xl] * cxh * cyl +
+                 pixIn[yh * dy + xh] * cxl * cyl;
 
           pixOut[j * sx + i] = vp;
         }
@@ -1113,35 +1089,36 @@ namespace smil {
     /*
      * 3D - Trilinear interpolation method - naive loop implementation
      */
-    RES_T resizeTrilinear(
-      Image<T> &imIn, size_t sx, size_t sy, size_t sz, Image<T> &imOut) {
-      off_t width = imIn.getWidth();
+    RES_T resizeTrilinear(Image<T> &imIn, size_t sx, size_t sy, size_t sz,
+                          Image<T> &imOut)
+    {
+      off_t width  = imIn.getWidth();
       off_t height = imIn.getHeight();
-      off_t depth = imIn.getDepth();
+      off_t depth  = imIn.getDepth();
 
-      if(depth == 1) {
+      if (depth == 1) {
         return resizeBilinear(imIn, sx, sy, imOut);
       }
 
       imOut.setSize(sx, sy, sz);
       ImageFreezer freeze(imOut);
 
-      double cx = ((double)(width - 1)) / (sx - 1);
-      double cy = ((double)(height - 1)) / (sy - 1);
-      double cz = ((double)(depth - 1)) / (sz - 1);
+      double cx = ((double) (width - 1)) / (sx - 1);
+      double cy = ((double) (height - 1)) / (sy - 1);
+      double cz = ((double) (depth - 1)) / (sz - 1);
 
-      T *pixIn = imIn.getPixels();
+      T *pixIn  = imIn.getPixels();
       T *pixOut = imOut.getPixels();
 
-      for(size_t k = 0; k < sz; k++) {
+      for (size_t k = 0; k < sz; k++) {
         off_t dz = width * height;
-        for(size_t j = 0; j < sy; j++) {
+        for (size_t j = 0; j < sy; j++) {
           off_t dy = width;
 #ifdef USE_OPEN_MP
           int nthreads = Core::getInstance()->getNumberOfThreads();
 #pragma omp parallel for num_threads(nthreads)
 #endif
-          for(size_t i = 0; i < sx; i++) {
+          for (size_t i = 0; i < sx; i++) {
             Point<double> P(cx * i, cy * j, cz * k);
 
             off_t xl = floor(P.x);
@@ -1158,14 +1135,14 @@ namespace smil {
             double czl = zh > zl ? (P.z - zl) : 1.;
             double czh = 1. - czl;
 
-            T vp = pixIn[zl * dz + yl * dy + xl] * cxh * cyh * czh
-                   + pixIn[zl * dz + yl * dy + xh] * cxl * cyh * czh
-                   + pixIn[zl * dz + yh * dy + xl] * cxh * cyl * czh
-                   + pixIn[zl * dz + yh * dy + xh] * cxl * cyl * czh
-                   + pixIn[zh * dz + yl * dy + xl] * cxh * cyh * czl
-                   + pixIn[zh * dz + yl * dy + xh] * cxl * cyh * czl
-                   + pixIn[zh * dz + yh * dy + xl] * cxh * cyl * czl
-                   + pixIn[zh * dz + yh * dy + xh] * cxl * cyl * czl;
+            T vp = pixIn[zl * dz + yl * dy + xl] * cxh * cyh * czh +
+                   pixIn[zl * dz + yl * dy + xh] * cxl * cyh * czh +
+                   pixIn[zl * dz + yh * dy + xl] * cxh * cyl * czh +
+                   pixIn[zl * dz + yh * dy + xh] * cxl * cyl * czh +
+                   pixIn[zh * dz + yl * dy + xl] * cxh * cyh * czl +
+                   pixIn[zh * dz + yl * dy + xh] * cxl * cyh * czl +
+                   pixIn[zh * dz + yh * dy + xl] * cxh * cyl * czl +
+                   pixIn[zh * dz + yh * dy + xh] * cxl * cyl * czl;
 
             pixOut[(k * sy + j) * sx + i] = vp;
           }
@@ -1203,14 +1180,11 @@ namespace smil {
    * trilinear (default), @b bilinear, @b closest or @b auto.
    */
   template <typename T>
-  RES_T resize(Image<T> &imIn,
-               size_t sx,
-               size_t sy,
-               size_t sz,
-               Image<T> &imOut,
-               string method = "trilinear") {
+  RES_T resize(Image<T> &imIn, size_t sx, size_t sy, size_t sz, Image<T> &imOut,
+               string method = "trilinear")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp = imIn.clone(true);
       return resize(imTmp, sx, sy, sz, imOut, method);
     }
@@ -1232,13 +1206,11 @@ namespace smil {
    * @overload
    */
   template <typename T>
-  RES_T resize(Image<T> &imIn,
-               size_t sx,
-               size_t sy,
-               Image<T> &imOut,
-               string method = "trilinear") {
+  RES_T resize(Image<T> &imIn, size_t sx, size_t sy, Image<T> &imOut,
+               string method = "trilinear")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp = imIn.clone(true);
       return resize(imTmp, sx, sy, imOut, method);
     }
@@ -1264,17 +1236,18 @@ namespace smil {
    * @overload
    */
   template <typename T>
-  RES_T resize(Image<T> &imIn, Image<T> &imOut, string method = "trilinear") {
+  RES_T resize(Image<T> &imIn, Image<T> &imOut, string method = "trilinear")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
 
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp = imIn.clone(true);
       return resize(imTmp, imOut, method);
     }
 
-    size_t width = imOut.getWidth();
+    size_t width  = imOut.getWidth();
     size_t height = imOut.getHeight();
-    size_t depth = imOut.getDepth();
+    size_t depth  = imOut.getDepth();
 
     ImageResizeFunc<T> func(method);
     return func.resize(imIn, width, height, depth, imOut, method);
@@ -1306,14 +1279,11 @@ namespace smil {
    * trilinear (default), @b bilinear, @b closest or @b auto.
    */
   template <typename T>
-  RES_T scale(Image<T> &imIn,
-              double kx,
-              double ky,
-              double kz,
-              Image<T> &imOut,
-              string method = "trilinear") {
+  RES_T scale(Image<T> &imIn, double kx, double ky, double kz, Image<T> &imOut,
+              string method = "trilinear")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp = imIn.clone(true);
       return scale(imTmp, kx, ky, kz, imOut, method);
     }
@@ -1334,13 +1304,11 @@ namespace smil {
    * trilinear (default), @b bilinear ou @b closest.
    */
   template <typename T>
-  RES_T scale(Image<T> &imIn,
-              double kx,
-              double ky,
-              Image<T> &imOut,
-              string method = "trilinear") {
+  RES_T scale(Image<T> &imIn, double kx, double ky, Image<T> &imOut,
+              string method = "trilinear")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp = imIn.clone(true);
       return scale(imTmp, kx, ky, 1, imOut, method);
     }
@@ -1362,12 +1330,11 @@ namespace smil {
    trilinear (default), @b bilinear ou @b closest.
    */
   template <typename T>
-  RES_T scale(Image<T> &imIn,
-              double k,
-              Image<T> &imOut,
-              string method = "trilinear") {
+  RES_T scale(Image<T> &imIn, double k, Image<T> &imOut,
+              string method = "trilinear")
+  {
     ASSERT_ALLOCATED(&imIn, &imOut)
-    if(&imIn == &imOut) {
+    if (&imIn == &imOut) {
       Image<T> imTmp = imIn.clone(true);
       return scale(imTmp, k, k, k, imOut, method);
     }

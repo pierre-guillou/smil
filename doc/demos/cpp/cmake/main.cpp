@@ -33,7 +33,8 @@
 
 using namespace smil;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   QApplication a(argc, argv);
   Image<UINT8> im("https://smil.cmm.minesparis.psl.eu/images/lena.png");
   Image<UINT8> im2(im);

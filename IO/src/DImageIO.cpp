@@ -46,34 +46,37 @@
 #include <curl/curl.h>
 #endif // USE_CURL
 
-namespace smil {
-  RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) {
+namespace smil
+{
+  RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
+  {
     auto_ptr<ImageFileHandler<void>> fHandler(
-      getHandlerForFile<void>(filename));
+        getHandlerForFile<void>(filename));
 
-    if(fHandler.get())
+    if (fHandler.get())
       return fHandler->getFileInfo(filename, fInfo);
     else
       return RES_ERR;
   }
 
-  BaseImage *createFromFile(const char *filename) {
-    string fileExt = getFileExtension(filename);
+  BaseImage *createFromFile(const char *filename)
+  {
+    string fileExt    = getFileExtension(filename);
     string filePrefix = (string(filename).substr(0, 7));
-    string prefix = string(filename);
+    string prefix     = string(filename);
 
-    if(prefix.find("http://") == 0 || prefix.find("https://") == 0) {
+    if (prefix.find("http://") == 0 || prefix.find("https://") == 0) {
       BaseImage *img = NULL;
 #ifdef USE_CURL
       string tmpFileName = "_smilTmpIO." + fileExt;
-      if(getHttpFile(filename, tmpFileName.c_str()) != RES_OK) {
+      if (getHttpFile(filename, tmpFileName.c_str()) != RES_OK) {
         ERR_MSG(string("Error downloading file ") + filename);
         return img;
       }
       img = createFromFile(tmpFileName.c_str());
       remove(tmpFileName.c_str());
 
-#else // USE_CURL
+#else  // USE_CURL
       ERR_MSG("Error: to use this functionality you must compile SMIL with the "
               "Curl option");
 #endif // USE_CURL
@@ -81,7 +84,7 @@ namespace smil {
     }
 
     ImageFileInfo fInfo;
-    if(getFileInfo(filename, fInfo) != RES_OK) {
+    if (getFileInfo(filename, fInfo) != RES_OK) {
       ERR_MSG("Can't open file");
       return NULL;
     }
@@ -90,28 +93,28 @@ namespace smil {
     ASSERT(fHandler, NULL);
     delete fHandler;
 
-    if(fInfo.colorType == ImageFileInfo::COLOR_TYPE_GRAY) {
-      if(fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_UINT8) {
-        Image<UINT8> *img = new Image<UINT8>();
+    if (fInfo.colorType == ImageFileInfo::COLOR_TYPE_GRAY) {
+      if (fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_UINT8) {
+        Image<UINT8>                     *img = new Image<UINT8>();
         auto_ptr<ImageFileHandler<UINT8>> fHandler(
-          getHandlerForFile<UINT8>(filename));
-        if(fHandler->read(filename, *img) == RES_OK)
+            getHandlerForFile<UINT8>(filename));
+        if (fHandler->read(filename, *img) == RES_OK)
           return img;
         else
           ERR_MSG("Error reading unsigned 8 bit image");
-      } else if(fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_UINT16) {
-        Image<UINT16> *img = new Image<UINT16>();
+      } else if (fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_UINT16) {
+        Image<UINT16>                     *img = new Image<UINT16>();
         auto_ptr<ImageFileHandler<UINT16>> fHandler(
-          getHandlerForFile<UINT16>(filename));
-        if(fHandler->read(filename, *img) == RES_OK)
+            getHandlerForFile<UINT16>(filename));
+        if (fHandler->read(filename, *img) == RES_OK)
           return img;
         else
           ERR_MSG("Error reading unsigned 16 bit image");
-      } else if(fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_INT16) {
-        Image<INT16> *img = new Image<INT16>();
+      } else if (fInfo.scalarType == ImageFileInfo::SCALAR_TYPE_INT16) {
+        Image<INT16>                     *img = new Image<INT16>();
         auto_ptr<ImageFileHandler<INT16>> fHandler(
-          getHandlerForFile<INT16>(filename));
-        if(fHandler->read(filename, *img) == RES_OK)
+            getHandlerForFile<INT16>(filename));
+        if (fHandler->read(filename, *img) == RES_OK)
           return img;
         else
           ERR_MSG("Error reading signed 16 bit image");
@@ -119,11 +122,11 @@ namespace smil {
         ERR_MSG("Unsupported GRAY data type");
     }
 #ifdef SMIL_WRAP_RGB
-    else if(fInfo.colorType == ImageFileInfo::COLOR_TYPE_RGB) {
-      Image<RGB> *img = new Image<RGB>();
+    else if (fInfo.colorType == ImageFileInfo::COLOR_TYPE_RGB) {
+      Image<RGB>                     *img = new Image<RGB>();
       auto_ptr<ImageFileHandler<RGB>> fHandler(
-        getHandlerForFile<RGB>(filename));
-      if(fHandler->read(filename, *img) == RES_OK)
+          getHandlerForFile<RGB>(filename));
+      if (fHandler->read(filename, *img) == RES_OK)
         return img;
       else
         ERR_MSG("Error reading RGB image");

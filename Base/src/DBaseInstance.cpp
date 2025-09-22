@@ -29,11 +29,14 @@
 
 #include "Base/include/DBaseInstance.h"
 
-namespace smil {
-  Base::Base() {
+namespace smil
+{
+  Base::Base()
+  {
   }
 
-  Base::~Base() {
+  Base::~Base()
+  {
   }
 
 } // namespace smil

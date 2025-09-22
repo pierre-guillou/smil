@@ -2,14 +2,13 @@
 #ifndef _D_SIGMA_FILTER_HPP_
 #define _D_SIGMA_FILTER_HPP_
 
-namespace smil {
+namespace smil
+{
   template <class T>
-  RES_T sigmaFilter(const Image<T> &imIn,
-                    const UINT8 radius,
-                    const double sigma,
-                    const double percentageNbMinPixel,
-                    const bool excludeOutlier,
-                    Image<T> &imOut) {
+  RES_T sigmaFilter(const Image<T> &imIn, const UINT8 radius,
+                    const double sigma, const double percentageNbMinPixel,
+                    const bool excludeOutlier, Image<T> &imOut)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -18,12 +17,12 @@ namespace smil {
     size_t S[3];
     imIn.getSize(S);
 
-    if(S[2] > 1) {
+    if (S[2] > 1) {
       // This is a 3D Image...
       return RES_ERR;
     }
 
-    typename ImDtTypes<T>::lineType bufferIn = imIn.getPixels();
+    typename ImDtTypes<T>::lineType bufferIn  = imIn.getPixels();
     typename ImDtTypes<T>::lineType bufferOut = imOut.getPixels();
 
     int W, H;
@@ -31,41 +30,41 @@ namespace smil {
     H = S[1];
 
     int i, j, k, l;
-    for(j = 0; j < H; j++) {
-      for(i = 0; i < W; i++) {
+    for (j = 0; j < H; j++) {
+      for (i = 0; i < W; i++) {
         double Mean = 0, Std = 0, lowerBound, higherBound;
-        int NbPixel = 0;
-        int NbPixelInKernel = 0;
+        int    NbPixel         = 0;
+        int    NbPixelInKernel = 0;
         double Sum = 0, Sum2 = 0;
 
         // Compute the mean and the std
-        for(k = -radius; k <= radius; k++) {
-          if(i + k >= 0 && i + k < W) {
-            for(l = -radius; l <= radius; l++) {
-              if(j + l >= 0 && j + l < H) {
+        for (k = -radius; k <= radius; k++) {
+          if (i + k >= 0 && i + k < W) {
+            for (l = -radius; l <= radius; l++) {
+              if (j + l >= 0 && j + l < H) {
                 Sum += bufferIn[(i + k + (j + l) * W)];
-                Sum2 += bufferIn[(i + k + (j + l) * W)]
-                        * bufferIn[(i + k + (j + l) * W)];
+                Sum2 += bufferIn[(i + k + (j + l) * W)] *
+                        bufferIn[(i + k + (j + l) * W)];
                 NbPixel++;
               }
             }
           }
         }
 
-        Mean = Sum / (double)NbPixel;
-        Std = std::sqrt((Sum2 / (double)NbPixel - (Mean * Mean)));
+        Mean = Sum / (double) NbPixel;
+        Std  = std::sqrt((Sum2 / (double) NbPixel - (Mean * Mean)));
 
-        lowerBound = bufferIn[(i + j * W)] - (Std * sigma);
+        lowerBound  = bufferIn[(i + j * W)] - (Std * sigma);
         higherBound = bufferIn[(i + j * W)] + (Std * sigma);
 
         Sum = 0;
         // Compute the kernel mean
-        for(k = -radius; k <= radius; k++) {
-          if(i + k >= 0 && i + k < W) {
-            for(l = -radius; l <= radius; l++) {
-              if(j + l >= 0 && j + l < H
-                 && bufferIn[(i + k + (j + l) * W)] >= lowerBound
-                 && bufferIn[(i + k + (j + l) * W)] <= higherBound) {
+        for (k = -radius; k <= radius; k++) {
+          if (i + k >= 0 && i + k < W) {
+            for (l = -radius; l <= radius; l++) {
+              if (j + l >= 0 && j + l < H &&
+                  bufferIn[(i + k + (j + l) * W)] >= lowerBound &&
+                  bufferIn[(i + k + (j + l) * W)] <= higherBound) {
                 Sum += bufferIn[(i + k + (j + l) * W)];
                 NbPixelInKernel++;
               }
@@ -74,27 +73,25 @@ namespace smil {
         }
 
         // On prend le vrai mean
-        if(NbPixelInKernel < NbPixel * percentageNbMinPixel) {
-          if(excludeOutlier) {
-            bufferOut[(i + j * W)]
-              = (T)((Mean * NbPixel - bufferIn[(i + j * W)])
-                    / (double)(NbPixel - 1));
+        if (NbPixelInKernel < NbPixel * percentageNbMinPixel) {
+          if (excludeOutlier) {
+            bufferOut[(i + j * W)] =
+                (T) ((Mean * NbPixel - bufferIn[(i + j * W)]) /
+                     (double) (NbPixel - 1));
           } else
-            bufferOut[(i + j * W)] = (T)Mean;
+            bufferOut[(i + j * W)] = (T) Mean;
         } else
-          bufferOut[(i + j * W)] = (T)(Sum / (double)NbPixelInKernel);
+          bufferOut[(i + j * W)] = (T) (Sum / (double) NbPixelInKernel);
       }
     }
     return RES_OK;
   }
 
   template <class T>
-  RES_T t_sigmaFilterRGB(const Image<T> &imIn,
-                         const UINT8 radius,
-                         const double sigma,
-                         const double percentageNbMinPixel,
-                         const bool excludeOutlier,
-                         Image<T> &imOut) {
+  RES_T t_sigmaFilterRGB(const Image<T> &imIn, const UINT8 radius,
+                         const double sigma, const double percentageNbMinPixel,
+                         const bool excludeOutlier, Image<T> &imOut)
+  {
 #if 0
     MORPHEE_ENTER_FUNCTION("t_sigmaFilterRGB");
 

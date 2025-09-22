@@ -35,27 +35,33 @@
 
 #include <tiffio.h>
 
-namespace smil {
+namespace smil
+{
   struct TIFFHeader {
-    TIFFHeader(const string /*rw*/) {
+    TIFFHeader(const string /*rw*/)
+    {
     }
-    ~TIFFHeader() {
+    ~TIFFHeader()
+    {
     }
   };
 
-  RES_T readTIFFHeader(FILE * /*fp*/, TIFFHeader & /*hStruct*/) {
+  RES_T readTIFFHeader(FILE * /*fp*/, TIFFHeader & /*hStruct*/)
+  {
     return RES_OK;
   }
 
-  RES_T writeTIFFHeader(FILE * /*fp*/, TIFFHeader & /*hStruct*/) {
+  RES_T writeTIFFHeader(FILE * /*fp*/, TIFFHeader & /*hStruct*/)
+  {
     return RES_OK;
   }
 
-  RES_T getTIFFFileInfo(const char *filename, ImageFileInfo &fInfo) {
+  RES_T getTIFFFileInfo(const char *filename, ImageFileInfo &fInfo)
+  {
     /* open image file */
     TIFF *tif = TIFFOpen(filename, "r");
 
-    if(!tif) {
+    if (!tif) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -70,11 +76,11 @@ namespace smil {
 
     TIFFClose(tif);
 
-    fInfo.width = w;
-    fInfo.height = h;
+    fInfo.width    = w;
+    fInfo.height   = h;
     fInfo.channels = nsamples;
 
-    switch(nbits) {
+    switch (nbits) {
       case 8:
         fInfo.scalarType = ImageFileInfo::SCALAR_TYPE_UINT8;
         break;
@@ -83,7 +89,7 @@ namespace smil {
         break;
     }
 
-    switch(nsamples) {
+    switch (nsamples) {
       case 1:
         fInfo.colorType = ImageFileInfo::COLOR_TYPE_GRAY;
         break;
@@ -101,11 +107,12 @@ namespace smil {
   }
 
   template <class T>
-  RES_T StandardTIFFRead(const char *filename, Image<T> &image) {
+  RES_T StandardTIFFRead(const char *filename, Image<T> &image)
+  {
     /* open image file */
     TIFF *tif = TIFFOpen(filename, "r");
 
-    if(!tif) {
+    if (!tif) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -123,7 +130,7 @@ namespace smil {
 
     typename ImDtTypes<T>::sliceType lines = image.getLines();
 
-    for(size_t j = 0; j < height; j++)
+    for (size_t j = 0; j < height; j++)
       TIFFReadScanline(tif, lines[j], j);
 
     image.modified();
@@ -133,22 +140,24 @@ namespace smil {
     return RES_OK;
   }
 
-  RES_T TIFFImageFileHandler<UINT8>::read(const char *filename,
-                                          Image<UINT8> &image) {
+  RES_T TIFFImageFileHandler<UINT8>::read(const char   *filename,
+                                          Image<UINT8> &image)
+  {
     return StandardTIFFRead(filename, image);
   }
 
-  RES_T TIFFImageFileHandler<UINT16>::read(const char *filename,
-                                           Image<UINT16> &image) {
+  RES_T TIFFImageFileHandler<UINT16>::read(const char    *filename,
+                                           Image<UINT16> &image)
+  {
     return StandardTIFFRead(filename, image);
   }
 
-  RES_T TIFFImageFileHandler<RGB>::read(const char *filename,
-                                        Image<RGB> &image) {
+  RES_T TIFFImageFileHandler<RGB>::read(const char *filename, Image<RGB> &image)
+  {
     /* open image file */
     TIFF *tif = TIFFOpen(filename, "r");
 
-    if(!tif) {
+    if (!tif) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -164,16 +173,16 @@ namespace smil {
     ASSERT(nbits == 8 && nsamples == 3, "Not a 24bit RGB image", RES_ERR);
     ASSERT((image.setSize(width, height) == RES_OK), RES_ERR_BAD_ALLOCATION);
 
-    Image<RGB>::sliceType lines = image.getLines();
+    Image<RGB>::sliceType                  lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
 
-    UINT8 *raster = (UINT8 *)_TIFFmalloc(width * 3 * sizeof(UINT8));
+    UINT8 *raster = (UINT8 *) _TIFFmalloc(width * 3 * sizeof(UINT8));
 
-    for(size_t j = 0; j < height; j++) {
+    for (size_t j = 0; j < height; j++) {
       arrays = lines[j].arrays;
       TIFFReadScanline(tif, raster, j);
-      for(size_t i = 0; i < width; i++)
-        for(UINT n = 0; n < 3; n++)
+      for (size_t i = 0; i < width; i++)
+        for (UINT n = 0; n < 3; n++)
           arrays[n][i] = raster[3 * i + n];
     }
 
@@ -186,11 +195,12 @@ namespace smil {
   }
 
   template <class T>
-  RES_T StandardTIFFWrite(const Image<T> &image, const char *filename) {
+  RES_T StandardTIFFWrite(const Image<T> &image, const char *filename)
+  {
     /* open image file */
     TIFF *tif = TIFFOpen(filename, "w");
 
-    if(!tif) {
+    if (!tif) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -209,7 +219,7 @@ namespace smil {
 
     typename ImDtTypes<T>::sliceType lines = image.getLines();
 
-    for(size_t j = 0; j < height; j++)
+    for (size_t j = 0; j < height; j++)
       TIFFWriteScanline(tif, lines[j], j);
 
     TIFFClose(tif);
@@ -218,21 +228,24 @@ namespace smil {
   }
 
   RES_T TIFFImageFileHandler<UINT8>::write(const Image<UINT8> &image,
-                                           const char *filename) {
+                                           const char         *filename)
+  {
     return StandardTIFFWrite(image, filename);
   }
 
   RES_T TIFFImageFileHandler<UINT16>::write(const Image<UINT16> &image,
-                                            const char *filename) {
+                                            const char          *filename)
+  {
     return StandardTIFFWrite(image, filename);
   }
 
   RES_T TIFFImageFileHandler<RGB>::write(const Image<RGB> &image,
-                                         const char *filename) {
+                                         const char       *filename)
+  {
     /* open image file */
     TIFF *tif = TIFFOpen(filename, "w");
 
-    if(!tif) {
+    if (!tif) {
       cout << "Cannot open file " << filename << endl;
       return RES_ERR_IO;
     }
@@ -248,15 +261,15 @@ namespace smil {
     TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
 
-    Image<RGB>::sliceType lines = image.getLines();
+    Image<RGB>::sliceType                  lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
 
-    UINT8 *raster = (UINT8 *)_TIFFmalloc(width * 3 * sizeof(UINT8));
+    UINT8 *raster = (UINT8 *) _TIFFmalloc(width * 3 * sizeof(UINT8));
 
-    for(size_t j = 0; j < height; j++) {
+    for (size_t j = 0; j < height; j++) {
       arrays = lines[j].arrays;
-      for(size_t i = 0; i < width; i++)
-        for(UINT n = 0; n < 3; n++)
+      for (size_t i = 0; i < width; i++)
+        for (UINT n = 0; n < 3; n++)
           raster[3 * i + n] = arrays[n][i];
       TIFFWriteScanline(tif, raster, j);
     }

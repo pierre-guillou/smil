@@ -36,12 +36,15 @@
 // #include <pthread.h>
 #include <QApplication>
 
-class timer {
+class timer
+{
 public:
-  timer() : running(false) {
+  timer() : running(false)
+  {
   }
 
-  ~timer() {
+  ~timer()
+  {
     running = false;
     end();
   }
@@ -56,7 +59,8 @@ public:
 
 protected:
   //   pthread_t thread;
-  void end() {
+  void end()
+  {
     //         pthread_join(thread, NULL);
   }
 };

@@ -44,7 +44,8 @@
 
 #include "Core/include/DCore.h"
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup   AddonFilters
    * @defgroup  AddonKuwaharaFilter        Kuwahara Filter (2D)
@@ -81,8 +82,8 @@ namespace smil {
    * @param[out] imOut : output Image (must be F_SIMPLE or F_DOUBLE ???)
    */
   template <class T>
-  RES_T
-    kuwaharaFilterRGB(const Image<T> &imIn, const int radius, Image<T> &imOut);
+  RES_T kuwaharaFilterRGB(const Image<T> &imIn, const int radius,
+                          Image<T> &imOut);
 
   /** @} */
 } // namespace smil

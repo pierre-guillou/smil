@@ -30,7 +30,8 @@
 #ifndef _D3DBILATERALFILTER_H_
 #define _D3DBILATERALFILTER_H_
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup AddonFilters
    * @defgroup Addon3DBilateral Bilateral Filter (3D)
@@ -61,10 +62,8 @@ namespace smil {
    *   (e.g. 10 for 8 bits images).
    */
   template <class T>
-  RES_T recursiveBilateralFilter(const Image<T> &imIn,
-                                 float sigmaW,
-                                 float sigmaR,
-                                 Image<T> &imOut);
+  RES_T recursiveBilateralFilter(const Image<T> &imIn, float sigmaW,
+                                 float sigmaR, Image<T> &imOut);
 
   /** @} */
 } // namespace smil

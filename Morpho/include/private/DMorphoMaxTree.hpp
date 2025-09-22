@@ -31,7 +31,7 @@
 #define _D_MAX_TREE
 
 #include "DMorphImageOperations.hpp" //BMI
-#include "DMorphoHierarQ.hpp" //BMI
+#include "DMorphoHierarQ.hpp"        //BMI
 #include "Core/include/DImage.h"
 #include "Base/include/private/DImageHistogram.hpp"
 #include "Morpho/include/private/DMorphoMaxTreeCriteria.hpp"
@@ -39,7 +39,8 @@
 #include <complex>
 #include <math.h>
 
-namespace smil {
+namespace smil
+{
   /**
    * @ingroup Morpho
    * @defgroup MaxTree MaxTree based algorithms
@@ -55,22 +56,21 @@ namespace smil {
   typedef size_t Offset_T;
   typedef UINT32 Label_T;
 
-  template <class T,
-            class CriterionT,
-            class Offset_T = size_t,
+  template <class T, class CriterionT, class Offset_T = size_t,
             class Label_T = UINT32>
-  class MaxTree2 {
+  class MaxTree2
+  {
   private:
-    size_t GRAY_LEVEL_NBR;
+    size_t          GRAY_LEVEL_NBR;
     Image<T> const *img;
 
     HierarchicalQueue<T, Offset_T> hq;
 
-    vector<T> levels;
-    vector<Label_T> children;
-    vector<Label_T> brothers;
+    vector<T>          levels;
+    vector<Label_T>    children;
+    vector<Label_T>    brothers;
     vector<CriterionT> criteria;
-    vector<Label_T> labels;
+    vector<Label_T>    labels;
 
     Label_T curLabel;
 
@@ -80,8 +80,7 @@ namespace smil {
     size_t imHeight;
 
   public:
-    MaxTree2()
-      : hq(true) // TOTO BMI
+    MaxTree2() : hq(true) // TOTO BMI
     {
       GRAY_LEVEL_NBR = ImDtTypes<T>::max() - ImDtTypes<T>::min() + 1;
       //  hq.reverse();// change priority order (max first)
@@ -92,12 +91,14 @@ namespace smil {
       initialized = false;
     }
 
-    ~MaxTree2() {
+    ~MaxTree2()
+    {
       reset();
     }
 
-    void reset() {
-      if(!initialized)
+    void reset()
+    {
+      if (!initialized)
         return;
 
       levels.clear();
@@ -107,14 +108,16 @@ namespace smil {
       labels.clear();
     }
 
-    void allocatePage() {
+    void allocatePage()
+    {
       levels.resize(levels.size() + 1024 * 1024);
       children.resize(children.size() + 1024 * 1024);
       brothers.resize(brothers.size() + 1024 * 1024);
       criteria.resize(criteria.size() + 1024 * 1024);
     }
 
-    T initialize(const Image<T> &imIn, Label_T *img_eti, const StrElt &se) {
+    T initialize(const Image<T> &imIn, Label_T *img_eti, const StrElt &se)
+    {
       imIn.getSize(imSize);
 
       // BMI BEGIN
@@ -124,45 +127,45 @@ namespace smil {
       oddSE = se.odd;
 
       // set an offset distance for each se point (!=0,0,0)
-      for(vector<IntPoint>::const_iterator it = se.points.begin();
-          it != se.points.end(); it++) {
-        if(it->x != 0 || it->y != 0 || it->z != 0) {
+      for (vector<IntPoint>::const_iterator it = se.points.begin();
+           it != se.points.end(); it++) {
+        if (it->x != 0 || it->y != 0 || it->z != 0) {
           sePts.push_back(*it);
-          dOffsets.push_back(it->x + it->y * imSize[0]
-                             + it->z * imSize[0] * imSize[1]);
+          dOffsets.push_back(it->x + it->y * imSize[0] +
+                             it->z * imSize[0] * imSize[1]);
         }
       }
 
       sePtsNbr = sePts.size();
       // BMI END
 
-      if(initialized)
+      if (initialized)
         reset();
 
-      this->img = &imIn;
+      this->img                           = &imIn;
       typename ImDtTypes<T>::lineType pix = img->getPixels();
 
-      T minValue = ImDtTypes<T>::max();
-      T tMinV = ImDtTypes<T>::min();
-      Offset_T minOff = 0;
-      for(size_t i = 0; i < img->getPixelCount(); i++) {
-        if(pix[i] < minValue) {
+      T        minValue = ImDtTypes<T>::max();
+      T        tMinV    = ImDtTypes<T>::min();
+      Offset_T minOff   = 0;
+      for (size_t i = 0; i < img->getPixelCount(); i++) {
+        if (pix[i] < minValue) {
           minValue = pix[i];
-          minOff = i;
-          if(minValue == tMinV)
+          minOff   = i;
+          if (minValue == tMinV)
             break;
         }
       }
 
       allocatePage();
 
-      curLabel = 1;
+      curLabel         = 1;
       levels[curLabel] = minValue;
 
       // BMI labels? quel rapport avec img_eti?
       // memset(old_labels, 0, GRAY_LEVEL_NBR * sizeof(Label_T));
 
-      img_eti[minOff] = curLabel;
+      img_eti[minOff]  = curLabel;
       labels[minValue] = curLabel;
       labels[minValue] = curLabel;
 
@@ -184,56 +187,57 @@ namespace smil {
 
       initialized = true;
 
-      imWidth = img->getWidth();
+      imWidth  = img->getWidth();
       imHeight = img->getHeight();
 
       return minValue;
     }
 
-    int nextLowerLabel(T valeur) {
-      if(curLabel + 256 > levels.size())
+    int nextLowerLabel(T valeur)
+    {
+      if (curLabel + 256 > levels.size())
         allocatePage();
 
       getLevel(curLabel) = valeur;
       int i;
-      for(i = valeur - 1; labels[i] == 0; i--)
+      for (i = valeur - 1; labels[i] == 0; i--)
         ;
 
-      getChild(curLabel) = getChild(labels[i]);
-      getChild(labels[i]) = curLabel;
-      getBrother(curLabel) = getBrother(getChild(curLabel));
+      getChild(curLabel)             = getChild(labels[i]);
+      getChild(labels[i])            = curLabel;
+      getBrother(curLabel)           = getBrother(getChild(curLabel));
       getBrother(getChild(curLabel)) = 0;
       getCriterion(curLabel).reset();
       return curLabel++;
     }
 
-    int nextHigherLabel(T parent_valeur, T valeur) {
-      if(curLabel + 256 > levels.size())
+    int nextHigherLabel(T parent_valeur, T valeur)
+    {
+      if (curLabel + 256 > levels.size())
         allocatePage();
 
-      getLevel(curLabel) = valeur;
-      getBrother(curLabel) = getChild(labels[parent_valeur]);
+      getLevel(curLabel)              = valeur;
+      getBrother(curLabel)            = getChild(labels[parent_valeur]);
       getChild(labels[parent_valeur]) = curLabel;
       getCriterion(curLabel).reset();
       return curLabel++;
     }
 
-    bool subFlood(typename ImDtTypes<T>::lineType imgPix,
-                  Label_T *img_eti,
-                  Offset_T p,
-                  Offset_T p_suiv) {
+    bool subFlood(typename ImDtTypes<T>::lineType imgPix, Label_T *img_eti,
+                  Offset_T p, Offset_T p_suiv)
+    {
       Label_T indice;
 
-      if(imgPix[p_suiv] > imgPix[p]) {
+      if (imgPix[p_suiv] > imgPix[p]) {
         Label_T j;
-        for(j = imgPix[p] + 1; j < imgPix[p_suiv]; j++)
+        for (j = imgPix[p] + 1; j < imgPix[p_suiv]; j++)
           labels[j] = 0;
-        indice = img_eti[p_suiv] = labels[j]
-          = nextHigherLabel(imgPix[p], imgPix[p_suiv]);
+        indice = img_eti[p_suiv] = labels[j] =
+            nextHigherLabel(imgPix[p], imgPix[p_suiv]);
 
-      } else if(labels[imgPix[p_suiv]] == 0) {
-        indice = img_eti[p_suiv] = labels[imgPix[p_suiv]]
-          = nextLowerLabel(imgPix[p_suiv]);
+      } else if (labels[imgPix[p_suiv]] == 0) {
+        indice = img_eti[p_suiv] = labels[imgPix[p_suiv]] =
+            nextLowerLabel(imgPix[p_suiv]);
       } else {
         indice = img_eti[p_suiv] = labels[imgPix[p_suiv]];
       }
@@ -244,20 +248,21 @@ namespace smil {
       getCriterion(indice).update(x, y, z);
       hq.push(imgPix[p_suiv], p_suiv);
 
-      if(imgPix[p_suiv] > imgPix[p]) {
+      if (imgPix[p_suiv] > imgPix[p]) {
         hq.push(imgPix[p], p);
         return true;
       }
       return false;
     }
 
-    void flood(const Image<T> &img, UINT *img_eti, unsigned int level) {
+    void flood(const Image<T> &img, UINT *img_eti, unsigned int level)
+    {
       Offset_T p;
 
       typename ImDtTypes<T>::lineType imgPix = img.getPixels();
-      size_t x0, y0, z0;
+      size_t                          x0, y0, z0;
 
-      while((hq.getHigherLevel() >= level) && !hq.isEmpty()) {
+      while ((hq.getHigherLevel() >= level) && !hq.isEmpty()) {
         p = hq.pop();
 
         img.getCoordsFromOffset(p, x0, y0, z0);
@@ -265,26 +270,26 @@ namespace smil {
         bool oddLine = oddSE && ((y0) % 2);
 
         // not size_t in order to (possibly be negative!)
-        off_t x, y, z;
+        off_t    x, y, z;
         Offset_T p_suiv;
 
-        for(UINT i = 0; i < sePtsNbr; i++) {
+        for (UINT i = 0; i < sePtsNbr; i++) {
           IntPoint &pt = sePts[i];
-          x = x0 + pt.x;
-          y = y0 + pt.y;
-          z = z0 + pt.z;
+          x            = x0 + pt.x;
+          y            = y0 + pt.y;
+          z            = z0 + pt.z;
 
-          if(oddLine)
+          if (oddLine)
             x += (((y + 1) % 2) != 0);
 
-          if(x >= 0 && x < (int)imSize[0] && y >= 0 && y < (int)imSize[1]
-             && z >= 0 && z < (int)imSize[2]) {
+          if (x >= 0 && x < (int) imSize[0] && y >= 0 && y < (int) imSize[1] &&
+              z >= 0 && z < (int) imSize[2]) {
             p_suiv = p + dOffsets[i];
-            if(oddLine)
+            if (oddLine)
               p_suiv += (((y + 1) % 2) != 0);
 
-            if(img_eti[p_suiv] == 0) {
-              if(subFlood(imgPix, img_eti, p, p_suiv))
+            if (img_eti[p_suiv] == 0) {
+              if (subFlood(imgPix, img_eti, p, p_suiv))
                 break;
             }
           }
@@ -297,40 +302,48 @@ namespace smil {
     size_t imSize[3];
 
     vector<IntPoint> sePts;
-    UINT sePtsNbr;
-    bool oddSE;
-    vector<int> dOffsets;
+    UINT             sePtsNbr;
+    bool             oddSE;
+    vector<int>      dOffsets;
 
   public:
-    inline CriterionT &getCriterion(const Label_T node) {
+    inline CriterionT &getCriterion(const Label_T node)
+    {
       return criteria[node];
     }
 
-    inline T &getLevel(const Label_T node) {
+    inline T &getLevel(const Label_T node)
+    {
       return levels[node];
     }
 
-    inline Label_T &getChild(const Label_T node) {
+    inline Label_T &getChild(const Label_T node)
+    {
       return children[node];
     }
 
-    inline Label_T &getBrother(const Label_T node) {
+    inline Label_T &getBrother(const Label_T node)
+    {
       return brothers[node];
     }
 
-    inline Label_T getLabelMax() {
+    inline Label_T getLabelMax()
+    {
       return curLabel;
     }
 
-    inline int getImWidth() {
+    inline int getImWidth()
+    {
       return imWidth;
     }
 
-    inline int getImHeight() {
+    inline int getImHeight()
+    {
       return imHeight;
     }
 
-    int build(const Image<T> &img, Label_T *img_eti, const StrElt &se) {
+    int build(const Image<T> &img, Label_T *img_eti, const StrElt &se)
+    {
       T minValue = initialize(img, img_eti, se);
 
       // BMI: dOffset already contains se information
@@ -346,9 +359,10 @@ namespace smil {
 
     // Update criteria on a given max-tree node.// From Andres
     // template <class T, class CriterionT, class Offset_T, class Label_T>
-    void updateCriteria(const int node) {
+    void updateCriteria(const int node)
+    {
       Label_T child = getChild(node);
-      while(child != 0) {
+      while (child != 0) {
         updateCriteria(child);
         getCriterion(node).merge(&getCriterion(child));
         child = getBrother(child);
@@ -361,25 +375,18 @@ namespace smil {
   // NEW BMI    # ##################################################
   //(tree, transformee_node, indicatrice_node, child, stopSize, (T)0, 0,
   // hauteur, tree.getLevel(root), tree.getLevel(root));
-  template <class T,
-            class CriterionT,
-            class Offset_T,
-            class Label_T,
+  template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void ComputeDeltaUO(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                      T *transformee_node,
-                      Attr_T *indicatrice_node,
-                      int node,
-                      int nParent,
-                      T prev_residue,
-                      Attr_T stop,
-                      UINT delta,
-                      int isPrevMaxT) {
+                      T *transformee_node, Attr_T *indicatrice_node, int node,
+                      int nParent, T prev_residue, Attr_T stop, UINT delta,
+                      int isPrevMaxT)
+  {
     // self,node = 1, nParent =0, stop=0, delta = 0, isPrevMaxT = 0):
-    int child; // index node
-    T current_residue;
+    int  child; // index node
+    T    current_residue;
     UINT cNode, cParent; // attributes
-    T lNode, lParent; // node levels, the same type than input image
+    T    lNode, lParent; // node levels, the same type than input image
 
     // ymax-tree.getCriterion(node).ymin+1;
     // #current criterion
@@ -395,11 +402,11 @@ namespace smil {
 
     bool flag = false;
 
-    if((cParent - cNode) <= delta) {
+    if ((cParent - cNode) <= delta) {
       flag = true;
     }
 
-    if(flag) {
+    if (flag) {
       current_residue = prev_residue + lNode - lParent;
     } else {
       current_residue = lNode - lParent;
@@ -410,12 +417,12 @@ namespace smil {
 
     int isMaxT = 0;
 
-    if(cNode < stop) {
-      if(current_residue > transformee_node[node]) {
+    if (cNode < stop) {
+      if (current_residue > transformee_node[node]) {
         //          std::cout<<"UPDATE RES\n";
-        isMaxT = 1;
+        isMaxT                 = 1;
         transformee_node[node] = current_residue;
-        if(!(isPrevMaxT && flag)) {
+        if (!(isPrevMaxT && flag)) {
           indicatrice_node[node] = cNode + 1;
         }
       }
@@ -423,7 +430,7 @@ namespace smil {
       indicatrice_node[node] = 0;
     }
     child = tree.getChild(node);
-    while(child != 0) {
+    while (child != 0) {
       ComputeDeltaUO(tree, transformee_node, indicatrice_node, child, node,
                      current_residue, stop, delta, isMaxT);
       child = tree.getBrother(child);
@@ -432,49 +439,44 @@ namespace smil {
 
   template <class T1, class T2>
   void compute_max(MaxTree2<T1, HeightCriterion, size_t, UINT32> &tree,
-                   T1 *transformee_node,
-                   T2 *indicatrice_node,
-                   UINT32 node,
-                   T2 stop,
-                   T1 max_tr,
-                   T2 max_in,
-                   T2 hauteur_parent,
-                   T1 valeur_parent,
-                   T1 previous_value) {
-    T1 m;
-    T1 max_node;
-    T2 max_criterion;
+                   T1 *transformee_node, T2 *indicatrice_node, UINT32 node,
+                   T2 stop, T1 max_tr, T2 max_in, T2 hauteur_parent,
+                   T1 valeur_parent, T1 previous_value)
+  {
+    T1     m;
+    T1     max_node;
+    T2     max_criterion;
     UINT32 child;
-    T2 hauteur = tree.getCriterion(node).getAttributeValue();
+    T2     hauteur = tree.getCriterion(node).getAttributeValue();
     // ymax-tree.getCriterion(node).ymin+1;
     //  std::cout<<"IN COMPUTE_MAX:"<<"; node="<<node<<"\n";
     m = (hauteur == hauteur_parent) ? tree.getLevel(node) - previous_value
                                     : tree.getLevel(node) - valeur_parent;
-    if(hauteur >= stop) {
-      max_node = max_tr;
-      max_criterion = 0; // max_in;
+    if (hauteur >= stop) {
+      max_node               = max_tr;
+      max_criterion          = 0; // max_in;
       transformee_node[node] = max_node;
 
       indicatrice_node[node] = 0;
-      child = tree.getChild(node);
+      child                  = tree.getChild(node);
     } else {
-      if(m > max_tr) {
-        max_node = m;
+      if (m > max_tr) {
+        max_node      = m;
         max_criterion = hauteur;
       } else {
-        max_node = max_tr;
+        max_node      = max_tr;
         max_criterion = max_in;
       }
       transformee_node[node] = max_node;
       indicatrice_node[node] = max_criterion + 1;
-      child = tree.getChild(node);
+      child                  = tree.getChild(node);
     }
-    if(hauteur == hauteur_parent) {
-      while(child != 0) {
+    if (hauteur == hauteur_parent) {
+      while (child != 0) {
         //      if(child > tree.getLabelMax()){
         //      std::cout<<"ERROR call child:"<<child<<"\n";
         //      }
-        if(hauteur_parent > stop)
+        if (hauteur_parent > stop)
           compute_max(tree, transformee_node, indicatrice_node, child, stop,
                       max_node, max_criterion, hauteur, tree.getLevel(node),
                       previous_value);
@@ -485,7 +487,7 @@ namespace smil {
         child = tree.getBrother(child);
       }
     } else {
-      while(child != 0) {
+      while (child != 0) {
         //      if(child > tree.getLabelMax()){
         //      std::cout<<"ERROR call child:"<<child<<"\n";
         //}
@@ -500,34 +502,31 @@ namespace smil {
 
   template <class T1, class T2>
   void compute_contrast(MaxTree2<T1, HeightCriterion, size_t, UINT32> &tree,
-                        T1 *transformee_node,
-                        T2 *indicatrice_node,
-                        UINT32 root,
-                        T2 stopSize,
-                        UINT delta = 0) {
+                        T1 *transformee_node, T2 *indicatrice_node, UINT32 root,
+                        T2 stopSize, UINT delta = 0)
+  {
     UINT32 child;
-    T2 hauteur;
+    T2     hauteur;
     //  std::cout<<"IN compute_contrast\n";
 
     transformee_node[root] = 0;
     indicatrice_node[root] = 0;
 
     hauteur = tree.getCriterion(root).getAttributeValue();
-    child = tree.getChild(root);
+    child   = tree.getChild(root);
     // ymax - tree.getCriterion(root).ymin+1;
-    if(delta == 0) {
-      while(child != 0) {
-
+    if (delta == 0) {
+      while (child != 0) {
         compute_max(tree, transformee_node, indicatrice_node, child, stopSize,
-                    (T1)0, (T2)0, hauteur, tree.getLevel(root),
+                    (T1) 0, (T2) 0, hauteur, tree.getLevel(root),
                     tree.getLevel(root));
         child = tree.getBrother(child);
       }
     } // END delta == 0
     else {
-      while(child != 0) {
+      while (child != 0) {
         ComputeDeltaUO(tree, transformee_node, indicatrice_node, child,
-                       root /*parent*/, (T1)0 /* prev_residue*/,
+                       root /*parent*/, (T1) 0 /* prev_residue*/,
                        stopSize /*stop*/, delta, 0 /*isPrevMaxT*/);
 
         child = tree.getBrother(child);
@@ -551,19 +550,17 @@ namespace smil {
    */
 
   template <class T1, class T2>
-  RES_T ultimateOpen(const Image<T1> &imIn,
-                     Image<T1> &imTrans,
-                     Image<T2> &imIndic,
-                     const StrElt &se = DEFAULT_SE,
-                     T2 stopSize = 0,
-                     UINT delta = 0) {
+  RES_T ultimateOpen(const Image<T1> &imIn, Image<T1> &imTrans,
+                     Image<T2> &imIndic, const StrElt &se = DEFAULT_SE,
+                     T2 stopSize = 0, UINT delta = 0)
+  {
     ASSERT_ALLOCATED(&imIn, &imTrans, &imIndic);
     ASSERT_SAME_SIZE(&imIn, &imTrans, &imIndic);
 
-    if(stopSize == 0)
+    if (stopSize == 0)
       stopSize = imIn.getHeight() - 1;
 
-    int imSize = imIn.getPixelCount();
+    int   imSize  = imIn.getPixelCount();
     UINT *img_eti = new UINT[imSize]();
 
     MaxTree2<T1, HeightCriterion, size_t, UINT32> tree;
@@ -574,13 +571,13 @@ namespace smil {
     T1 *transformee_node = new T1[tree.getLabelMax()]();
     T2 *indicatrice_node = new T2[tree.getLabelMax()]();
     //  std::cout<<"ULTIMATE OPEN, after memory allocation\n";
-    compute_contrast(
-      tree, transformee_node, indicatrice_node, root, stopSize, delta);
+    compute_contrast(tree, transformee_node, indicatrice_node, root, stopSize,
+                     delta);
 
     typename ImDtTypes<T1>::lineType transformeePix = imTrans.getPixels();
     typename ImDtTypes<T2>::lineType indicatricePix = imIndic.getPixels();
 
-    for(int i = 0; i < imSize; i++) {
+    for (int i = 0; i < imSize; i++) {
       transformeePix[i] = transformee_node[img_eti[i]];
       indicatricePix[i] = indicatrice_node[img_eti[i]];
     }
@@ -599,24 +596,14 @@ namespace smil {
   // NEW BMI    # ##################################################
   //(tree, transformee_node, indicatrice_node, child, stopSize, (T)0, 0,
   // hauteur, tree.getLevel(root), tree.getLevel(root));
-  template <class T,
-            class CriterionT,
-            class Offset_T,
-            class Label_T,
+  template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void ComputeDeltaUOMSER(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                          T *transformee_node,
-                          Attr_T *indicatrice_node,
-                          int node,
-                          int nParent,
-                          int first_ancestor,
-                          Attr_T stop,
-                          UINT delta,
-                          UINT method,
-                          int isPrevMaxT,
-                          UINT minArea = 0,
-                          T threshold = 0,
-                          T mymax = 0) {
+                          T *transformee_node, Attr_T *indicatrice_node,
+                          int node, int nParent, int first_ancestor,
+                          Attr_T stop, UINT delta, UINT method, int isPrevMaxT,
+                          UINT minArea = 0, T threshold = 0, T mymax = 0)
+  {
     // method:  1 (MSER), 2 (RGR)
 
     // "node": the current node; "nParent": its direct parent (allows
@@ -626,11 +613,11 @@ namespace smil {
     // computation
 
     // self,node = 1, nParent =0, stop=0, delta = 0, isPrevMaxT = 0):
-    int child; // index node
-    T current_residue, stab_residue = 0;
-    UINT hNode, hParent; // attributes
+    int    child; // index node
+    T      current_residue, stab_residue = 0;
+    UINT   hNode, hParent; // attributes
     size_t aNode, aParent, aAncestor;
-    T lNode, lParent, lAncestor;
+    T      lNode, lParent, lAncestor;
     // node levels, the same type than input image
     float stability;
 
@@ -639,49 +626,49 @@ namespace smil {
     lNode = tree.getLevel(node); // #current level
 
     // #current criterion
-    hParent = tree.getCriterion(nParent).getAttributeValue().H;
-    aParent = tree.getCriterion(nParent).getAttributeValue().A;
+    hParent   = tree.getCriterion(nParent).getAttributeValue().H;
+    aParent   = tree.getCriterion(nParent).getAttributeValue().A;
     aAncestor = tree.getCriterion(first_ancestor).getAttributeValue().A;
 
-    lParent = tree.getLevel(nParent); // #current level
+    lParent   = tree.getLevel(nParent);        // #current level
     lAncestor = tree.getLevel(first_ancestor); // #current level
 
     bool flag = false;
-    if((hParent - hNode) <= delta) {
+    if ((hParent - hNode) <= delta) {
       flag = true;
     }
 
-    float relativeGrowthRate; // BMI RGR
-    double lgARoot = std::log((double)tree.getImWidth() * tree.getImHeight());
+    float  relativeGrowthRate; // BMI RGR
+    double lgARoot = std::log((double) tree.getImWidth() * tree.getImHeight());
     double factor;
 
-    if(method == 2) {
+    if (method == 2) {
       // RGR
       // BMI RGR La valeur max sera max/10 pour un
       // changement d'aire de 1 a taille_im en pixels
-      factor = ImDtTypes<T>::max() / ((double)100 * lgARoot);
-    } else if(method == 3) { // MSER_sub
-      factor = ImDtTypes<T>::max() / ((double)100.0); // BMI
-      factor = mymax / ((double)25.0); // BMI
+      factor = ImDtTypes<T>::max() / ((double) 100 * lgARoot);
+    } else if (method == 3) {                          // MSER_sub
+      factor = ImDtTypes<T>::max() / ((double) 100.0); // BMI
+      factor = mymax / ((double) 25.0);                // BMI
     }
-    if(flag) {
+    if (flag) {
       current_residue = lNode - lAncestor;
-      if(method == 1) {
+      if (method == 1) {
         // mser stability
-        stability = 1 - ((aAncestor - aNode) * 1.0 / (aAncestor));
+        stability    = 1 - ((aAncestor - aNode) * 1.0 / (aAncestor));
         stab_residue = round(current_residue * stability);
-      } else if(method == 2) { // relative growth rate
-        relativeGrowthRate
-          = factor * (std::log((double)aAncestor) - std::log((double)aNode));
-        if(current_residue > relativeGrowthRate) {
+      } else if (method == 2) { // relative growth rate
+        relativeGrowthRate =
+            factor * (std::log((double) aAncestor) - std::log((double) aNode));
+        if (current_residue > relativeGrowthRate) {
           stab_residue = round(current_residue - relativeGrowthRate);
         } else {
           stab_residue = 0;
         }
       } // end RGR
-      else if(method == 3) { // MSER sustraire
+      else if (method == 3) { // MSER sustraire
         stability = factor * (((aAncestor - aNode) * 1.0 / (aAncestor)));
-        if(current_residue > stability) {
+        if (current_residue > stability) {
           stab_residue = round(current_residue - stability);
         } else {
           stab_residue = 0;
@@ -691,22 +678,22 @@ namespace smil {
     } // if flag
     else {
       current_residue = (lNode - lParent);
-      if(method == 1) { // mser stability
+      if (method == 1) { // mser stability
         // relative growth rate
-        stability = 1 - ((aParent - aNode) * 1.0 / (aParent));
+        stability    = 1 - ((aParent - aNode) * 1.0 / (aParent));
         stab_residue = round(current_residue * stability);
-      } else if(method == 2) { // relative growth rate
-        relativeGrowthRate
-          = factor * (std::log((double)aParent) - std::log((double)aNode));
-        if(current_residue > relativeGrowthRate) {
+      } else if (method == 2) { // relative growth rate
+        relativeGrowthRate =
+            factor * (std::log((double) aParent) - std::log((double) aNode));
+        if (current_residue > relativeGrowthRate) {
           stab_residue = round(current_residue - relativeGrowthRate);
         } else {
           stab_residue = 0;
         }
       } // end RGR
-      else if(method == 3) {
+      else if (method == 3) {
         stability = factor * (((aParent - aNode) * 1.0 / (aParent))); // msersub
-        if(current_residue > stability) {
+        if (current_residue > stability) {
           stab_residue = round(current_residue - stability);
         } else {
           stab_residue = 0;
@@ -719,14 +706,14 @@ namespace smil {
 
     transformee_node[node] = transformee_node[nParent];
     indicatrice_node[node] = indicatrice_node[nParent];
-    int isMaxT = 0;
-    if(hNode < stop) {
-      if(stab_residue > transformee_node[node] && stab_residue > threshold
-         && aNode > minArea) {
-        isMaxT = 1;
+    int isMaxT             = 0;
+    if (hNode < stop) {
+      if (stab_residue > transformee_node[node] && stab_residue > threshold &&
+          aNode > minArea) {
+        isMaxT                 = 1;
         transformee_node[node] = stab_residue;
 
-        if(!(isPrevMaxT && flag)) {
+        if (!(isPrevMaxT && flag)) {
           indicatrice_node[node] = hNode + 1;
         }
       }
@@ -734,8 +721,8 @@ namespace smil {
       indicatrice_node[node] = 0;
     }
     child = tree.getChild(node);
-    while(child != 0) {
-      if(flag && (hNode < stop)) {
+    while (child != 0) {
+      if (flag && (hNode < stop)) {
         ComputeDeltaUOMSER(tree, transformee_node, indicatrice_node, child,
                            node, first_ancestor, stop, delta, method, isMaxT,
                            minArea, threshold, mymax);
@@ -748,61 +735,51 @@ namespace smil {
     }
   }
 
-  inline void computeFillAspectRatioFactor(UINT wNode,
-                                           UINT cNode,
-                                           UINT area,
-                                           UINT width,
-                                           UINT height,
-                                           float &fillRatio,
-                                           float &AspectRatio) {
+  inline void computeFillAspectRatioFactor(UINT wNode, UINT cNode, UINT area,
+                                           UINT width, UINT height,
+                                           float &fillRatio, float &AspectRatio)
+  {
     // compute fillRatio and AspectRatio
     UINT minHW, maxHW;
-    minHW = MIN(wNode, cNode);
-    maxHW = MAX(wNode, cNode);
-    fillRatio = area * 1.0 / (wNode * cNode * 1.0);
+    minHW       = MIN(wNode, cNode);
+    maxHW       = MAX(wNode, cNode);
+    fillRatio   = area * 1.0 / (wNode * cNode * 1.0);
     AspectRatio = minHW * 1.0 / maxHW;
 
-    if(AspectRatio <= 0.4) // && fillRatio < 0.4)
+    if (AspectRatio <= 0.4) // && fillRatio < 0.4)
       AspectRatio = 0.0;
     else
       AspectRatio = std::pow(AspectRatio, 1.0 / 3);
 
-    if(fillRatio <= 0.2 || fillRatio >= 0.9)
+    if (fillRatio <= 0.2 || fillRatio >= 0.9)
       fillRatio = 0.0;
     else {
       fillRatio = abs(fillRatio - 0.55);
       fillRatio = std::pow((1.0 - (fillRatio * 1.0 / 0.35)), 1.0 / 3);
     }
 
-    if(AspectRatio <= 0.4 && fillRatio >= 0.4) { // a verifier
-      AspectRatio = 1; // 0.9
-      fillRatio = 1;
+    if (AspectRatio <= 0.4 && fillRatio >= 0.4) { // a verifier
+      AspectRatio = 1;                            // 0.9
+      fillRatio   = 1;
     } // 0.9
 
-    if(area < 20 || area > (0.9 * width * height) || cNode < 5) {
+    if (area < 20 || area > (0.9 * width * height) || cNode < 5) {
       //|| cNode > (tree.getImHeight()/3)){
       AspectRatio = 0.0;
-      fillRatio = 0.0;
+      fillRatio   = 0.0;
     }
   }
 
   // NEW BMI    # ##################################################
   //(tree, transformee_node, indicatrice_node, child, stopSize, (T)0, 0,
   // hauteur, tree.getLevel(root), tree.getLevel(root));
-  template <class T,
-            class CriterionT,
-            class Offset_T,
-            class Label_T,
+  template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void ComputeDeltaUOMSERSC(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                            T *transformee_node,
-                            Attr_T *indicatrice_node,
-                            int node,
-                            int nParent,
-                            int first_ancestor,
-                            Attr_T stop,
-                            UINT delta,
-                            int isPrevMaxT) {
+                            T *transformee_node, Attr_T *indicatrice_node,
+                            int node, int nParent, int first_ancestor,
+                            Attr_T stop, UINT delta, int isPrevMaxT)
+  {
     // "node": the current node; "nParent": its direct parent (allows
     // attribute comparison for Delta versions); "first_ancestor": the
     // first ancestor with a different attribute (used for residue
@@ -810,11 +787,11 @@ namespace smil {
     // computation
 
     // self,node = 1, nParent =0, stop=0, delta = 0, isPrevMaxT = 0):
-    int child; // index node
-    T current_residue, stab_residue;
-    UINT hNode, hParent, wNode; // attributes
+    int    child; // index node
+    T      current_residue, stab_residue;
+    UINT   hNode, hParent, wNode; // attributes
     size_t aNode, aParent, aAncestor;
-    T lNode, lParent, lAncestor;
+    T      lNode, lParent, lAncestor;
     /// wParent set but not used*/
     // node levels, the same type than input image
     float stability, fillRatio, AspectRatio, fac;
@@ -829,43 +806,43 @@ namespace smil {
     // wParent =
     // tree.getCriterion(nParent).xmax-tree.getCriterion(nParent).xmin+1;//
     //  #width
-    aParent = tree.getCriterion(nParent).getAttributeValue().A;
+    aParent   = tree.getCriterion(nParent).getAttributeValue().A;
     aAncestor = tree.getCriterion(first_ancestor).getAttributeValue().A;
-    lParent = tree.getLevel(nParent); // #current level
+    lParent   = tree.getLevel(nParent);        // #current level
     lAncestor = tree.getLevel(first_ancestor); // #current level
 
     bool flag = false;
-    if((hParent - hNode) <= delta) {
+    if ((hParent - hNode) <= delta) {
       flag = true;
     }
 
     computeFillAspectRatioFactor(wNode, hNode, aNode, tree.getImWidth(),
                                  tree.getImHeight(), fillRatio, AspectRatio);
 
-    if(flag) { // no significant attribute change
-      stability
-        = std::pow((1.0 - ((aAncestor - aNode) * 1.0 / aAncestor)), 1.0 / 3);
-      fac = (stability * AspectRatio * fillRatio);
+    if (flag) { // no significant attribute change
+      stability =
+          std::pow((1.0 - ((aAncestor - aNode) * 1.0 / aAncestor)), 1.0 / 3);
+      fac             = (stability * AspectRatio * fillRatio);
       current_residue = lNode - lAncestor;
-      stab_residue = round(current_residue * fac);
+      stab_residue    = round(current_residue * fac);
     } else {
-      stability
-        = std::pow((1.0 - ((aParent - aNode) * 1.0 / aParent)), 1.0 / 3);
-      fac = (stability * AspectRatio * fillRatio);
+      stability =
+          std::pow((1.0 - ((aParent - aNode) * 1.0 / aParent)), 1.0 / 3);
+      fac             = (stability * AspectRatio * fillRatio);
       current_residue = (lNode - lParent);
-      stab_residue = round(current_residue * fac);
+      stab_residue    = round(current_residue * fac);
     }
 
     transformee_node[node] = transformee_node[nParent];
     indicatrice_node[node] = indicatrice_node[nParent];
 
     int isMaxT = 0;
-    if(hNode < stop) {
-      if(stab_residue > transformee_node[node]) {
-        isMaxT = 1;
+    if (hNode < stop) {
+      if (stab_residue > transformee_node[node]) {
+        isMaxT                 = 1;
         transformee_node[node] = stab_residue;
 
-        if(!(isPrevMaxT && flag)) {
+        if (!(isPrevMaxT && flag)) {
           indicatrice_node[node] = hNode + 1;
         }
       }
@@ -873,8 +850,8 @@ namespace smil {
       indicatrice_node[node] = 0;
 
     child = tree.getChild(node);
-    while(child != 0) {
-      if(flag && (hNode < stop)) {
+    while (child != 0) {
+      if (flag && (hNode < stop)) {
         ComputeDeltaUOMSERSC(tree, transformee_node, indicatrice_node, child,
                              node, first_ancestor, stop, delta, isMaxT);
       } else {
@@ -887,15 +864,11 @@ namespace smil {
 
   template <class T1, class T2>
   void compute_contrast_MSER(MaxTree2<T1, HWACriterion, size_t, UINT32> &tree,
-                             T1 *transformee_node,
-                             T2 *indicatrice_node,
-                             UINT32 root,
-                             T2 stopSize,
-                             UINT delta = 0,
-                             UINT method = 2,
-                             UINT minArea = 0,
-                             T1 threshold = 0,
-                             bool use_textShape = 0) {
+                             T1 *transformee_node, T2 *indicatrice_node,
+                             UINT32 root, T2 stopSize, UINT delta = 0,
+                             UINT method = 2, UINT minArea = 0,
+                             T1 threshold = 0, bool use_textShape = 0)
+  {
     int child;
     //   UINT hauteur;
 
@@ -910,18 +883,18 @@ namespace smil {
     // BEGIN COMPUTE DYNAMIC, BMI
 
     UINT32 mynode;
-    T1 mylevel, mymax;
+    T1     mylevel, mymax;
     mymax = 0;
-    for(mynode = 0; mynode < tree.getLabelMax(); mynode++) {
+    for (mynode = 0; mynode < tree.getLabelMax(); mynode++) {
       mylevel = tree.getLevel(mynode);
-      if(mylevel > mymax) {
+      if (mylevel > mymax) {
         mymax = mylevel;
       }
     }
     // std::cout << "mymax=" << mymax << "\n";
     // END COMPUTE DYNAMIC, BMI
-    while(child != 0) {
-      if(!use_textShape)
+    while (child != 0) {
+      if (!use_textShape)
         ComputeDeltaUOMSER(tree, transformee_node, indicatrice_node, child,
                            root /*parent*/, root /*first_ancestor*/,
                            stopSize /*stop*/, delta, method, 0 /*isPrevMaxT*/,
@@ -939,26 +912,22 @@ namespace smil {
 #endif // SWIG
 
   template <class T1, class T2>
-  RES_T ultimateOpenMSER(const Image<T1> &imIn,
-                         Image<T1> &imTrans,
-                         Image<T2> &imIndic,
-                         const StrElt &se = DEFAULT_SE,
-                         T2 stopSize = 0,
-                         UINT delta = 0,
-                         UINT method = 2,
-                         UINT minArea = 0,
-                         T1 threshold = 0,
-                         bool use_textShape = 0) {
+  RES_T ultimateOpenMSER(const Image<T1> &imIn, Image<T1> &imTrans,
+                         Image<T2> &imIndic, const StrElt &se = DEFAULT_SE,
+                         T2 stopSize = 0, UINT delta = 0, UINT method = 2,
+                         UINT minArea = 0, T1 threshold = 0,
+                         bool use_textShape = 0)
+  {
     ASSERT_ALLOCATED(&imIn, &imTrans, &imIndic);
     ASSERT_SAME_SIZE(&imIn, &imTrans, &imIndic);
 
-    int imSize = imIn.getPixelCount();
+    int   imSize  = imIn.getPixelCount();
     UINT *img_eti = new UINT[imSize]();
 
     MaxTree2<T1, HWACriterion> tree;
-    int root = tree.build(imIn, img_eti, se);
+    int                        root = tree.build(imIn, img_eti, se);
 
-    if(stopSize == 0) {
+    if (stopSize == 0) {
       stopSize = imIn.getHeight() - 1;
     }
 
@@ -972,7 +941,7 @@ namespace smil {
     typename ImDtTypes<T1>::lineType transformeePix = imTrans.getPixels();
     typename ImDtTypes<T2>::lineType indicatricePix = imIndic.getPixels();
 
-    for(int i = 0; i < imSize; i++) {
+    for (int i = 0; i < imSize; i++) {
       transformeePix[i] = transformee_node[img_eti[i]];
       indicatricePix[i] = indicatrice_node[img_eti[i]];
     }
@@ -989,43 +958,34 @@ namespace smil {
 
 #ifndef SWIG
 
-  template <class T,
-            class CriterionT,
-            class Offset_T,
-            class Label_T,
+  template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void processMaxTree(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                      Label_T node,
-                      T *lut_out,
-                      T previousLevel,
-                      Attr_T stop) {
+                      Label_T node, T *lut_out, T previousLevel, Attr_T stop)
+  {
     // MORPHEE_ENTER_FUNCTION("s_OpeningTree::computeMaxTree");
     Label_T child;
-    T nodeLevel = tree.getLevel(node);
+    T       nodeLevel = tree.getLevel(node);
 
     T currentLevel = (tree.getCriterion(node).getAttributeValue() < stop)
-                       ? previousLevel
-                       : nodeLevel;
+                         ? previousLevel
+                         : nodeLevel;
 
     lut_out[node] = currentLevel;
 
     child = tree.getChild(node);
-    while(child != 0) {
+    while (child != 0) {
       processMaxTree(tree, child, lut_out, currentLevel, stop);
       child = tree.getBrother(child);
     }
   }
 
-  template <class T,
-            class CriterionT,
-            class Offset_T,
-            class Label_T,
+  template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void
-    compute_AttributeOpening(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                             T *lut_node,
-                             Label_T root,
-                             Attr_T stopSize) {
+  compute_AttributeOpening(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
+                           T *lut_node, Label_T root, Attr_T stopSize)
+  {
     Label_T child;
 
     lut_node[root] = tree.getLevel(root);
@@ -1043,29 +1003,26 @@ namespace smil {
     // END DEBUG
     child = tree.getChild(root);
 
-    while(child != 0) {
+    while (child != 0) {
       processMaxTree(tree, child, lut_node, tree.getLevel(root), stopSize);
       child = tree.getBrother(child);
     }
 
   } // compute_AttributeOpening
 
-  template <class T,
-            class CriterionT,
-            class Offset_T = size_t,
+  template <class T, class CriterionT, class Offset_T = size_t,
             class Label_T = UINT32>
-  RES_T attributeOpen(const Image<T> &imIn,
-                      Image<T> &imOut,
-                      size_t stopSize,
-                      const StrElt &se) {
+  RES_T attributeOpen(const Image<T> &imIn, Image<T> &imOut, size_t stopSize,
+                      const StrElt &se)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    size_t imSize = imIn.getPixelCount();
+    size_t   imSize  = imIn.getPixelCount();
     Label_T *img_eti = new Label_T[imSize]();
 
     MaxTree2<T, CriterionT> tree;
-    Label_T root = tree.build(imIn, img_eti, se);
+    Label_T                 root = tree.build(imIn, img_eti, se);
 
     // BEGIN BMI, DEBUG
     // for(size_t i=0;i<imSize;i++) {
@@ -1081,7 +1038,7 @@ namespace smil {
 
     typename ImDtTypes<T>::lineType outPix = imOut.getPixels();
 
-    for(size_t i = 0; i < imSize; i++)
+    for (size_t i = 0; i < imSize; i++)
       outPix[i] = out_node[img_eti[i]];
 
     delete[] img_eti;
@@ -1105,10 +1062,9 @@ namespace smil {
    * @param[in] se Structuring element
    */
   template <class T>
-  RES_T heightOpen(const Image<T> &imIn,
-                   size_t stopSize,
-                   Image<T> &imOut,
-                   const StrElt &se = DEFAULT_SE) {
+  RES_T heightOpen(const Image<T> &imIn, size_t stopSize, Image<T> &imOut,
+                   const StrElt &se = DEFAULT_SE)
+  {
     return attributeOpen<T, HeightCriterion>(imIn, imOut, stopSize, se);
   } // END heightOpen
 
@@ -1123,10 +1079,9 @@ namespace smil {
    * @param[in] se Structuring element
    */
   template <class T>
-  RES_T heightClose(const Image<T> &imIn,
-                    size_t stopSize,
-                    Image<T> &imOut,
-                    const StrElt &se = DEFAULT_SE) {
+  RES_T heightClose(const Image<T> &imIn, size_t stopSize, Image<T> &imOut,
+                    const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -1151,10 +1106,9 @@ namespace smil {
    * @param[in] se Structuring element
    */
   template <class T>
-  RES_T widthOpen(const Image<T> &imIn,
-                  size_t stopSize,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T widthOpen(const Image<T> &imIn, size_t stopSize, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     return attributeOpen<T, WidthCriterion>(imIn, imOut, stopSize, se);
   } // END widthOpen
 
@@ -1169,10 +1123,9 @@ namespace smil {
    * @param[in] se Structuring element
    */
   template <class T>
-  RES_T widthClose(const Image<T> &imIn,
-                   size_t stopSize,
-                   Image<T> &imOut,
-                   const StrElt &se = DEFAULT_SE) {
+  RES_T widthClose(const Image<T> &imIn, size_t stopSize, Image<T> &imOut,
+                   const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
@@ -1197,10 +1150,9 @@ namespace smil {
    * @param[in] se Structuring element
    */
   template <class T>
-  RES_T areaOpen(const Image<T> &imIn,
-                 size_t stopSize,
-                 Image<T> &imOut,
-                 const StrElt &se = DEFAULT_SE) {
+  RES_T areaOpen(const Image<T> &imIn, size_t stopSize, Image<T> &imOut,
+                 const StrElt &se = DEFAULT_SE)
+  {
     return attributeOpen<T, AreaCriterion>(imIn, imOut, stopSize, se);
   }
 
@@ -1215,10 +1167,9 @@ namespace smil {
    * @param[in] se Structuring element
    */
   template <class T>
-  RES_T areaClose(const Image<T> &imIn,
-                  size_t stopSize,
-                  Image<T> &imOut,
-                  const StrElt &se = DEFAULT_SE) {
+  RES_T areaClose(const Image<T> &imIn, size_t stopSize, Image<T> &imOut,
+                  const StrElt &se = DEFAULT_SE)
+  {
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
