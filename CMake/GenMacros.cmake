@@ -200,7 +200,9 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
          AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_compile_options(${PYTHON_LIB_NAME} PRIVATE -Wno-unused-function)
       endif()
-      target_link_libraries(${PYTHON_LIB_NAME} PRIVATE ${LIB_DEPS} ${SWIG_DEPS})
+      target_link_libraries(
+        ${PYTHON_LIB_NAME} PRIVATE ${LIB_DEPS} ${SWIG_DEPS} Python3::Module
+                                   Python3::NumPy)
       # SET_TARGET_PROPERTIES(_${PYTHON_LIB_NAME} PROPERTIES
       # LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/smilPython)
       if(LIB_SRCS)
@@ -355,7 +357,6 @@ macro(ADD_SMIL_TESTS _LIB_NAME)
         elseif(${_EXE_PREFIX} STREQUAL "python")
           add_test("${MOD_NAME}${TEST_NAME}"
                    ${EXECUTABLE_OUTPUT_PATH}/${TEST_NAME})
-          target_link_libraries(${TEST_NAME} Python3::Module)
           add_dependencies(tests ${TEST_NAME})
         elseif(${_EXE_PREFIX} STREQUAL "bench")
           add_test(NAME "${MOD_NAME}${TEST_NAME}"
