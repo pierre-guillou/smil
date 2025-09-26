@@ -1,0 +1,84 @@
+name: publish_windows-latest_msvc
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        py: [
+          "3.9",
+          "3.10",
+          "3.11",
+          "3.12",
+          "3.13",
+        ]
+    env:
+      QT_QPA_PLATFORM: offscreen
+      CMAKE_TOOLCHAIN_FILE : C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+      VCPKG_DEFAULT_TRIPLET: x64-windows-static
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          echo '{
+            "dependencies": [ "libpng", "tiff", "curl", "freetype" ]
+          }' > vcpkg.json
+          vcpkg install
+
+      - name: Install dependencies
+        run: |
+          pixi init
+          pixi add python==${{ matrix.py }}
+          pixi add swig numpy
+
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+
+      - name: Create & configure Smil build directory
+        run: |
+          mkdir build && cd build
+          export CMAKE_PREFIX_PATH="$CONDA_PREFIX/Library"
+          cmake \
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
+            -DBUILD_TEST=ON \
+            -DWRAP_PYTHON=ON \
+            -DUSE_NUMPY=ON \
+            $GITHUB_WORKSPACE
+        shell: pixi run bash -e {0}
+        env:
+          CMAKE_GENERATOR: "Visual Studio 17 2022"
+          CMAKE_BUILD_TYPE: Release
+
+      - name: Build Smil
+        run: |
+          cd build
+          cmake --build . --config Release
+
+      - name: Install Smil
+        run: |
+          cd build
+          cmake --build . --config Release --target install
+
+      - name: Execute non-regression tests and benchmarks
+        run: |
+          cd build
+          ctest -C Release -LE "python"
+        shell: pixi run bash -e {0}
+
+      - name: Execute Python tests
+        continue-on-error: true
+        run: |
+          cd build
+          ctest -C Release -L python --output-on-failure
+        shell: pixi run bash -e {0}
+        env:
+          PYTHONPATH: "/c/Program Files (x86)/Smil/lib:/c/Program Files (x86)/Smil/lib/smilPython"
