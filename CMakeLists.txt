@@ -309,25 +309,12 @@ endif(WRAP_CPP)
 
 option(WRAP_PYTHON "Wrap Python" FALSE)
 if(WRAP_PYTHON)
-  find_package(Python3 REQUIRED COMPONENTS Development.Module)
-  link_libraries(Python3::Module)
+  find_package(Python3 REQUIRED COMPONENTS Development.Module NumPy)
+  message(STATUS "Numpy includes: " ${Python3_NumPy_INCLUDE_DIRS})
+  add_compile_definitions(USE_NUMPY)
+  link_libraries(Python3::Module Python3::NumPy)
 
   add_custom_target(python)
-endif(WRAP_PYTHON)
-
-#
-# As we're wrapping to Python, let's find Numpy includes dir
-#
-# IF(WRAP_PYTHON AND NOT Python_Numpy_INCLUDE_DIRS)
-if(WRAP_PYTHON)
-  option(USE_NUMPY "Use Numpy for python pixels manipulation." OFF)
-
-  if(USE_NUMPY)
-    find_package(Python3 REQUIRED COMPONENTS NumPy)
-    add_compile_definitions(USE_NUMPY)
-    link_libraries(Python3::NumPy)
-    message(STATUS "Numpy includes: " ${Python3_NumPy_INCLUDE_DIRS})
-  endif(USE_NUMPY)
 endif(WRAP_PYTHON)
 
 #
