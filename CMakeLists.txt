@@ -736,10 +736,6 @@ if(USE_WRAPPER)
       target_compile_options(smil_Python PRIVATE -Wno-unused-function)
     endif()
     target_link_libraries(smil_Python PRIVATE ${SMIL_LIBS} Python3::Module)
-    file(
-      WRITE ${LIBRARY_OUTPUT_PATH}/smilPython.pth
-      "${SMIL_LIBRARIES_INSTALL_PATH}\n${SMIL_LIBRARIES_INSTALL_PATH}/smilPython"
-    )
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/__init__.py
                    ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py COPYONLY)
     # SET_TARGET_PROPERTIES(_smilPython PROPERTIES LIBRARY_OUTPUT_DIRECTORY
@@ -752,22 +748,6 @@ if(USE_WRAPPER)
             ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py
       DESTINATION ${SMIL_LIBRARIES_INSTALL_PATH}/smilPython
       COMPONENT python)
-
-    if(UNIX)
-      if(CONDA_PREFIX)
-        install(
-          FILES ${LIBRARY_OUTPUT_PATH}/smilPython.pth
-          DESTINATION
-            ${CMAKE_INSTALL_PREFIX}/lib/python${Python3_VERSION}/site-packages
-          COMPONENT python)
-      else(CONDA_PREFIX)
-        install(
-          FILES ${LIBRARY_OUTPUT_PATH}/smilPython.pth
-          DESTINATION
-            ${CMAKE_INSTALL_PREFIX}/lib${LIBSUFFIX}/python${Python3_VERSION}/dist-packages
-          COMPONENT python)
-      endif(CONDA_PREFIX)
-    endif(UNIX)
 
     add_dependencies(python smil_Python)
     add_subdirectory(python)
