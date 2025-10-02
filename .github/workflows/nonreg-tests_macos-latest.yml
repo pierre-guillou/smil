@@ -59,7 +59,6 @@ jobs:
             -DQt5Widgets_DIR=$(brew --prefix qt@5)/lib/cmake/Qt5Widgets \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
-            -DUSE_NUMPY=ON \
             $GITHUB_WORKSPACE
         env:
           CC: clang
