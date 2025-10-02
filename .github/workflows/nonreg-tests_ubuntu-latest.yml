@@ -57,7 +57,6 @@ jobs:
             -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
-            -DUSE_NUMPY=ON \
             -DUSE_OPTIMIZATION=OFF \
             $GITHUB_WORKSPACE
         env:
