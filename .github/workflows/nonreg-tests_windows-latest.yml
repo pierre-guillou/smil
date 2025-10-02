@@ -50,7 +50,6 @@ jobs:
             -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
-            -DUSE_NUMPY=ON \
             $GITHUB_WORKSPACE
         shell: pixi run bash -e {0}
         env:
