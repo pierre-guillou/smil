@@ -50,7 +50,6 @@ jobs:
             -DVCPKG_TARGET_TRIPLET=x64-windows-static \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
-            -DUSE_NUMPY=ON \
             $GITHUB_WORKSPACE
         shell: bash
         env:
