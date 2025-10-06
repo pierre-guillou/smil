@@ -79,9 +79,7 @@ namespace smil
       for (UINT i = 0; i < N; i++)
         c[i] = mc.value(i);
     }
-    virtual ~MultichannelType()
-    {
-    }
+    virtual ~MultichannelType() = default;
 
     MultichannelType &operator=(const MultichannelType &mc)
     {
@@ -447,11 +445,7 @@ namespace smil
       for (UINT i = 0; i < N; i++)
         arrays[i] = arrayValsPtr + size * i;
     }
-    ~MultichannelArray()
-    {
-      //             if (allocatedData)
-      //               deleteArrays();
-    }
+    ~MultichannelArray() = default;
 
     void resetArrays()
     {

@@ -73,9 +73,7 @@ namespace smil
     {
     }
 
-    virtual ~MorphImageFunctionBase()
-    {
-    }
+    virtual ~MorphImageFunctionBase() = default;
 
     RES_T operator()(const imageInType &imIn, imageOutType &imOut,
                      const StrElt &se = DEFAULT_SE)

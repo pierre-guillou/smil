@@ -75,9 +75,7 @@ namespace smil
   {
   }
 
-  QtAppGui::~QtAppGui()
-  {
-  }
+  QtAppGui::~QtAppGui() = default;
 
   void QtAppGui::_execLoop()
   {

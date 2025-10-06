@@ -45,9 +45,7 @@ namespace smil
   class EuclideanFunctor
   {
   public:
-    EuclideanFunctor()
-    {
-    }
+    EuclideanFunctor() = default;
 
     template <class T1, class T2>
     RES_T _exec(const Image<T1> &imIn, Image<T2> &imOut,

@@ -503,9 +503,7 @@ namespace smil
       Image<T>::drain(const_cast<ResImage<T> *>(&rhs));
     }
 
-    ~ResImage() override
-    {
-    }
+    ~ResImage() override = default;
   };
 
   template <class T>

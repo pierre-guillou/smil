@@ -48,9 +48,7 @@ namespace smil
     ImageFileHandler(const char *ext) : fileExtention(ext)
     {
     }
-    virtual ~ImageFileHandler()
-    {
-    }
+    virtual ~ImageFileHandler() = default;
 
     const char *fileExtention;
 

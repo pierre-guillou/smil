@@ -54,13 +54,9 @@ namespace smil
   class GenericCriterion
   {
   public:
-    GenericCriterion()
-    {
-    }
+    GenericCriterion() = default;
 
-    virtual ~GenericCriterion()
-    {
-    }
+    virtual ~GenericCriterion() = default;
 
   public:
     virtual void initialize()                                           = 0;
@@ -91,9 +87,7 @@ namespace smil
       initialize();
     }
 
-    ~AreaCriterion() override
-    {
-    }
+    ~AreaCriterion() override = default;
 
   public:
     void initialize() override
@@ -140,9 +134,7 @@ namespace smil
       initialize();
     }
 
-    ~HeightCriterion() override
-    {
-    }
+    ~HeightCriterion() override = default;
 
   public:
     void initialize() override
@@ -201,9 +193,7 @@ namespace smil
       initialize();
     }
 
-    ~WidthCriterion() override
-    {
-    }
+    ~WidthCriterion() override = default;
 
   public:
     void initialize() override
@@ -272,9 +262,7 @@ namespace smil
       initialize();
     }
 
-    ~HACriterion() override
-    {
-    }
+    ~HACriterion() override = default;
 
   public:
     void initialize() override
@@ -339,9 +327,7 @@ namespace smil
       initialize();
     }
 
-    ~HWACriterion() override
-    {
-    }
+    ~HWACriterion() override = default;
 
   public:
     void initialize() override

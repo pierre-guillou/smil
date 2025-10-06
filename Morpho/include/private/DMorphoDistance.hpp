@@ -62,9 +62,7 @@ namespace smil
       this->se = DEFAULT_SE;
     }
 
-    ~DistanceFunctor()
-    {
-    }
+    ~DistanceFunctor() = default;
 
     template <class T1, class T2>
     RES_T distance(const Image<T1> &imIn, Image<T2> &imOut, const StrElt &se)

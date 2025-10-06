@@ -86,21 +86,13 @@ namespace smil
     }
 
     /** @cond */
-    virtual ~Edge()
-    {
-    }
+    virtual ~Edge() = default;
     /** @endcond */
 
     /**
      * Copy an edge
      */
-    Edge &operator=(const Edge &rhs)
-    {
-      source = rhs.source;
-      target = rhs.target;
-      weight = rhs.weight;
-      return *this;
-    }
+    Edge &operator=(const Edge &rhs) = default;
 
     //! Source node
     NodeT source;
@@ -234,9 +226,7 @@ namespace smil
     }
 
     /** @cond */
-    ~Graph() override
-    {
-    }
+    ~Graph() override = default;
     /** @endcond */
 
     Graph &operator=(const Graph &rhs)
