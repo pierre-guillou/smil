@@ -91,8 +91,8 @@ namespace smil
 
     if (CDF) {
       double aSum = 0;
-      for (size_t i = 0; i < res.size(); i++)
-        aSum += res[i];
+      for (double re : res)
+        aSum += re;
       res[0] /= aSum;
       for (size_t i = 1; i < res.size(); i++)
         res[i] = res[i] / aSum + res[i - 1];

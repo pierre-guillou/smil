@@ -134,8 +134,8 @@ class Test_DrawText : public TestCase
         "/usr/share/fonts/dejavu/DejaVuSans.ttf",          // CentOS
     };
     string fpath;
-    for (int i = 0; i < N_FONT_PATHS; i++) {
-      fpath = font_search_paths[i];
+    for (const auto &font_search_path : font_search_paths) {
+      fpath = font_search_path;
       // trying to open the font path to check if it exists
       ifstream res(fpath.c_str());
       if (res.good()) {

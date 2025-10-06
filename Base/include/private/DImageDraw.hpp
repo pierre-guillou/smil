@@ -75,9 +75,8 @@ namespace smil
 
     typename Image<T>::sliceType lines = im.getLines();
 
-    for (std::vector<IntPoint>::iterator it = bPoints.begin();
-         it != bPoints.end(); it++)
-      lines[(*it).y][(*it).x] = value;
+    for (auto &bPoint : bPoints)
+      lines[bPoint.y][bPoint.x] = value;
 
     im.modified();
     return RES_OK;

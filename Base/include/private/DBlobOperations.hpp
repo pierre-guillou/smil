@@ -146,9 +146,9 @@ namespace smil
 
     std::map<UINT32, double> areas = blobsArea(blobs);
 
-    for (auto it = areas.cbegin(); it != areas.cend(); it++) {
-      if ((gt && it->second < threshold) || (!gt && it->second > threshold))
-        blobs.erase(it->first);
+    for (auto area : areas) {
+      if ((gt && area.second < threshold) || (!gt && area.second > threshold))
+        blobs.erase(area.first);
     }
 
     return drawBlobs(blobs, imOut);

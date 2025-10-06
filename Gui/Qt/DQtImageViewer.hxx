@@ -403,11 +403,11 @@ namespace smil
 #endif // Q_OS_WIN32
     else {
       std::vector<std::string> files;
-      for (QList<QUrl>::iterator it = urls.begin(); it != urls.end(); it++)
+      for (auto &url : urls)
 #ifdef Q_OS_WIN32
-        files.push_back((*it).toString().remove("file:///").toStdString());
+        files.push_back(url.toString().remove("file:///").toStdString());
 #else  // Q_OS_WIN32
-        files.push_back((*it).toString().remove("file:/").toStdString());
+        files.push_back(url.toString().remove("file:/").toStdString());
 #endif // Q_OS_WIN32
       read(files, *this->image);
     }

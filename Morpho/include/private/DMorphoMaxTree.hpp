@@ -127,12 +127,11 @@ namespace smil
       oddSE = se.odd;
 
       // set an offset distance for each se point (!=0,0,0)
-      for (std::vector<IntPoint>::const_iterator it = se.points.begin();
-           it != se.points.end(); it++) {
-        if (it->x != 0 || it->y != 0 || it->z != 0) {
-          sePts.push_back(*it);
-          dOffsets.push_back(it->x + it->y * imSize[0] +
-                             it->z * imSize[0] * imSize[1]);
+      for (auto point : se.points) {
+        if (point.x != 0 || point.y != 0 || point.z != 0) {
+          sePts.push_back(point);
+          dOffsets.push_back(point.x + point.y * imSize[0] +
+                             point.z * imSize[0] * imSize[1]);
         }
       }
 

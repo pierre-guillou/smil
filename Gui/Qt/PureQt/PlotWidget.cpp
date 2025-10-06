@@ -69,10 +69,9 @@ void PlotWidget::saveCurrentCurve()
 
 void PlotWidget::clearOtherCurves()
 {
-  for (QwtPlotItemList::const_iterator it = itemList().begin();
-       it != itemList().end(); it++)
-    if (*it != currentCurve)
-      (*it)->detach();
+  for (auto it : itemList())
+    if (it != currentCurve)
+      it->detach();
   replot();
 }
 
