@@ -93,7 +93,7 @@ namespace smil
     else {
       std::cout << "No reader/writer available for " << fileExt << " files."
                 << std::endl;
-      return NULL;
+      return nullptr;
     }
   }
   /** @endcond */

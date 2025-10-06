@@ -42,13 +42,13 @@ namespace smil
       if (rw == "r") {
         readMode = true;
         /* create a png read struct */
-        png_ptr =
-            png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+        png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr,
+                                         nullptr, nullptr);
       } else {
         readMode = false;
         /* create a png write struct */
-        png_ptr =
-            png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+        png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr,
+                                          nullptr, nullptr);
       }
 
       /* create a png info struct */
@@ -57,7 +57,7 @@ namespace smil
     ~PNGHeader()
     {
       if (readMode)
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
       else
         png_destroy_write_struct(&png_ptr, &info_ptr);
     }
@@ -132,8 +132,8 @@ namespace smil
 
     /* retrieve updated information */
     png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) (&width),
-                 (png_uint_32 *) (&height), &bit_depth, &color_type, NULL, NULL,
-                 NULL);
+                 (png_uint_32 *) (&height), &bit_depth, &color_type, nullptr,
+                 nullptr, nullptr);
 
     channels = png_get_channels(png_ptr, info_ptr);
 
@@ -241,7 +241,7 @@ namespace smil
     png_read_image(png_ptr, row_pointers);
 
     /* finish decompression and release memory */
-    png_read_end(png_ptr, NULL);
+    png_read_end(png_ptr, nullptr);
 
     image.modified();
 
@@ -297,7 +297,7 @@ namespace smil
     /* read pixel data using row pointers */
     png_read_image(png_ptr, row_pointers);
     /* finish decompression and release memory */
-    png_read_end(png_ptr, NULL);
+    png_read_end(png_ptr, nullptr);
 
     Image<RGB>::sliceType                  lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;
@@ -347,7 +347,7 @@ namespace smil
 
     png_bytep *row_pointers = (png_bytep *) image.getLines();
     png_write_image(png_ptr, row_pointers);
-    png_write_end(png_ptr, NULL);
+    png_write_end(png_ptr, nullptr);
 
     return RES_OK;
   }
@@ -412,7 +412,7 @@ namespace smil
 
     png_bytep *row_pointers = data;
     png_write_image(png_ptr, row_pointers);
-    png_write_end(png_ptr, NULL);
+    png_write_end(png_ptr, nullptr);
 
     for (size_t j = 0; j < height; j++)
       delete[] data[j];

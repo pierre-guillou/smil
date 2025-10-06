@@ -61,9 +61,9 @@ namespace smil
 
     mosaicToGraphFunct()
     {
-      internalGraph = NULL;
-      imEdgeValues  = NULL;
-      imNodeValues  = NULL;
+      internalGraph = nullptr;
+      imEdgeValues  = nullptr;
+      imNodeValues  = nullptr;
     }
 
     virtual ~mosaicToGraphFunct()
@@ -107,7 +107,7 @@ namespace smil
       ASSERT_SAME_SIZE(&imMosaic, &imEdgeValues);
 
       this->imEdgeValues = &imEdgeValues;
-      this->imNodeValues = NULL;
+      this->imNodeValues = nullptr;
       this->graph        = &graph;
       return this->_exec(imMosaic, se);
     }
@@ -154,7 +154,7 @@ namespace smil
     {
       ASSERT(parentClass::initialize(imIn, imOut, se) == RES_OK);
 
-      if (graph == NULL)
+      if (graph == nullptr)
         graph = internalGraph = new graphT();
 
       graph->clear();

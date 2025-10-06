@@ -66,7 +66,7 @@ namespace smil
     std::string prefix     = std::string(filename);
 
     if (prefix.find("http://") == 0 || prefix.find("https://") == 0) {
-      BaseImage *img = NULL;
+      BaseImage *img = nullptr;
 #ifdef USE_CURL
       std::string tmpFileName = "_smilTmpIO." + fileExt;
       if (getHttpFile(filename, tmpFileName.c_str()) != RES_OK) {
@@ -86,11 +86,11 @@ namespace smil
     ImageFileInfo fInfo;
     if (getFileInfo(filename, fInfo) != RES_OK) {
       ERR_MSG("Can't open file");
-      return NULL;
+      return nullptr;
     }
 
     ImageFileHandler<void> *fHandler = getHandlerForFile<void>(filename);
-    ASSERT(fHandler, NULL);
+    ASSERT(fHandler, nullptr);
     delete fHandler;
 
     if (fInfo.colorType == ImageFileInfo::COLOR_TYPE_GRAY) {
@@ -136,7 +136,7 @@ namespace smil
       ERR_MSG("Image data type not supported");
     }
 
-    return NULL;
+    return nullptr;
   }
 
 } // namespace smil

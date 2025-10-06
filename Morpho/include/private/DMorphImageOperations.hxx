@@ -398,7 +398,7 @@ namespace smil
     ImageFreezer freezer(imOut);
 
     Image<T_in> *inImage;
-    Image<T_in> *outImage, *tmpImage = NULL;
+    Image<T_in> *outImage, *tmpImage = nullptr;
 
     inImage = (Image<T_in> *) &imIn;
 

@@ -161,8 +161,8 @@ namespace smil
   public:
     HierarchicalQueue(bool rOrder = false) : reverseOrder(rOrder)
     {
-      stacks      = NULL;
-      tokenNbr    = NULL;
+      stacks      = nullptr;
+      tokenNbr    = nullptr;
       initialized = false;
     }
     ~HierarchicalQueue()
@@ -180,7 +180,7 @@ namespace smil
       for (size_t i = 0; i < GRAY_LEVEL_NBR; i++) {
         if (stacks[i]) {
           delete stacks[i];
-          stacks[i] = NULL;
+          stacks[i] = nullptr;
         }
       }
 
@@ -209,7 +209,7 @@ namespace smil
           if (h[i] != 0)
             stacks[i] = new StackType(h[i]);
           else
-            stacks[i] = NULL;
+            stacks[i] = nullptr;
         }
 
         delete[] h;

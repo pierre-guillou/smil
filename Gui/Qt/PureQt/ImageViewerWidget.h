@@ -45,7 +45,7 @@ class QImageGraphicsScene : public QGraphicsScene
 {
   Q_OBJECT
 public:
-  QImageGraphicsScene(QObject *parent = 0);
+  QImageGraphicsScene(QObject *parent = nullptr);
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -60,7 +60,7 @@ class ImageViewerWidget : public QGraphicsView
   Q_OBJECT
 
 public:
-  ImageViewerWidget(QWidget *parent = 0);
+  ImageViewerWidget(QWidget *parent = nullptr);
   ~ImageViewerWidget();
 
   virtual void mouseMoveEvent(QMouseEvent *event);
@@ -189,7 +189,7 @@ public slots:
   void         setCursorMode(const int &mode);
   void         setDrawPenColor(const QColor &color);
   void         showHelp();
-  void         saveAs(const char *fileName = NULL);
+  void         saveAs(const char *fileName = nullptr);
 
 protected slots:
   void setScrollBarPosition(int x, int y);
