@@ -86,12 +86,10 @@ CompStrElt CompStrElt::operator~()
 CompStrElt &CompStrElt::rotate(int steps)
 {
   bool odd = fgSE.odd;
-  for (std::vector<IntPoint>::iterator it = fgSE.points.begin();
-       it != fgSE.points.end(); it++)
-    (*it) = rotatePoint((*it), steps, odd);
-  for (std::vector<IntPoint>::iterator it = bgSE.points.begin();
-       it != bgSE.points.end(); it++)
-    (*it) = rotatePoint((*it), steps, odd);
+  for (auto &point : fgSE.points)
+    point = rotatePoint(point, steps, odd);
+  for (auto &point : bgSE.points)
+    point = rotatePoint(point, steps, odd);
   return *this;
 }
 
@@ -138,18 +136,16 @@ CompStrEltList::CompStrEltList(const CompStrElt &compSe, UINT nrot)
 CompStrEltList CompStrEltList::operator~()
 {
   CompStrEltList hmtSE;
-  for (std::vector<CompStrElt>::const_iterator it = compSeList.begin();
-       it != compSeList.end(); it++)
-    hmtSE.add((*it).bgSE, (*it).fgSE);
+  for (const auto &it : compSeList)
+    hmtSE.add(it.bgSE, it.fgSE);
   return hmtSE;
 }
 
 CompStrEltList CompStrEltList::operator|(const CompStrEltList &rhs)
 {
   CompStrEltList hmtSE(*this);
-  for (std::vector<CompStrElt>::const_iterator it = rhs.compSeList.begin();
-       it != rhs.compSeList.end(); it++)
-    hmtSE.add((*it).fgSE, (*it).bgSE);
+  for (const auto &it : rhs.compSeList)
+    hmtSE.add(it.fgSE, it.bgSE);
   return hmtSE;
 }
 
@@ -180,9 +176,8 @@ void CompStrEltList::add(const CompStrElt &cse, UINT nrot)
 CompStrEltList &CompStrEltList::rotate(int nrot)
 {
   CompStrEltList sel;
-  for (std::vector<CompStrElt>::iterator it = compSeList.begin();
-       it != compSeList.end(); it++)
-    (*it).rotate(nrot);
+  for (auto &it : compSeList)
+    it.rotate(nrot);
   return *this;
 }
 

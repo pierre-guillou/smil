@@ -126,10 +126,9 @@ namespace smil
 
     ImageFreezer freezer(imOut);
     ASSERT((fill(imOut, ImDtTypes<T>::min()) == RES_OK));
-    for (std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
-         it != mhtSE.compSeList.end(); it++) {
-      ASSERT((hitOrMiss<T>(imIn, (*it).fgSE, (*it).bgSE, tmpIm, borderVal) ==
-              RES_OK));
+    for (const auto &it : mhtSE.compSeList) {
+      ASSERT(
+          (hitOrMiss<T>(imIn, it.fgSE, it.bgSE, tmpIm, borderVal) == RES_OK));
       ASSERT((sup(imOut, tmpIm, imOut) == RES_OK));
     }
 
@@ -202,9 +201,8 @@ namespace smil
 
     ImageFreezer freezer(imOut);
     ASSERT((fill(imOut, ImDtTypes<T>::min()) == RES_OK));
-    for (std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
-         it != mhtSE.compSeList.end(); it++) {
-      ASSERT((thin<T>(tmpIm, (*it).fgSE, (*it).bgSE, tmpIm) == RES_OK));
+    for (const auto &it : mhtSE.compSeList) {
+      ASSERT((thin<T>(tmpIm, it.fgSE, it.bgSE, tmpIm) == RES_OK));
     }
     copy(tmpIm, imOut);
 
@@ -278,9 +276,8 @@ namespace smil
 
     ImageFreezer freezer(imOut);
     ASSERT((fill(imOut, ImDtTypes<T>::min()) == RES_OK));
-    for (std::vector<CompStrElt>::const_iterator it = mhtSE.compSeList.begin();
-         it != mhtSE.compSeList.end(); it++) {
-      ASSERT((thick<T>(tmpIm, (*it).fgSE, (*it).bgSE, tmpIm) == RES_OK));
+    for (const auto &it : mhtSE.compSeList) {
+      ASSERT((thick<T>(tmpIm, it.fgSE, it.bgSE, tmpIm) == RES_OK));
     }
     copy(tmpIm, imOut);
 

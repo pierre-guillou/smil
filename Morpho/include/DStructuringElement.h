@@ -537,8 +537,7 @@ namespace smil
       this->setName();
 
       int zList[] = {0, -1, 1};
-      for (int i = 0; i < 3; i++) {
-        int z = zList[i];
+      for (int z : zList) {
         addPoint(0, 0, z);
         addPoint(1, 0, z);
         addPoint(1, -1, z);
@@ -664,8 +663,8 @@ namespace smil
       std::vector<Point<int>> v;
 
       v = bresenhamPoints(0, 0, xf, yf);
-      for (size_t i = 0; i < v.size(); i++)
-        addPoint(v[i].x, v[i].y, v[i].z);
+      for (auto &i : v)
+        addPoint(i.x, i.y, i.z);
     }
   };
 
@@ -722,8 +721,8 @@ namespace smil
 
       Bresenham             line(0, 0, 0, xf, yf, zf);
       std::vector<IntPoint> v = line.getPoints();
-      for (size_t i = 0; i < v.size(); i++)
-        addPoint(v[i].x, v[i].y, v[i].z);
+      for (auto &i : v)
+        addPoint(i.x, i.y, i.z);
     }
   };
 
@@ -766,11 +765,11 @@ namespace smil
       std::vector<Point<int>> v;
       v = bresenhamPoints(0, 0, xf, yf);
 
-      for (size_t i = 0; i < v.size(); i++) {
-        addPoint(v[i].x, v[i].y, v[i].z);
-        if (v[i].x == 0 && v[i].y == 0 && v[i].z == 0)
+      for (auto &i : v) {
+        addPoint(i.x, i.y, i.z);
+        if (i.x == 0 && i.y == 0 && i.z == 0)
           continue;
-        addPoint(-v[i].x, -v[i].y, -v[i].z);
+        addPoint(-i.x, -i.y, -i.z);
       }
     }
   };
@@ -828,11 +827,11 @@ namespace smil
       Bresenham             line(0, 0, 0, xf, yf, zf);
       std::vector<IntPoint> v = line.getPoints();
 
-      for (size_t i = 0; i < v.size(); i++) {
-        addPoint(v[i].x, v[i].y, v[i].z);
-        if (v[i].x == 0 && v[i].y == 0 && v[i].z == 0)
+      for (auto &i : v) {
+        addPoint(i.x, i.y, i.z);
+        if (i.x == 0 && i.y == 0 && i.z == 0)
           continue;
-        addPoint(-v[i].x, -v[i].y, -v[i].z);
+        addPoint(-i.x, -i.y, -i.z);
       }
     }
   };
@@ -897,8 +896,8 @@ namespace smil
     std::vector<Point<int>> v;
 
     v = bresenhamPoints(0, 0, xf, yf);
-    for (size_t i = 0; i < v.size(); i++)
-      se.addPoint(v[i].x, v[i].y, v[i].z);
+    for (auto &i : v)
+      se.addPoint(i.x, i.y, i.z);
     return se;
   }
 

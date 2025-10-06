@@ -110,8 +110,7 @@ namespace smil
 
         bool oddLine = seLoc.odd && (pt.y % 2 != 0);
 
-        for (auto it = seLoc.points.begin(); it != seLoc.points.end(); it++) {
-          IntPoint ptSE = *it;
+        for (auto ptSE : seLoc.points) {
           IntPoint ptNb = pt + ptSE;
           off_t    ofNb;
 

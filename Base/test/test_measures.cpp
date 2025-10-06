@@ -45,8 +45,8 @@ class Test_ValueList : public TestCase
     TEST_ASSERT(vals == valsTruth);
 
     if (retVal != RES_OK)
-      for (vector<UINT8>::iterator it = vals.begin(); it != vals.end(); it++)
-        cout << int(*it) << endl;
+      for (unsigned char &val : vals)
+        cout << int(val) << endl;
   }
 };
 
@@ -174,8 +174,8 @@ class Test_MeasCovariance : public TestCase
     TEST_ASSERT(cov.size() == 5);
 
     if (retVal != RES_OK)
-      for (vector<double>::iterator it = cov.begin(); it != cov.end(); it++)
-        cout << *it << endl;
+      for (double &it : cov)
+        cout << it << endl;
   }
 };
 

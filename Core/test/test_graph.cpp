@@ -60,10 +60,9 @@ class Test_MST : public TestCase
     TEST_ASSERT(mst.getEdges() == mstTruth);
 
     if (retVal != RES_OK) {
-      for (vector<Edge<> >::const_iterator it = mst.getEdges().begin();
-           it != mst.getEdges().end(); it++)
-        cout << (*it).source << "-" << (*it).target << " (" << (*it).weight
-             << ")" << endl;
+      for (const auto &it : mst.getEdges())
+        cout << it.source << "-" << it.target << " (" << it.weight << ")"
+             << endl;
     }
   }
 };
@@ -93,9 +92,8 @@ class Test_Labelize : public TestCase
 
     if (retVal != RES_OK) {
       cout << endl;
-      for (map<size_t, size_t>::const_iterator it = labels.begin();
-           it != labels.end(); it++)
-        cout << it->first << "-" << it->second << endl;
+      for (const auto &label : labels)
+        cout << label.first << "-" << label.second << endl;
     }
   }
 };

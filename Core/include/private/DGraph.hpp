@@ -399,13 +399,12 @@ namespace smil
         return;
 
       NodeEdgesType &nedges = fNodeEdges->second;
-      for (NodeEdgesType::iterator it = nedges.begin(); it != nedges.end();
-           it++) {
-        EdgeType &e = edges[*it];
+      for (const auto &nedge : nedges) {
+        EdgeType &e = edges[nedge];
         if (e.source == node)
-          removeNodeEdge(e.target, *it);
+          removeNodeEdge(e.target, nedge);
         else
-          removeNodeEdge(e.source, *it);
+          removeNodeEdge(e.source, nedge);
         e.desactivate();
       }
       nedges.clear();
@@ -615,9 +614,8 @@ namespace smil
 
       const NodeEdgesType &nEdges = nodeEdgeList.at(ind);
 
-      for (typename NodeEdgesType::const_iterator it = nEdges.begin();
-           it != nEdges.end(); it++) {
-        const EdgeType &e = edges[*it];
+      for (unsigned long nEdge : nEdges) {
+        const EdgeType &e = edges[nEdge];
         if (e.source != ind)
           propagateLabel(e.source, lbl, lookup, nList);
         else if (e.target != ind)
