@@ -212,7 +212,7 @@ namespace smil
                                    const int &lineLen, lineOutType outBuf,
                                    lineInType tmpBuf)
     {
-      if (tmpBuf == NULL)
+      if (tmpBuf == nullptr)
         tmpBuf = cpBuf;
       shiftLine<T_in>(inBuf2, dx, lineLen, tmpBuf, this->borderValue);
       lineFunction._exec(inBuf1, tmpBuf, lineLen, outBuf);
@@ -249,7 +249,7 @@ namespace smil
                                          const int &dx, const int &lineLen,
                                          lineOutType outBuf, lineInType tmpBuf)
     {
-      if (tmpBuf == NULL)
+      if (tmpBuf == nullptr)
         tmpBuf = cpBuf;
       shiftLine<T_in>(inBuf2, dx, lineLen, tmpBuf, this->borderValue);
       lineFunction._exec(inBuf1, tmpBuf, lineLen, outBuf);

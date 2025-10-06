@@ -118,7 +118,7 @@ ImageViewerWidget::ImageViewerWidget(QWidget *parent) : QGraphicsView(parent)
   imagePixmaps.clear();
   overlayPixmaps.clear();
 
-  imScene       = NULL;
+  imScene       = nullptr;
   drawLabelized = false;
   autoRange     = false;
 
@@ -357,7 +357,7 @@ void ImageViewerWidget::createActions()
 void ImageViewerWidget::saveAs(const char *fileName)
 {
   QString fName;
-  if (fileName != NULL)
+  if (fileName != nullptr)
     fName = fileName;
   else
     fName = QFileDialog::getSaveFileName(
@@ -552,7 +552,7 @@ void ImageViewerWidget::mouseReleaseEvent(QMouseEvent *event)
 {
   Qt::MouseButton btn = event->button();
 
-  if (line != 0 && cursorMode == cursorDrawLine) {
+  if (line != nullptr && cursorMode == cursorDrawLine) {
   } else if (btn == Qt::LeftButton)
     setDragMode(QGraphicsView::NoDrag);
 

@@ -42,7 +42,7 @@ class PlotWidget : public QwtPlot
 {
   Q_OBJECT
 public:
-  PlotWidget(QWidget *parent = 0);
+  PlotWidget(QWidget *parent = nullptr);
   QwtPlotCurve *getCurrentCurve()
   {
     return currentCurve;

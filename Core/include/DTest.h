@@ -47,7 +47,7 @@ namespace smil
   class TestCase
   {
   public:
-    TestCase() : stopIfError(false), outStream(NULL)
+    TestCase() : stopIfError(false), outStream(nullptr)
     {
     }
     virtual ~TestCase()

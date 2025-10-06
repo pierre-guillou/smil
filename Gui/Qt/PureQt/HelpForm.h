@@ -44,7 +44,8 @@ class HelpForm : public QWidget
 public:
   // JOE 2024/04/25 explicit HelpForm(QWidget* parent = 0, Qt::WindowFlags /*f*/
   // = 0) :
-  explicit HelpForm(QWidget *parent = 0) : QWidget(parent), ui(new Ui::HelpForm)
+  explicit HelpForm(QWidget *parent = nullptr)
+      : QWidget(parent), ui(new Ui::HelpForm)
   {
     ui->setupUi(this);
   }

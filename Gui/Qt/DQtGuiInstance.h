@@ -45,7 +45,7 @@ namespace smil
   class QtGui : public Gui
   {
   public:
-    QtGui() : helpForm(NULL)
+    QtGui() : helpForm(nullptr)
     {
     }
     virtual ~QtGui();

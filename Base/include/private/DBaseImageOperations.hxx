@@ -69,7 +69,7 @@ namespace smil
     for (UINT i = 0; i < bufferNumber; i++)
       ImDtTypes<T>::deleteLine(alignedBuffers[i]);
     delete[] alignedBuffers;
-    alignedBuffers = NULL;
+    alignedBuffers = nullptr;
   }
 
   template <class T>

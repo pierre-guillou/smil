@@ -456,7 +456,7 @@ namespace smil
     void resetArrays()
     {
       for (UINT i = 0; i < N; i++)
-        arrays[i] = NULL;
+        arrays[i] = nullptr;
     }
 
     bool isAllocated()
@@ -510,7 +510,7 @@ namespace smil
 
     MultichannelArray &operator=(void *ptr)
     {
-      ASSERT((ptr == NULL), "Do not assign pointer to MultichannelArray",
+      ASSERT((ptr == nullptr), "Do not assign pointer to MultichannelArray",
              *this);
 
       deleteArrays();

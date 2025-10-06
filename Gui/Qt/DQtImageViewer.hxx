@@ -52,18 +52,18 @@ namespace smil
   QtImageViewer<T>::QtImageViewer() : BASE_QT_VIEWER(NULL)
   {
 #ifdef USE_QWT
-    histoPlot   = NULL;
-    profilePlot = NULL;
+    histoPlot   = nullptr;
+    profilePlot = nullptr;
 #endif // USE_QWT
   }
 
   template <class T>
   QtImageViewer<T>::QtImageViewer(Image<T> &im)
-      : ImageViewer<T>(im), BASE_QT_VIEWER(NULL)
+      : ImageViewer<T>(im), BASE_QT_VIEWER(nullptr)
   {
 #ifdef USE_QWT
-    histoPlot   = NULL;
-    profilePlot = NULL;
+    histoPlot   = nullptr;
+    profilePlot = nullptr;
 #endif // USE_QWT
     setImage(im);
   }
