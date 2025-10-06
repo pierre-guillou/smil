@@ -1,4 +1,7 @@
 name: nonreg-tests_ubuntu-latest
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   workflow_call:
@@ -34,10 +37,6 @@ jobs:
             qtbase5-dev \
             libqwt-qt5-dev \
             ninja-build
-          sudo rm /usr/lib/x86_64-linux-gnu/libpng16.so*
-          sudo rm /usr/lib/x86_64-linux-gnu/libcurl.so*
-          sudo rm /usr/lib/x86_64-linux-gnu/libjpeg.so*
-          sudo rm /usr/lib/x86_64-linux-gnu/libtiff.so*
 
       - name: Setup Python Version
         uses: actions/setup-python@v5
@@ -48,33 +47,44 @@ jobs:
         run: |
           python3 -m pip install numpy swig
 
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
       - name: Create & configure Smil build directory
         run: |
           mkdir build && cd build
           cmake \
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
-            -DUSE_NUMPY=ON \
+            -DUSE_OPTIMIZATION=OFF \
             $GITHUB_WORKSPACE
         env:
           CMAKE_GENERATOR: Ninja
           CMAKE_BUILD_TYPE: Release
+          CMAKE_CC_COMPILER_LAUNCHER: sccache
+          CMAKE_CXX_COMPILER_LAUNCHER: sccache
+          SCCACHE_GHA_ENABLED: "true"
 
       - name: Build Smil
         run: |
           cd build
-          cmake --build . --parallel 3
+          cmake --build .
 
       - name: Install Smil
         run: |
           cd build
           sudo cmake --build . --target install
-          sudo mv /usr/local/lib/Smil/_*.so /usr/local/lib/Smil/smilPython
 
       - name: Execute non-regression tests and benchmarks
         run: |
           cd build
-          ctest
+          ctest -LE python
+
+      - name: Execute Python tests
+        continue-on-error: true
+        run: |
+          cd build
+          ctest -L python --output-on-failure
         env:
           PYTHONPATH: /usr/local/lib/Smil
-        continue-on-error: true
