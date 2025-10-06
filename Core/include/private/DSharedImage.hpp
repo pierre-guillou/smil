@@ -48,8 +48,8 @@ namespace smil
   class SharedImage : public Image<T>
   {
   public:
-    typedef Image<T>                    parentClass;
-    typedef typename Image<T>::lineType lineType;
+    using parentClass = Image<T>;
+    using lineType    = typename Image<T>::lineType;
 
     //! Default constructor
     SharedImage() : Image<T>()

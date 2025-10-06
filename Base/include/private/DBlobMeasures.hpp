@@ -287,7 +287,7 @@ namespace smil
     std::map<labelT, Vector_double> bmoments;
     bmoments = processBlobMeasure<T, labelT, measMomentsFunc<T>>(imIn, blobs);
     if (central) {
-      typedef typename std::map<labelT, Vector_double>::iterator mIter;
+      using mIter = typename std::map<labelT, Vector_double>::iterator;
       for (mIter it = bmoments.begin(); it != bmoments.end(); it++) {
         it->second = centerMoments(it->second);
       }
@@ -320,7 +320,7 @@ namespace smil
     std::map<T, Vector_double> bmoments;
     bmoments = processBlobMeasure<T, T, measMomentsFunc<T>>(imLbl, onlyNonZero);
     if (central) {
-      typedef typename std::map<T, Vector_double>::iterator mIter;
+      using mIter = typename std::map<T, Vector_double>::iterator;
       for (mIter it = bmoments.begin(); it != bmoments.end(); it++) {
         it->second = centerMoments(it->second);
       }

@@ -231,8 +231,8 @@ namespace smil
     // Transpose imIn2 matrix to allow vectorization
     ASSERT((matTranspose(imIn2, transIm) == RES_OK));
 
-    typedef typename ImDtTypes<T>::sliceType sliceType;
-    typedef typename ImDtTypes<T>::lineType  lineType;
+    using sliceType = typename ImDtTypes<T>::sliceType;
+    using lineType  = typename ImDtTypes<T>::lineType;
 
     sliceType lines    = imIn1.getLines();
     sliceType outLines = imOut.getLines();

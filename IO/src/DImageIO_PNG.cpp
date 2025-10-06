@@ -286,7 +286,7 @@ namespace smil
     ASSERT(hStruct.bit_depth == 8 && hStruct.channels == 3,
            "Not a 24bit RGB image", RES_ERR);
 
-    typedef UINT8 *datap;
+    using datap         = UINT8 *;
     datap         *data = new datap[height];
     for (size_t j = 0; j < height; j++)
       data[j] = new UINT8[width * 3];
@@ -393,7 +393,7 @@ namespace smil
 
     ASSERT(writePNGHeader(fp, hStruct) == RES_OK);
 
-    typedef UINT8 *datap;
+    using datap         = UINT8 *;
     datap         *data = new datap[height];
     for (size_t j = 0; j < height; j++)
       data[j] = new UINT8[width * 3];

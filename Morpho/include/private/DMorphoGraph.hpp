@@ -49,15 +49,15 @@ namespace smil
 #endif // SWIG
   {
   public:
-    typedef MorphImageFunctionBase<T1, T2> parentClass;
-    typedef Image<T1>                      imageInType;
-    typedef Image<T2>                      imageOutType;
+    using parentClass  = MorphImageFunctionBase<T1, T2>;
+    using imageInType  = Image<T1>;
+    using imageOutType = Image<T2>;
 
-    typedef typename graphT::NodeType       NodeType;
-    typedef typename graphT::EdgeType       EdgeType;
-    typedef typename graphT::EdgeWeightType EdgeWeightType;
-    typedef typename graphT::NodeListType   NodeListType;
-    typedef typename graphT::EdgeListType   EdgeListType;
+    using NodeType       = typename graphT::NodeType;
+    using EdgeType       = typename graphT::EdgeType;
+    using EdgeWeightType = typename graphT::EdgeWeightType;
+    using NodeListType   = typename graphT::NodeListType;
+    using EdgeListType   = typename graphT::EdgeListType;
 
     mosaicToGraphFunct()
     {
@@ -231,7 +231,7 @@ namespace smil
                       const Image<T2> &imNodeValues, Graph<GT1, GT2> &graph,
                       const StrElt &se = DEFAULT_SE)
   {
-    typedef Graph<GT1, GT2>            graphT;
+    using graphT = Graph<GT1, GT2>;
     mosaicToGraphFunct<T1, T2, graphT> f;
 
     return f(imMosaic, imEdgeValues, imNodeValues, graph, se);
@@ -241,7 +241,7 @@ namespace smil
   mosaicToGraph(const Image<T1> &imMosaic, const Image<T2> &imEdgeValues,
                 const Image<T2> &imNodeValues, const StrElt &se = DEFAULT_SE)
   {
-    typedef Graph<T1, T2>              graphT;
+    using graphT = Graph<T1, T2>;
     mosaicToGraphFunct<T1, T2, graphT> f;
 
     return f(imMosaic, imEdgeValues, imNodeValues, se);
@@ -250,7 +250,7 @@ namespace smil
   RES_T mosaicToGraph(const Image<T1> &imMosaic, const Image<T2> &imEdgeValues,
                       Graph<GT1, GT2> &graph, const StrElt &se = DEFAULT_SE)
   {
-    typedef Graph<GT1, GT2>            graphT;
+    using graphT = Graph<GT1, GT2>;
     mosaicToGraphFunct<T1, T2, graphT> f;
 
     return f(imMosaic, imEdgeValues, graph, se);
@@ -260,7 +260,7 @@ namespace smil
                               const Image<T2> &imEdgeValues,
                               const StrElt    &se = DEFAULT_SE)
   {
-    typedef Graph<T1, T2>              graphT;
+    using graphT = Graph<T1, T2>;
     mosaicToGraphFunct<T1, T2, graphT> f;
 
     return f(imMosaic, imEdgeValues, se);
@@ -269,7 +269,7 @@ namespace smil
   RES_T mosaicToGraph(const Image<T1> &imMosaic, Graph<GT1, GT2> &graph,
                       const StrElt &se = DEFAULT_SE)
   {
-    typedef Graph<GT1, GT2>            graphT;
+    using graphT = Graph<GT1, GT2>;
     mosaicToGraphFunct<T1, T1, graphT> f;
 
     return f(imMosaic, graph, se);
@@ -278,7 +278,7 @@ namespace smil
   Graph<T1, UINT> mosaicToGraph(const Image<T1> &imMosaic,
                                 const StrElt    &se = DEFAULT_SE)
   {
-    typedef Graph<T1, UINT>            graphT;
+    using graphT = Graph<T1, UINT>;
     mosaicToGraphFunct<T1, T1, graphT> f;
 
     return f(imMosaic, se);
@@ -400,7 +400,7 @@ namespace smil
   {
     ASSERT_ALLOCATED(&imOut);
 
-    typedef typename graphT::NodeType NodeType;
+    using NodeType                            = typename graphT::NodeType;
     std::map<NodeType, NodeType>      nodeMap = graph.labelizeNodes();
     std::map<T, T>                    lut(nodeMap.begin(), nodeMap.end());
 
@@ -463,8 +463,8 @@ namespace smil
 
     std::map<mosImT, std::vector<double>> barys = blobsBarycenter(imMosaic);
 
-    typedef typename graphT::EdgeType   EdgeType;
-    typedef const std::vector<EdgeType> EdgeListType;
+    using EdgeType                            = typename graphT::EdgeType;
+    using EdgeListType                        = const std::vector<EdgeType>;
     EdgeListType                       &edges = graph.getEdges();
 
     for (typename EdgeListType::const_iterator it = edges.begin();

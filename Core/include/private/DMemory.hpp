@@ -189,15 +189,15 @@ namespace smil
   {
   public:
     //    typedefs
-    typedef T              value_type;
-    typedef std::size_t    size_type;
-    typedef std::ptrdiff_t difference_type;
+    using value_type      = T;
+    using size_type       = std::size_t;
+    using difference_type = std::ptrdiff_t;
 
   public:
     //    convert an allocator<T> to allocator<U>
     template <typename U>
     struct rebind {
-      typedef Allocator<U> other;
+      using other = Allocator<U>;
     };
 
   public:

@@ -903,10 +903,10 @@ namespace smil
     return *this;
   }
 
-  typedef Image<UINT8>  Image_UINT8;
-  typedef Image<UINT16> Image_UINT16;
-  typedef Image<UINT32> Image_UINT32;
-  typedef Image<bool>   Image_bool;
+  using Image_UINT8  = Image<UINT8>;
+  using Image_UINT16 = Image<UINT16>;
+  using Image_UINT32 = Image<UINT32>;
+  using Image_bool   = Image<bool>;
 
 } // namespace smil
 

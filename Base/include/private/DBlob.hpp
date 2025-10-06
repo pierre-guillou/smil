@@ -79,10 +79,10 @@ namespace smil
    */
   struct Blob {
     std::vector<PixelSequence>                         sequences;
-    typedef std::vector<PixelSequence>::iterator       sequences_iterator;
-    typedef std::vector<PixelSequence>::const_iterator sequences_const_iterator;
-    typedef std::vector<PixelSequence>::const_reverse_iterator
-        sequences_const_reverse_iterator;
+    using sequences_iterator       = std::vector<PixelSequence>::iterator;
+    using sequences_const_iterator = std::vector<PixelSequence>::const_iterator;
+    using sequences_const_reverse_iterator =
+        std::vector<PixelSequence>::const_reverse_iterator;
   };
 
   /**
@@ -256,7 +256,7 @@ namespace smil
     int id = 0;
 
     typename std::map<labelT, Blob>::const_iterator blob_it;
-    typedef typename Blob::sequences_const_iterator seqit_t;
+    using seqit_t = typename Blob::sequences_const_iterator;
 
     for (blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
       seqit_t it_end = blob_it->second.sequences.end();
@@ -292,7 +292,7 @@ namespace smil
     size_t offset = imIn.getOffsetFromCoords(x, y, z);
 
     typename std::map<labelT, Blob>::const_iterator blob_it;
-    typedef typename Blob::sequences_const_iterator seqit_t;
+    using seqit_t = typename Blob::sequences_const_iterator;
 
     for (blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
       seqit_t it_end = blob_it->second.sequences.end();

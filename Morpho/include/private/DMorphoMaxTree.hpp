@@ -53,8 +53,8 @@ namespace smil
 
 #ifndef SWIG
 
-  typedef size_t Offset_T;
-  typedef UINT32 Label_T;
+  using Offset_T = size_t;
+  using Label_T  = UINT32;
 
   template <class T, class CriterionT, class Offset_T = size_t,
             class Label_T = UINT32>

@@ -201,49 +201,49 @@ namespace smil
    *
    * Point coordinates defined as @b double values
    */
-  typedef Point<double> DoublePoint;
+  using DoublePoint = Point<double>;
 
   /** IntPoint
    *
    * Point coordinates defined as @b int values
    */
-  typedef Point<int> IntPoint;
+  using IntPoint = Point<int>;
 
   /** UintPoint
    *
    * Point coordinates defined as @b UINT (unsigned int) values
    */
-  typedef Point<UINT> UintPoint;
+  using UintPoint = Point<UINT>;
 
   /** Vector_double
    *
    * A vector of @b double values
    */
-  typedef std::vector<double> Vector_double;
+  using Vector_double = std::vector<double>;
 
   /** Matrix_double
    *
    * A Matrix of @b double values implemented as a vector of vectors
    */
-  typedef std::vector<Vector_double> Matrix_double;
+  using Matrix_double = std::vector<Vector_double>;
 
   /** Vector_UINT
    *
    * A vector of @b UINT (unsigned int) values
    */
-  typedef std::vector<UINT> Vector_UINT;
+  using Vector_UINT = std::vector<UINT>;
 
   /** Vector_size_t
    *
    * A vector of @b size_t values (natural - non negative values)
    */
-  typedef std::vector<size_t> Vector_size_t;
+  using Vector_size_t = std::vector<size_t>;
 
   /** Vector_off_t
    *
    * A vector of @b off_t values (integer - positive and negative values)
    */
-  typedef std::vector<off_t> Vector_off_t;
+  using Vector_off_t = std::vector<off_t>;
 
   /**
    * Rectangle

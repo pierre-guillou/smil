@@ -78,9 +78,9 @@ namespace smil
   class labelFunctGeneric : public MorphImageFunctionBase<T1, T2>
   {
   public:
-    typedef MorphImageFunctionBase<T1, T2>     parentClass;
-    typedef typename parentClass::imageInType  imageInType;
-    typedef typename parentClass::imageOutType imageOutType;
+    using parentClass  = MorphImageFunctionBase<T1, T2>;
+    using imageInType  = typename parentClass::imageInType;
+    using imageOutType = typename parentClass::imageOutType;
 
     size_t getLabelNbr()
     {
@@ -189,13 +189,13 @@ namespace smil
   class labelFunctFast : public MorphImageFunctionBase<T1, T2>
   {
   public:
-    typedef MorphImageFunctionBase<T1, T2>     parentClass;
-    typedef typename parentClass::imageInType  imageInType;
-    typedef typename parentClass::imageOutType imageOutType;
-    typedef typename imageInType::lineType     lineInType;
-    typedef typename imageInType::sliceType    sliceInType;
-    typedef typename imageOutType::lineType    lineOutType;
-    typedef typename imageOutType::sliceType   sliceOutType;
+    using parentClass  = MorphImageFunctionBase<T1, T2>;
+    using imageInType  = typename parentClass::imageInType;
+    using imageOutType = typename parentClass::imageOutType;
+    using lineInType   = typename imageInType::lineType;
+    using sliceInType  = typename imageInType::sliceType;
+    using lineOutType  = typename imageOutType::lineType;
+    using sliceOutType = typename imageOutType::sliceType;
 
     size_t getLabelNbr()
     {
@@ -385,10 +385,10 @@ namespace smil
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     // Typedefs
-    typedef Image<T1>               inT;
-    typedef Image<T2>               outT;
-    typedef typename inT::lineType  inLineT;
-    typedef typename outT::lineType outLineT;
+    using inT      = Image<T1>;
+    using outT     = Image<T2>;
+    using inLineT  = typename inT::lineType;
+    using outLineT = typename outT::lineType;
 
     // Initialisation.
     StrElt cpSe = se.noCenter();
@@ -466,10 +466,10 @@ namespace smil
     ASSERT_SAME_SIZE(&imIn2, &imOut);
 
     // Typedefs
-    typedef Image<T1>               inT;
-    typedef Image<T2>               outT;
-    typedef typename inT::lineType  inLineT;
-    typedef typename outT::lineType outLineT;
+    using inT      = Image<T1>;
+    using outT     = Image<T2>;
+    using inLineT  = typename inT::lineType;
+    using outLineT = typename outT::lineType;
 
     // Initialisation.
     StrElt cpSe = se.noCenter();
@@ -774,10 +774,10 @@ namespace smil
     std::map<T3, Blob>   blobs = computeBlobs(imLabel, true);
     std::map<T3, double> markers;
 
-    typedef typename std::map<T3, T2>::iterator                  itT2_T;
-    typedef typename std::map<T3, std::vector<T2>>::iterator     itT2Vec_T;
-    typedef typename std::map<T3, double>::iterator              itD_T;
-    typedef typename std::map<T3, std::vector<double>>::iterator itDVec_T;
+    using itT2_T    = typename std::map<T3, T2>::iterator;
+    using itT2Vec_T = typename std::map<T3, std::vector<T2>>::iterator;
+    using itD_T     = typename std::map<T3, double>::iterator;
+    using itDVec_T  = typename std::map<T3, std::vector<double>>::iterator;
 
     switch (key) {
       case 1: {
@@ -1124,7 +1124,7 @@ namespace smil
   class neighborsFunct : public MorphImageFunctionBase<T1, T2>
   {
   public:
-    typedef MorphImageFunctionBase<T1, T2> parentClass;
+    using parentClass = MorphImageFunctionBase<T1, T2>;
 
     inline void processPixel(size_t            pointOffset,
                              std::vector<int> &dOffsetList) override

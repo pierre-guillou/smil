@@ -57,7 +57,7 @@ namespace smil
       }
     }
 
-    typedef typename ImDtTypes<T>::lineType bufferType;
+    using bufferType = typename ImDtTypes<T>::lineType;
 
     RES_T initialize(size_t bufSize, SMIL_UNUSED size_t nbr = 0)
     {

@@ -46,17 +46,17 @@ namespace smil
       : public MorphImageFunction<T_in, lineFunction_T, T_out>
   {
   public:
-    typedef MorphImageFunction<T_in, lineFunction_T, T_out> parentClass;
+    using parentClass = MorphImageFunction<T_in, lineFunction_T, T_out>;
 
-    typedef Image<T_in>                         imageInType;
-    typedef typename ImDtTypes<T_in>::lineType  lineInType;
-    typedef typename ImDtTypes<T_in>::sliceType sliceInType;
-    typedef typename ImDtTypes<T_in>::volType   volInType;
+    using imageInType = Image<T_in>;
+    using lineInType  = typename ImDtTypes<T_in>::lineType;
+    using sliceInType = typename ImDtTypes<T_in>::sliceType;
+    using volInType   = typename ImDtTypes<T_in>::volType;
 
-    typedef Image<T_out>                         imageOutType;
-    typedef typename ImDtTypes<T_out>::lineType  lineOutType;
-    typedef typename ImDtTypes<T_out>::sliceType sliceOutType;
-    typedef typename ImDtTypes<T_out>::volType   volOutType;
+    using imageOutType = Image<T_out>;
+    using lineOutType  = typename ImDtTypes<T_out>::lineType;
+    using sliceOutType = typename ImDtTypes<T_out>::sliceType;
+    using volOutType   = typename ImDtTypes<T_out>::volType;
 
     unaryMorphArrowImageFunction(
         T_in border             = std::numeric_limits<T_in>::min(),
@@ -258,12 +258,12 @@ namespace smil
   public:
     outT propagationValue;
 
-    typedef Image<arrowT>               arrowIT;
-    typedef Image<statutT>              statutIT;
-    typedef Image<outT>                 outIT;
-    typedef typename arrowIT::lineType  arrowLT;
-    typedef typename statutIT::lineType statutLT;
-    typedef typename outIT::lineType    outLT;
+    using arrowIT  = Image<arrowT>;
+    using statutIT = Image<statutT>;
+    using outIT    = Image<outT>;
+    using arrowLT  = typename arrowIT::lineType;
+    using statutLT = typename statutIT::lineType;
+    using outLT    = typename outIT::lineType;
 
     arrowPropagate()          = default;
     virtual ~arrowPropagate() = default;
@@ -333,10 +333,10 @@ namespace smil
 
     T_out trueVal, falseVal;
 
-    typedef binaryLineFunctionBase<T1, T2, T_out> parentClass;
-    typedef typename parentClass::lineType1       lineType1;
-    typedef typename parentClass::lineType2       lineType2;
-    typedef typename parentClass::lineOutType     lineOutType;
+    using parentClass = binaryLineFunctionBase<T1, T2, T_out>;
+    using lineType1   = typename parentClass::lineType1;
+    using lineType2   = typename parentClass::lineType2;
+    using lineOutType = typename parentClass::lineOutType;
 
     inline void operator()(const lineType1 lIn1, const lineType2 lIn2,
                            const size_t size, lineOutType lOut)
@@ -358,17 +358,17 @@ namespace smil
   class arrowMinFunction : public MorphImageFunctionBase<T, arrowT>
   {
   public:
-    typedef MorphImageFunctionBase<T, arrowT> parentClass;
+    using parentClass = MorphImageFunctionBase<T, arrowT>;
 
-    typedef typename parentClass::imageInType imageInType;
-    typedef typename imageInType::lineType    lineInType;
-    typedef typename imageInType::lineType    sliceInType;
-    typedef typename imageInType::volType     volInType;
+    using imageInType = typename parentClass::imageInType;
+    using lineInType  = typename imageInType::lineType;
+    using sliceInType = typename imageInType::lineType;
+    using volInType   = typename imageInType::volType;
 
-    typedef typename parentClass::imageOutType imageArrowType;
-    typedef typename imageArrowType::lineType  lineArrowType;
-    typedef typename imageArrowType::sliceType sliceArrowType;
-    typedef typename imageArrowType::volType   volArrowType;
+    using imageArrowType = typename parentClass::imageOutType;
+    using lineArrowType  = typename imageArrowType::lineType;
+    using sliceArrowType = typename imageArrowType::sliceType;
+    using volArrowType   = typename imageArrowType::volType;
 
     arrowMinFunction(T border = std::numeric_limits<T>::max())
         : borderValue(border), MorphImageFunctionBase<T, arrowT>()
@@ -484,15 +484,15 @@ namespace smil
   class arrowMinStepFunction : public MorphImageFunctionBase<T, arrowT>
   {
   public:
-    typedef MorphImageFunctionBase<T, arrowT>  parentClass;
-    typedef typename parentClass::imageInType  imageInType;
-    typedef typename imageInType::lineType     lineInType;
-    typedef typename imageInType::lineType     sliceInType;
-    typedef typename imageInType::volType      volInType;
-    typedef typename parentClass::imageOutType imageArrowType;
-    typedef typename imageArrowType::lineType  lineArrowType;
-    typedef typename imageArrowType::sliceType sliceArrowType;
-    typedef typename imageArrowType::volType   volArrowType;
+    using parentClass    = MorphImageFunctionBase<T, arrowT>;
+    using imageInType    = typename parentClass::imageInType;
+    using lineInType     = typename imageInType::lineType;
+    using sliceInType    = typename imageInType::lineType;
+    using volInType      = typename imageInType::volType;
+    using imageArrowType = typename parentClass::imageOutType;
+    using lineArrowType  = typename imageArrowType::lineType;
+    using sliceArrowType = typename imageArrowType::sliceType;
+    using volArrowType   = typename imageArrowType::volType;
 
     arrowMinStepFunction(T border = std::numeric_limits<T>::max())
         : borderValue(border), MorphImageFunctionBase<T, arrowT>()

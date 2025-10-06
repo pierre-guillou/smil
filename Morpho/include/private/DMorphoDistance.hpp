@@ -113,10 +113,10 @@ namespace smil
 
       ImageFreezer freeze(imOut);
 
-      typedef Image<T1>                       imageInType;
-      typedef typename imageInType::lineType  lineInType;
-      typedef Image<T2>                       imageOutType;
-      typedef typename imageOutType::lineType lineOutType;
+      using imageInType  = Image<T1>;
+      using lineInType   = typename imageInType::lineType;
+      using imageOutType = Image<T2>;
+      using lineOutType  = typename imageOutType::lineType;
 
       lineInType  pixelsIn;
       lineOutType pixelsOut = imOut.getPixels();
@@ -219,10 +219,10 @@ namespace smil
       Image<T1>    tmp(imIn);
       ASSERT(inf(imIn, T1(1), tmp) == RES_OK);
 
-      typedef Image<T1>                       imageInType;
-      typedef typename imageInType::lineType  lineInType;
-      typedef Image<T2>                       imageOutType;
-      typedef typename imageOutType::lineType lineOutType;
+      using imageInType  = Image<T1>;
+      using lineInType   = typename imageInType::lineType;
+      using imageOutType = Image<T2>;
+      using lineOutType  = typename imageOutType::lineType;
 
       lineInType  pixelsIn  = tmp.getPixels();
       lineOutType pixelsOut = imOut.getPixels();
@@ -326,10 +326,10 @@ namespace smil
       Image<T1>    tmp(imIn);
       ASSERT(inf(imIn, T1(1), tmp) == RES_OK);
 
-      typedef Image<T1>                       imageInType;
-      typedef typename imageInType::lineType  lineInType;
-      typedef Image<T2>                       imageOutType;
-      typedef typename imageOutType::lineType lineOutType;
+      using imageInType  = Image<T1>;
+      using lineInType   = typename imageInType::lineType;
+      using imageOutType = Image<T2>;
+      using lineOutType  = typename imageOutType::lineType;
 
       lineInType  pixelsIn  = tmp.getPixels();
       lineOutType pixelsOut = imOut.getPixels();
@@ -418,10 +418,10 @@ namespace smil
       ImageFreezer freeze(imOut);
       Image<T2>    tmp(imIn);
 
-      typedef Image<T1>                       imageInType;
-      typedef typename imageInType::lineType  lineInType;
-      typedef Image<T2>                       imageOutType;
-      typedef typename imageOutType::lineType lineOutType;
+      using imageInType  = Image<T1>;
+      using lineInType   = typename imageInType::lineType;
+      using imageOutType = Image<T2>;
+      using lineOutType  = typename imageOutType::lineType;
 
       lineInType  pixelsIn  = imIn.getPixels();
       lineOutType pixelsOut = imOut.getPixels();
@@ -637,10 +637,10 @@ namespace smil
 
     Image<UINT32> imOffset(imIn);
 
-    typedef Image<T1>                       imageInType;
-    typedef typename imageInType::lineType  lineInType;
-    typedef Image<T2>                       imageOutType;
-    typedef typename imageOutType::lineType lineOutType;
+    using imageInType  = Image<T1>;
+    using lineInType   = typename imageInType::lineType;
+    using imageOutType = Image<T2>;
+    using lineOutType  = typename imageOutType::lineType;
 
     lineInType  pixelsIn, pixelsMask;
     lineOutType pixelsOut = imOut.getPixels();
@@ -650,7 +650,7 @@ namespace smil
     std::vector<IntPoint> sePts;
     off_t                 sePtsNbr;
 
-    typedef size_t                 OffsetT;
+    using OffsetT = size_t;
     HierarchicalQueue<T2, OffsetT> hq;
     // T3D fah      PriorityQueueT<float, OffsetT> hq(true);
     // Set image to 1 when pixels are !=0
@@ -834,10 +834,10 @@ namespace smil
     ImageFreezer freeze(imOut);
     Image<T2>    tmp(imIn);
 
-    typedef Image<T1>                       imageInType;
-    typedef typename imageInType::lineType  lineInType;
-    typedef Image<T2>                       imageOutType;
-    typedef typename imageOutType::lineType lineOutType;
+    using imageInType  = Image<T1>;
+    using lineInType   = typename imageInType::lineType;
+    using imageOutType = Image<T2>;
+    using lineOutType  = typename imageOutType::lineType;
 
     lineInType  pixelsIn  = imIn.getPixels();
     lineOutType pixelsOut = imOut.getPixels();
