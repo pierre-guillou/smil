@@ -58,7 +58,7 @@ namespace smil
   struct measAreaFunc : public MeasureFunctionBase<T, double> {
     typedef typename Image<T>::lineType lineType;
 
-    virtual void processSequence(lineType /*lineIn*/, size_t size)
+    void processSequence(lineType /*lineIn*/, size_t size) override
     {
       this->retVal += size;
     }
@@ -99,7 +99,7 @@ namespace smil
   struct measVolFunc : public MeasureFunctionBase<T, double> {
     typedef typename Image<T>::lineType lineType;
 
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++)
         this->retVal += double(lineIn[i]);
@@ -172,12 +172,12 @@ namespace smil
     double                              sum1, sum2;
     double                              pixNbr;
 
-    virtual void initialize(const Image<T> & /*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal.clear();
       sum1 = sum2 = pixNbr = 0.;
     }
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       double curV;
       for (size_t i = 0; i < size; i++) {
@@ -187,7 +187,7 @@ namespace smil
         sum2 += curV * curV;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       double mean_val = pixNbr == 0 ? 0 : sum1 / pixNbr;
       double std_dev_val =
@@ -226,11 +226,11 @@ namespace smil
   template <class T>
   struct measMinValFunc : public MeasureFunctionBase<T, T> {
     typedef typename Image<T>::lineType lineType;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal = std::numeric_limits<T>::max();
     }
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++)
         if (lineIn[i] < this->retVal)
@@ -242,12 +242,12 @@ namespace smil
   struct measMinValPosFunc : public MeasureFunctionWithPos<T, T> {
     typedef typename Image<T>::lineType lineType;
     Point<UINT>                         pt;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal = std::numeric_limits<T>::max();
     }
-    virtual void processSequence(lineType lineIn, size_t size, size_t x,
-                                 size_t y, size_t z)
+    void processSequence(lineType lineIn, size_t size, size_t x, size_t y,
+                         size_t z) override
     {
       for (size_t i = 0; i < size; i++, x++)
         if (lineIn[i] < this->retVal) {
@@ -303,11 +303,11 @@ namespace smil
   template <class T>
   struct measMaxValFunc : public MeasureFunctionBase<T, T> {
     typedef typename Image<T>::lineType lineType;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal = std::numeric_limits<T>::min();
     }
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++)
         if (lineIn[i] > this->retVal)
@@ -319,12 +319,12 @@ namespace smil
   struct measMaxValPosFunc : public MeasureFunctionWithPos<T, T> {
     typedef typename Image<T>::lineType lineType;
     Point<UINT>                         pt;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal = std::numeric_limits<T>::min();
     }
-    virtual void processSequence(lineType lineIn, size_t size, size_t x,
-                                 size_t y, size_t z)
+    void processSequence(lineType lineIn, size_t size, size_t x, size_t y,
+                         size_t z) override
     {
       for (size_t i = 0; i < size; i++, x++)
         if (lineIn[i] > this->retVal) {
@@ -381,13 +381,13 @@ namespace smil
   struct measMinMaxValFunc : public MeasureFunctionBase<T, std::vector<T>> {
     typedef typename Image<T>::lineType lineType;
     T                                   minVal, maxVal;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal.clear();
       maxVal = std::numeric_limits<T>::min();
       minVal = std::numeric_limits<T>::max();
     }
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
@@ -397,7 +397,7 @@ namespace smil
           minVal = val;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       this->retVal.push_back(minVal);
       this->retVal.push_back(maxVal);
@@ -433,18 +433,18 @@ namespace smil
     typedef typename Image<T>::lineType lineType;
     std::set<T>                         valList;
 
-    virtual void initialize(const Image<T> & /*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal.clear();
       valList.clear();
     }
 
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++)
         valList.insert(lineIn[i]);
     }
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       // Copy the content of the set into the ret vector
       std::copy(valList.begin(), valList.end(),
@@ -487,7 +487,7 @@ namespace smil
     std::map<int, int> nbList;
     int                maxNb;
     T                  mode;
-    virtual void       initialize(const Image<T>       &/*imIn*/)
+    void               initialize(const Image<T>               &/*imIn*/) override
     {
       // BMI            this->retVal.clear();
       nbList.clear();
@@ -495,7 +495,7 @@ namespace smil
       mode  = 0;
     }
 
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
@@ -553,7 +553,7 @@ namespace smil
     std::map<int, int> nbList;
     size_t             acc_elem, total_elems;
     T                  medianval;
-    virtual void       initialize(const Image<T>       &/*imIn*/)
+    void               initialize(const Image<T>               &/*imIn*/) override
     {
       // BMI            this->retVal.clear();
       nbList.clear();
@@ -562,7 +562,7 @@ namespace smil
       total_elems = 0;
     }
 
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
@@ -578,7 +578,7 @@ namespace smil
         //            this->retVal = medianval;
     } // virtual processSequence
 
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       typedef std::map<int, int>::iterator it_type;
 
@@ -670,13 +670,13 @@ namespace smil
   struct measBarycenterFunc : public MeasureFunctionWithPos<T, Vector_double> {
     typedef typename Image<T>::lineType lineType;
     double                              xSum, ySum, zSum, tSum;
-    virtual void                        initialize(const Image<T>                        &/*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal.clear();
       xSum = ySum = zSum = tSum = 0.;
     }
-    virtual void processSequence(lineType lineIn, size_t size, size_t x,
-                                 size_t y, size_t z)
+    void processSequence(lineType lineIn, size_t size, size_t x, size_t y,
+                         size_t z) override
     {
       for (size_t i = 0; i < size; i++, x++) {
         T pixVal = lineIn[i];
@@ -686,7 +686,7 @@ namespace smil
         tSum += double(pixVal);
       }
     }
-    virtual void finalize(const Image<T> &imIn)
+    void finalize(const Image<T> &imIn) override
     {
       this->retVal.push_back(xSum / tSum);
       this->retVal.push_back(ySum / tSum);
@@ -723,7 +723,7 @@ namespace smil
     typedef typename Image<T>::lineType lineType;
     double                              xMin, xMax, yMin, yMax, zMin, zMax;
     bool                                im3d;
-    virtual void                        initialize(const Image<T> &imIn)
+    void initialize(const Image<T> &imIn) override
     {
       this->retVal.clear();
       size_t imSize[3];
@@ -737,8 +737,8 @@ namespace smil
       zMin = imSize[2];
       zMax = 0;
     }
-    virtual void processSequence(lineType /*lineIn*/, size_t size, size_t x,
-                                 size_t y, size_t z)
+    void processSequence(lineType /*lineIn*/, size_t size, size_t x, size_t y,
+                         size_t z) override
     {
       if (x < xMin)
         xMin = x;
@@ -755,7 +755,7 @@ namespace smil
           zMax = z;
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       this->retVal.push_back(UINT(xMin));
       this->retVal.push_back(UINT(yMin));
@@ -797,14 +797,14 @@ namespace smil
     typedef typename Image<T>::lineType lineType;
     double       m000, m100, m010, m110, m200, m020, m001, m101, m011, m002;
     bool         im3d;
-    virtual void initialize(const Image<T> &imIn)
+    void         initialize(const Image<T> &imIn) override
     {
       im3d = (imIn.getDimension() == 3);
       this->retVal.clear();
       m000 = m100 = m010 = m110 = m200 = m020 = m001 = m101 = m011 = m002 = 0.;
     }
-    virtual void processSequence(lineType lineIn, size_t size, size_t x,
-                                 size_t y, size_t z)
+    void processSequence(lineType lineIn, size_t size, size_t x, size_t y,
+                         size_t z) override
     {
       for (size_t i = 0; i < size; i++, x++) {
         double pxVal = double(lineIn[i]);
@@ -822,7 +822,7 @@ namespace smil
         }
       }
     }
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       this->retVal.push_back(m000);
       this->retVal.push_back(m100);
@@ -1248,12 +1248,12 @@ namespace smil
 
     std::map<T, UINT> histo;
 
-    virtual void initialize(const Image<T> & /*imIn*/)
+    void initialize(const Image<T> & /*imIn*/) override
     {
       histo.clear();
     }
 
-    virtual void processSequence(lineType lineIn, size_t size)
+    void processSequence(lineType lineIn, size_t size) override
     {
       for (size_t i = 0; i < size; i++) {
         T val = lineIn[i];
@@ -1263,7 +1263,7 @@ namespace smil
       }
     }
 
-    virtual void finalize(const Image<T> & /*imIn*/)
+    void finalize(const Image<T> & /*imIn*/) override
     {
       double entropy = 0.;
       double sumP    = 0.;

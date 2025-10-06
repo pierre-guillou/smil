@@ -46,9 +46,9 @@ class QImageGraphicsScene : public QGraphicsScene
   Q_OBJECT
 public:
   QImageGraphicsScene(QObject *parent = nullptr);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-  void mousePressEvent(QGraphicsSceneMouseEvent *event);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 signals:
   void onMouseMove(QGraphicsSceneMouseEvent *event);
   void onMousePress(QGraphicsSceneMouseEvent *event);
@@ -61,14 +61,14 @@ class ImageViewerWidget : public QGraphicsView
 
 public:
   ImageViewerWidget(QWidget *parent = nullptr);
-  ~ImageViewerWidget();
+  ~ImageViewerWidget() override;
 
-  virtual void mouseMoveEvent(QMouseEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual void wheelEvent(QWheelEvent *);
-  virtual void keyPressEvent(QKeyEvent *);
-  virtual void leaveEvent(QEvent *event);
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *) override;
+  void keyPressEvent(QKeyEvent *) override;
+  void leaveEvent(QEvent *event) override;
 
   virtual void setLabelImage(bool val);
   virtual void displayPixelValue(size_t, size_t, size_t)
@@ -152,11 +152,11 @@ protected:
 
   QSlider *slider;
 
-  virtual void dropEvent(QDropEvent *)
+  void dropEvent(QDropEvent *) override
   {
   }
-  void dragMoveEvent(QDragMoveEvent *de);
-  void dragEnterEvent(QDragEnterEvent *event);
+  void dragMoveEvent(QDragMoveEvent *de) override;
+  void dragEnterEvent(QDragEnterEvent *event) override;
 
   enum cursorMode { cursorMove, cursorDraw, cursorDrawLine, cursorDrawBox };
   int                cursorMode;
@@ -168,7 +168,7 @@ protected:
   QPen         drawPen;
   bool         drawing;
 
-  void scrollContentsBy(int dx, int dy);
+  void scrollContentsBy(int dx, int dy) override;
 public slots:
   void load(const QString fileName);
   void zoomIn();

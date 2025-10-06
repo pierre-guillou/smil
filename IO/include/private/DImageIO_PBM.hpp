@@ -60,18 +60,18 @@ namespace smil
     {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
+    RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) override
     {
       unsigned int dum;
       fInfo.filename = filename;
       return readNetPBMFileInfo(filename, fInfo, dum);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image)
+    RES_T read(const char *filename, Image<T> &image) override
     {
       return ImageFileHandler<T>::read(filename, image);
     }
-    virtual RES_T write(const Image<T> &image, const char *filename)
+    RES_T write(const Image<T> &image, const char *filename) override
     {
       return ImageFileHandler<T>::write(image, filename);
     }
@@ -85,13 +85,13 @@ namespace smil
     {
     }
 
-    virtual RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo)
+    RES_T getFileInfo(const char *filename, ImageFileInfo &fInfo) override
     {
       unsigned int dum;
       return readNetPBMFileInfo(filename, fInfo, dum);
     }
 
-    virtual RES_T read(const char *filename, Image<T> &image)
+    RES_T read(const char *filename, Image<T> &image) override
     {
       /* open image file */
       std::ifstream fp(filename, std::ios_base::binary);
@@ -144,7 +144,7 @@ namespace smil
 
       return RES_OK;
     }
-    virtual RES_T write(const Image<T> &image, const char *filename)
+    RES_T write(const Image<T> &image, const char *filename) override
     {
       return ImageFileHandler<T>::write(image, filename);
     }

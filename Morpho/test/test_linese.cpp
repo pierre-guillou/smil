@@ -35,7 +35,7 @@ using namespace smil;
 
 class Test_LineSE_000 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     int          h = 16;
     int          w = 16;
@@ -79,7 +79,7 @@ class Test_LineSE_000 : public TestCase
 
 class Test_LineSE_030 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     int          h = 16;
     int          w = 16;
@@ -123,7 +123,7 @@ class Test_LineSE_030 : public TestCase
 
 class Test_LineSE_045 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     int          h = 16;
     int          w = 16;
@@ -167,7 +167,7 @@ class Test_LineSE_045 : public TestCase
 
 class Test_LineSE_090 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     int          h = 16;
     int          w = 16;
@@ -211,7 +211,7 @@ class Test_LineSE_090 : public TestCase
 
 class Test_LineSE_180 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     int          h = 16;
     int          w = 16;
@@ -255,7 +255,7 @@ class Test_LineSE_180 : public TestCase
 
 class Test_LineSE_270 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     int          h = 16;
     int          w = 16;

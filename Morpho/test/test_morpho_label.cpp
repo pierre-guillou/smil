@@ -34,7 +34,7 @@ using namespace smil;
 
 class Test_Label : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;
@@ -79,7 +79,7 @@ class Test_Label : public TestCase
 
 class Test_FastLabel : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;
@@ -124,7 +124,7 @@ class Test_FastLabel : public TestCase
 
 class Test_LabelLambdaFlatZones : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;
@@ -166,7 +166,7 @@ class Test_LabelLambdaFlatZones : public TestCase
 
 class Test_FastLabelLambdaFlatZones : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;
@@ -212,7 +212,7 @@ class Test_FastLabelLambdaFlatZones : public TestCase
 
 class Test_Label_Mosaic : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;
@@ -243,7 +243,7 @@ class Test_Label_Mosaic : public TestCase
 
 class Test_LabelWithArea : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;
@@ -290,7 +290,7 @@ class Test_LabelWithArea : public TestCase
 
 class Test_LabelNeighbors : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType;
       typedef Image<dataType> imType;

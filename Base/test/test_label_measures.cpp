@@ -29,7 +29,7 @@ using namespace smil;
 
 class Test_ComputeBlobs : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(10, 10);
     Image<UINT8>::lineType pixels = im.getPixels();
@@ -70,7 +70,7 @@ class Test_ComputeBlobs : public TestCase
 
 class Test_Areas : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(1024, 1024);
     // Image<UINT8>::lineType pixels = im.getPixels();
@@ -85,7 +85,7 @@ class Test_Areas : public TestCase
 
 class Test_Barycenters : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(1024, 1024);
     // Image<UINT8>::lineType pixels = im.getPixels();
@@ -104,7 +104,7 @@ class Test_Barycenters : public TestCase
 
 class Test_MeasureVolumes : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(10, 10);
     Image<UINT8>::lineType pixels = im.getPixels();

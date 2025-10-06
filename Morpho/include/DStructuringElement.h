@@ -138,7 +138,7 @@ namespace smil
     }
 
     /** @cond */
-    ~StrElt()
+    ~StrElt() override
     {
     }
     /** @endcond */
@@ -298,7 +298,7 @@ namespace smil
      *
      * @param[in] name - the new name
      */
-    void setName(const char *name)
+    void setName(const char *name) override
     {
       this->name = name;
     }
@@ -339,7 +339,7 @@ namespace smil
      *
      * @returns the name of the structuring element (as a string)
      */
-    const char *getName() const
+    const char *getName() const override
     {
       return name.c_str();
       // return name;
@@ -351,8 +351,8 @@ namespace smil
      * @note
      * In @TB{Python} this has the same effect than @TB{print(se)}
      */
-    virtual void printSelf(std::ostream &os     = std::cout,
-                           std::string   indent = "") const;
+    void printSelf(std::ostream &os     = std::cout,
+                   std::string   indent = "") const override;
 
     /**
      * printSelf() - Print the contents of the structuring element

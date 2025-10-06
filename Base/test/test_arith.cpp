@@ -27,7 +27,7 @@ using namespace smil;
 
 class Test_Cast : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     INT16 vec1[20] = {-32768, 2,  -12532, 32767, -5, -3024L, 2042L, -8, 9,  10,
                       -11,    12, 13,     14,    15, 16,     17,    18, 19, 20};
@@ -55,7 +55,7 @@ class Test_Cast : public TestCase
 
 class Test_Fill : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[20]    = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10,
                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
@@ -76,7 +76,7 @@ class Test_Fill : public TestCase
 
 class Test_Equal : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[20]   = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10,
                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
@@ -109,7 +109,7 @@ class Test_Equal : public TestCase
 
 class Test_Bit : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[20] = {
         97,  223, 13,  127, 229, 210, 57, 114, 248, 104,
@@ -146,7 +146,7 @@ class Test_Bit : public TestCase
 
 class Test_ApplyLookup : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[20] = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10,
                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20};

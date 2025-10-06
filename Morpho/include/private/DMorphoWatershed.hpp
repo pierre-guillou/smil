@@ -252,9 +252,11 @@ namespace smil
           STAT_WS_LINE(ImDtTypes<T>::max())
     {
     }
-    virtual ~WatershedFlooding()
-    {
-    }
+#ifndef SWIG
+    ~WatershedFlooding() override = default;
+#else
+    virtual ~WatershedFlooding() = default;
+#endif // SWIG
 
     Image<T> *imgWS;
 #ifdef SWIG
@@ -304,7 +306,7 @@ namespace smil
       return RES_OK;
     }
 
-    inline virtual void processPixel(const size_t &curOffset)
+    inline void processPixel(const size_t &curOffset) override
     {
       wsPixels[curOffset] = STAT_LABELED;
 
@@ -324,8 +326,8 @@ namespace smil
       }
     }
 
-    inline virtual void processNeighbor(const size_t &curOffset,
-                                        const size_t &nbOffset)
+    inline void processNeighbor(const size_t &curOffset,
+                                const size_t &nbOffset) override
     {
       T nbStat = this->wsPixels[nbOffset];
 

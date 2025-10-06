@@ -165,16 +165,16 @@ namespace smil
     {
     }
 
-    virtual RES_T initialize(const imageInType &imIn, imageOutType &imOut,
-                             const StrElt &se);
-    virtual RES_T finalize(const imageInType &imIn, imageOutType &imOut,
-                           const StrElt &se);
+    RES_T initialize(const imageInType &imIn, imageOutType &imOut,
+                     const StrElt &se) override;
+    RES_T finalize(const imageInType &imIn, imageOutType &imOut,
+                   const StrElt &se) override;
 
     static bool isInplaceSafe(const StrElt &se);
 
   protected:
-    virtual RES_T _exec(const imageInType &imIn, imageOutType &imOut,
-                        const StrElt &se);
+    RES_T         _exec(const imageInType &imIn, imageOutType &imOut,
+                        const StrElt &se) override;
     virtual RES_T _exec_single(const imageInType & /*imIn*/,
                                imageOutType & /*imOut*/, const StrElt & /*se*/)
     {
@@ -286,10 +286,10 @@ namespace smil
 
     lineFunction_T &lineFunction;
 
-    virtual RES_T _exec(const imageType &imIn, imageType &imOut,
-                        const StrElt &se);
-    virtual RES_T _exec_single(const imageType &imIn, imageType &imOut,
-                               const StrElt &se);
+    RES_T         _exec(const imageType &imIn, imageType &imOut,
+                        const StrElt &se) override;
+    RES_T         _exec_single(const imageType &imIn, imageType &imOut,
+                               const StrElt &se) override;
     virtual RES_T _exec_single_generic(const imageType &imIn, imageType &imOut,
                                        const StrElt &se); // Inplace unsafe !!
 

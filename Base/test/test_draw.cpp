@@ -31,7 +31,7 @@ using namespace smil;
 
 class Test_DrawCircle : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(20, 15);
     Image<UINT8> im2(20, 15);
@@ -75,7 +75,7 @@ class Test_DrawCircle : public TestCase
 
 class Test_DrawSphere : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(20, 15);
     Image<UINT8> im2(20, 15);
@@ -119,7 +119,7 @@ class Test_DrawSphere : public TestCase
 
 class Test_DrawText : public TestCase
 {
-  virtual void run()
+  void run() override
   {
 #ifdef USE_FREETYPE
 

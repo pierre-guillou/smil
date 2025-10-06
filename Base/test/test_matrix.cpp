@@ -27,7 +27,7 @@ using namespace smil;
 
 class Test_Transpose : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[20]     = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10,
                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
@@ -50,7 +50,7 @@ class Test_Transpose : public TestCase
 
 class Test_Multiply : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 

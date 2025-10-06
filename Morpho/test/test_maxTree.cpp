@@ -36,7 +36,7 @@ using namespace smil;
 
 class Test_MaxTree : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType1;
       typedef UINT16 dataType2;
@@ -115,7 +115,7 @@ class Test_MaxTree : public TestCase
 
 class Test_MaxTree_3D : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType1;
       typedef UINT16 dataType2;
@@ -239,7 +239,7 @@ class Test_MaxTree_3D : public TestCase
 
 class Test_DeltaUO : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType1;
       typedef UINT16 dataType2;
@@ -312,7 +312,7 @@ class Test_DeltaUO : public TestCase
 
 class Test_UO_MSER : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType1;
       typedef UINT16 dataType2;
@@ -379,7 +379,7 @@ class Test_UO_MSER : public TestCase
 
 class Test_AttributeOpening : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;

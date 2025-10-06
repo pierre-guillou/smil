@@ -234,7 +234,7 @@ namespace smil
     }
 
     /** @cond */
-    virtual ~Graph()
+    ~Graph() override
     {
     }
     /** @endcond */
@@ -577,8 +577,8 @@ namespace smil
     /**
      * printSelf() -
      */
-    virtual void printSelf(std::ostream &os = std::cout,
-                           std::string   s  = "") const
+    void printSelf(std::ostream &os = std::cout,
+                   std::string   s  = "") const override
     {
       os << s << "Number of nodes: " << nodes.size() << std::endl;
       os << s << "Number of edges: " << edges.size() << std::endl;

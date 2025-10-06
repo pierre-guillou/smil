@@ -92,24 +92,24 @@ namespace smil
       image = nullptr;
     }
 
-    virtual void show()
+    void show() override
     {
     }
-    virtual void showLabel()
+    void showLabel() override
     {
     }
-    virtual void hide()
+    void hide() override
     {
     }
-    virtual bool isVisible()
+    bool isVisible() override
     {
       return false;
     }
-    virtual void setName(const char *_name)
+    void setName(const char *_name) override
     {
       parentClass::setName(_name);
     }
-    virtual void update()
+    void update() override
     {
       if (!this->image)
         return;
@@ -147,7 +147,7 @@ namespace smil
     }
 
   protected:
-    virtual void drawImage()
+    void drawImage() override
     {
     }
     virtual void onSizeChanged(size_t /*width*/, size_t /*height*/,

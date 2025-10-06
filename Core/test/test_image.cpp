@@ -37,7 +37,7 @@ using namespace smil;
 
 class Test_Image : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8>  im8(16, 16);
     Image<UINT16> im16(16, 16);

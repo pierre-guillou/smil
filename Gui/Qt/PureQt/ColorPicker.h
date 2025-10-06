@@ -43,7 +43,7 @@ class ColorButton : public QPushButton
   Q_OBJECT
 public:
   ColorButton(QWidget *parent = nullptr);
-  ~ColorButton();
+  ~ColorButton() override;
 
   QColor getColor()
   {
@@ -58,7 +58,7 @@ signals:
 
 protected:
   int  iconSize;
-  void paintEvent(QPaintEvent *e);
+  void paintEvent(QPaintEvent *e) override;
 
 private slots:
   void buttonPressed(bool toggled);
@@ -73,7 +73,7 @@ class ColorPannel : public QFrame
 
 public:
   ColorPannel(QWidget *parent = nullptr);
-  ~ColorPannel();
+  ~ColorPannel() override;
 
   void setColors(const QVector<QRgb> &cols);
 
@@ -89,7 +89,7 @@ private:
 
 protected:
   QVector<QRgb> colors;
-  void          hideEvent(QHideEvent *e);
+  void          hideEvent(QHideEvent *e) override;
   void          clearGrid();
   ColorButton  *lastButtonSelected;
 };
@@ -101,7 +101,7 @@ class ColorPicker : public ColorButton
 public:
   ColorPicker(QWidget *parent = nullptr);
 
-  ~ColorPicker();
+  ~ColorPicker() override;
 
   void setColors(const QVector<QRgb> &cols);
 

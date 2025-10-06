@@ -35,7 +35,7 @@ using namespace smil;
 
 class Test_Thin : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -131,7 +131,7 @@ class Test_Thin : public TestCase
 
 class Test_FullThin : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -180,7 +180,7 @@ class Test_FullThin : public TestCase
 
 class Test_LineJunc : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;

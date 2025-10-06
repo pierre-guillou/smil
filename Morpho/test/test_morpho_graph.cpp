@@ -35,7 +35,7 @@ using namespace smil;
 
 class Test_MosaicToGraph : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT16 dataType1;
       typedef UINT8 dataType2;
@@ -134,7 +134,7 @@ class Test_MosaicToGraph : public TestCase
 
 class Test_DrawGraph : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;

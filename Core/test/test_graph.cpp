@@ -38,7 +38,7 @@ using namespace smil;
 
 class Test_MST : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Graph<> graph;
     graph.addEdge(Edge<>(0, 2, 1));
@@ -70,7 +70,7 @@ class Test_MST : public TestCase
 
 class Test_Labelize : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Graph<> graph;
     graph.addEdge(Edge<>(0, 1));

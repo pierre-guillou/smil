@@ -34,7 +34,7 @@ using namespace smil;
 
 class TestDistanceSquare : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(10,10);
     Image<UINT8> im2(im1);
@@ -79,7 +79,7 @@ class TestDistanceSquare : public TestCase
 
 class TestDistanceCross : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(8,8);
     Image<UINT8> im2(im1);

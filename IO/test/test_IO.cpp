@@ -40,7 +40,7 @@ using namespace smil;
 
 class Test_RW_RAW : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     typedef UINT8 T;
     const char *fName = "_smil_io_tmp.raw";
@@ -66,7 +66,7 @@ class Test_RW_RAW : public TestCase
 #ifdef USE_PNG
 class Test_RW_PNG : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     const char *fName = "_smil_io_tmp.png";
     Image<UINT8> im1(3, 3);
@@ -85,7 +85,7 @@ class Test_RW_PNG : public TestCase
 #ifdef USE_CURL
 class Test_Curl : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1;
 
@@ -107,7 +107,7 @@ class Test_Curl : public TestCase
 #ifdef USE_TIFF
 class Test_RW_TIFF : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     const char *fName = "_smil_io_tmp.tiff";
     Image<UINT8> im1(3, 3);
@@ -128,7 +128,7 @@ class Test_RW_TIFF : public TestCase
 
 class Test_RW_PGM : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     const char *fName = "_smil_io_tmp.pgm";
     Image<UINT8> im1(3, 3);
@@ -146,7 +146,7 @@ class Test_RW_PGM : public TestCase
 
 class Test_RW_BMP : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     const char *fName = "_smil_io_tmp.bmp";
     Image<UINT8> im1(3, 3);

@@ -34,7 +34,7 @@ using namespace smil;
 
 class Test_Mean : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vec1[20] = 
       {
@@ -75,7 +75,7 @@ class Test_Mean : public TestCase
 
 class Test_Median : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vec1[20] = 
       {

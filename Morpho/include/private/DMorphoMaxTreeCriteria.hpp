@@ -91,22 +91,22 @@ namespace smil
       initialize();
     }
 
-    virtual ~AreaCriterion()
+    ~AreaCriterion() override
     {
     }
 
   public:
-    virtual void initialize()
+    void initialize() override
     {
       attribute_value_ = 1;
     }
 
-    virtual void reset()
+    void reset() override
     {
       attribute_value_ = 0;
     }
 
-    virtual void merge(GenericCriterion *other_criteron)
+    void merge(GenericCriterion *other_criteron) override
     {
       // AreaCriterion &oc = dynamic_cast<AreaCriterion &>(*other_criteron);
 
@@ -114,18 +114,18 @@ namespace smil
           dynamic_cast<AreaCriterion &>(*other_criteron).attribute_value_;
     }
 
-    virtual void update(SMIL_UNUSED const size_t x, SMIL_UNUSED const size_t y,
-                        SMIL_UNUSED const size_t z)
+    void update(SMIL_UNUSED const size_t x, SMIL_UNUSED const size_t y,
+                SMIL_UNUSED const size_t z) override
     {
       attribute_value_ += 1;
     }
-    virtual bool operator<(const size_t &other_attribute)
+    bool operator<(const size_t &other_attribute) override
     {
       return (attribute_value_ < other_attribute);
     }
 
   protected:
-    virtual void compute()
+    void compute() override
     {
     }
   };
@@ -140,12 +140,12 @@ namespace smil
       initialize();
     }
 
-    virtual ~HeightCriterion()
+    ~HeightCriterion() override
     {
     }
 
   public:
-    virtual void initialize()
+    void initialize() override
     {
       attribute_value_ = 0;
       // lowest instead of min in Andres code
@@ -153,12 +153,12 @@ namespace smil
       y_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset()
+    void reset() override
     {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron)
+    void merge(GenericCriterion *other_criteron) override
     {
       // HeightCriterion &oc = dynamic_cast<HeightCriterion &>(*other_criteron);
 
@@ -168,19 +168,19 @@ namespace smil
           y_min_, dynamic_cast<HeightCriterion &>(*other_criteron).y_min_);
     }
 
-    virtual void update(SMIL_UNUSED const size_t x, const size_t y,
-                        SMIL_UNUSED const size_t z)
+    void update(SMIL_UNUSED const size_t x, const size_t y,
+                SMIL_UNUSED const size_t z) override
     {
       y_max_ = std::max(y_max_, y);
       y_min_ = std::min(y_min_, y);
     }
-    virtual bool operator<(const size_t &other_attribute)
+    bool operator<(const size_t &other_attribute) override
     {
       return (attribute_value_ < other_attribute);
     }
 
   protected:
-    virtual void compute()
+    void compute() override
     {
       attribute_value_ = y_max_ - y_min_ + 1;
     }
@@ -201,12 +201,12 @@ namespace smil
       initialize();
     }
 
-    virtual ~WidthCriterion()
+    ~WidthCriterion() override
     {
     }
 
   public:
-    virtual void initialize()
+    void initialize() override
     {
       attribute_value_ = 0;
       // lowest instead of min in Andres code
@@ -214,12 +214,12 @@ namespace smil
       x_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset()
+    void reset() override
     {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron)
+    void merge(GenericCriterion *other_criteron) override
     {
       // WidthCriterion &oc = dynamic_cast<WidthCriterion &>(*other_criteron);
 
@@ -229,19 +229,19 @@ namespace smil
                         dynamic_cast<WidthCriterion &>(*other_criteron).x_min_);
     }
 
-    virtual void update(const size_t x, SMIL_UNUSED const size_t y,
-                        SMIL_UNUSED const size_t z)
+    void update(const size_t x, SMIL_UNUSED const size_t y,
+                SMIL_UNUSED const size_t z) override
     {
       x_max_ = std::max(x_max_, x);
       x_min_ = std::min(x_min_, x);
     }
-    virtual bool operator<(const size_t &other_attribute)
+    bool operator<(const size_t &other_attribute) override
     {
       return (attribute_value_ < other_attribute);
     }
 
   protected:
-    virtual void compute()
+    void compute() override
     {
       attribute_value_ = x_max_ - x_min_ + 1;
     }
@@ -272,12 +272,12 @@ namespace smil
       initialize();
     }
 
-    virtual ~HACriterion()
+    ~HACriterion() override
     {
     }
 
   public:
-    virtual void initialize()
+    void initialize() override
     {
       attribute_value_.H = 1;
       attribute_value_.A = 0;
@@ -287,12 +287,12 @@ namespace smil
       y_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset()
+    void reset() override
     {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron)
+    void merge(GenericCriterion *other_criteron) override
     {
       // HACriterion &oc = dynamic_cast<HACriterion &>(*other_criteron);
 
@@ -305,20 +305,20 @@ namespace smil
           std::min(y_min_, dynamic_cast<HACriterion &>(*other_criteron).y_min_);
     }
 
-    virtual void update(SMIL_UNUSED const size_t x, const size_t y,
-                        SMIL_UNUSED const size_t z)
+    void update(SMIL_UNUSED const size_t x, const size_t y,
+                SMIL_UNUSED const size_t z) override
     {
       attribute_value_.A += 1;
       y_max_ = std::max(y_max_, y);
       y_min_ = std::min(y_min_, y);
     }
-    virtual bool operator<(const HA &other_attribute)
+    bool operator<(const HA &other_attribute) override
     {
       return (attribute_value_.H < other_attribute.H);
     }
 
   protected:
-    virtual void compute()
+    void compute() override
     {
       attribute_value_.H = y_max_ - y_min_ + 1;
     }
@@ -339,12 +339,12 @@ namespace smil
       initialize();
     }
 
-    virtual ~HWACriterion()
+    ~HWACriterion() override
     {
     }
 
   public:
-    virtual void initialize()
+    void initialize() override
     {
       attribute_value_.H = 1;
       attribute_value_.W = 1;
@@ -358,12 +358,12 @@ namespace smil
       y_min_ = std::numeric_limits<size_t>::max();
     }
 
-    virtual void reset()
+    void reset() override
     {
       initialize();
     }
 
-    virtual void merge(GenericCriterion *other_criteron)
+    void merge(GenericCriterion *other_criteron) override
     {
       // HWACriterion &oc = dynamic_cast<HWACriterion &>(*other_criteron);
 
@@ -381,8 +381,8 @@ namespace smil
                         dynamic_cast<HWACriterion &>(*other_criteron).y_min_);
     }
 
-    virtual void update(const size_t x, const size_t y,
-                        SMIL_UNUSED const size_t z)
+    void update(const size_t x, const size_t y,
+                SMIL_UNUSED const size_t z) override
     {
       attribute_value_.A += 1;
       x_max_ = std::max(x_max_, x);
@@ -392,13 +392,13 @@ namespace smil
       y_max_ = std::max(y_max_, y);
       y_min_ = std::min(y_min_, y);
     }
-    virtual bool operator<(const HWA &other_attribute)
+    bool operator<(const HWA &other_attribute) override
     {
       return (attribute_value_.H < other_attribute.H);
     }
 
   protected:
-    virtual void compute()
+    void compute() override
     {
       attribute_value_.W = x_max_ - x_min_ + 1;
       attribute_value_.H = y_max_ - y_min_ + 1;

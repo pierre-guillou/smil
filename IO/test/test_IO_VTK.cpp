@@ -40,7 +40,7 @@ using namespace smil;
 
 class Test_VTK_RW : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     typedef UINT8 T;
     const char *fName = "_smil_io_tmp.vtk";

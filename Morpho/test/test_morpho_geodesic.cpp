@@ -35,7 +35,7 @@ using namespace smil;
 
 class Test_Build : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vecIn[] = { 
         1, 2, 0, 5, 5, 5, 3, 3, 3, 1, 1
