@@ -69,7 +69,7 @@ namespace smil
   RES_T readRAW(const char *filename, size_t width, size_t height, size_t depth,
                 Image<T> &image)
   {
-    FILE *fp = NULL;
+    FILE *fp = nullptr;
 
     /* open image file */
     SMIL_OPEN(fp, filename, "rb");
@@ -107,7 +107,7 @@ namespace smil
   template <class T>
   RES_T writeRAW(Image<T> &image, const char *filename)
   {
-    FILE *fp = NULL;
+    FILE *fp = nullptr;
 
     /* open image file */
     SMIL_OPEN(fp, filename, "wb");

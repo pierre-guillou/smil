@@ -99,7 +99,7 @@ namespace smil
     virtual RES_T attach(lineType dataPtr, size_t width, size_t height,
                          size_t depth = 1)
     {
-      if (dataPtr == NULL) {
+      if (dataPtr == nullptr) {
         ERR_MSG("Source image isn't allocated");
         return RES_ERR;
       } else if (dataPtr == this->pixels && width == this->width &&
@@ -142,9 +142,9 @@ namespace smil
       if (this->lines)
         delete[] this->lines;
 
-      this->slices = NULL;
-      this->lines  = NULL;
-      this->pixels = NULL;
+      this->slices = nullptr;
+      this->lines  = nullptr;
+      this->pixels = nullptr;
 
       this->width  = 0;
       this->height = 0;

@@ -38,7 +38,7 @@ namespace smil
 {
   RES_T Gui::initialize()
   {
-    if (Gui::_instance == NULL) {
+    if (Gui::_instance == nullptr) {
 #ifdef USE_QT
       // Check if there is already a qapplication running
       if (!isGuiDisabled()) {

@@ -251,7 +251,7 @@ namespace smil
       createBasins(labelNbr + 1);
       currentLevel = ImDtTypes<T>::min();
       imStatus.resize(imIn.getPixelCount(), HQ_CANDIDATE);
-      graph = NULL;
+      graph = nullptr;
 
       return RES_OK;
     }
@@ -549,7 +549,7 @@ namespace smil
 
     if (rankOutput) {
       ExtinctionFlooding<T, labelT, UINT> *flooding =
-          NULL; // outT type may be smaller than the required flooding type
+          nullptr; // outT type may be smaller than the required flooding type
 
       if (strcmp(extinctionType, "v") == 0)
         flooding = new VolumeExtinctionFlooding<T, labelT, UINT>();
@@ -566,7 +566,7 @@ namespace smil
 
     else {
       ExtinctionFlooding<T, labelT, outT> *flooding =
-          NULL; // outT type may be smaller than the required flooding type
+          nullptr; // outT type may be smaller than the required flooding type
 
       if (strcmp(extinctionType, "v") == 0)
         flooding = new VolumeExtinctionFlooding<T, labelT, outT>();
@@ -628,7 +628,7 @@ namespace smil
                                  const StrElt        &se = DEFAULT_SE)
   {
     ExtinctionFlooding<T, labelT, outT> *flooding =
-        NULL; // outT type may be smaller than the required flooding type
+        nullptr; // outT type may be smaller than the required flooding type
 
     if (strcmp(extinctionType, "v") == 0)
       flooding = new VolumeExtinctionFlooding<T, labelT, outT>();

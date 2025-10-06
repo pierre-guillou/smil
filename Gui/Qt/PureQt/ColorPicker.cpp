@@ -98,7 +98,7 @@ ColorPannel::ColorPannel(QWidget *parent) : QFrame(parent, Qt::Popup)
   grid->setSpacing(0);
   setLayout(grid);
 
-  lastButtonSelected = NULL;
+  lastButtonSelected = nullptr;
 }
 
 ColorPannel::~ColorPannel()

@@ -44,7 +44,7 @@ namespace smil
   class Event
   {
   public:
-    Event(BaseObject *_sender = NULL) : sender(_sender)
+    Event(BaseObject *_sender = nullptr) : sender(_sender)
     {
     }
     const BaseObject *sender;
@@ -55,7 +55,7 @@ namespace smil
     friend class BaseSlot;
 
   public:
-    Signal(BaseObject *_sender = NULL) : sender(_sender), enabled(true)
+    Signal(BaseObject *_sender = nullptr) : sender(_sender), enabled(true)
     {
     }
     virtual ~Signal()
@@ -100,7 +100,7 @@ namespace smil
       }
     }
 
-    virtual void trigger(Event *e = NULL)
+    virtual void trigger(Event *e = nullptr)
     {
       if (!enabled)
         return;

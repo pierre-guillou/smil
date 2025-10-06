@@ -57,7 +57,7 @@ namespace smil
     // Can be overloaded because of the T::initialize call
     static RES_T initialize()
     {
-      if (T::_instance == NULL)
+      if (T::_instance == nullptr)
         T::_instance = new T();
       return RES_OK;
     }
@@ -66,7 +66,7 @@ namespace smil
     {
       if (T::_instance) {
         delete T::_instance;
-        T::_instance = NULL;
+        T::_instance = nullptr;
       }
     }
 
@@ -76,7 +76,7 @@ namespace smil
   };
 
   template <typename T>
-  T *UniqueInstance<T>::_instance = NULL;
+  T *UniqueInstance<T>::_instance = nullptr;
 
 } // namespace smil
 

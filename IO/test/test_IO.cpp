@@ -77,7 +77,7 @@ class Test_RW_PNG : public TestCase
     TEST_ASSERT(read(fName, im2) == RES_OK);
     TEST_ASSERT(im1 == im2);
     BaseImage *im3 = createFromFile(fName);
-    TEST_ASSERT(im3 != NULL);
+    TEST_ASSERT(im3 != nullptr);
     delete im3;
   }
 };
@@ -97,7 +97,7 @@ class Test_Curl : public TestCase
     Image<UINT8> im2(bImage);
     TEST_ASSERT(im2.isAllocated());
     BaseImage *im0 = createFromFile(aImage);
-    TEST_ASSERT(im0 != NULL);
+    TEST_ASSERT(im0 != nullptr);
     delete im0;
   }
 };
@@ -118,7 +118,7 @@ class Test_RW_TIFF : public TestCase
     TEST_ASSERT(read(fName, im2) == RES_OK);
     TEST_ASSERT(im1 == im2);
     BaseImage *im3 = createFromFile(fName);
-    TEST_ASSERT(im3 != NULL);
+    TEST_ASSERT(im3 != nullptr);
     delete im3;
   }
 };
@@ -139,7 +139,7 @@ class Test_RW_PGM : public TestCase
     TEST_ASSERT(read(fName, im2) == RES_OK);
     TEST_ASSERT(im1 == im2);
     BaseImage *im3 = createFromFile(fName);
-    TEST_ASSERT(im3 != NULL);
+    TEST_ASSERT(im3 != nullptr);
     delete im3;
   }
 };
@@ -157,7 +157,7 @@ class Test_RW_BMP : public TestCase
     TEST_ASSERT(read(fName, im2) == RES_OK);
     TEST_ASSERT(im1 == im2);
     BaseImage *im3 = createFromFile(fName);
-    TEST_ASSERT(im3 != NULL);
+    TEST_ASSERT(im3 != nullptr);
     delete im3;
   }
 };

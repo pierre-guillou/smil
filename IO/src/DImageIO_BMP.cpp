@@ -164,7 +164,7 @@ namespace smil
     FILE *fp;
     SMIL_OPEN(fp, filename, "rb");
 
-    ASSERT(fp != NULL, string("Cannot open file ") + filename + " for input",
+    ASSERT(fp != nullptr, string("Cannot open file ") + filename + " for input",
            RES_ERR_IO);
 
     FileCloser fc(fp);
@@ -227,7 +227,7 @@ namespace smil
     FILE *fp;
     SMIL_OPEN(fp, filename, "rb");
 
-    ASSERT(fp != NULL, string("Cannot open file ") + filename + " for input",
+    ASSERT(fp != nullptr, string("Cannot open file ") + filename + " for input",
            RES_ERR_IO);
 
     FileCloser fc(fp);
@@ -274,7 +274,7 @@ namespace smil
     FILE *fp;
     SMIL_OPEN(fp, filename, "wb");
 
-    if (fp == NULL) {
+    if (fp == nullptr) {
       std::cout << "Error: Cannot open file " << filename << " for output."
                 << std::endl;
       return RES_ERR;
@@ -346,7 +346,7 @@ namespace smil
     FILE *fp;
     SMIL_OPEN(fp, filename, "wb");
 
-    if (fp == NULL) {
+    if (fp == nullptr) {
       std::cout << "Error: Cannot open file " << filename << " for output."
                 << std::endl;
       return RES_ERR;

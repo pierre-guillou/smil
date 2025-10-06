@@ -344,9 +344,9 @@ namespace smil
       return false;
     }
     //! Show the image (viewer)
-    virtual void show(const char * = NULL, bool = false);
+    virtual void show(const char * = nullptr, bool = false);
     //! Show the image (viewer) as false colors
-    virtual void showLabel(const char * = NULL);
+    virtual void showLabel(const char * = nullptr);
     //! Hide the image (viewer)
     virtual void hide() = 0;
 

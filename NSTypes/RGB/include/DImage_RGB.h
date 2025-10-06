@@ -44,15 +44,15 @@ namespace smil
   {
     className = "Image";
 
-    slices = NULL;
-    lines  = NULL;
+    slices = nullptr;
+    lines  = nullptr;
     //     pixels = NULL;
 
     dataTypeSize = sizeof(pixelType);
 
     allocatedSize = 0;
 
-    viewer = NULL;
+    viewer = nullptr;
     name   = "";
 
     updatesEnabled = true;
@@ -139,10 +139,10 @@ namespace smil
       this->pixels.deleteArrays();
     //           ImDtTypes<RGB>::deleteLine(pixels);
 
-    this->slices = NULL;
-    this->lines  = NULL;
+    this->slices = nullptr;
+    this->lines  = nullptr;
     for (UINT n = 0; n < 3; n++)
-      this->pixels.arrays[n] = NULL;
+      this->pixels.arrays[n] = nullptr;
 
     this->allocated     = false;
     this->allocatedSize = 0;
@@ -204,7 +204,7 @@ namespace smil
   inline char *Image<RGB>::toCharArray()
   {
     std::cout << "Not implemented for RGB images" << std::endl;
-    return NULL;
+    return nullptr;
   }
 #endif // SWIGPYTHON
 
