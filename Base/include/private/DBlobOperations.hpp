@@ -50,7 +50,7 @@ namespace smil
   {
     BlobOps() {};
 
-    ~BlobOps() {};
+    ~BlobOps() = default;
   };
   /** @endcond */
 

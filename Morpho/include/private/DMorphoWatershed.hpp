@@ -66,9 +66,7 @@ namespace smil
     {
       pixelCount = 0;
     }
-    virtual ~BaseFlooding()
-    {
-    }
+    virtual ~BaseFlooding() = default;
 
   protected:
     const labelT STAT_QUEUED;

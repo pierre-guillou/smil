@@ -49,9 +49,7 @@ namespace smil
 
     BaseImageViewer(const char *_className = "BaseImageViewer");
 
-    ~BaseImageViewer() override
-    {
-    }
+    ~BaseImageViewer() override = default;
 
     virtual void show()
     {

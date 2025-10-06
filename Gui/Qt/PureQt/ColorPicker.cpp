@@ -51,9 +51,7 @@ ColorButton::ColorButton(QWidget *parent) : QPushButton(parent)
   connect(this, SIGNAL(toggled(bool)), SLOT(buttonPressed(bool)));
 }
 
-ColorButton::~ColorButton()
-{
-}
+ColorButton::~ColorButton() = default;
 
 void ColorButton::setColor(const QColor &col, const int index)
 {

@@ -118,9 +118,7 @@ namespace smil
     }
 
 #ifndef SWIG
-    ~Error() noexcept(true) override
-    {
-    }
+    ~Error() noexcept(true) override = default;
 
     const char *what() const noexcept(true) override
     {

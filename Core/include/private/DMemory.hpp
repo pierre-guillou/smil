@@ -201,13 +201,9 @@ namespace smil
     };
 
   public:
-    inline explicit Allocator()
-    {
-    }
+    inline explicit Allocator() = default;
 
-    inline ~Allocator()
-    {
-    }
+    inline ~Allocator() = default;
 
     inline Allocator(Allocator const &) : std::allocator<T>()
     {

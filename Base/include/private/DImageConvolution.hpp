@@ -95,9 +95,7 @@ namespace smil
       setupKernel();
     }
 
-    ~GaussianFilterFunct()
-    {
-    }
+    ~GaussianFilterFunct() = default;
 
     RES_T Convolve(Image<T> &imIn, int radius, Image<T> &imOut)
     {

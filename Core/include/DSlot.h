@@ -45,9 +45,7 @@ namespace smil
     friend class Signal;
 
   public:
-    BaseSlot()
-    {
-    }
+    BaseSlot() = default;
     virtual ~BaseSlot()
     {
       unregisterAll();
@@ -73,12 +71,8 @@ namespace smil
   class Slot : public BaseSlot
   {
   public:
-    Slot()
-    {
-    }
-    ~Slot() override
-    {
-    }
+    Slot()           = default;
+    ~Slot() override = default;
     virtual void run(eventT * /*e*/)
     {
     }

@@ -54,9 +54,7 @@ namespace smil
    */
   template <class T, class _retType>
   struct MeasureFunctionBase {
-    virtual ~MeasureFunctionBase()
-    {
-    }
+    virtual ~MeasureFunctionBase() = default;
     typedef typename Image<T>::lineType lineType;
     typedef _retType                    retType;
     retType                             retVal;

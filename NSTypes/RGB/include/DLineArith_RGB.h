@@ -73,9 +73,7 @@ namespace smil
   template <>
   struct fillLine<RGB> : public unaryLineFunctionBase<RGB> {
     typedef Image<RGB>::lineType lineType;
-    fillLine()
-    {
-    }
+    fillLine() = default;
     fillLine(const lineType lIn, const size_t size, const RGB value)
     {
       this->_exec(lIn, size, value);

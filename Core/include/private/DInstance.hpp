@@ -43,9 +43,7 @@ namespace smil
     {
     }
 
-    virtual ~UniqueInstance()
-    {
-    }
+    virtual ~UniqueInstance() = default;
 
   public:
     static T *getInstance()

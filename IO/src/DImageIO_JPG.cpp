@@ -41,9 +41,7 @@ namespace smil
     JPGHeader(const std::string /*rw*/)
     {
     }
-    ~JPGHeader()
-    {
-    }
+    ~JPGHeader() = default;
   };
 
   RES_T readJPGHeader(FILE * /*fp*/, JPGHeader & /*hStruct*/)

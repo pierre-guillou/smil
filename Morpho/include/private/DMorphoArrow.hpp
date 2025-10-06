@@ -265,12 +265,8 @@ namespace smil
     typedef typename statutIT::lineType statutLT;
     typedef typename outIT::lineType    outLT;
 
-    arrowPropagate()
-    {
-    }
-    virtual ~arrowPropagate()
-    {
-    }
+    arrowPropagate()          = default;
+    virtual ~arrowPropagate() = default;
 
     RES_T _exec(const Image<arrowT> &imArrow, Image<statutT> &imStatut,
                 Image<outT> &imOut, const StrElt &se, const size_t &offset)

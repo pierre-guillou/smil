@@ -569,13 +569,9 @@ namespace smil
   class ImageRotateFunct
   {
   public:
-    ImageRotateFunct()
-    {
-    }
+    ImageRotateFunct() = default;
 
-    ~ImageRotateFunct()
-    {
-    }
+    ~ImageRotateFunct() = default;
 
     RES_T Rotate(Image<T> &imIn, int count, Image<T> &imOut)
     {
@@ -852,9 +848,7 @@ namespace smil
       method = "trilinear";
     }
 
-    ~ImageResizeFunc()
-    {
-    }
+    ~ImageResizeFunc() = default;
 
     /*
      * Public resize members

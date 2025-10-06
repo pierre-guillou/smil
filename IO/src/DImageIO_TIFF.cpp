@@ -41,9 +41,7 @@ namespace smil
     TIFFHeader(const std::string /*rw*/)
     {
     }
-    ~TIFFHeader()
-    {
-    }
+    ~TIFFHeader() = default;
   };
 
   RES_T readTIFFHeader(FILE * /*fp*/, TIFFHeader & /*hStruct*/)

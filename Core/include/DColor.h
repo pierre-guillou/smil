@@ -126,9 +126,7 @@ namespace smil
         : MultichannelType<UINT8, 3>(rhs), r(c[0]), g(c[1]), b(c[2])
     {
     }
-    ~RGB() override
-    {
-    }
+    ~RGB() override = default;
     RGB &operator=(const RGB &rhs)
     {
       for (UINT i = 0; i < 3; i++)
