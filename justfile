@@ -28,10 +28,10 @@ _pass_on_sources tool: _build_dir
 
 # apply a given clang tool on a given file
 _clang_tool tool file:
-    {{ tool }} -p {{ bdir }} {{ file }}
+    {{ tool }} -p {{ bdir }} --fix {{ file }}
 
 # generate a brand new build directory
-_build_dir wrapper="" cmake_opts="":
+_build_dir wrapper="" cmake_opts="-DBUILD_TEST=ON":
     [ -d {{ bdir }} ] && rm -rf {{ bdir }} || true
     mkdir {{ bdir }}
     {{ wrapper }} cmake -B {{ bdir }} {{ cmake_opts }}
