@@ -45,7 +45,7 @@ namespace smil
   class BaseImageViewer : public BaseObject
   {
   public:
-    typedef BaseObject parentClass;
+    using parentClass = BaseObject;
 
     BaseImageViewer(const char *_className = "BaseImageViewer");
 

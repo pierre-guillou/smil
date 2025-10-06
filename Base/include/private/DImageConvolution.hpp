@@ -348,7 +348,7 @@ namespace smil
       partialKernWeights[i] = pkwSum;
     }
 
-    typedef double      bufType; // If float, loops are vectorized
+    using bufType = double; // If float, loops are vectorized
     BufferPool<bufType> bufferPool(imW);
 
 #ifdef USE_OPEN_MP
@@ -433,7 +433,7 @@ namespace smil
       partialKernWeights[i] = pkwSum;
     }
 
-    typedef double      bufType; // If double, loops are vectorized
+    using bufType = double; // If double, loops are vectorized
     BufferPool<bufType> bufferPool(imW);
 
     for (int z = 0; z < imD; z++) {

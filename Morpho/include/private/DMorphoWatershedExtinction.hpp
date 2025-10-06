@@ -685,7 +685,7 @@ namespace smil
     // Sort edges by extinctionValues
     graph.sortEdges();
 
-    typedef typename Graph<labelT, UINT>::EdgeType EdgeType;
+    using EdgeType = typename Graph<labelT, UINT>::EdgeType;
     const std::vector<EdgeType>                   &edges    = graph.getEdges();
     UINT                                           edgesNbr = edges.size();
 
@@ -709,7 +709,7 @@ namespace smil
     // Sort edges by extinctionValues
     graph.sortEdges();
 
-    typedef typename Graph<labelT, UINT>::EdgeType EdgeType;
+    using EdgeType = typename Graph<labelT, UINT>::EdgeType;
     const std::vector<EdgeType>                   &edges    = graph.getEdges();
     UINT                                           edgesNbr = edges.size();
 

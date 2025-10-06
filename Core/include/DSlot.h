@@ -94,8 +94,8 @@ namespace smil
   class MemberFunctionSlot : public Slot<eventT>
   {
   public:
-    typedef void (T::*memberFunc)(eventT *);
-    typedef void (T::*voidMemberFunc)();
+    using memberFunc     = void (T::*)(eventT *);
+    using voidMemberFunc = void (T::*)();
     MemberFunctionSlot()
     {
       _instance = nullptr;
@@ -140,8 +140,8 @@ namespace smil
   class FunctionSlot : public Slot<eventT>
   {
   public:
-    typedef void (*funcPtr)(eventT *);
-    typedef void (*voidFuncPtr)();
+    using funcPtr     = void (*)(eventT *);
+    using voidFuncPtr = void (*)();
     FunctionSlot(funcPtr func)
     {
       _function = func;

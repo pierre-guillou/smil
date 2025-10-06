@@ -49,33 +49,33 @@
 
 namespace smil
 {
-  typedef int           INT;
-  typedef long          LONG;
-  typedef unsigned int  UINT;
-  typedef unsigned long ULONG;
+  using INT   = int;
+  using LONG  = long;
+  using UINT  = unsigned int;
+  using ULONG = unsigned long;
 #if NEWTDEFS
   typedef uint8_t  UINT8;
   typedef uint16_t UINT16;
   typedef uint32_t UINT32;
 #else
-  typedef unsigned char  UINT8;
-  typedef unsigned short UINT16;
-  typedef unsigned int   UINT32;
+  using UINT8  = unsigned char;
+  using UINT16 = unsigned short;
+  using UINT32 = unsigned int;
 #endif
 #ifdef _MSC_VER
   typedef unsigned __int64 UINT64;
 #else
-  typedef uint64_t UINT64;
+  using UINT64 = uint64_t;
 #endif
 
   // typedef unsigned char __attribute__ ((vector_size (16))) alUINT8;
 
   // Why this directive for msvc (windows) ?
   // #ifndef _MSC_VER
-  typedef signed char INT8;
+  using INT8 = signed char;
   // #endif // _MSC_VER
-  typedef short INT16;
-  typedef int   INT32;
+  using INT16 = short;
+  using INT32 = int;
 
 #ifndef CHAR_BIT
 #define CHAR_BIT 8
@@ -85,20 +85,20 @@ namespace smil
 
   template <class T>
   struct ImDtTypes {
-    typedef T          pixelType;
-    typedef pixelType *lineType;
+    using pixelType = T;
+    using lineType  = pixelType *;
 #ifndef SWIG
-    typedef pixelType *restrictLineType;
+    using restrictLineType = pixelType *;
     // XXX JOE typedef pixelType * __restrict restrictLineType;
 #endif // SWIG
-    typedef lineType  *sliceType;
-    typedef sliceType *volType;
+    using sliceType = lineType *;
+    using volType   = sliceType *;
 
-    typedef std::vector<T, Allocator<T>> vectorType;
+    using vectorType = std::vector<T, Allocator<T>>;
     //         typedef std::vector<T> vectorType;
-    typedef std::vector<vectorType> matrixType;
+    using matrixType = std::vector<vectorType>;
 
-    typedef double floatType;
+    using floatType = double;
 
     static inline pixelType min()
     {

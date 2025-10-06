@@ -252,13 +252,13 @@ namespace smil
   {
     // Typedefs
     // typedef Image<T> inT;
-    typedef Image<T>                  outT;
-    typedef Image<T>                  arrowT;
-    typedef typename outT::lineType   outLineT;
-    typedef typename arrowT::lineType arrowLineT;
+    using outT       = Image<T>;
+    using arrowT     = Image<T>;
+    using outLineT   = typename outT::lineType;
+    using arrowLineT = typename arrowT::lineType;
     // typedef typename inT::volType inVolT;
-    typedef typename outT::volType   outVolT;
-    typedef typename arrowT::volType arrowVolT;
+    using outVolT   = typename outT::volType;
+    using arrowVolT = typename arrowT::volType;
 
     // Initialisation.
     arrowT arrows(imIn);

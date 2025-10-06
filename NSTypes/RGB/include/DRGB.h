@@ -56,7 +56,7 @@ namespace smil
   {
     Image<RGB>::sliceType lines = this->image->getSlices()[slider->value()];
     Image<RGB>::lineType  pixels;
-    typedef Image<UINT8>::lineType arrayType;
+    using arrayType = Image<UINT8>::lineType;
 
     size_t w = this->image->getWidth();
     size_t h = this->image->getHeight();

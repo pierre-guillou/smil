@@ -74,7 +74,7 @@ namespace smil
 #endif // SWIG
   {
   public:
-    typedef ImageViewer<T> parentClass;
+    using parentClass = ImageViewer<T>;
     QtImageViewer();
     QtImageViewer(Image<T> &im);
     ~QtImageViewer() override;

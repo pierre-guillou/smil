@@ -42,7 +42,7 @@ class Test_RW_RAW : public TestCase
 {
   void run() override
   {
-    typedef UINT8 T;
+    using T           = UINT8;
     const char *fName = "_smil_io_tmp.raw";
 
     Image<T> im1(3, 3, 2);

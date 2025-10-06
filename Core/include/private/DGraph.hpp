@@ -64,7 +64,7 @@ namespace smil
   class Edge
   {
   public:
-    typedef WeightT WeightType;
+    using WeightType = WeightT;
 
     /** Default constructor
      */
@@ -160,7 +160,7 @@ namespace smil
     if (e1.size() != e2.size())
       return false;
 
-    typedef Edge<NodeT, WeightT>                EdgeT;
+    using EdgeT                                     = Edge<NodeT, WeightT>;
     typename std::vector<EdgeT>::const_iterator it1 = e1.begin(),
                                                 it2 = e2.begin();
 
@@ -190,19 +190,19 @@ namespace smil
   class Graph : public BaseObject
   {
   public:
-    typedef Graph<NodeT, WeightT> GraphType;
+    using GraphType = Graph<NodeT, WeightT>;
 
-    typedef NodeT                    NodeType;
-    typedef WeightT                  NodeWeightType;
-    typedef std::map<NodeT, WeightT> NodeValuesType;
-    typedef std::set<NodeT>          NodeListType;
+    using NodeType       = NodeT;
+    using NodeWeightType = WeightT;
+    using NodeValuesType = std::map<NodeT, WeightT>;
+    using NodeListType   = std::set<NodeT>;
 
-    typedef Edge<NodeT, WeightT> EdgeType;
-    typedef WeightT              EdgeWeightType;
+    using EdgeType       = Edge<NodeT, WeightT>;
+    using EdgeWeightType = WeightT;
 
-    typedef std::vector<Edge<NodeT, WeightT>> EdgeListType;
-    typedef std::vector<size_t>               NodeEdgesType;
-    typedef std::map<NodeT, NodeEdgesType>    NodeEdgeListType;
+    using EdgeListType     = std::vector<Edge<NodeT, WeightT>>;
+    using NodeEdgesType    = std::vector<size_t>;
+    using NodeEdgeListType = std::map<NodeT, NodeEdgesType>;
 
   protected:
     size_t           edgeNbr;
@@ -635,11 +635,11 @@ namespace smil
   template <class graphT>
   graphT graphMST(const graphT &graph)
   {
-    typedef typename graphT::NodeType         NodeType;
-    typedef typename graphT::EdgeType         EdgeType;
-    typedef typename graphT::EdgeListType     EdgeListType;
-    typedef typename graphT::NodeEdgesType    NodeEdgesType;
-    typedef typename graphT::NodeEdgeListType NodeEdgeListType;
+    using NodeType         = typename graphT::NodeType;
+    using EdgeType         = typename graphT::EdgeType;
+    using EdgeListType     = typename graphT::EdgeListType;
+    using NodeEdgesType    = typename graphT::NodeEdgesType;
+    using NodeEdgeListType = typename graphT::NodeEdgeListType;
 
     std::set<NodeType>            visitedNodes;
     std::priority_queue<EdgeType> pq;

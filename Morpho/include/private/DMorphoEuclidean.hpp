@@ -74,10 +74,10 @@ namespace smil
 
       ImageFreezer freeze(imOut);
 
-      typedef Image<T1>                       imageInType;
-      typedef typename imageInType::lineType  lineInType;
-      typedef Image<T2>                       imageOutType;
-      typedef typename imageOutType::lineType lineOutType;
+      using imageInType  = Image<T1>;
+      using lineInType   = typename imageInType::lineType;
+      using imageOutType = Image<T2>;
+      using lineOutType  = typename imageOutType::lineType;
 
       lineInType  pixelsIn  = imIn.getPixels();
       lineOutType pixelsOut = imOut.getPixels();

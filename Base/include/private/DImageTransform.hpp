@@ -606,7 +606,7 @@ namespace smil
 
       ImageFreezer freeze(imOut);
 
-      typedef typename ImDtTypes<T>::lineType lineType;
+      using lineType = typename ImDtTypes<T>::lineType;
       lineType                                pixIn  = imIn.getPixels();
       lineType                                pixOut = imOut.getPixels();
 

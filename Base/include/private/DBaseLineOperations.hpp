@@ -41,15 +41,15 @@ namespace smil
   // Base abstract struct of line unary function
   template <class T, class T_out = T>
   struct unaryLineFunctionBase {
-    typedef Image<T>                               imageInType;
-    typedef typename imageInType::restrictLineType lineInType;
-    typedef typename imageInType::sliceType        sliceInType;
+    using imageInType = Image<T>;
+    using lineInType  = typename imageInType::restrictLineType;
+    using sliceInType = typename imageInType::sliceType;
 
-    typedef Image<T_out>                            imageOutType;
-    typedef typename imageOutType::restrictLineType lineOutType;
-    typedef typename imageOutType::sliceType        sliceOutType;
+    using imageOutType = Image<T_out>;
+    using lineOutType  = typename imageOutType::restrictLineType;
+    using sliceOutType = typename imageOutType::sliceType;
 
-    typedef lineInType lineType;
+    using lineType = lineInType;
 
     unaryLineFunctionBase() = default;
     unaryLineFunctionBase(const lineInType lineIn, const size_t size,
@@ -114,12 +114,12 @@ namespace smil
   template <class T1, class T2 = T1, class T_out = T1>
   struct binaryLineFunctionBase {
     virtual ~binaryLineFunctionBase() = default;
-    typedef typename Image<T1>::restrictLineType    lineType1;
-    typedef typename Image<T2>::restrictLineType    lineType2;
-    typedef typename Image<T_out>::restrictLineType lineOutType;
-    typedef lineType1                               lineType;
+    using lineType1                   = typename Image<T1>::restrictLineType;
+    using lineType2                   = typename Image<T2>::restrictLineType;
+    using lineOutType                 = typename Image<T_out>::restrictLineType;
+    using lineType                    = lineType1;
 
-    typedef typename Image<T1>::sliceType sliceType;
+    using sliceType = typename Image<T1>::sliceType;
 
     virtual void _exec(const lineType1, const lineType2, const size_t,
                        lineOutType) = 0;
@@ -188,11 +188,11 @@ namespace smil
   template <class T1, class T2 = T1, class T3 = T1, class T_out = T1>
   struct tertiaryLineFunctionBase {
     virtual ~tertiaryLineFunctionBase() = default;
-    typedef typename Image<T1>::restrictLineType    lineType1;
-    typedef typename Image<T2>::restrictLineType    lineType2;
-    typedef typename Image<T3>::restrictLineType    lineType3;
-    typedef typename Image<T_out>::restrictLineType lineOutType;
-    typedef lineType1                               lineType;
+    using lineType1                     = typename Image<T1>::restrictLineType;
+    using lineType2                     = typename Image<T2>::restrictLineType;
+    using lineType3                     = typename Image<T3>::restrictLineType;
+    using lineOutType = typename Image<T_out>::restrictLineType;
+    using lineType    = lineType1;
 
     virtual void _exec(const lineType1 /*lineIn1*/, const lineType2 /*lineIn2*/,
                        const lineType3 /*lineIn3*/, const size_t /*size*/,

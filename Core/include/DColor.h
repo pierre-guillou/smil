@@ -39,18 +39,18 @@
 namespace smil
 {
 
-  typedef MultichannelType<UINT8, 3>  COLOR_UINT8_3;
-  typedef MultichannelArray<UINT8, 3> COLOR_UINT8_3_Array;
+  using COLOR_UINT8_3       = MultichannelType<UINT8, 3>;
+  using COLOR_UINT8_3_Array = MultichannelArray<UINT8, 3>;
 
   template <>
   struct ImDtTypes<COLOR_UINT8_3> {
-    typedef COLOR_UINT8_3       pixelType;
-    typedef COLOR_UINT8_3_Array lineType;
-    typedef COLOR_UINT8_3_Array restrictLineType;
-    typedef lineType           *sliceType;
-    typedef sliceType          *volType;
+    using pixelType        = COLOR_UINT8_3;
+    using lineType         = COLOR_UINT8_3_Array;
+    using restrictLineType = COLOR_UINT8_3_Array;
+    using sliceType        = lineType *;
+    using volType          = sliceType *;
 
-    typedef MultichannelType<double, 3> floatType;
+    using floatType = MultichannelType<double, 3>;
 
     static inline pixelType min()
     {
@@ -90,7 +90,7 @@ namespace smil
     }
   };
 
-  typedef COLOR_UINT8_3_Array RGBArray;
+  using RGBArray = COLOR_UINT8_3_Array;
 
   struct RGB
 #ifndef SWIG
@@ -142,8 +142,8 @@ namespace smil
 
   template <>
   struct ImDtTypes<RGB> : public ImDtTypes<COLOR_UINT8_3> {
-    typedef RGB             pixelType;
-    typedef RGBArray        lineType;
+    using pixelType = RGB;
+    using lineType  = RGBArray;
     static inline pixelType min()
     {
       return RGB(0);
@@ -164,15 +164,15 @@ namespace smil
     return "RGB";
   }
 
-  typedef MultichannelType<UINT8, 4>  COLOR_32;
-  typedef MultichannelArray<UINT8, 4> COLOR_32_Array;
+  using COLOR_32       = MultichannelType<UINT8, 4>;
+  using COLOR_32_Array = MultichannelArray<UINT8, 4>;
 
   template <>
   struct ImDtTypes<COLOR_32> {
-    typedef COLOR_32       pixelType;
-    typedef COLOR_32_Array lineType;
-    typedef lineType      *sliceType;
-    typedef sliceType     *volType;
+    using pixelType = COLOR_32;
+    using lineType  = COLOR_32_Array;
+    using sliceType = lineType *;
+    using volType   = sliceType *;
 
     static inline pixelType min()
     {

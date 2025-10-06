@@ -189,7 +189,7 @@ namespace smil
     std::map<labelT, Vector_double> moments =
         blobsMoments(imIn, blobs, central);
 
-    typedef typename std::map<labelT, Blob>::iterator blobIter;
+    using blobIter = typename std::map<labelT, Blob>::iterator;
     for (blobIter it = blobs.begin(); it != blobs.end(); it++) {
       Vector_double m(3);
 

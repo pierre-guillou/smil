@@ -230,7 +230,7 @@ namespace smil
   class meanFunct : public MorphImageFunctionBase<T, T>
   {
   public:
-    typedef MorphImageFunctionBase<T, T> parentClass;
+    using parentClass = MorphImageFunctionBase<T, T>;
 
     inline void processPixel(size_t            pointOffset,
                              std::vector<int> &dOffsetList) override
@@ -273,7 +273,7 @@ namespace smil
   class medianFunct : public MorphImageFunctionBase<T, T>
   {
   public:
-    typedef MorphImageFunctionBase<T, T> parentClass;
+    using parentClass = MorphImageFunctionBase<T, T>;
 
     inline void processPixel(size_t            pointOffset,
                              std::vector<int> &dOffsetList) override
@@ -316,7 +316,7 @@ namespace smil
   class rankFunct : public MorphImageFunctionBase<T, T>
   {
   public:
-    typedef MorphImageFunctionBase<T, T> parentClass;
+    using parentClass = MorphImageFunctionBase<T, T>;
 
     rankFunct(double per) : MorphImageFunctionBase<T, T>(), percentile(per)
     {

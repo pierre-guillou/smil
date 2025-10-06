@@ -56,7 +56,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measAreaFunc : public MeasureFunctionBase<T, double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     void processSequence(lineType /*lineIn*/, size_t size) override
     {
@@ -97,7 +97,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measVolFunc : public MeasureFunctionBase<T, double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     void processSequence(lineType lineIn, size_t size) override
     {
@@ -168,7 +168,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMeanValFunc : public MeasureFunctionBase<T, Vector_double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     double                              sum1, sum2;
     double                              pixNbr;
 
@@ -225,7 +225,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMinValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal = std::numeric_limits<T>::max();
@@ -240,7 +240,7 @@ namespace smil
 
   template <class T>
   struct measMinValPosFunc : public MeasureFunctionWithPos<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     Point<UINT>                         pt;
     void initialize(const Image<T> & /*imIn*/) override
     {
@@ -302,7 +302,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMaxValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     void initialize(const Image<T> & /*imIn*/) override
     {
       this->retVal = std::numeric_limits<T>::min();
@@ -317,7 +317,7 @@ namespace smil
 
   template <class T>
   struct measMaxValPosFunc : public MeasureFunctionWithPos<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     Point<UINT>                         pt;
     void initialize(const Image<T> & /*imIn*/) override
     {
@@ -379,7 +379,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMinMaxValFunc : public MeasureFunctionBase<T, std::vector<T>> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     T                                   minVal, maxVal;
     void initialize(const Image<T> & /*imIn*/) override
     {
@@ -430,7 +430,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct valueListFunc : public MeasureFunctionBase<T, std::vector<T>> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     std::set<T>                         valList;
 
     void initialize(const Image<T> & /*imIn*/) override
@@ -482,7 +482,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measModeValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     std::map<int, int> nbList;
     int                maxNb;
@@ -548,7 +548,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMedianValFunc : public MeasureFunctionBase<T, T> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     std::map<int, int> nbList;
     size_t             acc_elem, total_elems;
@@ -580,7 +580,7 @@ namespace smil
 
     void finalize(const Image<T> & /*imIn*/) override
     {
-      typedef std::map<int, int>::iterator it_type;
+      using it_type = std::map<int, int>::iterator;
 
       for (it_type my_iterator = nbList.begin(); my_iterator != nbList.end();
            my_iterator++) {
@@ -668,7 +668,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measBarycenterFunc : public MeasureFunctionWithPos<T, Vector_double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     double                              xSum, ySum, zSum, tSum;
     void initialize(const Image<T> & /*imIn*/) override
     {
@@ -720,7 +720,7 @@ namespace smil
   template <class T>
   struct measBoundBoxFunc
       : public MeasureFunctionWithPos<T, std::vector<size_t>> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     double                              xMin, xMax, yMin, yMax, zMin, zMax;
     bool                                im3d;
     void initialize(const Image<T> &imIn) override
@@ -794,7 +794,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measMomentsFunc : public MeasureFunctionWithPos<T, Vector_double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
     double       m000, m100, m010, m110, m200, m020, m001, m101, m011, m002;
     bool         im3d;
     void         initialize(const Image<T> &imIn) override
@@ -1244,7 +1244,7 @@ namespace smil
   /** @cond */
   template <class T>
   struct measEntropyFunc : public MeasureFunctionBase<T, double> {
-    typedef typename Image<T>::lineType lineType;
+    using lineType = typename Image<T>::lineType;
 
     std::map<T, UINT> histo;
 

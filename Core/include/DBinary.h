@@ -43,7 +43,7 @@ namespace smil
 
 #ifdef USE_64BIT_IDS
   //     typedef UINT8 INT_TYPE;
-  typedef UINT8 BIN_TYPE;
+  using BIN_TYPE = UINT8;
 #else
   typedef UINT8 BIN_TYPE;
 #endif // USE_64BIT_IDS
@@ -95,9 +95,9 @@ namespace smil
     //! Less significant bit
     static const BIN_TYPE LS_BIT = 0x01;
 
-    typedef BIN_TYPE  Type;
-    typedef Type     *lineType;
-    typedef lineType *sliceType;
+    using Type      = BIN_TYPE;
+    using lineType  = Type *;
+    using sliceType = lineType *;
 
     static inline BIN_TYPE binLen(BIN_TYPE bitCount)
     {

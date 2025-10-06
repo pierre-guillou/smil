@@ -59,7 +59,7 @@ namespace smil
   template <class T>
   class Image : public BaseImage
   {
-    typedef BaseImage parentClass;
+    using parentClass = BaseImage;
 
   public:
     //! Default constructor
@@ -100,11 +100,11 @@ namespace smil
       T *dum = nullptr;
       return getDataTypeAsString<T>(dum);
     }
-    typedef typename ImDtTypes<T>::pixelType        pixelType;
-    typedef typename ImDtTypes<T>::lineType         lineType;
-    typedef typename ImDtTypes<T>::restrictLineType restrictLineType;
-    typedef typename ImDtTypes<T>::sliceType        sliceType;
-    typedef typename ImDtTypes<T>::volType          volType;
+    using pixelType        = typename ImDtTypes<T>::pixelType;
+    using lineType         = typename ImDtTypes<T>::lineType;
+    using restrictLineType = typename ImDtTypes<T>::restrictLineType;
+    using sliceType        = typename ImDtTypes<T>::sliceType;
+    using volType          = typename ImDtTypes<T>::volType;
 
     //! Get the pixels as a 1D array
     lineType getPixels() const

@@ -404,7 +404,7 @@ namespace smil
   class SquSE0 : public StrElt
   {
   public:
-    typedef StrElt parentClass;
+    using parentClass = StrElt;
     SquSE0(UINT s = 1) : StrElt(false, 8, 1, 2, 3, 4, 5, 6, 7, 8)
     {
       className = "SquSE0";

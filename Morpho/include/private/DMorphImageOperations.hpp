@@ -57,15 +57,15 @@ namespace smil
 #endif // SWIG
   {
   public:
-    typedef Image<T_in>                         imageInType;
-    typedef typename ImDtTypes<T_in>::lineType  lineInType;
-    typedef typename ImDtTypes<T_in>::sliceType sliceInType;
-    typedef typename ImDtTypes<T_in>::volType   volInType;
+    using imageInType = Image<T_in>;
+    using lineInType  = typename ImDtTypes<T_in>::lineType;
+    using sliceInType = typename ImDtTypes<T_in>::sliceType;
+    using volInType   = typename ImDtTypes<T_in>::volType;
 
-    typedef Image<T_out>                         imageOutType;
-    typedef typename ImDtTypes<T_out>::lineType  lineOutType;
-    typedef typename ImDtTypes<T_out>::sliceType sliceOutType;
-    typedef typename ImDtTypes<T_out>::volType   volOutType;
+    using imageOutType = Image<T_out>;
+    using lineOutType  = typename ImDtTypes<T_out>::lineType;
+    using sliceOutType = typename ImDtTypes<T_out>::sliceType;
+    using volOutType   = typename ImDtTypes<T_out>::volType;
 
     MorphImageFunctionBase(T_in  _borderValue  = ImDtTypes<T_in>::min(),
                            T_out _initialValue = ImDtTypes<T_out>::min())
@@ -145,17 +145,17 @@ namespace smil
   class MorphImageFunction : public MorphImageFunctionBase<T_in, T_out>
   {
   public:
-    typedef MorphImageFunctionBase<T_in, T_out> parentClass;
+    using parentClass = MorphImageFunctionBase<T_in, T_out>;
 
-    typedef Image<T_in>                         imageInType;
-    typedef typename ImDtTypes<T_in>::lineType  lineInType;
-    typedef typename ImDtTypes<T_in>::sliceType sliceInType;
-    typedef typename ImDtTypes<T_in>::volType   volInType;
+    using imageInType = Image<T_in>;
+    using lineInType  = typename ImDtTypes<T_in>::lineType;
+    using sliceInType = typename ImDtTypes<T_in>::sliceType;
+    using volInType   = typename ImDtTypes<T_in>::volType;
 
-    typedef Image<T_out>                         imageOutType;
-    typedef typename ImDtTypes<T_out>::lineType  lineOutType;
-    typedef typename ImDtTypes<T_out>::sliceType sliceOutType;
-    typedef typename ImDtTypes<T_out>::volType   volOutType;
+    using imageOutType = Image<T_out>;
+    using lineOutType  = typename ImDtTypes<T_out>::lineType;
+    using sliceOutType = typename ImDtTypes<T_out>::sliceType;
+    using volOutType   = typename ImDtTypes<T_out>::volType;
 
     MorphImageFunction(T_in  border       = ImDtTypes<T_in>::min(),
                        T_out initialValue = ImDtTypes<T_out>::min())
@@ -268,12 +268,12 @@ namespace smil
       : public MorphImageFunction<T_in, lineFunction_T, T_in, false>
   {
   public:
-    typedef MorphImageFunction<T_in, lineFunction_T, T_in, false> parentClass;
+    using parentClass = MorphImageFunction<T_in, lineFunction_T, T_in, false>;
 
-    typedef Image<T_in>                         imageType;
-    typedef typename ImDtTypes<T_in>::lineType  lineType;
-    typedef typename ImDtTypes<T_in>::sliceType sliceType;
-    typedef typename ImDtTypes<T_in>::volType   volType;
+    using imageType = Image<T_in>;
+    using lineType  = typename ImDtTypes<T_in>::lineType;
+    using sliceType = typename ImDtTypes<T_in>::sliceType;
+    using volType   = typename ImDtTypes<T_in>::volType;
 
     MorphImageFunction(T_in border       = ImDtTypes<T_in>::min(),
                        T_in initialValue = ImDtTypes<T_in>::min())

@@ -312,7 +312,7 @@ namespace smil
     size_t lineLen   = imIn1.getWidth();
     int    lineCount = imIn1.getLineCount();
 
-    typedef typename Image<T2>::sliceType sliceType2;
+    using sliceType2 = typename Image<T2>::sliceType;
 
     sliceType  srcLines1 = imIn1.getLines();
     sliceType2 srcLines2 = imIn2.getLines();
@@ -352,8 +352,8 @@ namespace smil
     size_t lineLen   = imIn1.getWidth();
     int    lineCount = imIn1.getLineCount();
 
-    typedef typename Image<T2>::lineType  lineType2;
-    typedef typename Image<T2>::sliceType sliceType2;
+    using lineType2  = typename Image<T2>::lineType;
+    using sliceType2 = typename Image<T2>::sliceType;
 
     sliceType  srcLines1 = imIn1.getLines();
     sliceType2 srcLines2 = imIn2.getLines();
@@ -398,8 +398,8 @@ namespace smil
     size_t lineLen   = imIn1.getWidth();
     int    lineCount = imIn1.getLineCount();
 
-    typedef typename Image<T2>::lineType  lineType2;
-    typedef typename Image<T2>::sliceType sliceType2;
+    using lineType2  = typename Image<T2>::lineType;
+    using sliceType2 = typename Image<T2>::sliceType;
 
     sliceType  srcLines1 = imIn1.getLines();
     sliceType2 srcLines2 = imIn2.getLines();
@@ -444,8 +444,8 @@ namespace smil
     size_t lineLen   = imIn.getWidth();
     int    lineCount = imIn.getLineCount();
 
-    typedef typename Image<T2>::lineType  lineType2;
-    typedef typename Image<T2>::sliceType sliceType2;
+    using lineType2  = typename Image<T2>::lineType;
+    using sliceType2 = typename Image<T2>::sliceType;
 
     sliceType  srcLines  = imIn.getLines();
     sliceType2 destLines = imOut.getLines();
