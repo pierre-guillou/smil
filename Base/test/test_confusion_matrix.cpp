@@ -32,7 +32,7 @@ Image<UINT8> imIn(dim,dim);
 
 class Test_Accuracy : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.641;
@@ -48,7 +48,7 @@ class Test_Accuracy : public TestCase
 
 class Test_Sensitivity : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.563;
@@ -64,7 +64,7 @@ class Test_Sensitivity : public TestCase
 
 class Test_Specificity : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.667;
@@ -80,7 +80,7 @@ class Test_Specificity : public TestCase
 
 class Test_FallOut : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.333;
@@ -96,7 +96,7 @@ class Test_FallOut : public TestCase
 
 class Test_MissRate : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.437;
@@ -112,7 +112,7 @@ class Test_MissRate : public TestCase
 
 class Test_Precision : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.360;
@@ -128,7 +128,7 @@ class Test_Precision : public TestCase
 
 class Test_Recall : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.563;
@@ -144,7 +144,7 @@ class Test_Recall : public TestCase
 
 class Test_FScore : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.439;
@@ -160,7 +160,7 @@ class Test_FScore : public TestCase
 
 class Test_Overlap : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.563;
@@ -176,7 +176,7 @@ class Test_Overlap : public TestCase
 
 class Test_Jaccard : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 0.281;
@@ -192,7 +192,7 @@ class Test_Jaccard : public TestCase
 
 class Test_Hamming : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     double rExpect = 23552;
@@ -226,7 +226,7 @@ class Test_Hausdorff : public TestCase
 
 class Test_All : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     ConfusionMatrix<UINT8> cTable(imGt, imIn);
     bool ok = true;

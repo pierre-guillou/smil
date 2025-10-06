@@ -28,7 +28,7 @@ using namespace smil;
 
 class Test_Resize : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(5, 5);
     Image<UINT8> im2(10, 10);
@@ -101,7 +101,7 @@ class Test_Resize : public TestCase
 
 class Test_Resize_Closest : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(5, 5);
     Image<UINT8> im2(10, 10);
@@ -145,7 +145,7 @@ class Test_Resize_Closest : public TestCase
 
 class Test_Scale : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(5, 5);
     Image<UINT8> im2(10, 10);
@@ -217,7 +217,7 @@ class Test_Scale : public TestCase
 
 class Test_Rotate090 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> imIn(10,10);
     Image<UINT8> imOut(imIn);
@@ -266,7 +266,7 @@ class Test_Rotate090 : public TestCase
 
 class Test_Rotate180 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> imIn(10,10);
     Image<UINT8> imOut(imIn);
@@ -315,7 +315,7 @@ class Test_Rotate180 : public TestCase
 
 class Test_Rotate270 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> imIn(10,10);
     Image<UINT8> imOut(imIn);
@@ -364,7 +364,7 @@ class Test_Rotate270 : public TestCase
 
 class Test_Rotate360 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> imIn(10,10);
     Image<UINT8> imOut(imIn);
@@ -414,7 +414,7 @@ class Test_Rotate360 : public TestCase
 
 class Test_HorizFlip : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> imIn(10,10);
     Image<UINT8> imOut(imIn);
@@ -463,7 +463,7 @@ class Test_HorizFlip : public TestCase
 
 class Test_VertFlip : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> imIn(10,10);
     Image<UINT8> imOut(imIn);

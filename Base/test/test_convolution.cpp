@@ -27,7 +27,7 @@ using namespace smil;
 
 class Test_ConvolHoriz : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(10, 5);
     Image<UINT8> im2(im1);
@@ -62,7 +62,7 @@ class Test_ConvolHoriz : public TestCase
 
 class Test_ConvolVert : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(10, 5);
     Image<UINT8> im2(im1);
@@ -95,7 +95,7 @@ class Test_ConvolVert : public TestCase
 
 class Test_GaussianFilter : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(10, 5);
     Image<UINT8> im2(im1);

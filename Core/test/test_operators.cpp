@@ -37,7 +37,7 @@ using namespace smil;
 
 class Test_Assign : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vecFill[20] = {127, 127, 127, 127, 127, 127, 127, 127, 127, 127,
                          127, 127, 127, 127, 127, 127, 127, 127, 127, 127};
@@ -61,7 +61,7 @@ class Test_Assign : public TestCase
 
 class Test_Add : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[20]     = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10,
                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20};

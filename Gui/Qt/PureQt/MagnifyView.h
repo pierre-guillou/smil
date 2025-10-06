@@ -47,7 +47,7 @@ class MagnifyView : public QGraphicsView
 public:
   explicit MagnifyView(QWidget *parent = nullptr);
 
-  ~MagnifyView();
+  ~MagnifyView() override;
 
 private:
   QImage *fullImage;
@@ -62,7 +62,7 @@ private:
 
   double scaleFactor;
 
-  void mouseMoveEvent(QMouseEvent *pEvent);
+  void mouseMoveEvent(QMouseEvent *pEvent) override;
 
 public:
   void       setGridSize(int s);

@@ -181,7 +181,7 @@ namespace smil
                                  size_t /*x*/, size_t /*y*/, size_t /*z*/)
     {
     }
-    virtual RES_T processImage(const Image<T> &imIn, bool onlyNonZero = false)
+    RES_T processImage(const Image<T> &imIn, bool onlyNonZero = false) override
     {
       this->initialize(imIn);
       ASSERT(CHECK_ALLOCATED(&imIn), RES_ERR_BAD_ALLOCATION);
@@ -223,7 +223,7 @@ namespace smil
       this->finalize(imIn);
       return RES_OK;
     }
-    virtual retType processImage(const Image<T> &imIn, const Blob &blob)
+    retType processImage(const Image<T> &imIn, const Blob &blob) override
     {
       this->initialize(imIn);
 
@@ -242,7 +242,7 @@ namespace smil
     }
 
   private:
-    virtual void processSequence(lineType /*lineIn*/, size_t /*size*/)
+    void processSequence(lineType /*lineIn*/, size_t /*size*/) override
     {
     }
   };

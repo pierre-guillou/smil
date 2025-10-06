@@ -87,8 +87,8 @@ namespace smil
       return real_labels;
     }
 
-    virtual RES_T initialize(const imageInType &imIn, imageOutType &imOut,
-                             const StrElt &se)
+    RES_T initialize(const imageInType &imIn, imageOutType &imOut,
+                     const StrElt &se) override
     {
       parentClass::initialize(imIn, imOut, se);
       fill(imOut, T2(0));
@@ -98,8 +98,8 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T processImage(const imageInType &imIn,
-                               imageOutType & /*imOut*/, const StrElt & /*se*/)
+    RES_T processImage(const imageInType &imIn, imageOutType & /*imOut*/,
+                       const StrElt & /*se*/) override
     {
       this->pixelsIn = imIn.getPixels();
 
@@ -113,8 +113,8 @@ namespace smil
       return RES_OK;
     }
 
-    virtual void processPixel(size_t      pointOffset,
-                              SMIL_UNUSED std::vector<int> &dOffsets)
+    void processPixel(size_t      pointOffset,
+                      SMIL_UNUSED std::vector<int> &dOffsets) override
     {
       T1 pVal = this->pixelsIn[pointOffset];
 
@@ -202,8 +202,8 @@ namespace smil
       return labels_real;
     }
 
-    virtual RES_T initialize(const imageInType &imIn, imageOutType &imOut,
-                             const StrElt &se)
+    RES_T initialize(const imageInType &imIn, imageOutType &imOut,
+                     const StrElt &se) override
     {
       parentClass::initialize(imIn, imOut, se);
       fill(imOut, T2(0));
@@ -213,8 +213,8 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T processImage(const imageInType &imIn, imageOutType &imOut,
-                               const StrElt & /*se*/)
+    RES_T processImage(const imageInType &imIn, imageOutType &imOut,
+                       const StrElt & /*se*/) override
     {
       Image<T1> tmp(imIn);
       Image<T1> tmp2(imIn);
@@ -1126,8 +1126,8 @@ namespace smil
   public:
     typedef MorphImageFunctionBase<T1, T2> parentClass;
 
-    virtual inline void processPixel(size_t            pointOffset,
-                                     std::vector<int> &dOffsetList)
+    inline void processPixel(size_t            pointOffset,
+                             std::vector<int> &dOffsetList) override
     {
       std::vector<T1>            vals;
       UINT                       nbrValues = 0;

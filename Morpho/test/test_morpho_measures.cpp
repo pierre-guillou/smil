@@ -34,7 +34,7 @@ using namespace smil;
 
 class TestGranulometry : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       Image<UINT8> im1(10,10);
       Image<UINT8> im2(im1);

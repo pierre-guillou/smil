@@ -34,7 +34,7 @@ using namespace smil;
 
 class TestArrow : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 T_in;
       typedef UINT16 T_out;

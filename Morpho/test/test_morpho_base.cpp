@@ -34,7 +34,7 @@ using namespace smil;
 
 class Test_Dilate_2Points : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -82,7 +82,7 @@ class Test_Dilate_2Points : public TestCase
 
 class Test_3Points_Hex : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -145,7 +145,7 @@ class Test_3Points_Hex : public TestCase
 
 class Test_Dilate_Vert : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -193,7 +193,7 @@ class Test_Dilate_Vert : public TestCase
 
 class Test_Dilate_Cross : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -245,7 +245,7 @@ class Test_Dilate_Cross : public TestCase
 
 class Test_Dilate_Hex : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -299,7 +299,7 @@ class Test_Dilate_Hex : public TestCase
 
 class Test_Dilate_Squ : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -367,7 +367,7 @@ class Test_Dilate_Squ : public TestCase
 
 class Test_Dilate_3D : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -451,7 +451,7 @@ class Test_Dilate_3D : public TestCase
 
 class Test_Dilate_Rhombicuboctahedron : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;

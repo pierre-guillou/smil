@@ -77,17 +77,17 @@ namespace smil
     typedef ImageViewer<T> parentClass;
     QtImageViewer();
     QtImageViewer(Image<T> &im);
-    ~QtImageViewer();
+    ~QtImageViewer() override;
 
-    virtual void setImage(Image<T> &im);
-    virtual void hide();
-    virtual void show();
-    virtual void showLabel();
-    virtual bool isVisible();
-    virtual void setName(const char *_name);
-    virtual void update();
-    virtual void saveSnapshot(const char *fileName);
-    virtual void redrawImage() // ImageViewerWidget
+    void setImage(Image<T> &im) override;
+    void hide() override;
+    void show() override;
+    void showLabel() override;
+    bool isVisible() override;
+    void setName(const char *_name) override;
+    void update() override;
+    void saveSnapshot(const char *fileName) override;
+    void redrawImage() override // ImageViewerWidget
     {
       update();
     }
@@ -98,37 +98,37 @@ namespace smil
 
       BASE_QT_VIEWER::updateIcon();
     }
-    virtual void drawOverlay(const Image<T> &im);
-    virtual void clearOverlay()
+    void drawOverlay(const Image<T> &im) override;
+    void clearOverlay() override
     {
       BASE_QT_VIEWER::clearOverlay();
     }
-    virtual RES_T getOverlay(Image<T> &img);
+    RES_T getOverlay(Image<T> &img) override;
 
     //! Set the color table as a 8bits RGB map (keys between 0 and 255)
-    virtual void setLookup(const std::map<UINT8, RGB> &lut);
-    virtual void resetLookup();
+    void setLookup(const std::map<UINT8, RGB> &lut) override;
+    void resetLookup() override;
 
-    virtual void setCurSlice(int)
+    void setCurSlice(int) override
     {
       this->update();
     }
 
-    virtual void setLabelImage(bool val);
+    void setLabelImage(bool val) override;
 
 #ifdef USE_QWT
-    virtual void displayHistogram(bool update = false);
-    virtual void displayProfile(bool update = false);
+    void displayHistogram(bool update = false) override;
+    void displayProfile(bool update = false) override;
 #endif // USE_QWT
 
   protected:
-    virtual void displayPixelValue(size_t x, size_t y, size_t z);
-    virtual void displayMagnifyView(size_t x, size_t y, size_t z);
-    virtual void drawImage();
-    virtual void overlayDataChanged(bool triggerEvents = true);
+    void displayPixelValue(size_t x, size_t y, size_t z) override;
+    void displayMagnifyView(size_t x, size_t y, size_t z) override;
+    void drawImage() override;
+    void overlayDataChanged(bool triggerEvents = true) override;
     //     ImageViewerWidget *qtViewer;
     //     ImageViewer *qtViewer;
-    virtual void dropEvent(QDropEvent *de);
+    void dropEvent(QDropEvent *de) override;
 
 #ifdef USE_QWT
     PlotWidget *histoPlot;

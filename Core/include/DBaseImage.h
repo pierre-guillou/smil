@@ -70,7 +70,7 @@ namespace smil
       onShow     = Signal(this);
     }
 
-    virtual ~BaseImage();
+    ~BaseImage() override;
 
     // Forbid implicit assignment operator
     BaseImage &operator=(const BaseImage &rhs);
@@ -94,7 +94,7 @@ namespace smil
     }
 
     //! Get memory size (bytes)
-    virtual size_t getAllocatedSize() const
+    size_t getAllocatedSize() const override
     {
       return allocatedSize;
     }
@@ -331,7 +331,7 @@ namespace smil
     }
 
     //! Get the description of the image
-    virtual std::string getInfoString(const char * = "") const
+    std::string getInfoString(const char * = "") const override
     {
       return {};
     }

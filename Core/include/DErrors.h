@@ -117,14 +117,23 @@ namespace smil
       buildMessage();
     }
 
-    virtual ~Error() noexcept(true)
+#ifndef SWIG
+    ~Error() noexcept(true) override
     {
     }
+
+    const char *what() const noexcept(true) override
+    {
+      return this->message.c_str();
+    }
+#else
+    virtual ~Error() noexcept(true) = default;
 
     virtual const char *what() const noexcept(true)
     {
       return this->message.c_str();
     }
+#endif // SWIG
 
     void show()
     {

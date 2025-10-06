@@ -83,7 +83,7 @@ namespace smil
       this->clone(img);
     }
 
-    virtual ~SharedImage()
+    ~SharedImage() override
     {
       this->detach();
     }
@@ -165,8 +165,8 @@ namespace smil
   protected:
     bool attached;
 
-    virtual RES_T setSize(size_t w, size_t h, size_t d = 1,
-                          bool /*doAllocate*/ = true)
+    RES_T setSize(size_t w, size_t h, size_t d = 1,
+                  bool /*doAllocate*/ = true) override
     {
       this->width  = w;
       this->height = h;
@@ -184,12 +184,12 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T allocate()
+    RES_T allocate() override
     {
       return RES_ERR_BAD_ALLOCATION;
     }
 
-    virtual RES_T deallocate()
+    RES_T deallocate() override
     {
       return RES_ERR_BAD_ALLOCATION;
     }

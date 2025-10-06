@@ -37,7 +37,7 @@ using namespace smil;
 
 class Test_Add : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Point<off_t> pr(25, 45, 65);
     Point<off_t> p1(10, 20, 30);
@@ -51,7 +51,7 @@ class Test_Add : public TestCase
 
 class Test_Sub : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Point<off_t> pr(5, 0, -5);
     Point<off_t> p1(15, 20, 30);

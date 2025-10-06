@@ -232,8 +232,8 @@ namespace smil
   public:
     typedef MorphImageFunctionBase<T, T> parentClass;
 
-    virtual inline void processPixel(size_t            pointOffset,
-                                     std::vector<int> &dOffsetList)
+    inline void processPixel(size_t            pointOffset,
+                             std::vector<int> &dOffsetList) override
     {
       double                     meanVal = 0;
       std::vector<int>::iterator dOffset = dOffsetList.begin();
@@ -275,8 +275,8 @@ namespace smil
   public:
     typedef MorphImageFunctionBase<T, T> parentClass;
 
-    virtual inline void processPixel(size_t            pointOffset,
-                                     std::vector<int> &dOffsetList)
+    inline void processPixel(size_t            pointOffset,
+                             std::vector<int> &dOffsetList) override
     {
       std::vector<T>             vals;
       std::vector<int>::iterator dOffset = dOffsetList.begin();

@@ -30,7 +30,7 @@ using namespace smil;
 
 class Test_Area_Threshold : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(16, 16);
     Image<UINT8> im2(16, 16);

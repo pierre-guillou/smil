@@ -37,7 +37,7 @@ using namespace smil;
 
 class Test_HierarchicalQueue : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       Image<UINT8> img(6,1);
       UINT8 vals[] = { 0, 0, 0, 2, 2, 2 };
@@ -63,7 +63,7 @@ class Test_HierarchicalQueue : public TestCase
 
 class Test_InitHierarchicalQueue : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vecIn[] = { 
         2, 2, 2, 2, 2, 2,
@@ -104,7 +104,7 @@ class Test_InitHierarchicalQueue : public TestCase
 
 class Test_Build : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vecIn[] = { 
         1, 2, 0, 5, 5, 5, 3, 3, 3, 1, 1
@@ -140,7 +140,7 @@ class Test_Build : public TestCase
 
 class Test_BinBuild : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vecIn[] = { 
           0,   0,   0,   0,   0, 255,   0,

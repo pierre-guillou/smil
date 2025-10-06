@@ -76,9 +76,11 @@ namespace smil
 #endif // SWIG
   {
   public:
-    virtual ~ExtinctionFlooding()
-    {
-    }
+#ifndef SWIG
+    ~ExtinctionFlooding() override = default;
+#else
+    virtual ~ExtinctionFlooding() = default;
+#endif // SWIG
 
     UINT                    labelNbr, basinNbr;
     T                       currentLevel;
@@ -133,9 +135,9 @@ namespace smil
           equivalentLabels[i] = lbl2;
     }
 
-    virtual RES_T flood(const Image<T> &imIn, const Image<labelT> &imMarkers,
-                        Image<labelT> &imBasinsOut,
-                        const StrElt  &se = DEFAULT_SE)
+    RES_T flood(const Image<T> &imIn, const Image<labelT> &imMarkers,
+                Image<labelT> &imBasinsOut,
+                const StrElt  &se = DEFAULT_SE) override
     {
       return BaseFlooding<T, labelT, HQ_Type>::flood(imIn, imMarkers,
                                                      imBasinsOut, se);
@@ -242,8 +244,8 @@ namespace smil
     }
 
   protected:
-    virtual RES_T initialize(const Image<T> &imIn, Image<labelT> &imLbl,
-                             const StrElt &se)
+    RES_T initialize(const Image<T> &imIn, Image<labelT> &imLbl,
+                     const StrElt &se) override
     {
       BaseFlooding<T, labelT, HQ_Type>::initialize(imIn, imLbl, se);
 
@@ -256,8 +258,8 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T processImage(const Image<T> &imIn, Image<labelT> &imLbl,
-                               const StrElt &se)
+    RES_T processImage(const Image<T> &imIn, Image<labelT> &imLbl,
+                       const StrElt &se) override
     {
       BaseFlooding<T, labelT, HQ_Type>::processImage(imIn, imLbl, se);
       //	    std::cout<<"PROCESSMERGES_IMAGE,"<<pendingMerges.size()<<"\n";
@@ -317,7 +319,7 @@ namespace smil
       }
     }
 
-    inline virtual void processPixel(const size_t &curOffset)
+    inline void processPixel(const size_t &curOffset) override
     {
       if (this->inPixels[curOffset] > currentLevel) {
         // std::cout<<"PROCESSMERGES_Px,"<<pendingMerges.size()<<"\n";
@@ -339,8 +341,8 @@ namespace smil
       lastOffset = curOffset;
     }
 
-    inline virtual void processNeighbor(const size_t &curOffset,
-                                        const size_t &nbOffset)
+    inline void processNeighbor(const size_t &curOffset,
+                                const size_t &nbOffset) override
     {
       labelT nbLbl  = this->lblPixels[nbOffset];
       labelT curLbl = this->lblPixels[curOffset]; //==this->STAT_QUEUED ? 0 :
@@ -382,7 +384,7 @@ namespace smil
     std::vector<UINT> areas;
     std::vector<T>    minValues;
 
-    virtual void createBasins(const UINT &nbr)
+    void createBasins(const UINT &nbr) override
     {
       areas.resize(nbr, 0);
       minValues.resize(nbr, ImDtTypes<T>::max());
@@ -390,7 +392,7 @@ namespace smil
       ExtinctionFlooding<T, labelT, extValType, HQ_Type>::createBasins(nbr);
     }
 
-    virtual void deleteBasins()
+    void deleteBasins() override
     {
       areas.clear();
       minValues.clear();
@@ -398,7 +400,7 @@ namespace smil
       ExtinctionFlooding<T, labelT, extValType, HQ_Type>::deleteBasins();
     }
 
-    inline virtual void insertPixel(const size_t &offset, const labelT &lbl)
+    inline void insertPixel(const size_t &offset, const labelT &lbl) override
     {
       if (this->inPixels[offset] < minValues[lbl])
         minValues[lbl] = this->inPixels[offset];
@@ -406,7 +408,7 @@ namespace smil
       areas[lbl]++;
       //	    std::cout<<"label="<<int(lbl)<<"; areas[lbl]="<<areas[lbl]<<"\n";
     }
-    virtual labelT mergeBasins(const labelT &lbl1, const labelT &lbl2)
+    labelT mergeBasins(const labelT &lbl1, const labelT &lbl2) override
     {
       labelT eater, eaten;
 
@@ -429,7 +431,7 @@ namespace smil
       //	    std::cout<<"....\n";
       return eater;
     }
-    virtual void finalize(const labelT &lbl)
+    void finalize(const labelT &lbl) override
     {
       this->extinctionValues[lbl] += areas[lbl];
     }
@@ -443,7 +445,7 @@ namespace smil
     std::vector<UINT> areas, volumes;
     std::vector<T>    floodLevels;
 
-    virtual void createBasins(const UINT &nbr)
+    void createBasins(const UINT &nbr) override
     {
       areas.resize(nbr, 0);
       volumes.resize(nbr, 0);
@@ -452,7 +454,7 @@ namespace smil
       ExtinctionFlooding<T, labelT, extValType, HQ_Type>::createBasins(nbr);
     }
 
-    virtual void deleteBasins()
+    void deleteBasins() override
     {
       areas.clear();
       volumes.clear();
@@ -461,7 +463,7 @@ namespace smil
       ExtinctionFlooding<T, labelT, extValType, HQ_Type>::deleteBasins();
     }
 
-    virtual void insertPixel(const size_t &offset, const labelT &lbl)
+    void insertPixel(const size_t &offset, const labelT &lbl) override
     {
       floodLevels[lbl] = std::max(this->currentLevel, floodLevels[lbl]);
       volumes[lbl] += this->currentLevel -
@@ -469,14 +471,14 @@ namespace smil
                                               // (ex. non-minima markers)
       areas[lbl]++;
     }
-    virtual void raiseLevel(const labelT &lbl)
+    void raiseLevel(const labelT &lbl) override
     {
       if (floodLevels[lbl] < this->currentLevel) {
         volumes[lbl] += areas[lbl] * (this->currentLevel - floodLevels[lbl]);
         floodLevels[lbl] = this->currentLevel;
       }
     }
-    virtual labelT mergeBasins(const labelT &lbl1, const labelT &lbl2)
+    labelT mergeBasins(const labelT &lbl1, const labelT &lbl2) override
     {
       labelT eater, eaten;
 
@@ -496,7 +498,7 @@ namespace smil
 
       return eater;
     }
-    virtual void finalize(const labelT &lbl)
+    void finalize(const labelT &lbl) override
     {
       volumes[lbl] += areas[lbl];
       this->extinctionValues[lbl] += volumes[lbl];
@@ -508,7 +510,7 @@ namespace smil
   class DynamicExtinctionFlooding
       : public AreaExtinctionFlooding<T, labelT, extValType, HQ_Type>
   {
-    virtual labelT mergeBasins(const labelT &lbl1, const labelT &lbl2)
+    labelT mergeBasins(const labelT &lbl1, const labelT &lbl2) override
     {
       labelT eater, eaten;
 
@@ -528,7 +530,7 @@ namespace smil
 
       return eater;
     }
-    virtual void finalize(const labelT &lbl)
+    void finalize(const labelT &lbl) override
     {
       this->extinctionValues[lbl] = this->currentLevel - this->minValues[lbl];
     }

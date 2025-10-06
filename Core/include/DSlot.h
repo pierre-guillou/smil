@@ -76,7 +76,7 @@ namespace smil
     Slot()
     {
     }
-    virtual ~Slot()
+    ~Slot() override
     {
     }
     virtual void run(eventT * /*e*/)
@@ -87,7 +87,7 @@ namespace smil
     }
 #ifndef SWIG
   protected:
-    virtual void _run(Event *e)
+    void _run(Event *e) override
     {
       run(static_cast<eventT *>(e));
     }
@@ -130,7 +130,7 @@ namespace smil
     T             *_instance;
     memberFunc     _function;
     voidMemberFunc _void_function;
-    virtual void   run(eventT *e = NULL)
+    void           run(eventT *e = NULL) override
     {
       if (!_instance)
         return;

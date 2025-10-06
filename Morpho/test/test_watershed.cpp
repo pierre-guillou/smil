@@ -36,7 +36,7 @@ using namespace smil;
 
 class Test_Basins : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dtType;
       typedef UINT16 dtType2;
@@ -108,7 +108,7 @@ class Test_Basins : public TestCase
 
 class Test_Basins_Plateaus : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dtType;
       typedef UINT16 dtType2;
@@ -171,7 +171,7 @@ class Test_Basins_Plateaus : public TestCase
 
 class Test_ProcessWatershedHierarchicalQueue : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vecIn[] = { 
         2, 2, 2, 2, 2, 2,
@@ -265,7 +265,7 @@ class Test_ProcessWatershedHierarchicalQueue : public TestCase
 template <class dtType=UINT8>
 class Test_Watershed : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       dtType vecIn[] = { 
         2, 2, 2, 2, 2, 2,
@@ -347,7 +347,7 @@ class Test_Watershed : public TestCase
 
 class Test_Watershed_Plateaus : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dtType;
       typedef UINT16 dtType2;
@@ -429,7 +429,7 @@ class Test_Watershed_Plateaus : public TestCase
 
 class Test_Watershed_Indempotence : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       UINT8 vecIn[] = { 
           98,   81,   45,  233,  166,  112,  100,   20,  176,   79,

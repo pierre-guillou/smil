@@ -46,8 +46,8 @@ namespace smil
     typedef typename unaryLineFunctionBase<T, T_out>::lineInType  lineInType;
     typedef typename unaryLineFunctionBase<T, T_out>::lineOutType lineOutType;
 
-    virtual void _exec(const lineInType lIn, const size_t size,
-                       lineOutType lOut)
+    void _exec(const lineInType lIn, const size_t size,
+               lineOutType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn[i] >= minVal && lIn[i] <= maxVal ? trueVal : falseVal;

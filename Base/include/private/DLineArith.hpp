@@ -75,11 +75,11 @@ namespace smil
       this->_exec(lIn, size, value);
     }
 
-    virtual void _exec(const lineType lIn, const size_t size, lineType lOut)
+    void _exec(const lineType lIn, const size_t size, lineType lOut) override
     {
       return this->fill(lIn, size, lOut);
     }
-    virtual void _exec(lineType lInOut, const size_t size, const T value)
+    void _exec(lineType lInOut, const size_t size, const T value) override
     {
       return this->fill(lInOut, size, value);
     }
@@ -117,7 +117,8 @@ namespace smil
   template <class T>
   struct invLine : public unaryLineFunctionBase<T> {
     typedef typename unaryLineFunctionBase<T>::lineType lineType;
-    inline void _exec(const lineType lineIn, const size_t size, lineType lOut)
+    inline void _exec(const lineType lineIn, const size_t size,
+                      lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = ImDtTypes<T>::max() - lineIn[i] - ImDtTypes<T>::min();
@@ -127,8 +128,8 @@ namespace smil
   template <class T>
   struct addLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] > (T) (ImDtTypes<T>::max() - lIn2[i])
@@ -140,8 +141,8 @@ namespace smil
   template <class T>
   struct addNoSatLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] + lIn2[i];
@@ -151,8 +152,8 @@ namespace smil
   template <class T>
   struct subLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] < (T) (ImDtTypes<T>::min() + lIn2[i])
@@ -164,8 +165,8 @@ namespace smil
   template <class T>
   struct subNoSatLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] - lIn2[i];
@@ -175,8 +176,8 @@ namespace smil
   template <class T>
   struct supLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] > lIn2[i] ? lIn1[i] : lIn2[i];
@@ -186,8 +187,8 @@ namespace smil
   template <class T>
   struct infLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] < lIn2[i] ? lIn1[i] : lIn2[i];
@@ -203,8 +204,8 @@ namespace smil
     T trueVal, falseVal;
 
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       T _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -224,8 +225,8 @@ namespace smil
     typedef typename parentClass::lineType            lineInType;
     typedef typename parentClass::lineOutType         lineOutType;
 
-    virtual void _exec(const lineInType lIn1, const lineInType lIn2,
-                       const size_t size, lineOutType lOut)
+    void _exec(const lineInType lIn1, const lineInType lIn2, const size_t size,
+               lineOutType lOut) override
     {
       T_out _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -242,8 +243,8 @@ namespace smil
     T trueVal, falseVal;
 
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       T _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -263,8 +264,8 @@ namespace smil
     typedef typename parentClass::lineType            lineInType;
     typedef typename parentClass::lineOutType         lineOutType;
 
-    virtual void _exec(const lineInType lIn1, const lineInType lIn2,
-                       const size_t size, lineOutType lOut)
+    void _exec(const lineInType lIn1, const lineInType lIn2, const size_t size,
+               lineOutType lOut) override
     {
       T_out _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -281,8 +282,8 @@ namespace smil
     T trueVal, falseVal;
 
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       T _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -302,8 +303,8 @@ namespace smil
     typedef typename parentClass::lineType            lineInType;
     typedef typename parentClass::lineOutType         lineOutType;
 
-    virtual void _exec(const lineInType lIn1, const lineInType lIn2,
-                       const size_t size, lineOutType lOut)
+    void _exec(const lineInType lIn1, const lineInType lIn2, const size_t size,
+               lineOutType lOut) override
     {
       T_out _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -320,8 +321,8 @@ namespace smil
     T trueVal, falseVal;
 
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       T _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -341,8 +342,8 @@ namespace smil
     typedef typename parentClass::lineType            lineInType;
     typedef typename parentClass::lineOutType         lineOutType;
 
-    virtual void _exec(const lineInType lIn1, const lineInType lIn2,
-                       const size_t size, lineOutType lOut)
+    void _exec(const lineInType lIn1, const lineInType lIn2, const size_t size,
+               lineOutType lOut) override
     {
       T_out _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -359,8 +360,8 @@ namespace smil
     T trueVal, falseVal;
 
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       T _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -377,8 +378,8 @@ namespace smil
     T trueVal, falseVal;
 
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       T _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -398,8 +399,8 @@ namespace smil
     typedef typename parentClass::lineType            lineInType;
     typedef typename parentClass::lineOutType         lineOutType;
 
-    virtual void _exec(const lineInType lIn1, const lineInType lIn2,
-                       const size_t size, lineOutType lOut)
+    void _exec(const lineInType lIn1, const lineInType lIn2, const size_t size,
+               lineOutType lOut) override
     {
       T_out _trueVal(trueVal), _falseVal(falseVal);
       for (size_t i = 0; i < size; i++)
@@ -416,8 +417,8 @@ namespace smil
   template <class T>
   struct absDiffLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = lIn1[i] > lIn2[i] ? lIn1[i] - lIn2[i] : lIn2[i] - lIn1[i];
@@ -427,8 +428,8 @@ namespace smil
   template <class T>
   struct mulLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] =
@@ -452,8 +453,8 @@ namespace smil
   template <class T>
   struct divLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++) {
         lOut[i] = lIn2[i] == T(0) ? ImDtTypes<T>::max() : lIn1[i] / lIn2[i];
@@ -491,8 +492,8 @@ namespace smil
     expLine() : base(0)
     {
     }
-    virtual void _exec(const lineInType lIn, const size_t size,
-                       lineOutType lOut)
+    void _exec(const lineInType lIn, const size_t size,
+               lineOutType lOut) override
     {
       double vmax = std::numeric_limits<T2>::max();
       double v;
@@ -520,8 +521,8 @@ namespace smil
     powLine() : exponent(1)
     {
     }
-    virtual void _exec(const lineInType lIn, const size_t size,
-                       lineOutType lOut)
+    void _exec(const lineInType lIn, const size_t size,
+               lineOutType lOut) override
     {
       double vmax = std::numeric_limits<T2>::max();
       double v;
@@ -550,8 +551,8 @@ namespace smil
     sqrtLine()
     {
     }
-    virtual void _exec(const lineInType lIn, const size_t size,
-                       lineOutType lOut)
+    void _exec(const lineInType lIn, const size_t size,
+               lineOutType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = T2(std::sqrt(lIn[i]));
@@ -572,8 +573,8 @@ namespace smil
   template <class T>
   struct bitAndLine : public binaryLineFunctionBase<T> {
     typedef typename binaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType lIn1, const lineType lIn2,
-                       const size_t size, lineType lOut)
+    void _exec(const lineType lIn1, const lineType lIn2, const size_t size,
+               lineType lOut) override
     {
       for (size_t i = 0; i < size; i++)
         lOut[i] = (T) (lIn1[i] & lIn2[i]);
@@ -642,7 +643,7 @@ namespace smil
   struct rightShiftLine : public unaryLineFunctionBase<T> {
     using unaryLineFunctionBase<T>::_exec;
     typedef typename unaryLineFunctionBase<T>::lineType lineType;
-    virtual void _exec(const lineType, const size_t, lineType)
+    void _exec(const lineType, const size_t, lineType) override
     {
     }
     virtual void _exec(const lineType lIn1, const UINT shift, const size_t size,
@@ -659,8 +660,8 @@ namespace smil
     typedef typename parentClass::lineType1          lineType1;
     typedef typename parentClass::lineOutType        lineType2;
 
-    virtual void _exec(const lineType1 lIn1, const lineType2 lIn2,
-                       const lineType2 lIn3, const size_t size, lineType2 lOut)
+    void _exec(const lineType1 lIn1, const lineType2 lIn2, const lineType2 lIn3,
+               const size_t size, lineType2 lOut) override
     {
       for (size_t i = 0; i < size; i++) {
         lOut[i] = lIn1[i] ? lIn2[i] : lIn3[i];

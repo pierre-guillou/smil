@@ -66,7 +66,7 @@ namespace smil
       imNodeValues  = nullptr;
     }
 
-    virtual ~mosaicToGraphFunct()
+    ~mosaicToGraphFunct() override
     {
       if (internalGraph)
         delete internalGraph;
@@ -149,8 +149,8 @@ namespace smil
       return *internalGraph;
     }
 
-    virtual RES_T initialize(const imageInType &imIn, imageOutType &imOut,
-                             const StrElt &se)
+    RES_T initialize(const imageInType &imIn, imageOutType &imOut,
+                     const StrElt &se) override
     {
       ASSERT(parentClass::initialize(imIn, imOut, se) == RES_OK);
 
@@ -170,14 +170,14 @@ namespace smil
       return RES_OK;
     }
 
-    virtual RES_T finalize(const imageInType &imIn, imageOutType &imOut,
-                           const StrElt &se)
+    RES_T finalize(const imageInType &imIn, imageOutType &imOut,
+                   const StrElt &se) override
     {
       return parentClass::finalize(imIn, imOut, se);
     }
 
-    virtual inline void processPixel(size_t            pointOffset,
-                                     std::vector<int> &dOffsetList)
+    inline void processPixel(size_t            pointOffset,
+                             std::vector<int> &dOffsetList) override
     {
       T1                         curVal  = parentClass::pixelsIn[pointOffset];
       std::vector<int>::iterator dOffset = dOffsetList.begin();

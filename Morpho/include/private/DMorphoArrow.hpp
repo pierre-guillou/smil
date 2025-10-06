@@ -64,8 +64,8 @@ namespace smil
         : MorphImageFunction<T_in, lineFunction_T, T_out>(border)
     {
     }
-    virtual RES_T _exec_single(const imageInType &imIn, imageOutType &imOut,
-                               const StrElt &se);
+    RES_T _exec_single(const imageInType &imIn, imageOutType &imOut,
+                       const StrElt &se) override;
   };
 
   template <class T_in, class lineFunction_T, class T_out>

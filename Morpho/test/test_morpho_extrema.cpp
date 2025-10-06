@@ -41,7 +41,7 @@ using namespace smil;
 
 class Test_MinMax : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;
@@ -106,7 +106,7 @@ class Test_MinMax : public TestCase
 
 class Test_HMinMax : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef UINT8 dataType;
       typedef Image<dataType> imType;

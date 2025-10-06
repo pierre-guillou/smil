@@ -35,7 +35,7 @@ using namespace smil;
 
 class TestAreaOpening03 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
 
@@ -54,7 +54,7 @@ class TestAreaOpening03 : public TestCase
 
 class TestAreaOpening06 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
 
@@ -73,7 +73,7 @@ class TestAreaOpening06 : public TestCase
 
 class TestAreaOpening12 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
 
@@ -93,7 +93,7 @@ class TestAreaOpening12 : public TestCase
 
 class TestAreaOpening20 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
 
@@ -113,7 +113,7 @@ class TestAreaOpening20 : public TestCase
 
 class TestAreaOpening30 : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
 

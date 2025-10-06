@@ -34,7 +34,7 @@ using namespace smil;
 
 class TestDiameter : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
     
@@ -54,7 +54,7 @@ class TestDiameter : public TestCase
 
 class TestExtremities : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
     
@@ -74,7 +74,7 @@ class TestExtremities : public TestCase
 
 class TestElongation : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     char *path;
     

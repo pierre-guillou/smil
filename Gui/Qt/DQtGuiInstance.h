@@ -48,12 +48,12 @@ namespace smil
     QtGui() : helpForm(nullptr)
     {
     }
-    virtual ~QtGui();
+    ~QtGui() override;
 
   protected:
-    virtual void _execLoop();
-    virtual void _processEvents();
-    virtual void _showHelp();
+    void _execLoop() override;
+    void _processEvents() override;
+    void _showHelp() override;
 
   private:
     HelpForm *helpForm;
@@ -63,11 +63,11 @@ namespace smil
   {
   public:
     QtAppGui();
-    ~QtAppGui();
+    ~QtAppGui() override;
 
   protected:
-    virtual void _execLoop();
-    virtual void _processEvents();
+    void _execLoop() override;
+    void _processEvents() override;
 
   private:
     int _argc;

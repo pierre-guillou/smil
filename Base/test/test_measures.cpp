@@ -29,7 +29,7 @@ using namespace smil;
 
 class Test_ValueList : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im1(4, 5);
 
@@ -52,7 +52,7 @@ class Test_ValueList : public TestCase
 
 class Test_MeasureVolAndArea : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(256, 256);
 
@@ -73,7 +73,7 @@ class Test_MeasureVolAndArea : public TestCase
 
 class Test_MeasureBarycenter : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(256, 256);
 
@@ -96,7 +96,7 @@ class Test_MeasureBarycenter : public TestCase
 
 class Test_MeasBoundingBox : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec[125] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -128,7 +128,7 @@ class Test_MeasBoundingBox : public TestCase
 
 class Test_MeasMoments : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec[25] = {
         0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
@@ -147,7 +147,7 @@ class Test_MeasMoments : public TestCase
 
 class Test_MeasCovariance : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     UINT8 vec1[25] = {
         10, 207, 10, 182, 118, 222, 96,  36,  14,  147, 150, 104, 159,
@@ -181,7 +181,7 @@ class Test_MeasCovariance : public TestCase
 
 class Test_MeanVal : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT16> im(10, 1);
 
@@ -196,7 +196,7 @@ class Test_MeanVal : public TestCase
 
 class Test_MinMax : public TestCase
 {
-  virtual void run()
+  void run() override
   {
     Image<UINT8> im(5, 5);
 

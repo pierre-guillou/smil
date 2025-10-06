@@ -37,7 +37,7 @@ using namespace smil;
 
 class Test_Array : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       MultichannelArray<UINT8, 3> arr;
       arr.createArrays(10);
@@ -67,7 +67,7 @@ class Test_Array : public TestCase
 
 class Test_Copy : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef RGB dataType;
       typedef Image<dataType> imType;
@@ -119,7 +119,7 @@ class Test_Copy : public TestCase
 
 class Test_Split_Merge : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       
       typedef RGB dataType;
@@ -201,7 +201,7 @@ class Test_Split_Merge : public TestCase
 
 class Test_Trans : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef RGB dataType;
       typedef Image<dataType> imType;
@@ -280,7 +280,7 @@ class Test_Trans : public TestCase
 
 class Test_Sup : public TestCase
 {
-  virtual void run()
+  void run() override
   {
       typedef RGB dataType;
       typedef Image<dataType> imType;
