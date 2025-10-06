@@ -2,5 +2,14 @@ file(GLOB TEST_PY *.py)
 
 foreach(_PY ${TEST_PY})
   get_filename_component(TEST_NAME ${_PY} NAME_WE)
-  add_test(NAME ${TEST_NAME}_py COMMAND ${Python3_EXECUTABLE} ${_PY})
+  if(${TEST_NAME} MATCHES ".*parsimonious.*")
+    # skip demo-parsimonious-path-opening.py since corresponding C++ code has
+    # been removed from Smil
+    continue()
+  endif()
+  add_test(
+    NAME ${TEST_NAME}_py
+    COMMAND ${Python3_EXECUTABLE} ${_PY}
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/images)
+  set_property(TEST ${TEST_NAME}_py PROPERTY LABELS python)
 endforeach()
