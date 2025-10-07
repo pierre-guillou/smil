@@ -272,7 +272,7 @@ namespace smil
       return RES_OK;
     }
 
-    virtual void processMerges(void)
+    virtual void processMerges()
     {
       if (pendingMerges.size() == 0)
         return;

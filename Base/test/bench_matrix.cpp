@@ -28,7 +28,7 @@
 
 using namespace smil;
 
-int main(void)
+int main()
 {
   int sx = 1024; // 24;
   int sy = 1024;

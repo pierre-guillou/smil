@@ -183,7 +183,7 @@ class Test_DrawText : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

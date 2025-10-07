@@ -134,7 +134,7 @@ class Test_GaussianFilter : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

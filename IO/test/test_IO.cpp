@@ -162,7 +162,7 @@ class Test_RW_BMP : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

@@ -177,7 +177,7 @@ class Test_ApplyLookup : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 
