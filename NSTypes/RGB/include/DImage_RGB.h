@@ -61,7 +61,7 @@ namespace smil
   }
 
   template <>
-  inline RES_T Image<RGB>::restruct(void)
+  inline RES_T Image<RGB>::restruct()
   {
     if (this->slices)
       delete[] this->slices;

@@ -273,7 +273,7 @@ class Test_All : public TestCase
       cout << "\n\t All indexes \t" << rExpect << "\t" << r << endl;
   }
 };
-int main(void)
+int main()
 {
   TestSuite ts;
 

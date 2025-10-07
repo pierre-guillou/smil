@@ -92,7 +92,7 @@ class Test_Area_Threshold : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 
