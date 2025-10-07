@@ -220,7 +220,7 @@ class Test_MinMax : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

@@ -510,7 +510,7 @@ class Test_VertFlip : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

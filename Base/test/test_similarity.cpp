@@ -210,7 +210,7 @@ class Test_Hausdorff : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

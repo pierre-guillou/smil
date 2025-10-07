@@ -63,7 +63,7 @@ class Test_VTK_RW : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
       TestSuite ts;
 

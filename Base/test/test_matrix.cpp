@@ -78,7 +78,7 @@ class Test_Multiply : public TestCase
   }
 };
 
-int main(void)
+int main()
 {
   TestSuite ts;
 

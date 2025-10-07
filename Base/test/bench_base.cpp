@@ -155,7 +155,7 @@ void bench_Size()
   cout << endl;
 }
 
-int main(void)
+int main()
 {
   // bench_INT_vs_AV();
   bench_NCores();

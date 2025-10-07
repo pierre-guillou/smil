@@ -28,7 +28,7 @@
 
 using namespace smil;
 
-int main(void)
+int main()
 {
   const size_t dim = 256;
 

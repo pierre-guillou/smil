@@ -28,7 +28,7 @@
 
 using namespace smil;
 
-int main(void)
+int main()
 {
   UINT BENCH_NRUNS = 100;
 
