@@ -31,11 +31,9 @@
 #define _D_MORPHO_HIERARQ_HPP
 
 #include <queue>
-#include <deque>
 #include <stack>
 
-#include "Core/include/private/DTypes.hpp"
-#include "Morpho/include/DStructuringElement.h"
+#include "include/private/DImage.hpp"
 
 namespace smil
 {
