@@ -54,11 +54,11 @@ namespace smil
 
     static inline pixelType min()
     {
-      return COLOR_UINT8_3(0);
+      return {0};
     }
     static inline pixelType max()
     {
-      return COLOR_UINT8_3(255);
+      return {255};
     }
     static inline size_t cardinal()
     {
@@ -146,11 +146,11 @@ namespace smil
     using lineType  = RGBArray;
     static inline pixelType min()
     {
-      return RGB(0);
+      return {0};
     }
     static inline pixelType max()
     {
-      return RGB(255);
+      return {255};
     }
     static inline size_t cardinal()
     {
@@ -176,11 +176,11 @@ namespace smil
 
     static inline pixelType min()
     {
-      return COLOR_32(0);
+      return {0};
     }
     static inline pixelType max()
     {
-      return COLOR_32(255);
+      return {255};
     }
     static inline lineType createLine(size_t lineLen)
     {

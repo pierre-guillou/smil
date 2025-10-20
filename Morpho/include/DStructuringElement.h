@@ -847,31 +847,31 @@ namespace smil
   /** @cond */
   inline HexSE hSE(UINT s = 1)
   {
-    return HexSE(s);
+    return {s};
   }
   inline HexSE0 hSE0(UINT s = 1)
   {
-    return HexSE0(s);
+    return {s};
   }
   inline SquSE sSE(UINT s = 1)
   {
-    return SquSE(s);
+    return {s};
   }
   inline SquSE0 sSE0(UINT s = 1)
   {
-    return SquSE0(s);
+    return {s};
   }
   inline CrossSE cSE(UINT s = 1)
   {
-    return CrossSE(s);
+    return {s};
   }
   inline CubeSE cbSE(UINT s = 1)
   {
-    return CubeSE(s);
+    return {s};
   }
   inline RhombicuboctahedronSE rcoSE(UINT s = 1)
   {
-    return RhombicuboctahedronSE(s);
+    return {s};
   }
   /** @endcond */
 
