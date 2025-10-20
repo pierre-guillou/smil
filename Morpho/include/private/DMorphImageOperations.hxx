@@ -58,7 +58,7 @@ namespace smil
 
     sePointNbr = sePoints.size();
     relativeOffsets.clear();
-    std::vector<IntPoint>::iterator pt = sePoints.begin();
+    auto pt                            = sePoints.begin();
     se_xmin                            = ImDtTypes<int>::max();
     se_xmax                            = ImDtTypes<int>::min();
     se_ymin                            = ImDtTypes<int>::max();
@@ -265,7 +265,7 @@ namespace smil
                                                     std::vector<int> &dOffsets)
   {
     // Example: dilation function
-    std::vector<int>::iterator it = dOffsets.begin();
+    auto it = dOffsets.begin();
     while (it != dOffsets.end()) {
       // pixelsOut[pointOffset] = max(pixelsOut[pointOffset],
       // pixelsIn[pointOffset + *dOffset]);

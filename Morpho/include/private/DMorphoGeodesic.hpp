@@ -270,8 +270,8 @@ namespace smil
     std::vector<int> dOffsets;
     operatorT        oper;
 
-    std::vector<IntPoint>::const_iterator it_start = se.points.begin();
-    std::vector<IntPoint>::const_iterator it_end   = se.points.end();
+    auto                                  it_start = se.points.begin();
+    auto                                  it_end   = se.points.end();
     std::vector<IntPoint>::const_iterator it;
 
     std::vector<size_t> tmpOffsets;
@@ -284,7 +284,7 @@ namespace smil
       dOffsets.push_back(it->x + it->y * s[0] + it->z * s[0] * s[1]);
     }
 
-    std::vector<int>::iterator it_off_start = dOffsets.begin();
+    auto                       it_off_start = dOffsets.begin();
     std::vector<int>::iterator it_off;
 
     size_t x0, y0, z0;

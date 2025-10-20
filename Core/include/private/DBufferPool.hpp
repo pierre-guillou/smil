@@ -51,8 +51,7 @@ namespace smil
     }
     ~BufferPool()
     {
-      for (typename std::vector<bufferType>::iterator it = buffers.begin();
-           it != buffers.end(); it++) {
+      for (auto it = buffers.begin(); it != buffers.end(); it++) {
         ImDtTypes<T>::deleteLine(*it);
       }
     }

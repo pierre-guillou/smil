@@ -1995,7 +1995,7 @@ namespace smil
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     // Verify that the max(measure) doesn't exceed the T2 type max
-    typename mapT::const_iterator max_it =
+    auto max_it =
         std::max_element(_map.begin(), _map.end(), map_comp_value_less());
     ASSERT((max_it->second <= ImDtTypes<T2>::max()),
            "Input map max exceeds data type max!", RES_ERR);
@@ -2050,8 +2050,7 @@ namespace smil
     typename Image<T1>::lineType pixIn  = imIn.getPixels();
     typename Image<T2>::lineType pixOut = imOut.getPixels();
 
-    for (typename std::map<T1, T2>::const_iterator it = lut.begin();
-         it != lut.end(); it++)
+    for (auto it = lut.begin(); it != lut.end(); it++)
       outVals[it->first] = it->second;
 
     for (size_t i = 0; i < imIn.getPixelCount(); i++)

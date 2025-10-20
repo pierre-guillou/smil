@@ -783,70 +783,70 @@ namespace smil
       case 1: {
         // area
         std::map<T3, double> values = blobsArea(blobs);
-        for (itD_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
       case 2: {
         // volume
         std::map<T3, double> values = blobsVolume(imIn, blobs);
-        for (itD_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
       case 3: {
         // min
         std::map<T3, T2> values = blobsMinVal(imIn, blobs);
-        for (itT2_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
       case 4: {
         // max
         std::map<T3, T2> values = blobsMaxVal(imIn, blobs);
-        for (itT2_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
       case 5: {
         // mean
         std::map<T3, std::vector<double>> values = blobsMeanVal(imIn, blobs);
-        for (itDVec_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = (iter->second)[0];
         }
       } break;
       case 6: {
         // stddev
         std::map<T3, std::vector<double>> values = blobsMeanVal(imIn, blobs);
-        for (itDVec_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = (iter->second)[1];
         }
       } break;
       case 7: {
         // median
         std::map<T3, T2> values = blobsMedianVal(imIn, blobs);
-        for (itT2_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
       case 8: {
         // median
         std::map<T3, T2> values = blobsModeVal(imIn, blobs);
-        for (itT2_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
       case 9: {
         // values count
         std::map<T3, std::vector<T2>> values = blobsValueList(imIn, blobs);
-        for (itT2Vec_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second.size();
         }
       } break;
       case 10: {
         // entropy
         std::map<T3, double> values = blobsEntropy(imIn, blobs);
-        for (itD_T iter = values.begin(); iter != values.end(); ++iter) {
+        for (auto iter = values.begin(); iter != values.end(); ++iter) {
           markers[iter->first] = iter->second;
         }
       } break;
@@ -859,7 +859,7 @@ namespace smil
 
     double maxV = maxMapValueDouble(markers);
     double minV = minMapValueDouble(markers);
-    double maxT = double(ImDtTypes<T3>::max());
+    auto   maxT = double(ImDtTypes<T3>::max());
 
     retVal[1] = minV;
     retVal[2] = maxV;
@@ -1131,7 +1131,7 @@ namespace smil
     {
       std::vector<T1>            vals;
       UINT                       nbrValues = 0;
-      std::vector<int>::iterator dOffset   = dOffsetList.begin();
+      auto                       dOffset   = dOffsetList.begin();
       while (dOffset != dOffsetList.end()) {
         T1 val = parentClass::pixelsIn[pointOffset + *dOffset];
         if (find(vals.begin(), vals.end(), val) == vals.end()) {

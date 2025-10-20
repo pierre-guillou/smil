@@ -459,11 +459,10 @@ namespace smil
     delete[] yVals;
 #else  // QWT_VERSION < 0x060000
     QVector<QPointF> samples;
-    for (typename std::map<T, UINT>::iterator it = hist.begin();
-         it != hist.end(); it++)
+    for (auto it = hist.begin(); it != hist.end(); it++)
       samples.push_back(QPointF(it->first, it->second));
 
-    QwtPointSeriesData *myData = new QwtPointSeriesData();
+    auto *myData = new QwtPointSeriesData();
     myData->setSamples(samples);
     curve->setData(myData);
 
@@ -523,13 +522,12 @@ namespace smil
 
 #else  // QWT_VERSION < 0x060000
     QVector<QPointF> samples;
-    for (std::vector<IntPoint>::iterator it = bPoints.begin();
-         it != bPoints.end(); it++, i++) {
+    for (auto it = bPoints.begin(); it != bPoints.end(); it++, i++) {
       value = lines[(*it).y][(*it).x];
       samples.push_back(QPointF(i, value));
     }
 
-    QwtPointSeriesData *myData = new QwtPointSeriesData();
+    auto *myData = new QwtPointSeriesData();
     myData->setSamples(samples);
     curve->setData(myData);
 

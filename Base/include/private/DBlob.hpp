@@ -78,7 +78,7 @@ namespace smil
    * A Blob contains a vector of PixelSequence.
    */
   struct Blob {
-    std::vector<PixelSequence>                         sequences;
+    std::vector<PixelSequence> sequences;
     using sequences_iterator       = std::vector<PixelSequence>::iterator;
     using sequences_const_iterator = std::vector<PixelSequence>::const_iterator;
     using sequences_const_reverse_iterator =
@@ -164,13 +164,12 @@ namespace smil
     typename std::map<labelT, Blob>::const_iterator blob_it;
     for (blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
       // Verify that the blob can fit in the image
-      Blob::sequences_const_reverse_iterator last =
-          blob_it->second.sequences.rbegin();
+      auto last = blob_it->second.sequences.rbegin();
       if ((*last).offset + (*last).size > pixCount) {
         allBlobsFit = false;
       } else {
-        Blob::sequences_const_iterator it = blob_it->second.sequences.begin();
-        Blob::sequences_const_iterator it_end = blob_it->second.sequences.end();
+        auto it     = blob_it->second.sequences.begin();
+        auto it_end = blob_it->second.sequences.end();
 
         T outVal = blobsValue != defaultValue ? blobsValue : blob_it->first;
         for (; it != it_end; it++) {
@@ -215,13 +214,12 @@ namespace smil
     typename std::map<labelT, Blob>::const_iterator blob_it;
     for (blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
       // Verify that the blob can fit in the image
-      Blob::sequences_const_reverse_iterator last =
-          blob_it->second.sequences.rbegin();
+      auto last = blob_it->second.sequences.rbegin();
       if ((*last).offset + (*last).size > pixCount) {
         allBlobsFit = false;
       } else {
-        Blob::sequences_const_iterator it = blob_it->second.sequences.begin();
-        Blob::sequences_const_iterator it_end = blob_it->second.sequences.end();
+        auto it     = blob_it->second.sequences.begin();
+        auto it_end = blob_it->second.sequences.end();
 
         typename std::map<labelT, T>::const_iterator valIt =
             lut.find(blob_it->first);
@@ -255,15 +253,12 @@ namespace smil
   {
     int id = 0;
 
-    typename std::map<labelT, Blob>::const_iterator blob_it;
-    using seqit_t = typename Blob::sequences_const_iterator;
+    for (const auto &blob_it : blobs) {
+      auto it_end = blob_it.second.sequences.end();
 
-    for (blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
-      seqit_t it_end = blob_it->second.sequences.end();
-
-      for (seqit_t it = blob_it->second.sequences.begin(); it != it_end; it++) {
-        if (offset >= it->offset && offset < it->offset + it->size)
-          id = blob_it->first;
+      for (const auto &it : blob_it.second.sequences) {
+        if (offset >= it.offset && offset < it.offset + it.size)
+          id = blob_it.first;
       }
       if (id > 0)
         break;
@@ -291,15 +286,12 @@ namespace smil
 
     size_t offset = imIn.getOffsetFromCoords(x, y, z);
 
-    typename std::map<labelT, Blob>::const_iterator blob_it;
-    using seqit_t = typename Blob::sequences_const_iterator;
+    for (const auto &blob_it : blobs) {
+      auto it_end = blob_it.second.sequences.end();
 
-    for (blob_it = blobs.begin(); blob_it != blobs.end(); blob_it++) {
-      seqit_t it_end = blob_it->second.sequences.end();
-
-      for (seqit_t it = blob_it->second.sequences.begin(); it != it_end; it++) {
-        if (offset >= it->offset && offset < it->offset + it->size)
-          id = blob_it->first;
+      for (const auto &it : blob_it.second.sequences) {
+        if (offset >= it.offset && offset < it.offset + it.size)
+          id = blob_it.first;
       }
       if (id > 0)
         break;

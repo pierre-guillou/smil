@@ -202,7 +202,7 @@ namespace smil
       tokenNbr = new size_t[GRAY_LEVEL_NBR];
 
       if (StackType::preallocate) {
-        size_t *h = new size_t[GRAY_LEVEL_NBR];
+        auto *h = new size_t[GRAY_LEVEL_NBR];
         histogram(img, h);
 
         for (size_t i = 0; i < GRAY_LEVEL_NBR; i++) {

@@ -129,7 +129,7 @@ namespace smil
     std::vector<T> rVals = rangeVal(imIn);
     size_t         card  = rVals[1] - rVals[0] + 1;
 
-    size_t *buf = new size_t[card];
+    auto *buf = new size_t[card];
     for (size_t i = 0; i < card; i++)
       buf[i] = 0;
 
@@ -179,7 +179,7 @@ namespace smil
     std::vector<T> rVals = rangeVal(imIn);
     size_t         card  = rVals[1] - rVals[0] + 1;
 
-    size_t *buf = new size_t[card];
+    auto *buf = new size_t[card];
     for (size_t i = 0; i < card; i++)
       buf[i] = 0;
 
@@ -433,7 +433,7 @@ namespace smil
 
     ASSERT(imIn.isAllocated(), rVect);
 
-    size_t *h = new size_t[size_t(ImDtTypes<T>::cardinal())];
+    auto *h = new size_t[size_t(ImDtTypes<T>::cardinal())];
     histogram(imIn, h);
 
     double imVol;
@@ -614,8 +614,7 @@ namespace smil
     double   totalFrequency = 0;
     MeanType globalMean     = 0;
 
-    for (typename std::map<T, UINT>::iterator it = hist.begin();
-         it != hist.end(); it++) {
+    for (auto it = hist.begin(); it != hist.end(); it++) {
       globalMean += double((*it).first) * double((*it).second);
       totalFrequency += (*it).second;
     }

@@ -1018,7 +1018,7 @@ namespace smil
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
     size_t   imSize  = imIn.getPixelCount();
-    Label_T *img_eti = new Label_T[imSize]();
+    auto    *img_eti = new Label_T[imSize]();
 
     MaxTree2<T, CriterionT> tree;
     Label_T                 root = tree.build(imIn, img_eti, se);

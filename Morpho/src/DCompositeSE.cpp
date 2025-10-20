@@ -187,8 +187,7 @@ void CompStrEltList::printSelf(std::ostream &os, std::string indent) const
      << std::endl;
   os << indent << "Name : " << name << std::endl;
   int i = 0;
-  for (std::vector<CompStrElt>::const_iterator it = compSeList.begin();
-       it != compSeList.end(); it++, i++) {
+  for (auto it = compSeList.begin(); it != compSeList.end(); it++, i++) {
     os << indent << "CompSE #" << i << ":" << std::endl;
     (*it).printSelf(os, indent + "\t");
   }

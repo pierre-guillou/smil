@@ -134,8 +134,8 @@ namespace smil
 
       ASSERT(copy(tmp, imOut) == RES_OK);
 
-      std::queue<size_t> *level      = new std::queue<size_t>();
-      std::queue<size_t> *next_level = new std::queue<size_t>();
+      auto               *level      = new std::queue<size_t>();
+      auto               *next_level = new std::queue<size_t>();
       std::queue<size_t> *swap;
       T2                  cur_level = T2(2);
 

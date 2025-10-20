@@ -235,7 +235,7 @@ namespace smil
            RES_ERR_BAD_ALLOCATION);
 
     /* setup a pointer array.  Each one points at the begening of a row. */
-    png_bytep *row_pointers = (png_bytep *) image.getLines();
+    auto *row_pointers = (png_bytep *) image.getLines();
 
     /* read pixel data using row pointers */
     png_read_image(png_ptr, row_pointers);
@@ -287,7 +287,7 @@ namespace smil
            "Not a 24bit RGB image", RES_ERR);
 
     using datap         = UINT8 *;
-    datap         *data = new datap[height];
+    auto *data          = new datap[height];
     for (size_t j = 0; j < height; j++)
       data[j] = new UINT8[width * 3];
 
@@ -345,7 +345,7 @@ namespace smil
 
     ASSERT(writePNGHeader(fp, hStruct) == RES_OK);
 
-    png_bytep *row_pointers = (png_bytep *) image.getLines();
+    auto *row_pointers = (png_bytep *) image.getLines();
     png_write_image(png_ptr, row_pointers);
     png_write_end(png_ptr, nullptr);
 
@@ -394,7 +394,7 @@ namespace smil
     ASSERT(writePNGHeader(fp, hStruct) == RES_OK);
 
     using datap         = UINT8 *;
-    datap         *data = new datap[height];
+    auto *data          = new datap[height];
     for (size_t j = 0; j < height; j++)
       data[j] = new UINT8[width * 3];
 

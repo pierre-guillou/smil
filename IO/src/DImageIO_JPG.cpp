@@ -191,7 +191,7 @@ namespace smil
     cinfo.in_color_space   = JCS_RGB; /* colorspace of input image */
     jpeg_set_defaults(&cinfo);
 
-    UINT8 *buffer = new UINT8[width * 3];
+    auto *buffer = new UINT8[width * 3];
 
     Image<RGB>::sliceType                  lines = image.getLines();
     MultichannelArray<UINT8, 3>::lineType *arrays;

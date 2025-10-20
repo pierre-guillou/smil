@@ -135,7 +135,7 @@ void ColorPannel::setColors(const QVector<QRgb> &cols)
     for (int i = 0; i < colCount; i++) {
       if (index >= colorCount)
         break;
-      ColorButton *button = new ColorButton(this);
+      auto *button = new ColorButton(this);
       button->setColor(cols[index], index);
       button->setText("");
       button->setToolTip(QString::number(index));

@@ -159,8 +159,8 @@ StrElt StrElt::noCenter() const
   se.seT  = this->seT;
   se.size = this->size;
 
-  std::vector<IntPoint>::const_iterator it_start = this->points.begin();
-  std::vector<IntPoint>::const_iterator it_end   = this->points.end();
+  auto                                  it_start = this->points.begin();
+  auto                                  it_end   = this->points.end();
   std::vector<IntPoint>::const_iterator it;
 
   for (it = it_start; it != it_end; ++it)
