@@ -102,7 +102,7 @@ CompStrEltList CompStrElt::operator|(const CompStrElt &rhs)
 
 CompStrEltList CompStrElt::operator()(UINT nrot)
 {
-  return CompStrEltList(*this, nrot);
+  return {*this, nrot};
 }
 
 void CompStrElt::printSelf(std::ostream &os, std::string indent) const
