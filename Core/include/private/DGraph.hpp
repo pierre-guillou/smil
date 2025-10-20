@@ -563,7 +563,7 @@ namespace smil
       if (it != nodeEdgeList.end())
         return it->second;
       else
-        return std::vector<size_t>();
+        return {};
     }
 
     /**
