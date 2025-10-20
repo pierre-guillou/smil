@@ -43,8 +43,7 @@ namespace smil
 
   void BaseSlot::unregisterSignal(Signal *signal, bool _disconnect)
   {
-    std::vector<Signal *>::iterator it =
-        std::find(_signals.begin(), _signals.end(), signal);
+    auto it = std::find(_signals.begin(), _signals.end(), signal);
 
     if (it == _signals.end())
       return;
@@ -57,7 +56,7 @@ namespace smil
 
   void BaseSlot::unregisterAll()
   {
-    std::vector<Signal *>::iterator it = _signals.begin();
+    auto it = _signals.begin();
 
     while (it != _signals.end()) {
       (*it)->disconnect(this, false);

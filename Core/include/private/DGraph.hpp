@@ -161,8 +161,7 @@ namespace smil
       return false;
 
     using EdgeT                                     = Edge<NodeT, WeightT>;
-    typename std::vector<EdgeT>::const_iterator it1 = e1.begin(),
-                                                it2 = e2.begin();
+    auto it1 = e1.begin(), it2 = e2.begin();
 
     for (; it1 != e1.end() && it2 != e2.end(); it1++, it2++) {
       if ((*it1) != (*it2))
@@ -267,8 +266,7 @@ namespace smil
      */
     int findEdge(const EdgeType &e)
     {
-      typename EdgeListType::iterator foundEdge =
-          find(edges.begin(), edges.end(), e);
+      auto foundEdge = find(edges.begin(), edges.end(), e);
       if (foundEdge != edges.end())
         return foundEdge - edges.begin();
       else
@@ -336,8 +334,7 @@ namespace smil
       nodeEdgeList.clear();
       edgeNbr = 0;
 
-      for (typename EdgeListType::const_iterator it = sEdges.begin();
-           it != sEdges.end(); it++)
+      for (auto it = sEdges.begin(); it != sEdges.end(); it++)
         addEdge(*it, false);
     }
 
@@ -376,14 +373,13 @@ namespace smil
 
     void removeNodeEdge(const NodeT node, const size_t edgeIndex)
     {
-      typename NodeEdgeListType::iterator nEdges = nodeEdgeList.find(node);
+      auto nEdges = nodeEdgeList.find(node);
       if (nEdges == nodeEdgeList.end())
         return;
 
       NodeEdgesType &eList = nEdges->second;
 
-      typename NodeEdgesType::iterator ei =
-          find(eList.begin(), eList.end(), edgeIndex);
+      auto ei = find(eList.begin(), eList.end(), edgeIndex);
       if (ei != eList.end())
         eList.erase(ei);
     }
@@ -430,8 +426,7 @@ namespace smil
      */
     void removeEdge(const NodeT src, const NodeT targ)
     {
-      typename EdgeListType::iterator foundEdge =
-          find(edges.begin(), edges.end(), EdgeType(src, targ));
+      auto foundEdge = find(edges.begin(), edges.end(), EdgeType(src, targ));
       if (foundEdge == edges.end())
         return;
 
@@ -575,8 +570,7 @@ namespace smil
          << "source-target (weight) " << std::endl;
 
       std::string s2 = s + "\t";
-      for (typename EdgeListType::const_iterator it = edges.begin();
-           it != edges.end(); it++)
+      for (auto it = edges.begin(); it != edges.end(); it++)
         if ((*it).isActive())
           (*it).printSelf(os, s2);
     }
@@ -605,7 +599,7 @@ namespace smil
                         std::map<NodeT, NodeT> &lookup,
                         std::set<NodeT>        &nList) const
     {
-      typename NodeListType::iterator foundNode = nList.find(ind);
+      auto foundNode = nList.find(ind);
       if (foundNode == nList.end())
         return;
 
@@ -650,8 +644,7 @@ namespace smil
     visitedNodes.insert(curNode);
 
     const NodeEdgesType &nodeEdges = nodeEdgeList.at(curNode);
-    for (typename NodeEdgesType::const_iterator it = nodeEdges.begin();
-         it != nodeEdges.end(); it++)
+    for (auto it = nodeEdges.begin(); it != nodeEdges.end(); it++)
       pq.push(edges[*it]);
 
     while (!pq.empty()) {
@@ -668,8 +661,7 @@ namespace smil
       mst.addEdge(edge, false);
       visitedNodes.insert(curNode);
       NodeEdgesType const &nodeEdges = nodeEdgeList.at(curNode);
-      for (typename NodeEdgesType::const_iterator it = nodeEdges.begin();
-           it != nodeEdges.end(); it++)
+      for (auto it = nodeEdges.begin(); it != nodeEdges.end(); it++)
         pq.push(edges[*it]);
     }
     // Copy node values

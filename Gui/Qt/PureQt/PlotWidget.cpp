@@ -58,7 +58,7 @@ void PlotWidget::saveCurrentCurve()
   QwtData *data = currentCurve->data().copy();
   currentCurve->setData(*data);
 #else  // QWT_VERSION < 0x060000
-  QwtPointSeriesData *data = new QwtPointSeriesData(
+  auto *data = new QwtPointSeriesData(
       ((QwtPointSeriesData *) (currentCurve->data()))->samples());
   currentCurve->setData(data);
 #endif // QWT_VERSION < 0x060000
@@ -78,7 +78,7 @@ void PlotWidget::clearOtherCurves()
 void PlotWidget::removeCurve()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   curve->detach();
   replot();
 }
@@ -86,7 +86,7 @@ void PlotWidget::removeCurve()
 void PlotWidget::showCurve()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   curve->show();
   replot();
 }
@@ -94,7 +94,7 @@ void PlotWidget::showCurve()
 void PlotWidget::hideCurve()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   curve->hide();
   replot();
 }
@@ -102,7 +102,7 @@ void PlotWidget::hideCurve()
 void PlotWidget::chooseCurveColor()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   QColorDialog  diag(this);
   QPen          pen(curve->pen());
   QColor        color = diag.getColor(pen.color(), this);
@@ -116,7 +116,7 @@ void PlotWidget::chooseCurveColor()
 void PlotWidget::chooseCurveWidth()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   QPen          pen(curve->pen());
   bool          ok;
   int           lWidth = QInputDialog::getInt(this, tr(""), tr("Line width:"),
@@ -131,7 +131,7 @@ void PlotWidget::chooseCurveWidth()
 void PlotWidget::chooseCurveTitle()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   bool          ok;
   QString       title =
       QInputDialog::getText(this, tr(""), tr("Curve Legend"), QLineEdit::Normal,
@@ -146,7 +146,7 @@ void PlotWidget::chooseCurveTitle()
 void PlotWidget::chooseCurveBrushColor()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   QColorDialog  diag(this);
   QBrush        brush(curve->brush());
   QColor        color = diag.getColor(brush.color(), this);
@@ -160,7 +160,7 @@ void PlotWidget::chooseCurveBrushColor()
 void PlotWidget::setCurveStyle()
 {
   int           itemIndex = (((QAction *) sender())->data()).toInt();
-  QwtPlotCurve *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
+  auto         *curve     = (QwtPlotCurve *) this->itemList()[itemIndex];
   QString       style     = ((QAction *) sender())->text();
   if (style == "Lines")
     curve->setStyle(QwtPlotCurve::Lines);
@@ -186,8 +186,8 @@ void PlotWidget::showContextMenu(const QPoint &pos)
   int i = 0;
   for (QwtPlotItemList::const_iterator it = itemList().begin();
        it != itemList().end(); it++, i++) {
-    QwtPlotCurve *curve = (QwtPlotCurve *) (*it);
-    QMenu        *curveMenu =
+    auto *curve = (QwtPlotCurve *) (*it);
+    auto *curveMenu =
         new QMenu("#" + QString::number(i) + " " + curve->title().text());
     QAction *action;
     action = curveMenu->addAction("Title...", this, SLOT(chooseCurveTitle()));
@@ -200,7 +200,7 @@ void PlotWidget::showContextMenu(const QPoint &pos)
                                   SLOT(chooseCurveBrushColor()));
     action->setData(i);
 
-    QMenu *styleMenu = new QMenu("Style");
+    auto *styleMenu = new QMenu("Style");
     action = styleMenu->addAction("Lines", this, SLOT(setCurveStyle()));
     action->setData(i);
     if (curve->style() == QwtPlotCurve::Lines) {

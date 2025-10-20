@@ -236,7 +236,7 @@ namespace smil
                              std::vector<int> &dOffsetList) override
     {
       double                     meanVal = 0;
-      std::vector<int>::iterator dOffset = dOffsetList.begin();
+      auto                       dOffset = dOffsetList.begin();
       while (dOffset != dOffsetList.end()) {
         meanVal += double(parentClass::pixelsIn[pointOffset + *dOffset]);
         dOffset++;
@@ -279,7 +279,7 @@ namespace smil
                              std::vector<int> &dOffsetList) override
     {
       std::vector<T>             vals;
-      std::vector<int>::iterator dOffset = dOffsetList.begin();
+      auto                       dOffset = dOffsetList.begin();
       while (dOffset != dOffsetList.end()) {
         vals.push_back(parentClass::pixelsIn[pointOffset + *dOffset]);
         dOffset++;
@@ -325,7 +325,7 @@ namespace smil
                                      std::vector<int> &dOffsetList)
     {
       std::vector<T>             vals;
-      std::vector<int>::iterator dOffset = dOffsetList.begin();
+      auto                       dOffset = dOffsetList.begin();
       while (dOffset != dOffsetList.end()) {
         vals.push_back(parentClass::pixelsIn[pointOffset + *dOffset]);
         dOffset++;

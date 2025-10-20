@@ -45,9 +45,9 @@ void SSE_INT_Sup(Image<UINT8> &im1, Image<UINT8> &im2, Image<UINT8> &im3)
   //     addLine<UINT8> al;
 
   for (int l = 0; l < nlines; l++) {
-    __m128i *l1 = (__m128i *) p1;
-    __m128i *l2 = (__m128i *) p2;
-    __m128i *l3 = (__m128i *) p3;
+    auto *l1 = (__m128i *) p1;
+    auto *l2 = (__m128i *) p2;
+    auto *l3 = (__m128i *) p3;
 
     for (int i = 0; i < size; i += 16, l1++, l2++, l3++) {
       r0 = _mm_load_si128(l1);

@@ -135,8 +135,8 @@ namespace smil
       ASSERT(CHECK_ALLOCATED(&imIn), RES_ERR_BAD_ALLOCATION, retVal);
 
       lineType                       pixels = imIn.getPixels();
-      Blob::sequences_const_iterator it     = blob.sequences.begin();
-      Blob::sequences_const_iterator it_end = blob.sequences.end();
+      auto                           it     = blob.sequences.begin();
+      auto                           it_end = blob.sequences.end();
       for (; it != it_end; it++)
         processSequence(pixels + (*it).offset, (*it).size);
       finalize(imIn);
@@ -228,8 +228,8 @@ namespace smil
       ASSERT(CHECK_ALLOCATED(&imIn), RES_ERR_BAD_ALLOCATION, this->retVal);
 
       lineType                       pixels = imIn.getPixels();
-      Blob::sequences_const_iterator it     = blob.sequences.begin();
-      Blob::sequences_const_iterator it_end = blob.sequences.end();
+      auto                           it     = blob.sequences.begin();
+      auto                           it_end = blob.sequences.end();
       size_t                         x, y, z;
       for (; it != it_end; it++) {
         imIn.getCoordsFromOffset((*it).offset, x, y, z);
@@ -269,8 +269,7 @@ namespace smil
     std::vector<labelT>  _keys;
     std::vector<retType> _results(blobNbr);
 
-    for (typename std::map<labelT, Blob>::const_iterator it = blobs.begin();
-         it != blobs.end(); it++)
+    for (auto it = blobs.begin(); it != blobs.end(); it++)
       _keys.push_back(it->first);
 
     labelT  *keys    = _keys.data();

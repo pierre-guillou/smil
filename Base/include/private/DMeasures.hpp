@@ -803,7 +803,7 @@ namespace smil
                          size_t z) override
     {
       for (size_t i = 0; i < size; i++, x++) {
-        double pxVal = double(lineIn[i]);
+        auto pxVal = double(lineIn[i]);
         m000 += pxVal;
         m100 += pxVal * x;
         m010 += pxVal * y;

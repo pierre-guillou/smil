@@ -339,7 +339,7 @@ namespace smil
     int kernelRadius = (kernel.size() - 1) / 2;
     //         int kLen = 2*kernelRadius+1;
 
-    double *partialKernWeights = new double[kernelRadius];
+    auto   *partialKernWeights = new double[kernelRadius];
     double  pkwSum             = 0;
     for (int i = 0; i < kernelRadius; i++)
       pkwSum += kernel[i];
@@ -424,7 +424,7 @@ namespace smil
     int imD          = imIn.getDepth();
     int kernelRadius = (kernel.size() - 1) / 2;
 
-    double *partialKernWeights = new double[kernelRadius];
+    auto   *partialKernWeights = new double[kernelRadius];
     double  pkwSum             = 0;
     for (int i = 0; i < kernelRadius; i++)
       pkwSum += kernel[i];

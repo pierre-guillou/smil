@@ -1057,9 +1057,9 @@ namespace smil
         for (size_t i = 0; i < sx; i++) {
           Point<double> P(cx * i, cy * j, 0);
 
-          off_t xl = (off_t) floor(P.x);
+          auto  xl = (off_t) floor(P.x);
           off_t xh = (xl + 1) < width ? xl + 1 : xl;
-          off_t yl = (off_t) floor(P.y);
+          auto  yl = (off_t) floor(P.y);
           off_t yh = (yl + 1) < height ? yl + 1 : yl;
 
           double cxl = xh > xl ? (P.x - xl) : 1.;

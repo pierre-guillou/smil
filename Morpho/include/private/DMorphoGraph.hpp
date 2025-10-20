@@ -180,7 +180,7 @@ namespace smil
                              std::vector<int> &dOffsetList) override
     {
       T1                         curVal  = parentClass::pixelsIn[pointOffset];
-      std::vector<int>::iterator dOffset = dOffsetList.begin();
+      auto                       dOffset = dOffsetList.begin();
 
       while (dOffset != dOffsetList.end()) {
         T1 val = parentClass::pixelsIn[pointOffset + *dOffset];
@@ -467,8 +467,7 @@ namespace smil
     using EdgeListType                        = const std::vector<EdgeType>;
     EdgeListType                       &edges = graph.getEdges();
 
-    for (typename EdgeListType::const_iterator it = edges.begin();
-         it != edges.end(); it++) {
+    for (auto it = edges.begin(); it != edges.end(); it++) {
       const EdgeType &edge = *it;
 
       if (edge.source == edge.target)
