@@ -81,7 +81,6 @@ include_directories(${CMAKE_MODULE_PATH})
 include(GenMacros)
 
 set(SMIL_LIB_PREFIX smil)
-set(SMIL_EXT_DEPS)
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND PREFIX)
   set(CMAKE_INSTALL_PREFIX
@@ -418,7 +417,6 @@ if(USE_QT)
   find_package(Qt5Widgets REQUIRED)
   # SET(CMAKE_AUTOMOC ON) SET(CMAKE_AUTOUIC ON)
   link_libraries(Qt5::Core Qt5::Gui Qt5::Widgets)
-  list(APPEND SMIL_EXT_DEPS Qt5::Core Qt5::Gui Qt5::Widgets)
 
   add_compile_definitions(USE_QT)
 
@@ -442,7 +440,6 @@ if(USE_QT)
         add_compile_definitions(QWT_DLL)
       endif(MSVC)
       include_directories(${QWT_INCLUDE_DIR})
-      list(APPEND SMIL_EXT_DEPS ${QWT_LIBRARY})
     endif(QWT_FOUND)
   endif(USE_QWT)
 
@@ -455,7 +452,6 @@ if(USE_AALIB)
   add_compile_definitions(USE_AALIB)
   include_directories(${AALIB_INCLUDES})
   link_libraries(${AALIB_LIBRARY})
-  list(APPEND SMIL_EXT_DEPS ${AALIB_LIBRARY})
 endif(USE_AALIB)
 
 # IO ######
@@ -470,7 +466,6 @@ if(USE_PNG)
   add_compile_definitions(USE_PNG)
   find_package(PNG REQUIRED)
   link_libraries(PNG::PNG)
-  list(APPEND SMIL_EXT_DEPS ${PNG_LIBRARIES})
 endif(USE_PNG)
 
 find_package(JPEG)
@@ -483,7 +478,6 @@ if(USE_JPEG)
   add_compile_definitions(USE_JPEG)
   find_package(JPEG REQUIRED)
   link_libraries(JPEG::JPEG)
-  list(APPEND SMIL_EXT_DEPS ${JPEG_LIBRARIES})
 endif(USE_JPEG)
 
 find_package(TIFF)
@@ -496,7 +490,6 @@ if(USE_TIFF)
   add_compile_definitions(USE_TIFF)
   find_package(TIFF REQUIRED)
   link_libraries(TIFF::TIFF)
-  list(APPEND SMIL_EXT_DEPS ${TIFF_LIBRARIES})
 endif(USE_TIFF)
 
 find_package(CURL)
@@ -509,13 +502,6 @@ if(USE_CURL)
   find_package(CURL REQUIRED)
   add_compile_definitions(USE_CURL)
   link_libraries(CURL::libcurl)
-
-  list(APPEND SMIL_EXT_DEPS ${CURL_LIBRARIES})
-
-  if(USE_STATIC_DEPEND_LIBS)
-    # Find Curl pkg-config entries
-    add_pkg_config_defs(libcurl STATIC)
-  endif(USE_STATIC_DEPEND_LIBS)
 endif(USE_CURL)
 
 # MISC ######
@@ -530,7 +516,6 @@ if(USE_FREETYPE)
   find_package(Freetype REQUIRED)
   add_compile_definitions(USE_FREETYPE)
   link_libraries(Freetype::Freetype)
-  list(APPEND SMIL_EXT_DEPS ${FREETYPE_LIBRARY})
 endif(USE_FREETYPE)
 
 # DOC ######
@@ -785,7 +770,7 @@ if(USE_WRAPPER)
   #
 endif(USE_WRAPPER)
 
-add_smil_tests(Smil smilCore smilIO smilGui smilMorpho ${SMIL_EXT_DEPS})
+add_smil_tests(Smil smilCore smilIO smilGui smilMorpho)
 
 include(Preinstall)
 
