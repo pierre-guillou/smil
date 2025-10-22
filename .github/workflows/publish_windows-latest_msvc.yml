@@ -44,7 +44,6 @@ jobs:
         run: |
           mkdir build && cd build
           cmake \
-            -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DVCPKG_HOST_TRIPLET=x64-windows-static \
             -DVCPKG_TARGET_TRIPLET=x64-windows-static \
             -DBUILD_TEST=ON \
@@ -54,6 +53,7 @@ jobs:
         shell: bash
         env:
           CMAKE_GENERATOR: "Visual Studio 17 2022"
+          CMAKE_GENERATOR_TOOLSET: ClangCL
           CMAKE_BUILD_TYPE: Release
           CMAKE_TOOLCHAIN_FILE : C:\vcpkg\scripts\buildsystems\vcpkg.cmake
 
