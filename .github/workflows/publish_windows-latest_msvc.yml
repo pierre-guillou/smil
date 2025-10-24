@@ -44,6 +44,7 @@ jobs:
         run: |
           mkdir build && cd build
           cmake \
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DVCPKG_HOST_TRIPLET=x64-windows-static \
             -DVCPKG_TARGET_TRIPLET=x64-windows-static \
             -DBUILD_TEST=ON \

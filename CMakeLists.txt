@@ -726,6 +726,11 @@ if(USE_WRAPPER)
       smil_Python
       LANGUAGE python
       SOURCES ${SWIG_MAIN_INTERFACE})
+    if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT MATCHES "MSVC"
+       AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      target_compile_options(smil_Python PRIVATE -Wno-overloaded-virtual
+                                                 -Wno-unused-function)
+    endif()
     target_link_libraries(smil_Python PRIVATE ${SMIL_LIBS} Python3::Module)
     file(
       WRITE ${LIBRARY_OUTPUT_PATH}/smilPython.pth
