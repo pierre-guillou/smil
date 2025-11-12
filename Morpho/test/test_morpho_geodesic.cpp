@@ -65,7 +65,7 @@ class Test_Build : public TestCase
       TEST_ASSERT(imBuild==imTruth);
       
       if (retVal!=RES_OK)
-        imBuild.printSelf(1);
+        imBuild.printSelf(true);
   }
 };
 

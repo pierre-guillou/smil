@@ -76,7 +76,7 @@ class Test_Areas : public TestCase
     // Image<UINT8>::lineType pixels = im.getPixels();
 
     fill(im, UINT8(0));
-    drawRectangle(im, 200, 200, 512, 512, UINT8(127), 1);
+    drawRectangle(im, 200, 200, 512, 512, UINT8(127), true);
 
     map<UINT8, double> areas = blobsArea(im);
     TEST_ASSERT(areas[127] == 262144);
@@ -91,8 +91,8 @@ class Test_Barycenters : public TestCase
     // Image<UINT8>::lineType pixels = im.getPixels();
 
     fill(im, UINT8(0));
-    drawRectangle(im, 200, 200, 50, 50, UINT8(127), 1);
-    drawRectangle(im, 600, 200, 70, 70, UINT8(255), 1);
+    drawRectangle(im, 200, 200, 50, 50, UINT8(127), true);
+    drawRectangle(im, 600, 200, 70, 70, UINT8(255), true);
 
     map<UINT8, Vector_double> barycenters = blobsBarycenter(im);
     TEST_ASSERT(barycenters[127][0] == 224.5);

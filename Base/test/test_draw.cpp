@@ -69,7 +69,7 @@ class Test_DrawCircle : public TestCase
     TEST_ASSERT(im1 == im2);
 
     if (retVal != RES_OK)
-      im1.printSelf(1);
+      im1.printSelf(true);
   }
 };
 
@@ -113,7 +113,7 @@ class Test_DrawSphere : public TestCase
     TEST_ASSERT(im1 == im2);
 
     if (retVal != RES_OK)
-      im1.printSelf(1);
+      im1.printSelf(true);
   }
 };
 
@@ -177,7 +177,7 @@ class Test_DrawText : public TestCase
     TEST_ASSERT(im1 == im2);
 
     if (retVal != RES_OK)
-      im1.printSelf(1);
+      im1.printSelf(true);
 
 #endif // USE_FREETYPE
   }
