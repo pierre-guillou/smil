@@ -47,8 +47,8 @@ class Test_Cast : public TestCase
     TEST_ASSERT(equ(im2, imTruth));
 
     if (retVal != RES_OK) {
-      im2.printSelf(1);
-      imTruth.printSelf(1);
+      im2.printSelf(true);
+      imTruth.printSelf(true);
     }
   }
 };
@@ -138,8 +138,8 @@ class Test_Bit : public TestCase
 
     TEST_ASSERT(im3 == imTruth);
     if (retVal != RES_OK) {
-      im3.printSelf(1);
-      imTruth.printSelf(1);
+      im3.printSelf(true);
+      imTruth.printSelf(true);
     }
   }
 };
@@ -171,8 +171,8 @@ class Test_ApplyLookup : public TestCase
     TEST_ASSERT(equ(im2, imTruth));
 
     if (retVal != RES_OK) {
-      im2.printSelf(1);
-      imTruth.printSelf(1);
+      im2.printSelf(true);
+      imTruth.printSelf(true);
     }
   }
 };

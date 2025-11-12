@@ -81,7 +81,7 @@ class Test_Add : public TestCase
 
     TEST_ASSERT(equ(im2, imTruth));
     if (retVal != RES_OK)
-      im2.printSelf(1);
+      im2.printSelf(true);
   }
 };
 

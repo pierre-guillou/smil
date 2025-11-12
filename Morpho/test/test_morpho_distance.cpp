@@ -73,7 +73,7 @@ class TestDistanceSquare : public TestCase
     distance(im1, im2, sSE());
     TEST_ASSERT(im2==imTruth);
     if (retVal!=RES_OK)
-      im2.printSelf(1);
+      im2.printSelf(true);
   }
 };
 
@@ -114,7 +114,7 @@ class TestDistanceCross : public TestCase
     distance(im1, im2, cSE());
     TEST_ASSERT(im2==imTruth);
     if (retVal!=RES_OK)
-     im2.printSelf(1);
+      im2.printSelf(true);
   }
 };
 

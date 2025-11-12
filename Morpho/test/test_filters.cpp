@@ -67,8 +67,8 @@ class Test_Mean : public TestCase
       
       if (retVal!=RES_OK)
       {
-        imTruth.printSelf(1);
-        im2.printSelf(1);
+        imTruth.printSelf(true);
+        im2.printSelf(true);
       }
   }
 };
@@ -108,8 +108,8 @@ class Test_Median : public TestCase
       
       if (retVal!=RES_OK)
       {
-        imTruth.printSelf(1);
-        im2.printSelf(1);
+        imTruth.printSelf(true);
+        im2.printSelf(true);
       }
   }
 };

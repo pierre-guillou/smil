@@ -112,7 +112,7 @@ namespace smil
 #pragma omp parallel num_threads(nthreads)
 #endif
       {
-        bool oddSe = se.odd, oddLine = 0;
+        bool oddSe = se.odd, oddLine = false;
 
         size_t         x, y, z;
         lineFunction_T arrowLineFunction;
@@ -409,7 +409,7 @@ namespace smil
     lineInType    *srcLines;
     lineArrowType *destLines;
 
-    bool oddSe = se.odd, oddLine = 0;
+    bool oddSe = se.odd, oddLine = false;
 
 #ifdef USE_OPEN_MP
 #pragma omp parallel private(oddLine)
@@ -535,7 +535,7 @@ namespace smil
     lineInType    *srcLines;
     lineArrowType *destLines;
 
-    bool oddSe = cpSe.odd, oddLine = 0;
+    bool oddSe = cpSe.odd, oddLine = false;
 
 #ifdef USE_OPEN_MP
 #pragma omp parallel private(oddLine)

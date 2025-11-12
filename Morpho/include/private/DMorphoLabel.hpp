@@ -248,7 +248,7 @@ namespace smil
       T2   current_label    = labels;
       bool is_not_a_gap     = false;
       bool process_labeling = false;
-      bool oddLine          = 0;
+      bool oddLine          = false;
 
       // First PASS to label the boundaries. //
       for (size_t i = 0;

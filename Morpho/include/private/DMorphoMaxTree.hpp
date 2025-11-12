@@ -866,7 +866,7 @@ namespace smil
                              T1 *transformee_node, T2 *indicatrice_node,
                              UINT32 root, T2 stopSize, UINT delta = 0,
                              UINT method = 2, UINT minArea = 0,
-                             T1 threshold = 0, bool use_textShape = 0)
+                             T1 threshold = 0, bool use_textShape = false)
   {
     int child;
     //   UINT hauteur;
@@ -915,7 +915,7 @@ namespace smil
                          Image<T2> &imIndic, const StrElt &se = DEFAULT_SE,
                          T2 stopSize = 0, UINT delta = 0, UINT method = 2,
                          UINT minArea = 0, T1 threshold = 0,
-                         bool use_textShape = 0)
+                         bool use_textShape = false)
   {
     ASSERT_ALLOCATED(&imIn, &imTrans, &imIndic);
     ASSERT_SAME_SIZE(&imIn, &imTrans, &imIndic);

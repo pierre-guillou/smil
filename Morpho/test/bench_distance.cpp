@@ -52,7 +52,7 @@ class Test_Distance : public TestCase
     TEST_ASSERT(im2 == im3);
 
     if (retVal != RES_OK)
-      im2.printSelf(1);
+      im2.printSelf(true);
   }
 };
 

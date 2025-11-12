@@ -54,8 +54,8 @@ class Test_ConvolHoriz : public TestCase
     TEST_ASSERT(im2 == im3);
 
     if (retVal != RES_OK) {
-      im1.printSelf(1);
-      im2.printSelf(1);
+      im1.printSelf(true);
+      im2.printSelf(true);
     }
   }
 };
@@ -89,7 +89,7 @@ class Test_ConvolVert : public TestCase
     TEST_ASSERT(im2 == im3);
 
     if (retVal != RES_OK)
-      im2.printSelf(1);
+      im2.printSelf(true);
   }
 };
 
@@ -127,9 +127,9 @@ class Test_GaussianFilter : public TestCase
     TEST_ASSERT(maxVal(ims) <= 1);
 
     if (retVal != RES_OK) {
-      im2.printSelf(1);
-      im3.printSelf(1);
-      ims.printSelf(1);
+      im2.printSelf(true);
+      im3.printSelf(true);
+      ims.printSelf(true);
     }
   }
 };
