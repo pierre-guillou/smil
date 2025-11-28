@@ -44,25 +44,83 @@ jobs:
         run: |
           pip install swig numpy build ninja
 
+      - name: Checkout zlib
+        uses: actions/checkout@v5
+        with:
+          repository: "madler/zlib"
+          ref: "v1.3.1"
+          path: "zlib-src"
+
+      - name: Build & install static zlib
+        run: |
+          cmake -S zlib-src -B zlib-build \
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
+          cmake --build zlib-build --target install
+
       - name: Checkout libpng
         uses: actions/checkout@v5
         with:
           repository: "pnggroup/libpng"
           ref: "v1.6.50"
-          path: "libpng"
+          path: "libpng-src"
 
       - name: Build & install static libpng
         run: |
-          cd libpng
-          mkdir build
-          cd build
-          cmake \
+          cmake -S libpng-src -B libpng-build \
             -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-            -DCMAKE_INSTALL_PREFIX=$PWD/install \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DPNG_SHARED=OFF \
+            -DPNG_TESTS=OFF \
+            -DZLIB_ROOT=$GITHUB_WORKSPACE/deps \
+            -DZLIB_USE_STATIC_LIBS=ON \
             -DPNG_SHARED=OFF \
             -DPNG_TOOLS=OFF \
-            ..
-          cmake --build . --target install
+            -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
+          cmake --build libpng-build --target install
+
+      - name: Checkout libjpeg-turbo
+        uses: actions/checkout@v5
+        with:
+          repository: "libjpeg-turbo/libjpeg-turbo"
+          ref: "3.1.3"
+          path: "libjpeg-turbo-src"
+
+      - name: Build & install static libjpeg-turbo
+        run: |
+          cmake -S libjpeg-turbo-src -B libjpeg-build \
+              -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+              -DBUILD_SHARED_LIBS=OFF \
+              -DENABLE_SHARED=OFF \
+              -DENABLE_STATIC=ON \
+              -DWITH_TESTS=OFF \
+              -DWITH_TOOLS=OFF \
+              -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
+          cmake --build libjpeg-build --target install
+
+      - name: Checkout libtiff
+        run: |
+          git clone --depth 1 https://gitlab.com/libtiff/libtiff.git libtiff-src
+
+      - name: Build & install static libtiff
+        run: |
+          cmake -S libtiff-src -B libtiff-build \
+              -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+              -DBUILD_SHARED_LIBS=OFF \
+              -Djpeglib=ON \
+              -Dzlib=ON \
+              -Dtiff-static=ON \
+              -Dtiff-contrib=OFF \
+              -Dtiff-docs=OFF \
+              -Dtiff-tests=OFF \
+              -Dtiff-tools=OFF \
+              -DJPEG_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
+              -DJPEG_LIBRARY=$GITHUB_WORKSPACE/deps/lib/jpeg-static.lib \
+              -DZLIB_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
+              -DZLIB_LIBRARY=$GITHUB_WORKSPACE/deps/lib/zlibstatic.lib \
+              -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
+          cmake --build libtiff-build --target install
 
       - name: Create & configure Smil build directory
         run: |
@@ -71,7 +129,9 @@ jobs:
             -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
-            -DPNG_ROOT=$GITHUB_WORKSPACE/libpng/build/install \
+            -DPNG_ROOT=$GITHUB_WORKSPACE/deps \
+            -DJPEG_ROOT=$GITHUB_WORKSPACE/deps \
+            -DTIFF_ROOT=$GITHUB_WORKSPACE/deps \
             $GITHUB_WORKSPACE
         env:
           CMAKE_GENERATOR: "Ninja"
