@@ -7,6 +7,10 @@ on:
   workflow_call:
   workflow_dispatch:
 
+env:
+  CMAKE_GENERATOR: Ninja
+  CMAKE_BUILD_TYPE: Release
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,7 +39,6 @@ jobs:
             sudo \
             libcurl-devel \
             libjpeg-devel \
-            libpng-devel \
             libtiff-devel \
             freetype-devel
 
@@ -46,6 +49,25 @@ jobs:
       - name: Install python dependencies
         run: |
           pip install swig numpy build ninja
+
+      - name: Checkout libpng
+        uses: actions/checkout@v5
+        with:
+          repository: "pnggroup/libpng"
+          ref: "v1.6.50"
+          path: "libpng"
+
+      - name: Build static libpng
+        run: |
+          cd libpng
+          mkdir build
+          cd build
+          cmake \
+            -DCMAKE_INSTALL_PREFIX=$PWD/install \
+            -DPNG_SHARED=OFF \
+            -DPNG_EXECUTABLES=OFF \
+            ..
+          echo CMAKE_PREFIX_PATH=$PWD/install/lib/cmake:$CMAKE_PREFIX_PATH >> $GITHUB_ENV
 
       - name: Create & configure Smil build directory
         run: |
