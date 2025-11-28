@@ -6,6 +6,8 @@ permissions:
 on:
   workflow_call:
   workflow_dispatch:
+  push:
+    branches: [publish_manylinux]
 
 env:
   CMAKE_GENERATOR: Ninja
@@ -19,12 +21,7 @@ jobs:
     strategy:
       matrix:
         python: [
-          "cp39-cp39",
-          "cp310-cp310",
-          "cp311-cp311",
           "cp312-cp312",
-          "cp313-cp313"
-          "cp314-cp314"
           ]
         image: [
            manylinux_2_28_x86_64
@@ -37,11 +34,7 @@ jobs:
         run: |
           dnf update -y
           dnf install -y \
-            sudo \
-            libcurl-devel \
-            libjpeg-devel \
-            libtiff-devel \
-            freetype-devel
+            sudo
 
       - name: Register the python version
         run: |
@@ -87,6 +80,7 @@ jobs:
       - name: Build Smil
         run: |
           cmake --build build --config Release
+          ldd build/lib/_smilIOPython.so
 
       - name: Build Python package
         run: |
