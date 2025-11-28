@@ -84,6 +84,7 @@ jobs:
       - name: Build Smil
         run: |
           cmake --build build --config Release
+          ldd lib/_smilIOPython.so
 
       - name: Build Python package
         run: |
