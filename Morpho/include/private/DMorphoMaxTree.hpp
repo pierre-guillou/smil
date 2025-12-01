@@ -116,7 +116,8 @@ namespace smil
       criteria.resize(criteria.size() + 1024 * 1024);
     }
 
-    T initialize(const Image<T> &imIn, Label_T *img_eti, const StrElt &se)
+    T initialize(const Image<T> &imIn, std::vector<Label_T> &img_eti,
+                 const StrElt &se)
     {
       imIn.getSize(imSize);
 
@@ -222,8 +223,8 @@ namespace smil
       return curLabel++;
     }
 
-    bool subFlood(typename ImDtTypes<T>::lineType imgPix, Label_T *img_eti,
-                  Offset_T p, Offset_T p_suiv)
+    bool subFlood(typename ImDtTypes<T>::lineType imgPix,
+                  std::vector<Label_T> &img_eti, Offset_T p, Offset_T p_suiv)
     {
       Label_T indice;
 
@@ -254,7 +255,8 @@ namespace smil
       return false;
     }
 
-    void flood(const Image<T> &img, UINT *img_eti, unsigned int level)
+    void flood(const Image<T> &img, std::vector<UINT> &img_eti,
+               unsigned int level)
     {
       Offset_T p;
 
@@ -341,7 +343,8 @@ namespace smil
       return imHeight;
     }
 
-    int build(const Image<T> &img, Label_T *img_eti, const StrElt &se)
+    int build(const Image<T> &img, std::vector<Label_T> &img_eti,
+              const StrElt &se)
     {
       T minValue = initialize(img, img_eti, se);
 
@@ -377,7 +380,8 @@ namespace smil
   template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void ComputeDeltaUO(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                      T *transformee_node, Attr_T *indicatrice_node, int node,
+                      std::vector<T>      &transformee_node,
+                      std::vector<Attr_T> &indicatrice_node, int node,
                       int nParent, T prev_residue, Attr_T stop, UINT delta,
                       int isPrevMaxT)
   {
@@ -438,9 +442,10 @@ namespace smil
 
   template <class T1, class T2>
   void compute_max(MaxTree2<T1, HeightCriterion, size_t, UINT32> &tree,
-                   T1 *transformee_node, T2 *indicatrice_node, UINT32 node,
-                   T2 stop, T1 max_tr, T2 max_in, T2 hauteur_parent,
-                   T1 valeur_parent, T1 previous_value)
+                   std::vector<T1> &transformee_node,
+                   std::vector<T2> &indicatrice_node, UINT32 node, T2 stop,
+                   T1 max_tr, T2 max_in, T2 hauteur_parent, T1 valeur_parent,
+                   T1 previous_value)
   {
     T1     m;
     T1     max_node;
@@ -501,7 +506,8 @@ namespace smil
 
   template <class T1, class T2>
   void compute_contrast(MaxTree2<T1, HeightCriterion, size_t, UINT32> &tree,
-                        T1 *transformee_node, T2 *indicatrice_node, UINT32 root,
+                        std::vector<T1> &transformee_node,
+                        std::vector<T2> &indicatrice_node, UINT32 root,
                         T2 stopSize, UINT delta = 0)
   {
     UINT32 child;
@@ -559,16 +565,16 @@ namespace smil
     if (stopSize == 0)
       stopSize = imIn.getHeight() - 1;
 
-    int   imSize  = imIn.getPixelCount();
-    UINT *img_eti = new UINT[imSize]();
+    int               imSize = imIn.getPixelCount();
+    std::vector<UINT> img_eti(imSize);
 
     MaxTree2<T1, HeightCriterion, size_t, UINT32> tree;
     UINT32 root = tree.build(imIn, img_eti, se);
 
     // std::cout<<"ULTIMATE OPEN, after tree.build"<<"NB
     // VERTEX="<<tree.getLabelMax()<<"\n";
-    T1 *transformee_node = new T1[tree.getLabelMax()]();
-    T2 *indicatrice_node = new T2[tree.getLabelMax()]();
+    std::vector<T1> transformee_node(tree.getLabelMax());
+    std::vector<T2> indicatrice_node(tree.getLabelMax());
     //  std::cout<<"ULTIMATE OPEN, after memory allocation\n";
     compute_contrast(tree, transformee_node, indicatrice_node, root, stopSize,
                      delta);
@@ -580,10 +586,6 @@ namespace smil
       transformeePix[i] = transformee_node[img_eti[i]];
       indicatricePix[i] = indicatrice_node[img_eti[i]];
     }
-
-    delete[] img_eti;
-    delete[] transformee_node;
-    delete[] indicatrice_node;
 
     imTrans.modified();
     imIndic.modified();
@@ -598,9 +600,10 @@ namespace smil
   template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void ComputeDeltaUOMSER(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                          T *transformee_node, Attr_T *indicatrice_node,
-                          int node, int nParent, int first_ancestor,
-                          Attr_T stop, UINT delta, UINT method, int isPrevMaxT,
+                          std::vector<T>      &transformee_node,
+                          std::vector<Attr_T> &indicatrice_node, int node,
+                          int nParent, int first_ancestor, Attr_T stop,
+                          UINT delta, UINT method, int isPrevMaxT,
                           UINT minArea = 0, T threshold = 0, T mymax = 0)
   {
     // method:  1 (MSER), 2 (RGR)
@@ -775,9 +778,10 @@ namespace smil
   template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void ComputeDeltaUOMSERSC(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                            T *transformee_node, Attr_T *indicatrice_node,
-                            int node, int nParent, int first_ancestor,
-                            Attr_T stop, UINT delta, int isPrevMaxT)
+                            std::vector<T>      &transformee_node,
+                            std::vector<Attr_T> &indicatrice_node, int node,
+                            int nParent, int first_ancestor, Attr_T stop,
+                            UINT delta, int isPrevMaxT)
   {
     // "node": the current node; "nParent": its direct parent (allows
     // attribute comparison for Delta versions); "first_ancestor": the
@@ -863,10 +867,11 @@ namespace smil
 
   template <class T1, class T2>
   void compute_contrast_MSER(MaxTree2<T1, HWACriterion, size_t, UINT32> &tree,
-                             T1 *transformee_node, T2 *indicatrice_node,
-                             UINT32 root, T2 stopSize, UINT delta = 0,
-                             UINT method = 2, UINT minArea = 0,
-                             T1 threshold = 0, bool use_textShape = false)
+                             std::vector<T1> &transformee_node,
+                             std::vector<T2> &indicatrice_node, UINT32 root,
+                             T2 stopSize, UINT delta = 0, UINT method = 2,
+                             UINT minArea = 0, T1 threshold = 0,
+                             bool use_textShape = false)
   {
     int child;
     //   UINT hauteur;
@@ -920,8 +925,8 @@ namespace smil
     ASSERT_ALLOCATED(&imIn, &imTrans, &imIndic);
     ASSERT_SAME_SIZE(&imIn, &imTrans, &imIndic);
 
-    int   imSize  = imIn.getPixelCount();
-    UINT *img_eti = new UINT[imSize]();
+    int               imSize = imIn.getPixelCount();
+    std::vector<UINT> img_eti(imSize);
 
     MaxTree2<T1, HWACriterion> tree;
     int                        root = tree.build(imIn, img_eti, se);
@@ -930,8 +935,8 @@ namespace smil
       stopSize = imIn.getHeight() - 1;
     }
 
-    T1 *transformee_node = new T1[tree.getLabelMax()]();
-    T2 *indicatrice_node = new T2[tree.getLabelMax()]();
+    std::vector<T1> transformee_node(tree.getLabelMax());
+    std::vector<T2> indicatrice_node(tree.getLabelMax());
 
     compute_contrast_MSER(tree, transformee_node, indicatrice_node, root,
                           stopSize, delta, method, minArea, threshold,
@@ -945,10 +950,6 @@ namespace smil
       indicatricePix[i] = indicatrice_node[img_eti[i]];
     }
 
-    delete[] img_eti;
-    delete[] transformee_node;
-    delete[] indicatrice_node;
-
     imTrans.modified();
     imIndic.modified();
 
@@ -960,7 +961,8 @@ namespace smil
   template <class T, class CriterionT, class Offset_T, class Label_T,
             class Attr_T>
   void processMaxTree(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                      Label_T node, T *lut_out, T previousLevel, Attr_T stop)
+                      Label_T node, std::vector<T> &lut_out, T previousLevel,
+                      Attr_T stop)
   {
     // MORPHEE_ENTER_FUNCTION("s_OpeningTree::computeMaxTree");
     Label_T child;
@@ -983,7 +985,8 @@ namespace smil
             class Attr_T>
   void
   compute_AttributeOpening(MaxTree2<T, CriterionT, Offset_T, Label_T> &tree,
-                           T *lut_node, Label_T root, Attr_T stopSize)
+                           std::vector<T> &lut_node, Label_T root,
+                           Attr_T stopSize)
   {
     Label_T child;
 
@@ -1017,8 +1020,8 @@ namespace smil
     ASSERT_ALLOCATED(&imIn, &imOut);
     ASSERT_SAME_SIZE(&imIn, &imOut);
 
-    size_t   imSize  = imIn.getPixelCount();
-    auto    *img_eti = new Label_T[imSize]();
+    size_t               imSize = imIn.getPixelCount();
+    std::vector<Label_T> img_eti(imSize);
 
     MaxTree2<T, CriterionT> tree;
     Label_T                 root = tree.build(imIn, img_eti, se);
@@ -1031,7 +1034,7 @@ namespace smil
     //   std::cout<<img_eti[i]<<",";
     // }
     // END BEGIN BMI, DEBUG
-    T *out_node = new T[tree.getLabelMax()]();
+    std::vector<T> out_node(tree.getLabelMax());
 
     compute_AttributeOpening(tree, out_node, root, stopSize);
 
@@ -1039,9 +1042,6 @@ namespace smil
 
     for (size_t i = 0; i < imSize; i++)
       outPix[i] = out_node[img_eti[i]];
-
-    delete[] img_eti;
-    delete[] out_node;
 
     imOut.modified();
 
