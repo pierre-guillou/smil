@@ -24,6 +24,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+%begin %{
+#if defined(SWIGPYTHON)
+// use the Python Stable ABI to target several Python versions at once
+#define Py_LIMITED_API 0x030A0000 // Python 3.10 and up
+#endif // SWIGPYTHON
+%}
 
 %feature("autodoc", "1");
 
