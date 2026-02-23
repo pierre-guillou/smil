@@ -313,7 +313,7 @@ endif(WRAP_CPP)
 
 option(WRAP_PYTHON "Wrap Python" FALSE)
 if(WRAP_PYTHON)
-  find_package(Python3 REQUIRED COMPONENTS Development.Module NumPy)
+  find_package(Python3 REQUIRED COMPONENTS Development.SABIModule NumPy)
   message(STATUS "Numpy includes: " ${Python3_NumPy_INCLUDE_DIRS})
   add_compile_definitions(USE_NUMPY)
 
@@ -706,7 +706,7 @@ if(USE_WRAPPER)
        AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
       target_compile_options(smil_Python PRIVATE -Wno-unused-function)
     endif()
-    target_link_libraries(smil_Python PRIVATE ${SMIL_LIBS} Python3::Module Python3::NumPy)
+    target_link_libraries(smil_Python PRIVATE ${SMIL_LIBS} Python3::SABIModule Python3::NumPy)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/__init__.py
                    ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py COPYONLY)
     # SET_TARGET_PROPERTIES(_smilPython PROPERTIES LIBRARY_OUTPUT_DIRECTORY
