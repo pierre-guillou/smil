@@ -199,17 +199,15 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
       target_link_libraries(
         ${PYTHON_LIB_NAME} PRIVATE ${LIB_DEPS} ${SWIG_DEPS} Python3::Module
                                    Python3::NumPy)
-      # SET_TARGET_PROPERTIES(_${PYTHON_LIB_NAME} PROPERTIES
-      # LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/smilPython)
       if(LIB_SRCS)
         target_link_libraries(${PYTHON_LIB_NAME} PRIVATE ${LIB_NAME} smilCore)
       endif(LIB_SRCS)
       install(TARGETS ${PYTHON_LIB_NAME}
-              LIBRARY DESTINATION ${SMIL_LIBRARIES_INSTALL_PATH}/smilPython
+              LIBRARY DESTINATION ${Python3_SITEARCH}/smilPython
                       COMPONENT ${COMPONENT_PREFIX_}python)
       install(
         FILES ${LIBRARY_OUTPUT_PATH}/smilPython/${LIB_NAME}Python.py
-        DESTINATION ${SMIL_LIBRARIES_INSTALL_PATH}/smilPython
+        DESTINATION ${Python3_SITEARCH}/smilPython
         COMPONENT ${COMPONENT_PREFIX_}python)
       list(APPEND COMPONENT_LIST ${COMPONENT_PREFIX_}python)
       add_dependencies(python ${PYTHON_LIB_NAME})
