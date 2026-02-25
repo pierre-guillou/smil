@@ -700,15 +700,13 @@ if(USE_WRAPPER)
     target_link_libraries(smil_Python PRIVATE ${SMIL_LIBS} Python3::SABIModule Python3::NumPy)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/__init__.py
                    ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py COPYONLY)
-    # SET_TARGET_PROPERTIES(_smilPython PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-    # ${LIBRARY_OUTPUT_PATH}/smilPython)
     install(TARGETS smil_Python
-            LIBRARY DESTINATION ${SMIL_LIBRARIES_INSTALL_PATH}/smilPython
+            LIBRARY DESTINATION ${Python3_SITEARCH}/smilPython
                     COMPONENT python)
     install(
       FILES ${LIBRARY_OUTPUT_PATH}/smilPython/smil_Python.py
             ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py
-      DESTINATION ${SMIL_LIBRARIES_INSTALL_PATH}/smilPython
+      DESTINATION ${Python3_SITEARCH}/smilPython
       COMPONENT python)
 
     add_dependencies(python smil_Python)
