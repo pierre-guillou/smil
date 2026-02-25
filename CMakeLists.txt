@@ -393,30 +393,18 @@ endif(
 
 # GUI ######
 
-find_package(Qt5Widgets)
+find_package(Qt6 COMPONENTS Core Gui Widgets)
 
-if(Qt5Core_FOUND)
+if(Qt6Core_FOUND)
   option(USE_QT "Build Qt Gui" ON)
 else()
   option(USE_QT "Build Qt Gui" OFF)
 endif()
 
 if(USE_QT)
-  set(USE_QT_VERSION
-      "5"
-      CACHE STRING "Qt version to use")
 
-  if(CMAKE_CROSSCOMPILING)
-    set(QT_HEADERS_DIR "/usr/i686-w64-mingw32/include")
-    set(QT_LIBRARY_DIR "/usr/i686-w64-mingw32/lib")
-  endif()
-  set(QT_USE_FRAMEWORKS
-      OFF
-      CACHE INTERNAL "" FORCE)
-
-  find_package(Qt5Widgets REQUIRED)
-  # SET(CMAKE_AUTOMOC ON) SET(CMAKE_AUTOUIC ON)
-  link_libraries(Qt5::Core Qt5::Gui Qt5::Widgets)
+  find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+  link_libraries(Qt6::Core Qt6::Gui Qt6::Widgets)
 
   add_compile_definitions(USE_QT)
 

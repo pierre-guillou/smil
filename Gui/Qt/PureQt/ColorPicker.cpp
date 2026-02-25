@@ -94,7 +94,7 @@ ColorPannel::ColorPannel(QWidget *parent) : QFrame(parent, Qt::Popup)
   setMouseTracking(true);
 
   grid = new QGridLayout();
-  grid->setMargin(1);
+  grid->setContentsMargins(1, 1, 1, 1);
   grid->setSpacing(0);
   setLayout(grid);
 
