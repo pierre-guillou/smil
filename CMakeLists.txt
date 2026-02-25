@@ -505,7 +505,9 @@ if(USE_CURL)
 endif(USE_CURL)
 
 # MISC ######
-find_package(Freetype)
+find_package(PkgConfig)
+pkg_check_modules(FREETYPE QUIET freetype2)
+
 if(FREETYPE_FOUND)
   option(USE_FREETYPE "Use FreeType library for text drawing" ON)
 else(FREETYPE_FOUND)
@@ -513,9 +515,10 @@ else(FREETYPE_FOUND)
 endif(FREETYPE_FOUND)
 
 if(USE_FREETYPE)
-  find_package(Freetype REQUIRED)
+  pkg_check_modules(FREETYPE REQUIRED freetype2)
   add_compile_definitions(USE_FREETYPE)
-  link_libraries(Freetype::Freetype)
+  include_directories(${FREETYPE_INCLUDE_DIRS})
+  link_libraries(${FREETYPE_LINK_LIBRARIES})
 endif(USE_FREETYPE)
 
 # DOC ######
