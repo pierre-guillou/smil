@@ -42,3 +42,6 @@ numpy = "*"
 
 [package.target.linux-64.host-dependencies]
 libgl-devel = ">=1.7.0,<2"
+
+[package.run-dependencies]
+python = ">=3.10,<4"
