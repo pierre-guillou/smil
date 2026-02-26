@@ -122,6 +122,18 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
           cmake --build libtiff-build --target install
 
+      - name: Checkout freetype
+        run: |
+          git clone --depth 1 -b VER-2-14-1 https://gitlab.freedesktop.org/freetype/freetype.git freetype-src
+
+      - name: Build & install static freetype
+        run: |
+          cmake -S freetype-src -B freetype-build \
+              -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+              -DBUILD_SHARED_LIBS=OFF \
+              -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
+          cmake --build freetype-build --target install
+
       - name: Create & configure Smil build directory
         run: |
           cmake -S . -B build \
