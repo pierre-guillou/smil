@@ -146,9 +146,9 @@ jobs:
             -DPNG_ROOT=$GITHUB_WORKSPACE/deps \
             -DJPEG_ROOT=$GITHUB_WORKSPACE/deps \
             -DTIFF_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
-            -DTIFF_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libtiff.a \
-            -DFREETYPE_INCLUDE_DIRS=$GITHUB_WORKSPACE/deps/include/freetype2 \
-            -DFREETYPE_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libfreetype.a
+            -DTIFF_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libtiff.a
+        env:
+          PKG_CONFIG_PATH: $GITHUB_WORKSPACE/deps/lib64/pkgconfig
 
       - name: Build Smil
         run: |
