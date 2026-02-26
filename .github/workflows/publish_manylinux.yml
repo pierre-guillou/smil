@@ -34,7 +34,8 @@ jobs:
         run: |
           dnf update -y
           dnf install -y \
-            openssl-devel \
+            perl-IPC-Cmd \
+            perl-Time-Piece \
             sudo
 
       - name: Register the python version
@@ -135,6 +136,20 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
           cmake --build freetype-build --target install
 
+      - name: Checkout OpenSSL
+        uses: actions/checkout@v5
+        with:
+          repository: "openssl/openssl"
+          ref: "openssl-3.6.1 "
+          path: "openssl-src"
+
+      - name: Build & install static OpenSSL
+        run: |
+          cd openssl-src
+          ./config no-shared no-tests no-docs -fPIC --prefix=$GITHUB_WORKSPACE/deps
+          make -j$(nproc)
+          make install
+
       - name: Checkout curl
         uses: actions/checkout@v5
         with:
@@ -156,6 +171,7 @@ jobs:
               -DCURL_STATICLIB=ON \
               -DCURL_USE_LIBPSL=OFF \
               -DCURL_USE_OPENSSL=ON \
+              -DOPENSSL_USE_STATIC_LIBS=ON \
               -DENABLE_CURL_MANUAL=OFF \
               -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
           cmake --build curl-build --target install
