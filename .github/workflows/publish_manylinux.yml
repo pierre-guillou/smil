@@ -170,20 +170,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: build
-    container:
-      image: quay.io/pypa/${{ matrix.image }}
     strategy:
       matrix:
-        python: [
-          "cp310-cp310",
-          "cp311-cp311",
-          "cp312-cp312",
-          "cp313-cp313",
-          "cp314-cp314",
+        py: [
+          "3.10",
+          "3.11",
+          "3.12",
+          "3.13",
+          "3.14",
           ]
-        image: [
-           manylinux_2_28_x86_64
-        ]
 
     steps:
       - uses: actions/checkout@v4
@@ -191,10 +186,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: linux-python-package-x64
-
-      - name: Register the python version
-        run: |
-          echo "/opt/python/${{ matrix.python }}/bin" >> $GITHUB_PATH
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
@@ -212,7 +203,7 @@ jobs:
 
       - name: Test Python scripts
         run: |
-          Copy-Item -Path "images\*" -Destination "doc\demos\python" -Recurse
+          cp -r images/* doc/demos/python
           cd doc/demos/python/
           python base_graph.py
           python benchs.py
