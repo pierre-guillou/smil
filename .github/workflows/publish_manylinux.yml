@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         python: [
-          "cp312-cp312",
+          "cp310-cp310",
           ]
         image: [
            manylinux_2_28_x86_64
@@ -42,7 +42,7 @@ jobs:
 
       - name: Install python dependencies
         run: |
-          pip install swig numpy build ninja
+          pip install swig numpy build ninja wheel
 
       - name: Checkout zlib
         uses: actions/checkout@v5
@@ -150,13 +150,12 @@ jobs:
         run: |
           cd build/python
           python -m build --wheel -C="--build-option=--plat-name=${{ matrix.image }}"
-          cd ../..
-          echo "MY_PKG=$(ls build/python/dist/*)" >> "$GITHUB_ENV"
+          python -m wheel tags --abi-tag=abi3 dist/*.whl
 
       - uses: actions/upload-artifact@v4
         with:
-          name: linux-python-package-x64-${{ matrix.py }}
-          path: ${{ env.MY_PKG }}
+          name: linux-python-package-x64
+          path: build/python/dist/*abi3*.whl
 
   test:
     runs-on: ubuntu-latest
@@ -166,11 +165,11 @@ jobs:
     strategy:
       matrix:
         python: [
-          "cp39-cp39",
           "cp310-cp310",
           "cp311-cp311",
           "cp312-cp312",
-          "cp313-cp313"
+          "cp313-cp313",
+          "cp314-cp314",
           ]
         image: [
            manylinux_2_28_x86_64
@@ -181,7 +180,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: linux-python-package-x64-${{ matrix.py }}
+          name: linux-python-package-x64
 
       - name: Register the python version
         run: |
