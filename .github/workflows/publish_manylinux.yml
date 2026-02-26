@@ -167,8 +167,8 @@ jobs:
               -DBUILD_LIBCURL_DOCS=OFF \
               -DBUILD_MISC_DOCS=OFF \
               -DBUILD_SHARED_LIBS=OFF \
+              -DBUILD_STATIC_LIBS=ON \
               -DBUILD_TESTING=OFF \
-              -DCURL_STATICLIB=ON \
               -DCURL_USE_LIBPSL=OFF \
               -DCURL_USE_OPENSSL=ON \
               -DOPENSSL_USE_STATIC_LIBS=ON \
@@ -186,8 +186,8 @@ jobs:
             -DUSE_QT=OFF \
             -DPNG_ROOT=$GITHUB_WORKSPACE/deps \
             -DJPEG_ROOT=$GITHUB_WORKSPACE/deps \
-            -DTIFF_DIR=$GITHUB_WORKSPACE/deps/lib64/cmake \
-            -DFreetype_DIR=$GITHUB_WORSPACE/deps/lib64/cmake \
+            -DTIFF_ROOT=$GITHUB_WORKSPACE/deps \
+            -DFreetype_ROOT=$GITHUB_WORSPACE/deps \
             -DCURL_ROOT=$GITHUB_WORSPACE/deps
 
       - name: Build Smil
