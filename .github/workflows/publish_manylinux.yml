@@ -186,9 +186,12 @@ jobs:
             -DUSE_QT=OFF \
             -DPNG_ROOT=$GITHUB_WORKSPACE/deps \
             -DJPEG_ROOT=$GITHUB_WORKSPACE/deps \
-            -DTIFF_ROOT=$GITHUB_WORKSPACE/deps \
-            -DFreetype_ROOT=$GITHUB_WORSPACE/deps \
-            -DCURL_ROOT=$GITHUB_WORSPACE/deps
+            -DTIFF_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
+            -DTIFF_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libtiff.a \
+            -DFREETYPE_INCLUDE_DIRS=$GITHUB_WORKSPACE/deps/include/freetype2 \
+            -DFREETYPE_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libfreetype.a \
+            -DCURL_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
+            -DCURL_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libcurl.a
 
       - name: Build Smil
         run: |
