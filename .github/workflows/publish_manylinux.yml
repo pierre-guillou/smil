@@ -34,8 +34,7 @@ jobs:
         run: |
           dnf update -y
           dnf install -y \
-            perl-IPC-Cmd \
-            perl-Time-Piece \
+            libcurl-devel \
             sudo
 
       - name: Register the python version
@@ -136,46 +135,6 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
           cmake --build freetype-build --target install
 
-      - name: Checkout OpenSSL
-        uses: actions/checkout@v5
-        with:
-          repository: "openssl/openssl"
-          ref: "openssl-3.6.1 "
-          path: "openssl-src"
-
-      - name: Build & install static OpenSSL
-        run: |
-          cd openssl-src
-          ./config no-shared no-tests no-docs -fPIC --prefix=$GITHUB_WORKSPACE/deps
-          make -j$(nproc)
-          make install
-
-      - name: Checkout curl
-        uses: actions/checkout@v5
-        with:
-          repository: "curl/curl"
-          ref: "curl-8_18_0"
-          path: "curl-src"
-
-      - name: Build & install static libcurl
-        continue-on-error: true
-        run: |
-          cmake -S curl-src -B curl-build \
-              -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-              -DBUILD_CURL_EXE=OFF \
-              -DBUILD_EXAMPLES=OFF \
-              -DBUILD_LIBCURL_DOCS=OFF \
-              -DBUILD_MISC_DOCS=OFF \
-              -DBUILD_SHARED_LIBS=OFF \
-              -DBUILD_STATIC_LIBS=ON \
-              -DBUILD_TESTING=OFF \
-              -DCURL_USE_LIBPSL=OFF \
-              -DCURL_USE_OPENSSL=ON \
-              -DOPENSSL_USE_STATIC_LIBS=ON \
-              -DENABLE_CURL_MANUAL=OFF \
-              -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
-          cmake --build curl-build --target install
-
       - name: Create & configure Smil build directory
         run: |
           cmake -S . -B build \
@@ -189,9 +148,7 @@ jobs:
             -DTIFF_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
             -DTIFF_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libtiff.a \
             -DFREETYPE_INCLUDE_DIRS=$GITHUB_WORKSPACE/deps/include/freetype2 \
-            -DFREETYPE_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libfreetype.a \
-            -DCURL_INCLUDE_DIR=$GITHUB_WORKSPACE/deps/include \
-            -DCURL_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libcurl.a
+            -DFREETYPE_LIBRARY=$GITHUB_WORKSPACE/deps/lib64/libfreetype.a
 
       - name: Build Smil
         run: |
