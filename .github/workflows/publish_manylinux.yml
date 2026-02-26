@@ -134,6 +134,29 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
           cmake --build freetype-build --target install
 
+      - name: Checkout curl
+        uses: actions/checkout@v5
+        with:
+          repository: "curl/curl"
+          ref: "curl-8_18_0"
+          path: "curl-src"
+
+      - name: Build & install static libcurl
+        run: |
+          cmake -S curl-src -B curl-build \
+              -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+              -DBUILD_CURL_EXE=OFF \
+              -DBUILD_LIBCURL_DOCS=OFF \
+              -DBUILD_MISC_DOCS=OFF \
+              -DBUILD_SHARED_LIBS=OFF \
+              -DCURL_STATICLIB=ON \
+              -DCURL_USE_LIBPSL=OFF \
+              -DCURL_USE_OPENSSL=ON \
+              -DOPENSSL_USE_STATIC_LIBS=ON \
+              -DENABLE_CURL_MANUAL=OFF \
+              -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
+          cmake --build curl-build --target install
+
       - name: Create & configure Smil build directory
         run: |
           cmake -S . -B build \
@@ -145,7 +168,8 @@ jobs:
             -DPNG_ROOT=$GITHUB_WORKSPACE/deps \
             -DJPEG_ROOT=$GITHUB_WORKSPACE/deps \
             -DTIFF_ROOT=$GITHUB_WORKSPACE/deps \
-            -DFreetype_DIR=$GITHUB_WORSPACE/deps/lib64/cmake/freetype
+            -DFreetype_DIR=$GITHUB_WORSPACE/deps/lib64/cmake/freetype \
+            -DCURL_ROOT=$GITHUB_WORSPACE/deps
 
       - name: Build Smil
         run: |
