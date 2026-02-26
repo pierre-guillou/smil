@@ -124,18 +124,16 @@ jobs:
 
       - name: Create & configure Smil build directory
         run: |
-          mkdir build && cd build
-          cmake \
+          cmake -S . -B build \
             -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
             -DBUILD_TEST=ON \
             -DWRAP_PYTHON=ON \
+            -DUSE_OPTIMIZATION=OFF \
+            -DUSE_QT=OFF \
             -DPNG_ROOT=$GITHUB_WORKSPACE/deps \
             -DJPEG_ROOT=$GITHUB_WORKSPACE/deps \
             -DTIFF_ROOT=$GITHUB_WORKSPACE/deps \
-            $GITHUB_WORKSPACE
-        env:
-          CMAKE_GENERATOR: "Ninja"
-          CMAKE_BUILD_TYPE: Release
+            -DFreetype_DIR=$GITHUB_WORSPACE/deps/lib64/cmake/freetype
 
       - name: Build Smil
         run: |
