@@ -59,3 +59,45 @@ jobs:
       - name: Test installed package
         run: |
           pixi run python -c "import smilPython as sp"
+
+      - name: Test Python scripts
+        run: |
+          cp -r images/* doc/demos/python
+          cd doc/demos/python/
+          pixi run python base_graph.py
+          pixi run python benchs.py
+          pixi run python blob_measures.py
+          pixi run python constrained_watershed.py
+          pixi run python copy_crop.py
+          pixi run python example-3D-image-rotate.py
+          pixi run python example-areathreshold.py
+          pixi run python example-asfclose.py
+          pixi run python example-bresenham.py
+          pixi run python example-default-se.py
+          pixi run python example-distance-geodesic.py
+          pixi run python example-gaussian-filter.py
+          pixi run python example-horiz-convolve.py
+          pixi run python example-imagefileinfo-print.py
+          pixi run python example-inertia-matrix.py
+          pixi run python example-intro-blobs.py
+          pixi run python example-point-minus.py
+          pixi run python example-read.py
+          pixi run python example-readRAW.py
+          pixi run python extinction_values.py
+          pixi run python first-program.py
+          pixi run python hit_or_miss.py
+          pixi run python loop-input.py
+          pixi run python loop-sleep.py
+          pixi run python multichannel_operations.py
+          pixi run python numpy_array.py
+          pixi run python numpy_np2image.py
+          pixi run python numpy_np2sp.py
+          pixi run python numpy_sp2np2sp.py
+          pixi run python numpy_sp2np.py
+          pixi run python operators.py
+          pixi run python skiz.py
+          pixi run python thresholds.py
+          pixi run python x_image_01.py
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
