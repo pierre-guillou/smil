@@ -9,7 +9,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v6
 
@@ -24,5 +27,35 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: smil-conda
+          name: smil-conda-${{ matrix.os }}
           path: ./*.conda
+
+  test:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: [py310, py311, py312, py313, py314]
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: prefix-dev/setup-pixi@v0.9.5
+        with:
+          pixi-version: v0.67.2
+          run-install: false
+
+      - uses: actions/download-artifact@v7
+        with:
+          name: smil-conda-${{ matrix.os }}
+
+      - name: Install conda package
+        run: |
+          rm -f pixi*
+          pixi init
+          pixi add $PWD/smil-*-${{ matrix.python }}*.conda
+        shell: bash
+
+      - name: Test installed package
+        run: |
+          pixi run python -c "import smilPython as sp"
