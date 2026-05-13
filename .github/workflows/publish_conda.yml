@@ -1,4 +1,4 @@
-name: publish_ubuntu-latest
+name: publish_conda
 permissions:
   contents: read
   pull-requests: write
