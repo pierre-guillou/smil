@@ -197,7 +197,7 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
         target_compile_options(${PYTHON_LIB_NAME} PRIVATE -Wno-unused-function)
       endif()
       target_link_libraries(
-        ${PYTHON_LIB_NAME} PRIVATE ${LIB_DEPS} ${SWIG_DEPS} Python3::Module
+        ${PYTHON_LIB_NAME} PRIVATE ${LIB_DEPS} ${SWIG_DEPS} Python3::SABIModule
                                    Python3::NumPy)
       if(LIB_SRCS)
         target_link_libraries(${PYTHON_LIB_NAME} PRIVATE ${LIB_NAME} smilCore)
