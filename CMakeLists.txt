@@ -158,6 +158,12 @@ if(UNIX)
       ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
 endif(UNIX)
 
+if(${SKBUILD})
+  set(SMIL_PYTHON_INSTALL_PATH "${SKBUILD_PLATLIB_DIR}/${SKBUILD_PROJECT_NAME}")
+else()
+  set(SMIL_PYTHON_INSTALL_PATH ${SMIL_LIBRARIES_INSTALL_PATH}/smilPython)
+endif()
+
 set(CMAKE_INSTALL_RPATH ${LIBRARY_OUTPUT_PATH})
 
 # BUILD OPTIONS ######
@@ -702,11 +708,11 @@ if(USE_WRAPPER)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/__init__.py
                    ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py COPYONLY)
     install(TARGETS smil_Python
-            LIBRARY DESTINATION ${Python3_SITEARCH}/smilPython COMPONENT python)
+            LIBRARY DESTINATION ${SMIL_PYTHON_INSTALL_PATH} COMPONENT python)
     install(
       FILES ${LIBRARY_OUTPUT_PATH}/smilPython/smil_Python.py
             ${LIBRARY_OUTPUT_PATH}/smilPython/__init__.py
-      DESTINATION ${Python3_SITEARCH}/smilPython
+      DESTINATION ${SMIL_PYTHON_INSTALL_PATH}
       COMPONENT python)
 
     add_dependencies(python smil_Python)
