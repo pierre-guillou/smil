@@ -56,7 +56,10 @@
 # policies, either expressed or implied, of the FreeBSD Project.
 # =============================================================================
 
-find_path(QWT_INCLUDE_DIR NAMES qwt_plot.h)
+find_path(
+  QWT_INCLUDE_DIR
+  NAMES qwt_plot.h
+  PATH_SUFFIXES qwt-qt5 qwt qwt6)
 
 set(QWT_INCLUDE_DIRS ${QWT_INCLUDE_DIR})
 
@@ -90,7 +93,7 @@ if(Qwt_FIND_VERSION AND QWT_VERSION_STRING)
   endif()
 endif()
 
-find_library(QWT_LIBRARY NAMES qwt)
+find_library(QWT_LIBRARY NAMES qwt-qt5 qwt6-qt5 qwt qwt6)
 
 set(QWT_LIBRARIES ${QWT_LIBRARY})
 
@@ -104,10 +107,15 @@ endif()
 
 # handle the QUIETLY and REQUIRED arguments
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(
-  Qwt
-  REQUIRED_VARS QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH
-  VERSION_VAR QWT_VERSION_STRING)
+if(CMAKE_VERSION LESS 2.8.3)
+  find_package_handle_standard_args(Qwt DEFAULT_MSG QWT_LIBRARY QWT_INCLUDE_DIR
+                                    _QWT_VERSION_MATCH)
+else()
+  find_package_handle_standard_args(
+    Qwt
+    REQUIRED_VARS QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH
+    VERSION_VAR QWT_VERSION_STRING)
+endif()
 
 mark_as_advanced(
   QWT_LIBRARY

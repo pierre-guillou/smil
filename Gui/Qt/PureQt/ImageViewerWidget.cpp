@@ -857,7 +857,7 @@ void ImageViewerWidget::showContextMenu(const QPoint &pos)
 
   QAction *selectedItem = contMenu.exec(globalPos);
   if (selectedItem) {
-    if (selectedItem->parent() == &selectMenu) {
+    if (selectedItem->parentWidget() == &selectMenu) {
       if (selectedItem->text() == "Draw")
         setCursorMode(cursorDraw);
       else if (selectedItem->text() == "Line")
@@ -866,7 +866,7 @@ void ImageViewerWidget::showContextMenu(const QPoint &pos)
         setCursorMode(cursorDrawBox);
       else
         setCursorMode(cursorMove);
-    } else if (selectedItem->parent() == &linkMenu) {
+    } else if (selectedItem->parentWidget() == &linkMenu) {
       QWidget *widget =
           QApplication::topLevelWidgets()[selectedItem->data().toInt()];
       ImageViewerWidget *w = static_cast<ImageViewerWidget *>(widget);
