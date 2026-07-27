@@ -204,11 +204,11 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
       endif(LIB_SRCS)
       install(TARGETS ${PYTHON_LIB_NAME}
               LIBRARY DESTINATION ${SMIL_PYTHON_INSTALL_PATH}
-                      COMPONENT ${COMPONENT_PREFIX_}python)
+                      COMPONENT python)
       install(
         FILES ${LIBRARY_OUTPUT_PATH}/smilPython/${LIB_NAME}Python.py
         DESTINATION ${SMIL_PYTHON_INSTALL_PATH}
-        COMPONENT ${COMPONENT_PREFIX_}python)
+        COMPONENT python)
       list(APPEND COMPONENT_LIST ${COMPONENT_PREFIX_}python)
       add_dependencies(python ${PYTHON_LIB_NAME})
     endif(WRAP_PYTHON)

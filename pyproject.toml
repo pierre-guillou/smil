@@ -39,6 +39,7 @@ Issues = "https://github.com/MinesParis-MorphoMath/smil/issues"
 
 [tool.scikit-build]
 wheel.py-api = "cp39"
+install.components = ["python"]
 
 [tool.scikit-build.wheel.force-include]
 # include launcher script inside wheel
