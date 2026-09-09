@@ -54,3 +54,7 @@ field = "version"
 input = "CMakeLists.txt"
 regex = '.*VERSION.*(?P<major>\d+).(?P<minor>\d+).(?P<patch>\d+)'
 result = "{major}.{minor}.{patch}"
+
+# Install system libraries
+[tool.cibuildwheel.linux]
+before-all = "yum install -y doxygen freetype-devel libpng-devel libtiff-devel libjpeg-turbo-devel libcurl-devel qwt-qt5-devel"

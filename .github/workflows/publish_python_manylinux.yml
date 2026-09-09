@@ -6,60 +6,22 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container:
-      image: quay.io/pypa/${{ matrix.image }}
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: [
-            "cp39-cp39",
-          ]
-        image: [
-           manylinux_2_28_x86_64
-        ]
+        os: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v6
 
-    - name: Install dependencies
-      run: |
-        dnf update -y
-        dnf install -y \
-          sudo \
-          doxygen \
-          freetype-devel \
-          libpng-devel \
-          libtiff-devel \
-          libjpeg-turbo-devel \
-          libcurl-devel \
-          qwt-qt5-devel
+    - name: Build wheels
+      uses: pypa/cibuildwheel@v4.2.1
 
-    - name: Register the python version
-      run: |
-        echo "/opt/python/${{ matrix.python }}/bin" >> $GITHUB_PATH
-
-    - name: Setup uv
-      uses: astral-sh/setup-uv@v8.1.0
+    - uses: actions/upload-artifact@v4
       with:
-        python-version: ${{env.PYTHON_VERSION}}
-        activate-environment: true
-
-    - name : Build the Python wheel
-      run : |
-        uv build --wheel
-
-    - name : Fix Python wheel
-      run : |
-        uv pip install auditwheel
-        auditwheel show dist/*.whl
-        auditwheel repair dist/*.whl
-        echo "MY_PKG=$(ls wheelhouse/*manylinux*.whl)" >> "$GITHUB_ENV"
-
-    - uses: actions/upload-artifact@v6
-      # Use specific artifact identifier for publishing all versions
-      with:
-        name: linux-python-package-${{ matrix.image }}
-        path: ${{env.MY_PKG}}
+        name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+        path: ./wheelhouse/*.whl
 
   test:
     needs: build
