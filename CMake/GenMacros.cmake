@@ -196,6 +196,7 @@ macro(ADD_SMIL_LIBRARY _LIB_NAME)
          AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_compile_options(${PYTHON_LIB_NAME} PRIVATE -Wno-unused-function)
       endif()
+      target_compile_definitions(${PYTHON_LIB_NAME} PRIVATE Py_LIMITED_API=0x030A0000)
       target_link_libraries(
         ${PYTHON_LIB_NAME} PRIVATE ${LIB_DEPS} ${SWIG_DEPS} Python3::SABIModule
                                    Python3::NumPy)

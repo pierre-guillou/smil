@@ -715,6 +715,7 @@ if(USE_WRAPPER)
        AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
       target_compile_options(smil_Python PRIVATE -Wno-unused-function)
     endif()
+    target_compile_definitions(smil_Python PRIVATE Py_LIMITED_API=0x030A0000)
     target_link_libraries(smil_Python PRIVATE ${SMIL_LIBS} Python3::SABIModule
                                               Python3::NumPy)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/__init__.py
