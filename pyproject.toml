@@ -57,7 +57,7 @@ result = "{major}.{minor}.{patch}"
 
 [tool.cibuildwheel]
 # Disable free-threading + 3.15 builds on all platforms
-skip = ["cp3??t-*", "cp315-*"]
+skip = ["cp3??t-*", "cp315-*", "*-musllinux_*"]
 
 # Install system libraries
 [tool.cibuildwheel.linux]
