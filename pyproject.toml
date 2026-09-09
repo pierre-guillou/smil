@@ -19,7 +19,7 @@ authors = [
 description = "Smil, Simple Morphological Image Library"
 readme = "README.md"
 license = {text = 'GPL'}
-requires-python = '>=3.9'
+requires-python = '>=3.10'
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: C++",
@@ -38,7 +38,7 @@ Homepage = "https://github.com/MinesParis-MorphoMath/smil"
 Issues = "https://github.com/MinesParis-MorphoMath/smil/issues"
 
 [tool.scikit-build]
-wheel.py-api = "cp39"
+wheel.py-api = "cp310"
 install.components = ["python"]
 
 [tool.scikit-build.wheel.force-include]
