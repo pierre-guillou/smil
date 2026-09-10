@@ -61,4 +61,4 @@ skip = ["cp3??t-*", "cp315-*", "*-musllinux_*"]
 
 # Install system libraries
 [tool.cibuildwheel.linux]
-before-all = "dnf install -y doxygen freetype-devel libpng-devel libtiff-devel libjpeg-turbo-devel libcurl-devel qwt-qt5-devel"
+before-all = "dnf install -y doxygen freetype-devel libpng-devel libtiff-devel libjpeg-turbo-devel libcurl-devel"
