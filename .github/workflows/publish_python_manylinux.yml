@@ -20,12 +20,12 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+        name: cibw-wheels-${{ matrix.os }}
         path: ./wheelhouse/*.whl
 
   test:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     container:
       image: quay.io/pypa/${{ matrix.image }}
     strategy:
@@ -43,13 +43,16 @@ jobs:
         image: [
            manylinux_2_28_x86_64
         ]
+        os: [
+           ubuntu-latest,
+        ]
 
     steps:
     - uses: actions/checkout@v6
 
     - uses: actions/download-artifact@v7
       with:
-        name: linux-python-package-${{ matrix.image }}
+        name: cibw-wheels-${{ matrix.os }}
 
     - name: Register the python version
       run: |
