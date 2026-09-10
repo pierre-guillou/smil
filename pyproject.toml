@@ -62,3 +62,11 @@ skip = ["cp3??t-*", "cp315-*", "*-musllinux_*"]
 # Install system libraries
 [tool.cibuildwheel.linux]
 before-all = "dnf install -y doxygen freetype-devel libpng-devel libtiff-devel libjpeg-turbo-devel libcurl-devel"
+
+[tool.cibuildwheel.macos]
+before-all = "brew install llvm libpng libtiff libjpeg curl freetype && export PATH=/opt/homebrew/opt/llvm/bin:$PATH && export SDKROOT=$(xcrun --show-sdk-path) && export LDFLAGS=-L/opt/homebrew/opt/llvm/lib/c++"
+environment = {
+    CC="clang",
+    CXX="clang++",
+    MACOSX_DEPLOYMENT_TARGET="14.0",
+ }
